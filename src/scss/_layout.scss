@@ -1,0 +1,43 @@
+.wrapper {
+  width: 100%;
+  @include ltr-rtl("padding-left", var(--cui-sidebar-occupy-start, 0));
+  will-change: auto;
+  @include transition(padding .15s);
+}
+
+.formWraper{
+  border: 1px solid #ccc;
+}
+.formWraper .form-outline{
+  border-bottom: 1px solid #ccc;
+
+
+}
+.formWraper .form-outline .formWrpLabel{
+background: #e3e0e0;
+display: flex;
+    align-items: center;
+border-left: 1px solid #ccc;
+padding: 20px;
+    min-width: 250px;
+}
+ .formWraper .form-outline label{
+padding-right: 10px;
+   }
+.formWraper .form-outline .formWrpInpt{
+  padding: 20px;
+  flex: 1;
+}
+// .formWraper .form-outline input{
+//   height: 50px;
+// }
+@media(max-width:768px){
+  .formWraper .form-outline {
+    flex-direction: column;
+}
+.formWraper .form-outline .formWrpLabel{
+
+border-left:none;
+}
+}
+
