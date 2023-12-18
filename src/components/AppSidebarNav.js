@@ -1,12 +1,16 @@
 import React from 'react'
-import { NavLink, useLocation } from 'react-router-dom'
+import { NavLink, useLocation, useNavigate } from 'react-router-dom'
 import PropTypes from 'prop-types'
 
 import { CBadge } from '@coreui/react'
+import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
+import CIcon from '@coreui/icons-react'
+import { cilCursor } from '@coreui/icons'
+
 
 export const AppSidebarNav = ({ items }) => {
   const location = useLocation()
-  const navLink = (name, icon, badge) => {
+  const navLink = (name, icon, badge, url) => {
     return (
       <>
         {icon && icon}
@@ -21,34 +25,58 @@ export const AppSidebarNav = ({ items }) => {
   }
 
   const navItem = (item, index) => {
-    const { component, name, badge, icon, ...rest } = item
-    const Component = component
-    return (
-      <Component
-        {...(rest.to &&
-          !rest.items && {
+
+    if (item.submenuId) {
+      const { submenuName, badge, icon, submenuId, isSubMenuPermission, ...rest } = item
+      const Component = CNavItem
+      return (
+        <Component
+          {...(rest.submenuUrl && !rest.items &&
+          {
             component: NavLink,
-          })}
-        key={index}
-        {...rest}
-      >
-        {navLink(name, icon, badge)}
-      </Component>
-    )
+          })
+          }
+          key={index}
+          to={rest.submenuUrl}
+        >
+          {navLink(submenuName, icon, badge, rest.submenuUrl)}
+        </Component>
+      )
+    } else {
+      const { menuName, badge, menuId, isSubMenuPermission, ...rest } = item
+      const Component = CNavItem
+      return (
+        <Component
+          {...(rest.menuUrl && !rest.items &&
+          {
+            component: NavLink,
+          })
+          }
+          key={index}
+          to={rest.menuUrl}
+        >
+          {navLink(menuName, <CIcon icon={cilCursor} customClassName="nav-icon" />, badge, rest.menuUrl)}
+        </Component>
+      )
+    }
+
+
   }
   const navGroup = (item, index) => {
-    const { component, name, icon, to, ...rest } = item
-    const Component = component
+    const { menuUrl, menuName, icon, ...rest } = item
+    const Component = CNavGroup
+
     return (
       <Component
         idx={String(index)}
         key={index}
-        toggler={navLink(name, icon)}
-        visible={location.pathname.startsWith(to)}
+        toggler={navLink(menuName, <CIcon icon={cilCursor} customClassName="nav-icon" />, menuUrl)}
+        visible={location.pathname.startsWith(menuUrl)}
         {...rest}
+
       >
-        {item.items?.map((item, index) =>
-          item.items ? navGroup(item, index) : navItem(item, index),
+        {item.subMenu?.map((item, index) =>
+          item.subMenu ? navGroup(item, index) : navItem(item, index),
         )}
       </Component>
     )
@@ -57,7 +85,7 @@ export const AppSidebarNav = ({ items }) => {
   return (
     <React.Fragment>
       {items &&
-        items.map((item, index) => (item.items ? navGroup(item, index) : navItem(item, index)))}
+        items.map((item, index) => (item.subMenu.length > 0 ? navGroup(item, index) : navItem(item, index)))}
     </React.Fragment>
   )
 }

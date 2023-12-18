@@ -20,12 +20,12 @@ import CIcon from '@coreui/icons-react'
 import { cilInfo } from '@coreui/icons'
 import { Formik, Form, Field } from 'formik'
 import * as Yup from 'yup'
-import { changePassWordApi } from 'src/api/Api'
+import { changePassWordApi } from 'src/utils/Api'
 import { useState, useEffect, useCallback } from 'react'
 
 
 
-const Changepass = () => {
+const ChangePassword = () => {
 
   const navigate = useNavigate();
 
@@ -40,12 +40,12 @@ const Changepass = () => {
 
   return (
     <>
-      <section className="bg-light  d-flex flex-row align-items-center">
+      <section className="d-flex flex-row align-items-center">
         <div className='container'>
           <div className="row justify-content-center">
             <div className="row justify-content-center">
               <div className='col-md-12' >
-                <div className="card p-5">
+                <div className="card p-2">
                   <div className='card-body'>
                     <Formik
                       initialValues={{
@@ -72,12 +72,12 @@ const Changepass = () => {
                         console.log('value =>', values);
                         changePassWordApi(values).then((data) => {
                           if (data.status == 200) {
-                            navigate('/dashboard')
+                            navigate('/Login')
                             setError('')
                           } else if (data.status == 400) {
-                             setError(data.msg)
+                            setError(data.msg)
                           } else if (data.status == 420) {
-                             setError(data.msg)
+                            setError(data.msg)
                           } else {
 
                           }
@@ -94,7 +94,7 @@ const Changepass = () => {
                                 <label className="fw-bolder ">Current Password</label>
                               </div>
                               <div className='formWrpInpt'>
-                                <Field placeholder='current password' type="password" id="typePasswordX" className="form-control form-control-lg" name="currentPassword" />
+                                <Field placeholder='current password' type="password" id="typePasswordX" className="form-control form-control-md" name="currentPassword" />
                                 {errors.currentPassword && touched.currentPassword ? (<p className='text-danger'>{errors.currentPassword}</p>) : null}
                               </div>
                             </div>
@@ -116,7 +116,7 @@ const Changepass = () => {
                                 </CTooltip>
                               </div>
                               <div className='formWrpInpt'>
-                                <Field placeholder='new password' type="password" id="typePasswordX" className="form-control form-control-lg" name="newPassword" />
+                                <Field placeholder='new password' type="password" id="typePasswordX" className="form-control form-control-md" name="newPassword" />
                                 {errors.newPassword && touched.newPassword ? (<p className='text-danger'>{errors.newPassword}</p>) : null}
                               </div>
                             </div>
@@ -126,18 +126,14 @@ const Changepass = () => {
                                 <label className="fw-bolder ">Confirm new paswword</label>
                               </div>
                               <div className='formWrpInpt'>
-                                <Field placeholder='confirm new password' type="password" id="typePasswordX" className="form-control form-control-lg" name="confirmPassword" />
+                                <Field placeholder='confirm new password' type="password" id="typePasswordX" className="form-control form-control-md" name="confirmPassword" />
                                 {errors.confirmPassword && touched.confirmPassword ? (<p className='text-danger'>{errors.confirmPassword}</p>) : null}
                               </div>
                             </div>
-
-
-
-
                           </div>
-                                {showError && <p className='text-danger text-center'>{showError}</p>}
-                          <div className='px-5 mt-5 d-flex justify-content-center'>
-                            <button className="btn btn-primary btn-lg  " type="submit" disabled={!isValid || !dirty}>Save</button>
+                          {showError && <p className='text-danger text-center'>{showError}</p>}
+                          <div className='px-4 mt-4 d-flex justify-content-center'>
+                            <button className="btn btn-primary btn-md  " type="submit" disabled={!isValid || !dirty}>Save</button>
                           </div>
                         </Form>
                       )}
@@ -153,4 +149,4 @@ const Changepass = () => {
   )
 }
 
-export default Changepass
+export default ChangePassword

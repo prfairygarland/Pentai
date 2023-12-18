@@ -31,23 +31,36 @@ import { cilBell, cilEnvelopeOpen, cilList, cilMenu } from '@coreui/icons'
 import { AppBreadcrumb } from './index'
 import { AppHeaderDropdown } from './header/index'
 import { logo } from 'src/assets/brand/logo'
+import { setSidebar } from './../state/SideBar/sideBarAction'
 
 const AppHeader = () => {
   const dispatch = useDispatch()
-  const sidebarShow = useSelector((state) => state.sidebarShow)
+  const sidebarShow = useSelector((state) => state.sideBarState.sidebarShow)
   const [visible, setVisible] = useState(false)
 
   const navigate = useNavigate();
 
 
   const logOut = async () => {
-    try {
-      localStorage.removeItem('token')
-      localStorage.removeItem('userdata')
-      navigate('/Login')
-    } catch (error) {
-      console.log('error =>', error);
-     }
+    if (sessionStorage.getItem('sessionToken') == null) {
+      try {
+        localStorage.removeItem('token')
+        localStorage.removeItem('userdata')
+        localStorage.removeItem('roleWisePermission')
+        navigate('/Login')
+      } catch (error) {
+        console.log('error =>', error);
+      }
+    } else {
+      try {
+        sessionStorage.removeItem('sessionToken')
+        sessionStorage.removeItem('sessionUserdata')
+        sessionStorage.removeItem('roleWisePermission')
+        navigate('/Login')
+      } catch (error) {
+        console.log('error else =>', error);
+      }
+    }
   }
 
   return (
@@ -55,12 +68,12 @@ const AppHeader = () => {
       <CContainer fluid>
         <CHeaderToggler
           className="ps-1"
-          onClick={() => dispatch({ type: 'set', sidebarShow: !sidebarShow })}
+          onClick={() => dispatch(setSidebar(!sidebarShow ))}
         >
           <CIcon icon={cilMenu} size="lg" />
         </CHeaderToggler>
         <CHeaderBrand className="mx-auto d-md-none" to="/">
-          <CIcon icon={logo} height={48} alt="Logo" />
+          {/* <CIcon icon={logo} height={48} alt="Logo" /> */}
         </CHeaderBrand>
         <CHeaderNav className="ms-3">
           <CNavItem>

@@ -12,13 +12,19 @@ import { sygnet } from 'src/assets/brand/sygnet'
 import SimpleBar from 'simplebar-react'
 import 'simplebar/dist/simplebar.min.css'
 
+
 // sidebar nav config
 import navigation from '../_nav'
+import {
+  setSidebarUnfolded,
+  setSidebar
+} from "../state/SideBar/sideBarAction"
 
 const AppSidebar = () => {
   const dispatch = useDispatch()
-  const unfoldable = useSelector((state) => state.sidebarUnfoldable)
-  const sidebarShow = useSelector((state) => state.sidebarShow)
+  const unfoldable = useSelector((state) => state.sideBarState.sidebarUnfoldable)
+  const sidebarShow = useSelector((state) =>state.sideBarState.sidebarShow)
+
 
   return (
     <CSidebar
@@ -26,22 +32,25 @@ const AppSidebar = () => {
       unfoldable={unfoldable}
       visible={sidebarShow}
       onVisibleChange={(visible) => {
-        dispatch({ type: 'set', sidebarShow: visible })
+        dispatch(setSidebar(visible ))
       }}
     >
-      <CSidebarBrand className="d-none d-md-flex" to="/">
+      <CSidebarBrand className="d-none d-md-flex">
         {/* <CIcon className="sidebar-brand-full" icon={logoNegative} height={35} /> */}
-        <h4 className='mt-3'>PTK APP Admin</h4>
+        <h4 className="sidebar-brand-full mt-3">PTK APP Admin</h4>
+        <h4 className="sidebar-brand-narrow">PTK APP Admin</h4>
         {/* <CIcon className="sidebar-brand-narrow" icon={sygnet} height={35} /> */}
       </CSidebarBrand>
+      <h5 className="sidebar-brand-full mt-3 text-center">Category Menu</h5>
       <CSidebarNav>
+        {/* <h4 className="sidebar-brand-narrow">PTK APP Admin</h4> */}
         <SimpleBar>
           <AppSidebarNav items={navigation} />
         </SimpleBar>
       </CSidebarNav>
       <CSidebarToggler
         className="d-none d-lg-flex"
-        onClick={() => dispatch({ type: 'set', sidebarUnfoldable: !unfoldable })}
+        onClick={() => dispatch(setSidebarUnfolded(!unfoldable ))}
       />
     </CSidebar>
   )
