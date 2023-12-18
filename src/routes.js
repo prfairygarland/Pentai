@@ -1,7 +1,8 @@
 import React from 'react'
 import Login from './views/pages/login/Login'
 import AuthLayout from './layout/AuthLayout'
-import  Changepass  from './views/pages/login/Changepass'
+import Changepass from './views/pages/login/ChangePassword'
+import UserList from './views/pages/userManagement/userList'
 
 const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
 const Colors = React.lazy(() => import('./views/theme/colors/Colors'))
@@ -58,6 +59,7 @@ const routes = [
   { path: '/', exact: true, name: 'Home' },
   { path: '/dashboard', name: 'Dashboard', element: Dashboard },
   { path: '/changepassword', name: 'Change Password', element: Changepass },
+  { path: '/User', name: 'User List', element: UserList },
   { path: '/theme', name: 'Theme', element: Colors, exact: true },
   { path: '/theme/colors', name: 'Colors', element: Colors },
   { path: '/theme/typography', name: 'Typography', element: Typography },
@@ -100,12 +102,12 @@ const routes = [
   { path: '/notifications/modals', name: 'Modals', element: Modals },
   { path: '/notifications/toasts', name: 'Toasts', element: Toasts },
   { path: '/widgets', name: 'Widgets', element: Widgets },
-  {
-    path: '/authLayout', name: 'authLayout', element: <AuthLayout/>, childern: [
-      {
-      index:true,element:<Login/>
-    }
-  ] }
+  // {
+  //   path: '/authLayout', name: 'authLayout', element: <AuthLayout/>, childern: [
+  //     {
+  //     index:true,element:<Login/>
+  //   }
+  // ] }
 ]
 
 export default routes

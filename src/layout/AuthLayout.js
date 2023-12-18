@@ -19,7 +19,7 @@ function AuthLayout() {
   return (
     <div>
 
-    <Outlet/>
+      {/* <Outlet/> */}
     </div>
   )
 }
