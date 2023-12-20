@@ -79,9 +79,16 @@ color: ($white);
     padding: 10px;
     font-size: 14px;
     white-space: nowrap;
+    position: relative;
 }
 .ptk-table tbody tr{
   border-bottom: 1px solid #ccc !important;
+}
+.ptk-table td span.sortarrow{
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
 }
 @media(max-width:768px){
   .formWraper .form-outline {

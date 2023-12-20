@@ -101,10 +101,10 @@ const ReactTable = ({
                     >
                       {column.render('Header')}
                       {/* <span className='icon-arrow-d'> */}
-                      <span className={ column.isSorted
+                      <span className={  column.isSorted
                           ? column.isSortedDesc
-                            ? 'icon-arrow-d'
-                            : 'icon-arrow-u'
+                            ? 'sortarrow icon-arrow-d'
+                            : 'sortarrow icon-arrow-u'
                           : ''}>
 
                       </span>
