@@ -331,8 +331,8 @@ const UserList = () => {
             <button className='btn btn-light  me-3' onClick={() => getUserListExport()}>Export</button>
             <CDropdown className='dropDownbackground drpDBtn align-items-center'>
               <label>Show</label>
-              <CDropdownToggle color="white" className='w-25'>{itemsPerPage}</CDropdownToggle>
-              <CDropdownMenu>
+              <CDropdownToggle color="white" className='mx-2 filterbtn' >{itemsPerPage}</CDropdownToggle>
+              <CDropdownMenu >
                 {perPageValue.map((option, index) => (
                   <CDropdownItem role="button" key={index} onClick={() => perPagehandleSelect(option)}>
                     {option}
@@ -367,7 +367,7 @@ const UserList = () => {
           }
 
           <div>
-            <button className='btn btn-success mb-3'>Import History</button>
+            <button className='btn btn-primary mb-3'>Import History</button>
           </div>
         </div>
       </div>
