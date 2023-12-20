@@ -18,7 +18,9 @@ export let API_ENDPOINT = {
   getgroup_api: ALL_CONSTANTS.API_URL + "/api/adminPanel/getGroup",
   getteam_api: ALL_CONSTANTS.API_URL + "/api/adminPanel/getTeam",
   userlist_api: ALL_CONSTANTS.API_URL + "/api/adminPanel/userList",
-  userlistexport: ALL_CONSTANTS.API_URL + "/api/adminPanel/userListExport"
+  userlistexport: ALL_CONSTANTS.API_URL + "/api/adminPanel/userListExport",
+  userdetails: ALL_CONSTANTS.API_URL + "/api/adminPanel/userDetails"
+
 
 
 
