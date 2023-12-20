@@ -1,6 +1,7 @@
 import React, { Component, Suspense } from 'react'
 import { BrowserRouter, HashRouter, Route, Routes } from 'react-router-dom'
 import './scss/style.scss'
+import BoardManagement from './views/pages/communityManagement/BoardManagement'
 
 const loading = (
   <div className="pt-3 text-center">

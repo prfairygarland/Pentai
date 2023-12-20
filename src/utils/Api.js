@@ -188,78 +188,82 @@ export const getBookRental = async (url) => {
 //   accessToken: '12321321',
 // };
 
-// export const getApi = async (url, header) => {
-//   {
-//     let data = null;
-//     try {
-//       let res = await axios.get(url, {
-//         headers: {
-//           accept: 'text/plain',
-//           ...CustomHeader,
-//           ...header,
-//         },
-//       });
+const CustomHeader = {
+  accept: 'text/plain',
+  token: getToken,
+};
 
-//       data = res.data;
-//     } catch (err) {
-//       console.log(err);
-//     }
+export const getApi = async (url, header) => {
+  {
+    let data = null;
+    try {
+      let res = await axios.get(url, {
+        headers: {
+          ...CustomHeader,
+          ...header,
+        },
+      });
 
-//     return data;
-//   }
-// };
+      data = res.data;
+    } catch (err) {
+      console.log(err);
+    }
 
-// export const postApi = async (url, data, header) => {
-//   {
-//     let response = null;
-//     try {
-//       response = await axios.post(url, data, {
-//         headers: {
-//           accept: 'text/plain',
-//           ...CustomHeader,
-//           ...header,
-//         },
-//       });
-//     } catch (err) {
-//       console.log(err);
-//     }
+    return data;
+  }
+};
 
-//     return response;
-//   }
-// };
-// export const putApi = async (url, postIdToUpdate, data, header) => {
-//   {
-//     let response = null;
-//     try {
-//       response = await axios.put(url + postIdToUpdate, data, {
-//         headers: {
-//           accept: 'text/plain',
-//           ...CustomHeader,
-//           ...header,
-//         },
-//       });
-//     } catch (err) {
-//       console.log(err);
-//     }
+export const postApi = async (url, data, header) => {
+  {
+    let response = null;
+    try {
+      response = await axios.post(url, data, {
+        headers: {
+          accept: 'text/plain',
+          ...CustomHeader,
+          ...header,
+        },
+      });
+    } catch (err) {
+      console.log(err);
+    }
 
-//     return response;
-//   }
-// };
-// export const deleteApi = async (url, postIdToDelete, data, header) => {
-//   {
-//     let response = null;
-//     try {
-//       response = await axios.delete(url + postIdToDelete, data, {
-//         headers: {
-//           accept: 'text/plain',
-//           ...CustomHeader,
-//           ...header,
-//         },
-//       });
-//     } catch (err) {
-//       console.log(err);
-//     }
+    return response;
+  }
+};
+export const putApi = async (url, postIdToUpdate, data, header) => {
+  {
+    let response = null;
+    try {
+      response = await axios.put(url + postIdToUpdate, data, {
+        headers: {
+          accept: 'text/plain',
+          ...CustomHeader,
+          ...header,
+        },
+      });
+    } catch (err) {
+      console.log(err);
+    }
 
-//     return response;
-//   }
-// };
+    return response;
+  }
+};
+export const deleteApi = async (url, postIdToDelete, data, header) => {
+  {
+    let response = null;
+    try {
+      response = await axios.delete(url + postIdToDelete, data, {
+        headers: {
+          accept: 'text/plain',
+          ...CustomHeader,
+          ...header,
+        },
+      });
+    } catch (err) {
+      console.log(err);
+    }
+
+    return response;
+  }
+};

@@ -19,7 +19,11 @@ export let API_ENDPOINT = {
   getteam_api: ALL_CONSTANTS.API_URL + "/api/adminPanel/getTeam",
   userlist_api: ALL_CONSTANTS.API_URL + "/api/adminPanel/userList",
   userlistexport: ALL_CONSTANTS.API_URL + "/api/adminPanel/userListExport",
-  userdetails: ALL_CONSTANTS.API_URL + "/api/adminPanel/userDetails"
+  userdetails: ALL_CONSTANTS.API_URL + "/api/adminPanel/userDetails",
+  // {Community Mangagement} //
+  get_board_usage_setting: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/getUsageStatus",
+  get_prohabited_words : ALL_CONSTANTS.API_URL + "/api/adminPanel/community/getProhibitedWords",
+ 
 
 
 
