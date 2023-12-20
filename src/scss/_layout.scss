@@ -70,7 +70,7 @@ background: ($primary);
 color: ($white);
     white-space: nowrap;
     padding: 10px;
-    font-family: ($fontrg);
+    font-family: ($fontrg);position: relative;
 }
 .ptk-table {
   width: 100%;
@@ -79,16 +79,18 @@ color: ($white);
     padding: 10px;
     font-size: 14px;
     white-space: nowrap;
-    position: relative;
+    
 }
 .ptk-table tbody tr{
   border-bottom: 1px solid #ccc !important;
 }
-.ptk-table td span.sortarrow{
-  position: absolute;
-  top: 50%;
-  right: 10px;
-  transform: translateY(-50%);
+.ptk-table th span.sortarrow{
+  // position: absolute;
+  // top: 50%;
+  // right: 10px;
+  // transform: translateY(-50%);
+  margin-left: 10px;
+  font-size: 12px;
 }
 @media(max-width:768px){
   .formWraper .form-outline {
