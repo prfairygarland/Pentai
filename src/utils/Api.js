@@ -110,84 +110,160 @@ export const getUserListExportData = async (url) => {
 }
 
 
+export const getUserDetail = async (url) => {
+  try {
+
+    const resUserDetail = await axios.get(url,
+      { headers: { token: `${getToken}` } })
+    console.log('resUserDetail data  =>', resUserDetail.data);
+    return resUserDetail.data
+  } catch (error) {
+    console.log('error =>', error);
+  }
+}
+
+export const userImportApi = async (values) => {
+  try {
+
+    const userImportApi = await axios.post('https://ptkapi.experiencecommerce.com/api/adminPanel/orgBulkUpload', values,
+      { headers: { token: `${getToken}` } })
+    console.log('orgImportApiData data  =>', userImportApi.data);
+    return userImportApi.data
+  } catch (error) {
+    console.log('error =>', error);
+  }
+}
+
+export const orgImportApi = async (values) => {
+  try {
+
+    const orgImportApiData = await axios.post('https://ptkapi.experiencecommerce.com/api/adminPanel/orgBulkUpload', values,
+      { headers: { token: `${getToken}` } })
+    console.log('orgImportApiData data  =>', orgImportApiData.data);
+    return orgImportApiData.data
+  } catch (error) {
+    console.log('error =>', error);
+  }
+}
+
+export const getImportHistory = async (url) => {
+  try {
+
+    const resGetImportHistory = await axios.get(url,
+      { headers: { token: `${getToken}` } })
+    console.log('resUserList data  =>', resGetImportHistory.data);
+    return resGetImportHistory.data
+  } catch (error) {
+    console.log('error =>', error);
+  }
+}
+
+export const getSupplyRental = async (url) => {
+  try {
+
+    const resGetSupplyRental = await axios.get(url,
+      { headers: { token: `${getToken}` } })
+    console.log('resGetSupplyRental data  =>', resGetSupplyRental.data);
+    return resGetSupplyRental.data
+  } catch (error) {
+    console.log('error =>', error);
+  }
+}
+
+export const getBookRental = async (url) => {
+  try {
+
+    const resGetBookRental = await axios.get(url,
+      { headers: { token: `${getToken}` } })
+    console.log('resGetBookRental data  =>', resGetBookRental.data);
+    return resGetBookRental.data
+  } catch (error) {
+    console.log('error =>', error);
+  }
+}
+
 // import axios from 'axios';
 // const CustomHeader = {
 //   accept: 'text/plain',
 //   accessToken: '12321321',
 // };
 
-// export const getApi = async (url, header) => {
-//   {
-//     let data = null;
-//     try {
-//       let res = await axios.get(url, {
-//         headers: {
-//           accept: 'text/plain',
-//           ...CustomHeader,
-//           ...header,
-//         },
-//       });
+const CustomHeader = {
+  accept: 'text/plain',
+  token: getToken,
+};
 
-//       data = res.data;
-//     } catch (err) {
-//       console.log(err);
-//     }
+export const getApi = async (url, header) => {
+  {
+    let data = null;
+    try {
+      let res = await axios.get(url, {
+        headers: {
+          ...CustomHeader,
+          ...header,
+        },
+      });
 
-//     return data;
-//   }
-// };
+      data = res.data;
+    } catch (err) {
+      console.log(err);
+    }
 
-// export const postApi = async (url, data, header) => {
-//   {
-//     let response = null;
-//     try {
-//       response = await axios.post(url, data, {
-//         headers: {
-//           accept: 'text/plain',
-//           ...CustomHeader,
-//           ...header,
-//         },
-//       });
-//     } catch (err) {
-//       console.log(err);
-//     }
+    return data;
+  }
+};
 
-//     return response;
-//   }
-// };
-// export const putApi = async (url, postIdToUpdate, data, header) => {
-//   {
-//     let response = null;
-//     try {
-//       response = await axios.put(url + postIdToUpdate, data, {
-//         headers: {
-//           accept: 'text/plain',
-//           ...CustomHeader,
-//           ...header,
-//         },
-//       });
-//     } catch (err) {
-//       console.log(err);
-//     }
+export const postApi = async (url, data, header) => {
+  {
+    let response = null;
+    try {
+      response = await axios.post(url, data, {
+        headers: {
+          accept: 'text/plain',
+          ...CustomHeader,
+          ...header,
+        },
+      });
+    } catch (err) {
+      console.log(err);
+    }
 
-//     return response;
-//   }
-// };
-// export const deleteApi = async (url, postIdToDelete, data, header) => {
-//   {
-//     let response = null;
-//     try {
-//       response = await axios.delete(url + postIdToDelete, data, {
-//         headers: {
-//           accept: 'text/plain',
-//           ...CustomHeader,
-//           ...header,
-//         },
-//       });
-//     } catch (err) {
-//       console.log(err);
-//     }
+    return response;
+  }
+};
+export const putApi = async (url, postIdToUpdate, data, header) => {
+  {
+    let response = null;
+    try {
+      response = await axios.put(url + postIdToUpdate, data, {
+        headers: {
+          accept: 'text/plain',
+          ...CustomHeader,
+          ...header,
+        },
+      });
+    } catch (err) {
+      console.log(err);
+    }
 
-//     return response;
-//   }
-// };
+    return response;
+  }
+};
+export const deleteApi = async (url, postIdToDelete, data, header) => {
+  {
+    let response = null;
+    try {
+      response = await axios.delete(url + postIdToDelete, data, {
+        headers: {
+          accept: 'text/plain',
+          ...CustomHeader,
+          ...header,
+        },
+      });
+    } catch (err) {
+      console.log(err);
+    }
+
+    return response;
+  }
+};

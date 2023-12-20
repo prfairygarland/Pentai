@@ -3,6 +3,10 @@ import Login from './views/pages/login/Login'
 import AuthLayout from './layout/AuthLayout'
 import Changepass from './views/pages/login/ChangePassword'
 import UserList from './views/pages/userManagement/userList'
+import BoardManagement from './views/pages/communityManagement/BoardManagement'
+import UserInformationSettings from './views/pages/userManagement/userInformationSettings'
+import UserDetails from './views/pages/userManagement/userDetails'
+
 
 const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
 const Colors = React.lazy(() => import('./views/theme/colors/Colors'))
@@ -58,8 +62,18 @@ const Widgets = React.lazy(() => import('./views/widgets/Widgets'))
 const routes = [
   { path: '/', exact: true, name: 'Home' },
   { path: '/dashboard', name: 'Dashboard', element: Dashboard },
+  // Login Module
   { path: '/changepassword', name: 'Change Password', element: Changepass },
+  // User Management Module
   { path: '/User', name: 'User List', element: UserList },
+  {
+    path: '/UserInformation', name: 'User Information Settings', element: UserInformationSettings
+  },
+  {
+    path: '/UserDetails/:id', name: 'User Details', element: UserDetails
+  },
+  //{ community management}
+  { path: '/BoardManagement', name: 'Board Management', element: BoardManagement },
   { path: '/theme', name: 'Theme', element: Colors, exact: true },
   { path: '/theme/colors', name: 'Colors', element: Colors },
   { path: '/theme/typography', name: 'Typography', element: Typography },
