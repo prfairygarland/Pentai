@@ -48,8 +48,9 @@ const UserList = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
-
-
+  const [currentImportHistoryPage, setCurrentImportHistoryPage] = useState(1)
+  const [totalImport, setTotalImport] = useState(0)
+  const [totalImportPages, setTotalImportPages] = useState(0)
 
 
   const statusDropdownValues = [{ id: 2, Name: 'All' }, { id: 1, Name: 'Active' }, { id: 0, Name: 'Inactive' }];
@@ -60,8 +61,7 @@ const UserList = () => {
     {
       Header: 'No',
       accessor: 'Id',
-      Cell: ({ row }) =>
-      {
+      Cell: ({ row }) => {
         return currentPage * itemsPerPage + (row.index + 1)
       }
 
@@ -115,10 +115,9 @@ const UserList = () => {
     {
       Header: 'No',
       accessor: 'Id',
-      Cell: ({ row }) =>
-        currentPage > 0
-          ? currentPage * itemsPerPage + (parseInt(row.id) + 1)
-          : parseInt(row.id) + 1
+      Cell: ({ row }) => {
+        return (currentImportHistoryPage - 1) * itemsPerPage + (row.index + 1)
+      }
 
     },
     {
@@ -143,7 +142,7 @@ const UserList = () => {
 
     }
 
-  ], [])
+  ], [currentImportHistoryPage, itemsPerPage])
 
   useEffect(() => {
     getUserListData().then((item) => {
@@ -156,9 +155,9 @@ const UserList = () => {
   }, [])
 
   useEffect(() => {
-    getImportHistoryData().then((item) => {
+    getImportHistoryData(1).then((item) => {
     })
-  }, [importVisible, startDate, endDate, searchImportInputValue])
+  }, [currentImportHistoryPage, startDate, endDate, searchImportInputValue])
 
   const undo = () => {
     console.log('undo');
@@ -323,8 +322,8 @@ const UserList = () => {
       const res = await getUserList(url);
       if (res.status == 200) {
         setUserListData(res.data)
-        setTotalUser(res.totalUser)
-        setTotalPages(Math.ceil(res.totalUser / Number(itemsPerPage)));
+        setTotalUser(res.totalCount)
+        setTotalPages(Math.ceil(res.totalCount / Number(itemsPerPage)));
       }
 
     } catch (error) {
@@ -335,7 +334,7 @@ const UserList = () => {
   // http://192.168.9.175:3000
   // https://ptkapi.experiencecommerce.com
   const getUserListExport = async () => {
-    let url = `http://192.168.9.175:3000/api/adminPanel/userListExport?pageNo=${currentPage + 1
+    let url = `https://ptkapi.experiencecommerce.com/api/adminPanel/userListExport?pageNo=${currentPage + 1
       }&limit=${itemsPerPage}&status=${statusSelectedValue.id}`;
 
     if (selectCompany.id) {
@@ -435,10 +434,9 @@ const UserList = () => {
 
   }
 
-  const getImportHistoryData = async () => {
+  const getImportHistoryData = async (currentImportHistoryPage) => {
     try {
-      let url = `https://ptkapi.experiencecommerce.com/api/adminPanel/importModifiedHistory?pageNo=${currentPage + 1
-        }`;
+      let url = `https://ptkapi.experiencecommerce.com/api/adminPanel/importModifiedHistory?pageNo=${currentImportHistoryPage}&limit=${itemsPerPage}`;
       console.log('start date =>', startDate);
       if (startDate) {
         url = url + `&startDate=${startDate}`
@@ -452,9 +450,11 @@ const UserList = () => {
 
       const res = await getImportHistory(url);
       if (res.status == 200) {
+        setCurrentImportHistoryPage(currentImportHistoryPage)
         setImportHistoryData(res.data)
+        setTotalImport(res.totalCount)
+        setTotalImportPages(Math.ceil(res.totalCount / Number(itemsPerPage)));
         // setTotalUser(res.totalUser)
-        // setTotalPages(Math.ceil(res.totalUser / Number(itemsPerPage)));
       }
 
     } catch (error) {
@@ -477,6 +477,12 @@ const UserList = () => {
 
   const handlePageChange = (selectedPage) => {
     setCurrentPage(selectedPage.selected)
+  }
+
+  const handleImportHistoryPageChange = (selectedPage) => {
+    // setCurrentImportHistoryPage(selectedPage.selected)
+    getImportHistoryData(selectedPage.selected + 1)
+
   }
 
   const handleCheckboxChange = (event) => {
@@ -524,13 +530,17 @@ const UserList = () => {
 
   }, []);
 
-  const resetFilter = () => {
+  const clearAllFilters = () => {
     console.log('hello');
     setSelectCompany({});
     setSelectDivision({});
     setSelectGroup({});
     setSelectTeam({});
     setIsLeader('');
+    setDivisionData([]);
+    setGroupData([])
+    setTeamData([])
+    setStatusSelectedValue({ id: 1, Name: 'Active' })
     setTypeSelect({});
     setSearchInput('');
     setSearchInputValue('');
@@ -568,7 +578,7 @@ const UserList = () => {
           <div className='d-flex align-items-center'>
             <label className='me-3'>Department</label>
             <CDropdown className='dropDownbackground me-3 drpBtn' >
-              <CDropdownToggle color="white">{selectCompany.companyName ? selectCompany.companyName : 'company'}</CDropdownToggle>
+              <CDropdownToggle color="white">{selectCompany.companyName ? selectCompany.companyName : 'Company'}</CDropdownToggle>
               <CDropdownMenu>
                 {companiesData.map((option, index) => (
                   <CDropdownItem role="button" key={index} onClick={() => { getDivisionData(option.id); setSelectCompany(option) }}>
@@ -578,7 +588,7 @@ const UserList = () => {
               </CDropdownMenu>
             </CDropdown>
             <CDropdown className={divisionData.length > 0 ? 'dropDownbackground me-3 drpBtn' : 'dropDownbackground me-3 drpBtn disable-class'} >
-              <CDropdownToggle color="white">{selectDivision.DivisionsName ? selectDivision.DivisionsName : 'division'}</CDropdownToggle>
+              <CDropdownToggle color="white">{selectDivision.DivisionsName ? selectDivision.DivisionsName : 'Division'}</CDropdownToggle>
 
               <CDropdownMenu >
                 {divisionData.length > 0 && divisionData?.map((option, index) => (
@@ -589,7 +599,7 @@ const UserList = () => {
               </CDropdownMenu>
             </CDropdown>
             <CDropdown className={groupData.length > 0 ? 'dropDownbackground me-3 drpBtn' : 'dropDownbackground me-3 drpBtn disable-class'}>
-              <CDropdownToggle color="white">{selectGroup.groupName ? selectGroup.groupName : 'group'}</CDropdownToggle>
+              <CDropdownToggle color="white">{selectGroup.groupName ? selectGroup.groupName : 'Group'}</CDropdownToggle>
               <CDropdownMenu>
                 {groupData.map((option, index) => (
                   <CDropdownItem role="button" key={index} onClick={() => { getTeamData(option.id); setSelectGroup(option) }}>
@@ -599,7 +609,7 @@ const UserList = () => {
               </CDropdownMenu>
             </CDropdown>
             <CDropdown className={TeamData.length > 0 ? 'dropDownbackground me-4 drpBtn' : 'dropDownbackground me-4 drpBtn disable-class'}>
-              <CDropdownToggle color="white">{selectTeam.teamName ? selectTeam.teamName : 'team'}</CDropdownToggle>
+              <CDropdownToggle color="white">{selectTeam.teamName ? selectTeam.teamName : 'Team'}</CDropdownToggle>
               <CDropdownMenu>
                 {TeamData.map((option, index) => (
                   <CDropdownItem role="button" key={index} onClick={() => setSelectTeam(option)} >
@@ -629,13 +639,13 @@ const UserList = () => {
           </div>
           <div className="navbar navbar-light bg-light w-100">
             <div className="d-flex form-inline w-100">
-              <input className="form-control mr-sm-10 me-2" onChange={handleInputChange} type="search" placeholder="Search" aria-label="Search" />
+              <input className="form-control mr-sm-10 me-2" value={searchInput} onChange={handleInputChange} type="search" placeholder="Search" aria-label="Search" />
               <button className="btn btn-primary my-2 my-sm-0" disabled={!typeSelect.id || searchInput == ''} type="submit" onClick={() => { handleInputvalue() }}>Search</button>
             </div>
           </div>
         </div>
-        <div className='mt-3'>
-          <CButton className='btn btn-primary' onClick={() => resetFilter()}>Reset filters</CButton>
+        <div className='d-flex justify-content-end mt-3'>
+          <CButton className='btn btn-primary' onClick={() => clearAllFilters()}>Clear</CButton>
         </div>
       </div>
       <div>
@@ -643,7 +653,9 @@ const UserList = () => {
           <p style={{ margin: 0 }}>Total:{totalUser}</p>
           <div>
 
-            <button className='btn btn-light  me-3' onClick={() => setUserImportVisible(!userImportVisible)} >User Import</button>
+            {/* <button className='btn btn-light  me-3' onClick={() => setUserImportVisible(!userImportVisible)} >User Import</button> */}
+            <button className='btn btn-light  me-3' >User Import</button>
+
             <CModal
               alignment="center"
               visible={userImportVisible}
@@ -747,7 +759,59 @@ const UserList = () => {
           }
 
           <div>
-            <button className='btn btn-primary mb-3'>Import History</button>
+            <button className='btn btn-success mb-3' onClick={() => { setImportVisible(!importVisible); getImportHistoryData(1) }}>Import History</button>
+          </div>
+          <div>
+            <CModal
+              alignment="center"
+              size="lg"
+              visible={importVisible}
+              onClose={() => setImportVisible(false)}
+              aria-labelledby="LiveDemoExampleLabel">
+              <CModalHeader onClose={() => setImportVisible(false)}>
+                <CModalTitle>Import History</CModalTitle>
+              </CModalHeader>
+              <CModalBody>
+                <div className='d-flex w-100 gap-3 justify-content-end'>
+                  <p>Total: {totalImport} </p>
+                  <div className='d-flex p-2 gap-3'>
+                    <DatePicker value={startDate} onChange={handleStartDateChange} />
+                    <DatePicker value={endDate} onChange={handleEndDateChange} />
+                  </div>
+                  <div>
+                    <div className="d-flex form-inline w-100">
+                      <input className="form-control mr-sm-10 me-2" onChange={handleImportInputChange} type="search" placeholder="Search" aria-label="Search" />
+                      <button className="btn btn-primary my-2 my-sm-0" disabled={searchImportInput == ''} type="submit" onClick={() => { handleImportInputvalue() }}>Search</button>
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <ReactTable showCheckbox={false} columns={importHistoryColumns} data={importHistoryData} totalCount={10} onSelectionChange={handleSelectionChange} />
+                  {importHistoryData.length > 0 &&
+                    <div className='userlist-pagination'>
+                      <div className='userlist-pagination dataTables_paginate'>
+                        <ReactPaginate
+                          breakLabel={'...'}
+                          marginPagesDisplayed={1}
+                          previousLabel={<button>Previous</button>}
+                          nextLabel={<button>Next</button>}
+                          pageCount={totalImportPages}
+                          onPageChange={handleImportHistoryPageChange}
+                          forcePage={currentImportHistoryPage - 1}
+                          renderOnZeroPageCount={null}
+                          pageRangeDisplayed={1}
+                        />
+                      </div>
+                    </div>
+                  }
+
+                </div>
+              </CModalBody>
+              {/* <CModalFooter>
+                <CButton color="secondary">Close</CButton>
+                <CButton color="primary">Save changes</CButton>
+              </CModalFooter> */}
+            </CModal>
           </div>
         </div>
       </div>

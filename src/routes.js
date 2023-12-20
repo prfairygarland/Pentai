@@ -72,6 +72,7 @@ const routes = [
   {
     path: '/UserDetails/:id', name: 'User Details', element: UserDetails
   },
+
   //{ community management}
   { path: '/BoardManagement', name: 'Board Management', element: BoardManagement },
   { path: '/theme', name: 'Theme', element: Colors, exact: true },

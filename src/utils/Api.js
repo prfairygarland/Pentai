@@ -182,6 +182,18 @@ export const getBookRental = async (url) => {
   }
 }
 
+export const getOprationClub = async (url) => {
+  try {
+
+    const resGetOprationClub = await axios.get(url,
+      { headers: { token: `${getToken}` } })
+    console.log('resGetOprationClub data  =>', resGetOprationClub.data);
+    return resGetOprationClub.data
+  } catch (error) {
+    console.log('error =>', error);
+  }
+}
+
 // import axios from 'axios';
 // const CustomHeader = {
 //   accept: 'text/plain',
