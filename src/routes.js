@@ -3,6 +3,7 @@ import Login from './views/pages/login/Login'
 import AuthLayout from './layout/AuthLayout'
 import Changepass from './views/pages/login/ChangePassword'
 import UserList from './views/pages/userManagement/userList'
+import BoardManagement from './views/pages/communityManagement/BoardManagement'
 import UserInformationSettings from './views/pages/userManagement/userInformationSettings'
 import UserDetails from './views/pages/userManagement/userDetails'
 
@@ -71,7 +72,8 @@ const routes = [
   {
     path: '/UserDetails/:id', name: 'User Details', element: UserDetails
   },
-
+  //{ community management}
+  { path: '/BoardManagement', name: 'Board Management', element: BoardManagement },
   { path: '/theme', name: 'Theme', element: Colors, exact: true },
   { path: '/theme/colors', name: 'Colors', element: Colors },
   { path: '/theme/typography', name: 'Typography', element: Typography },
