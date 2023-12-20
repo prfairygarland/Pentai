@@ -110,6 +110,78 @@ export const getUserListExportData = async (url) => {
 }
 
 
+export const getUserDetail = async (url) => {
+  try {
+
+    const resUserDetail = await axios.get(url,
+      { headers: { token: `${getToken}` } })
+    console.log('resUserDetail data  =>', resUserDetail.data);
+    return resUserDetail.data
+  } catch (error) {
+    console.log('error =>', error);
+  }
+}
+
+export const userImportApi = async (values) => {
+  try {
+
+    const userImportApi = await axios.post('https://ptkapi.experiencecommerce.com/api/adminPanel/orgBulkUpload', values,
+      { headers: { token: `${getToken}` } })
+    console.log('orgImportApiData data  =>', userImportApi.data);
+    return userImportApi.data
+  } catch (error) {
+    console.log('error =>', error);
+  }
+}
+
+export const orgImportApi = async (values) => {
+  try {
+
+    const orgImportApiData = await axios.post('https://ptkapi.experiencecommerce.com/api/adminPanel/orgBulkUpload', values,
+      { headers: { token: `${getToken}` } })
+    console.log('orgImportApiData data  =>', orgImportApiData.data);
+    return orgImportApiData.data
+  } catch (error) {
+    console.log('error =>', error);
+  }
+}
+
+export const getImportHistory = async (url) => {
+  try {
+
+    const resGetImportHistory = await axios.get(url,
+      { headers: { token: `${getToken}` } })
+    console.log('resUserList data  =>', resGetImportHistory.data);
+    return resGetImportHistory.data
+  } catch (error) {
+    console.log('error =>', error);
+  }
+}
+
+export const getSupplyRental = async (url) => {
+  try {
+
+    const resGetSupplyRental = await axios.get(url,
+      { headers: { token: `${getToken}` } })
+    console.log('resGetSupplyRental data  =>', resGetSupplyRental.data);
+    return resGetSupplyRental.data
+  } catch (error) {
+    console.log('error =>', error);
+  }
+}
+
+export const getBookRental = async (url) => {
+  try {
+
+    const resGetBookRental = await axios.get(url,
+      { headers: { token: `${getToken}` } })
+    console.log('resGetBookRental data  =>', resGetBookRental.data);
+    return resGetBookRental.data
+  } catch (error) {
+    console.log('error =>', error);
+  }
+}
+
 // import axios from 'axios';
 // const CustomHeader = {
 //   accept: 'text/plain',
