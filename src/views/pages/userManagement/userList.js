@@ -711,8 +711,8 @@ const UserList = () => {
             </CModal>
             <CDropdown className='dropDownbackground drpDBtn align-items-center'>
               <label>Show</label>
-              <CDropdownToggle color="white" className='w-25'>{itemsPerPage}</CDropdownToggle>
-              <CDropdownMenu>
+              <CDropdownToggle color="white" className='mx-2 filterbtn' >{itemsPerPage}</CDropdownToggle>
+              <CDropdownMenu >
                 {perPageValue.map((option, index) => (
                   <CDropdownItem role="button" key={index} onClick={() => perPagehandleSelect(option)}>
                     {option}
@@ -747,59 +747,7 @@ const UserList = () => {
           }
 
           <div>
-            <button className='btn btn-success mb-3' onClick={() => { setImportVisible(!importVisible); getImportHistoryData() }}>Import History</button>
-          </div>
-          <div>
-            <CModal
-              alignment="center"
-              size="lg"
-              visible={importVisible}
-              onClose={() => setImportVisible(false)}
-              aria-labelledby="LiveDemoExampleLabel">
-              <CModalHeader onClose={() => setImportVisible(false)}>
-                <CModalTitle>Import History</CModalTitle>
-              </CModalHeader>
-              <CModalBody>
-                <div className='d-flex w-100 gap-3 justify-content-end'>
-                  <p>Total: </p>
-                  <div className='d-flex p-2 gap-3'>
-                    <DatePicker value={startDate} onChange={handleStartDateChange} />
-                    <DatePicker value={endDate} onChange={handleEndDateChange} />
-                  </div>
-                  <div>
-                    <div className="d-flex form-inline w-100">
-                      <input className="form-control mr-sm-10 me-2" onChange={handleImportInputChange} type="search" placeholder="Search" aria-label="Search" />
-                      <button className="btn btn-primary my-2 my-sm-0" disabled={searchImportInput == ''} type="submit" onClick={() => { handleImportInputvalue() }}>Search</button>
-                    </div>
-                  </div>
-                </div>
-                <div>
-                  <ReactTable showCheckbox={false} columns={importHistoryColumns} data={importHistoryData} totalCount={10} onSelectionChange={handleSelectionChange} />
-                  {importHistoryData.length > 0 &&
-                    <div className='userlist-pagination'>
-                      {/* <div className='userlist-pagination dataTables_paginate'>
-                        <ReactPaginate
-                          breakLabel={'...'}
-                          marginPagesDisplayed={1}
-                          previousLabel={<button>Previous</button>}
-                          nextLabel={<button>Next</button>}
-                          pageCount={totalPages}
-                          onPageChange={handlePageChange}
-                          forcePage={currentPage}
-                          renderOnZeroPageCount={null}
-                          pageRangeDisplayed={1}
-                        />
-                      </div> */}
-                    </div>
-                  }
-
-                </div>
-              </CModalBody>
-              {/* <CModalFooter>
-                <CButton color="secondary">Close</CButton>
-                <CButton color="primary">Save changes</CButton>
-              </CModalFooter> */}
-            </CModal>
+            <button className='btn btn-primary mb-3'>Import History</button>
           </div>
         </div>
       </div>

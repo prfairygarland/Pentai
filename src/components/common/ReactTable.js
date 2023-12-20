@@ -87,7 +87,7 @@ const ReactTable = ({
           <p>No data available</p>
         </div>
       ) : (
-        <div>
+        <div className='table-responsive'>
           <table {...getTableProps()} className='ptk-table dataTable no-footer'>
             <thead>
               {headerGroups.map((headerGroup, index) => (
@@ -100,12 +100,13 @@ const ReactTable = ({
                       aria-label={column.Header}
                     >
                       {column.render('Header')}
-                      <span>
-                        {column.isSorted
+                      {/* <span className='icon-arrow-d'> */}
+                      <span className={  column.isSorted
                           ? column.isSortedDesc
-                            ? ' 🔽'
-                            : ' 🔼'
-                          : ''}
+                            ? 'sortarrow icon-arrow-d'
+                            : 'sortarrow icon-arrow-u'
+                          : ''}>
+
                       </span>
                     </th>
                   ))}

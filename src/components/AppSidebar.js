@@ -41,17 +41,17 @@ const AppSidebar = () => {
         <h4 className="sidebar-brand-narrow">PTK APP Admin</h4>
         {/* <CIcon className="sidebar-brand-narrow" icon={sygnet} height={35} /> */}
       </CSidebarBrand>
-      <h5 className="sidebar-brand-full mt-3 text-center">Category Menu</h5>
+      <h5 className="sidebar-brand-cat mt-3 text-center">Category Menu</h5>
       <CSidebarNav>
         {/* <h4 className="sidebar-brand-narrow">PTK APP Admin</h4> */}
         <SimpleBar>
           <AppSidebarNav items={navigation} />
         </SimpleBar>
       </CSidebarNav>
-      <CSidebarToggler
+      {/* <CSidebarToggler
         className="d-none d-lg-flex"
         onClick={() => dispatch(setSidebarUnfolded(!unfoldable ))}
-      />
+      /> */}
     </CSidebar>
   )
 }
