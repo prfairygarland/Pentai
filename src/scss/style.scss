@@ -83,6 +83,11 @@ padding: 6px;
   border-radius: 50%;
 }
 
+.short-data-table .no-data-message p {
+  text-align: center;
+  font-size: 1.2em;
+  color: #999;
+}
 .mandatory-red-asterisk {
   color: red;
 }

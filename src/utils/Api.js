@@ -232,7 +232,6 @@ export const postApi = async (url, data, header) => {
       response = await axios.post(url, data, {
         headers: {
           accept: 'text/plain',
-          token: `${getToken}`,
           ...CustomHeader,
           ...header,
         },
