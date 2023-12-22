@@ -1,0 +1,118 @@
+.upload-image-main-container {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    width: 100%;
+}
+
+.upload-file-main-container {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    width: 100%;
+}
+
+.upload-img-btn-and-info {
+    display: flex;
+    align-items: flex-start;
+}
+
+.upload-images-container {
+    display: flex;
+    flex-direction: row;
+    border: 1px solid;
+    border-radius: 10px;
+    width: 100%;
+    padding: 10px;
+}
+
+.upload-files-container {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid;
+    border-radius: 10px;
+    width: 100%;
+    padding: 10px;
+}
+
+.individual-file-and-delete {
+    display: flex;
+    justify-content: space-around;
+}
+
+.uploaded-file-name {
+    display: flex;
+    flex-direction: row;
+    width: 80%;
+}
+
+.uploaded-file-delete {
+    display: flex;
+    justify-content: end;
+    width: 15%;
+}
+.remaining-img-container img{
+    margin-top: 40px;
+    width: 100px;
+    height: 100px;
+    padding: 5px;
+}
+
+.thubmnail-img-container img{
+    width: 200px;
+    height: 140px;
+    padding: 5px;
+}
+
+.upload-container-btn {
+    margin-right: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.upload-instruction {
+    color: #a59797;
+    font-size: 12px;
+}
+
+.file-information {
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.recruit-poll-container,
+.push-notification-container,
+.add-as-notice-container {
+    display: flex;
+    align-items: flex-start;
+    padding: 20px;
+}
+
+.recruit-btn,
+.poll-btn {
+    display: flex;
+    width: 125px;
+    justify-content: space-between;
+    margin: 0px 20px 0px 0px;
+    border: 1px solid;
+    border-radius: 10px;
+    padding: 10px;
+    transition: all 0.7s;
+}
+
+.recruit-btn:hover,
+.poll-btn:hover{
+    color: white;
+    background-color: black;
+    cursor: pointer;
+}
+
+.dropdown-container {
+    display: flex;
+    align-items: center;
+    margin-left: 18px;
+}
+
+.board-dropdown {
+    width: 200px;
+}
