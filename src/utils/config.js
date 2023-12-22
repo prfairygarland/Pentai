@@ -23,6 +23,8 @@ export let API_ENDPOINT = {
   // {Community Mangagement} //
   get_board_usage_setting: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/getUsageStatus",
   get_prohabited_words: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/getProhibitedWords",
+  get_board_list: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/boardList",
+  create_post_bulletin: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/createPostBulletin",
 
 
 
