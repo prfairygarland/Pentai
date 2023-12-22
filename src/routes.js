@@ -5,6 +5,7 @@ import BoardManagement from './views/pages/communityManagement/BoardManagement'
 import CreatePost from './views/pages/communityManagement/CreatePost'
 import UserInformationSettings from './views/pages/userManagement/userInformationSettings'
 import UserDetails from './views/pages/userManagement/userDetails'
+import BoardPostListing from './views/pages/communityManagement/BoardPostListing'
 
 
 const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
@@ -23,7 +24,7 @@ const routes = [
   
   //{ community management}
   { path: '/BoardManagement', name: 'Board Management', element: BoardManagement },
-  { path: '/BulletinBoard', name: 'Create Post', element: CreatePost },
+  { path: '/BulletinBoard', name: 'Bulletin Board Management', element: BoardPostListing },
 ]
 
 export default routes

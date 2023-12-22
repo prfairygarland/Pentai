@@ -4,9 +4,13 @@ export let ALL_CONSTANTS = {
   BASE_URL: "https://ptkapi.experiencecommerce.com",       // API URL staging
   API_URL: "https://ptkapi.experiencecommerce.com",    // API URL staging
 
-  // IS_PRODUCTION: true,
-  // BASE_URL: "",       // API URL Live
+    // IS_PRODUCTION: true,
+    // BASE_URL: "",       // API URL Live
   // API_URL: "",    // API URL Live
+    
+  // IS_PRODUCTION: false,
+  // BASE_URL: "http://192.168.9.175:3000",       // Local
+  // API_URL: "http://192.168.9.175:3000",    // Local 
 }
 
 
@@ -23,6 +27,10 @@ export let API_ENDPOINT = {
   // {Community Mangagement} //
   get_board_usage_setting: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/getUsageStatus",
   get_prohabited_words: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/getProhibitedWords",
+  get_boards: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/boardList",
+  get_bulletinboard_posts: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/bulletinBoardManagement",
+  get_boarddata_byID: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/getBoardId",
+  get_postuserdetail : ALL_CONSTANTS.API_URL + "/api/adminPanel/community/userDetailsBulletin",
   get_board_list: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/boardList",
   create_post_bulletin: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/createPostBulletin",
 
