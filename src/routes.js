@@ -25,6 +25,7 @@ const routes = [
   //{ community management}
   { path: '/BoardManagement', name: 'Board Management', element: BoardManagement },
   { path: '/BulletinBoard', name: 'Bulletin Board Management', element: BoardPostListing },
+  { path: '/BulletinBoard/createPost', name: 'Create A Post', element: CreatePost },
 ]
 
 export default routes
