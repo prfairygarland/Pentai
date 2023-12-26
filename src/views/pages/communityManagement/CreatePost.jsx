@@ -1,14 +1,21 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { CButton, CFormCheck, CFormInput, CFormSelect, CFormTextarea } from '@coreui/react'
+import { useLocation } from 'react-router-dom'
 
 import './createPost.scss'
 import { getApi, postApi } from 'src/utils/Api'
 import { API_ENDPOINT } from 'src/utils/config'
+import { SnackbarProvider, enqueueSnackbar } from 'notistack'
+import RecruitManagement from './RecruitManagement'
 
 const CreatePost = () => {
+  const location = useLocation()
   const [boardDropdownValues, setBoardDropdownValues] = useState([{ id: 0, name: 'All' }])
+  const [recruitData, setRecruitData] = useState({})
   const [uploadedImages, setUploadedImages] = useState([])
   const [uploadedFiles, setUploadedFiles] = useState([])
+  const [titleCharCount, setTitleCharCount] = useState(0)
+  const [isRecruitOpen, setIsRecruitOpen] = useState(false)
   const [data, setData] = useState({
     title: '',
     content: '',
@@ -16,8 +23,6 @@ const CreatePost = () => {
     isAnnouncement: false,
     isPushNotification: false,
   })
-  const titleErrRef = useRef(false)
-  const contentErrRef = useRef(false)
 
   const uploadImagesHandler = (e) => {
     const files = [...uploadedImages]
@@ -27,6 +32,7 @@ const CreatePost = () => {
       }
       files.push(file)
     })
+    setData((prev) => ({ ...prev, images: files }))
     setUploadedImages(files)
   }
 
@@ -44,6 +50,7 @@ const CreatePost = () => {
       }
       files.push(file)
     })
+    setData((prev) => ({ ...prev, attachments: files }))
     setUploadedFiles(files)
   }
 
@@ -62,7 +69,20 @@ const CreatePost = () => {
   const savePostHandler = async () => {
     if (validate()) {
       try {
-        const res = await postApi(API_ENDPOINT.create_post_bulletin, data)
+        const formData = new FormData()
+        for (let obj in data) {
+          if (Array.isArray(data[obj])) {
+            for (let i = 0; i < data[obj].length; i++) {
+              formData.append(obj, data[obj][i])
+            }
+          } else {
+            formData.append(obj, data[obj])
+          }
+        }
+        // for (var pair of formData.entries()) {
+        //   console.log(pair[0] + ', ' + pair[1])
+        // }
+        const res = await postApi(API_ENDPOINT.create_post_bulletin, formData)
         console.log(res.status)
         setData({
           title: '',
@@ -70,8 +90,9 @@ const CreatePost = () => {
           boardId: '',
           isAnnouncement: false,
           isPushNotification: false,
+          recruitData: {},
         })
-        alert('Post Created Successfully')
+        enqueueSnackbar('Post Created Successfully', { variant: 'success' })
       } catch (error) {
         console.log(error)
       }
@@ -79,20 +100,15 @@ const CreatePost = () => {
   }
 
   const validate = () => {
-    let isValidated = true
     if (!data.title || data.title.trim() === '') {
-      isValidated = false
-      titleErrRef.current.style.display = 'block'
-    } else {
-      titleErrRef.current.style.display = 'none'
+      enqueueSnackbar('Please enter title', { variant: 'error' })
+      return false
     }
     if (!data.content || data.content.trim() === '') {
-      isValidated = false
-      contentErrRef.current.style.display = 'block'
-    } else {
-      contentErrRef.current.style.display = 'none'
+      enqueueSnackbar('Please enter content', { variant: 'error' })
+      return false
     }
-    return isValidated
+    return true
   }
 
   const getBoardList = async () => {
@@ -107,14 +123,38 @@ const CreatePost = () => {
     }
   }
 
+  const recruitHandler = (isOpen) => {
+    setIsRecruitOpen(isOpen)
+  }
+
+  const changeRecruitDataHandle = (data) => {
+    setRecruitData(data)
+    setData((prev) => ({
+      ...prev,
+      recruitmentEnabled: data.recruitmentEnabled,
+      recruitmentAllowRaffle: data.recruitmentAllowRaffle,
+      recruitmentMaxParticipants: data.recruitmentMaxParticipants,
+      recruitmentDeadline: data.recruitmentDeadline,
+      recruitmentRaffleMaxWinners: data.recruitmentRaffleMaxWinners,
+    }))
+  }
   useEffect(() => {
-    titleErrRef.current.style.display = 'none'
-    contentErrRef.current.style.display = 'none'
     getBoardList()
   }, [])
 
   return (
     <>
+      <SnackbarProvider
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'center',
+        }}
+      />
+      <RecruitManagement
+        isRecruitOpen={isRecruitOpen}
+        setModal={recruitHandler}
+        changeRecruitDataHandle={changeRecruitDataHandle}
+      />
       <main>
         <h4>Create a Post</h4>
         <div className="card p-2 mb-2 mt-4">
@@ -129,7 +169,11 @@ const CreatePost = () => {
               }}
             >
               {boardDropdownValues.map((option, index) => (
-                <option key={option.id} value={option.id}>
+                <option
+                  key={option.id}
+                  value={option.id}
+                  selected={option.id === location.state.boardID}
+                >
                   {option.name}
                 </option>
               ))}
@@ -150,13 +194,16 @@ const CreatePost = () => {
                       placeholder="Enter Title Here"
                       name="title"
                       value={data.title}
-                      onChange={(e) => handleInputChange(e)}
+                      onChange={(e) => {
+                        handleInputChange(e)
+                        setTitleCharCount(e.target.value.length)
+                      }}
                     />
-                    <span className="txt-byte-information">0 / 120 byte</span>
+                    <span className="txt-byte-information">{titleCharCount} / 120 byte</span>
                   </div>
-                  <span className="err-msg-txt" ref={titleErrRef}>
+                  {/* <span className="err-msg-txt" ref={titleErrRef}>
                     Please enter title
-                  </span>
+                  </span> */}
                 </div>
               </div>
               <div className="form-outline form-white  d-flex ">
@@ -176,9 +223,23 @@ const CreatePost = () => {
                       onChange={(e) => handleInputChange(e)}
                     ></CFormTextarea>
                   </div>
-                  <span className="err-msg-txt" ref={contentErrRef}>
-                    Please enter content
-                  </span>
+                  {recruitData?.recruitmentDeadline && (
+                    <div>
+                      <div>{recruitData.recruitmentDeadline}</div>
+                      <div>Status : Not Open</div>
+                      <div>No. of Participants : {recruitData.recruitmentMaxParticipants}</div>
+                      <div>
+                        Raffle : {recruitData.recruitmentAllowRaffle ? 'Yes' : 'No'} /{' '}
+                        {recruitData.recruitmentRaffleMaxWinners}
+                      </div>
+                      <CButton className="btn" color="dark" onClick={() => alert('WIP')}>
+                        Modify
+                      </CButton>
+                      <CButton className="delete-btn" onClick={() => setRecruitData({})}>
+                        Delete
+                      </CButton>
+                    </div>
+                  )}
                 </div>
               </div>
               <div className="form-outline form-white  d-flex ">
@@ -197,6 +258,7 @@ const CreatePost = () => {
                         id="imageFiles"
                         style={{ display: 'inline' }}
                         multiple
+                        accept="image/*"
                         onChange={(e) => uploadImagesHandler(e)}
                       />
                     </div>
@@ -247,6 +309,7 @@ const CreatePost = () => {
                         id="files"
                         style={{ display: 'inline' }}
                         multiple
+                        accept=".xlsx, .docx, .pdf"
                         onChange={(e) => uploadFilesHandler(e)}
                       />
                     </div>
@@ -282,11 +345,16 @@ const CreatePost = () => {
                   <label className="fw-bolder ">Add</label>
                 </div>
                 <div className="recruit-poll-container">
-                  <div className="recruit-btn" onClick={() => alert('Recruit - Work In Progress')}>
+                  <div className="recruit-btn" onClick={() => recruitHandler(true)}>
                     <div>+</div>
                     <div>Recruit</div>
                   </div>
-                  <div className="poll-btn" onClick={() => alert('Poll - Work In Progress')}>
+                  <div
+                    className="poll-btn"
+                    onClick={() =>
+                      enqueueSnackbar('Recruit - Work In Progress', { variant: 'warning' })
+                    }
+                  >
                     <div>+</div>
                     <div>Poll</div>
                   </div>

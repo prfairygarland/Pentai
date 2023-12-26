@@ -2,7 +2,7 @@ import { CButton, CFormInput, CFormSelect, CModal, CModalBody, CModalHeader, CMo
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import DatePicker from 'react-date-picker';
 import ReactPaginate from 'react-paginate';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import ReactTable from 'src/components/common/ReactTable';
 import { getApi } from 'src/utils/Api';
 import { API_ENDPOINT } from 'src/utils/config';
@@ -382,11 +382,19 @@ const BoardPostListing = () => {
         },
     ], [currentPage, itemsPerPage])
 
+    const navigate = useNavigate();
+    const createPostHandler = () => {
+        navigate("./createPost", {
+            state: {
+                boardID: boardID
+            }
+        })
+    }
     return (
         <main>
             <div>
                 <div className='d-flex justify-content-end'>
-                    <CButton>Create a post</CButton>
+                    <CButton onClick={createPostHandler}>Create a post</CButton>
                 </div>
                 <div className='d-flex p-3 justify-content-between h-100 w-100 bg-light rounded mt-2' >
                     <div className='d-flex align-items-center w-25 ms-2 align-items-center'>
