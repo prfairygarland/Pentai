@@ -7,15 +7,18 @@ import { getApi, postApi } from 'src/utils/Api'
 import { API_ENDPOINT } from 'src/utils/config'
 import { SnackbarProvider, enqueueSnackbar } from 'notistack'
 import RecruitManagement from './RecruitManagement'
+import PollManagement from './PollManagement'
 
 const CreatePost = () => {
   const location = useLocation()
   const [boardDropdownValues, setBoardDropdownValues] = useState([{ id: 0, name: 'All' }])
   const [recruitData, setRecruitData] = useState({})
+  const [pollData, setPollData] = useState({})
   const [uploadedImages, setUploadedImages] = useState([])
   const [uploadedFiles, setUploadedFiles] = useState([])
   const [titleCharCount, setTitleCharCount] = useState(0)
   const [isRecruitOpen, setIsRecruitOpen] = useState(false)
+  const [isPollOpen, setIsPollOpen] = useState(false)
   const [data, setData] = useState({
     title: '',
     content: '',
@@ -71,28 +74,30 @@ const CreatePost = () => {
       try {
         const formData = new FormData()
         for (let obj in data) {
-          if (Array.isArray(data[obj])) {
-            for (let i = 0; i < data[obj].length; i++) {
-              formData.append(obj, data[obj][i])
+          if (obj !== 'pollData') {
+            if (Array.isArray(data[obj])) {
+              for (let i = 0; i < data[obj].length; i++) {
+                formData.append(obj, data[obj][i])
+              }
+            } else {
+              formData.append(obj, data[obj])
             }
-          } else {
-            formData.append(obj, data[obj])
           }
         }
-        // for (var pair of formData.entries()) {
-        //   console.log(pair[0] + ', ' + pair[1])
-        // }
         const res = await postApi(API_ENDPOINT.create_post_bulletin, formData)
-        console.log(res.status)
-        setData({
-          title: '',
-          content: '',
-          boardId: '',
-          isAnnouncement: false,
-          isPushNotification: false,
-          recruitData: {},
-        })
-        enqueueSnackbar('Post Created Successfully', { variant: 'success' })
+        if (res?.data?.status === 201) {
+          setData({
+            title: '',
+            content: '',
+            isAnnouncement: false,
+            isPushNotification: false,
+            recruitData: {},
+            pollData: {},
+          })
+          enqueueSnackbar('Post Created Successfully', { variant: 'success' })
+        } else {
+          enqueueSnackbar(`${res?.data?.msg}`, { variant: 'error' })
+        }
       } catch (error) {
         console.log(error)
       }
@@ -127,6 +132,10 @@ const CreatePost = () => {
     setIsRecruitOpen(isOpen)
   }
 
+  const pollHandler = (isOpen) => {
+    setIsPollOpen(isOpen)
+  }
+
   const changeRecruitDataHandle = (data) => {
     setRecruitData(data)
     setData((prev) => ({
@@ -138,6 +147,15 @@ const CreatePost = () => {
       recruitmentRaffleMaxWinners: data.recruitmentRaffleMaxWinners,
     }))
   }
+
+  const changePollDataHandle = (paramData) => {
+    setPollData(paramData)
+    setData((prev) => ({
+      ...prev,
+      ...paramData,
+    }))
+  }
+
   useEffect(() => {
     getBoardList()
   }, [])
@@ -154,6 +172,11 @@ const CreatePost = () => {
         isRecruitOpen={isRecruitOpen}
         setModal={recruitHandler}
         changeRecruitDataHandle={changeRecruitDataHandle}
+      />
+      <PollManagement
+        isPollOpen={isPollOpen}
+        setModal={pollHandler}
+        changePollDataHandle={changePollDataHandle}
       />
       <main>
         <h4>Create a Post</h4>
@@ -240,6 +263,21 @@ const CreatePost = () => {
                       </CButton>
                     </div>
                   )}
+                  {pollData?.pollEndTimestamp && (
+                    <div>
+                      <div>Status : Not Open</div>
+                      <div>Anonymous : None</div>
+                      <div>Select : {pollData.pollMaxSelections === 1 ? 'Single' : 'Multi'}</div>
+                      <h3>Poll : {pollData.pollTitle}</h3>
+                      <div>{pollData?.pollEndTimestamp}</div>
+                      <CButton className="btn" color="dark" onClick={() => alert('WIP')}>
+                        Modify
+                      </CButton>
+                      <CButton className="delete-btn" onClick={() => setPollData({})}>
+                        Delete
+                      </CButton>
+                    </div>
+                  )}
                 </div>
               </div>
               <div className="form-outline form-white  d-flex ">
@@ -249,18 +287,18 @@ const CreatePost = () => {
                 <div className="upload-image-main-container">
                   <div className="upload-img-btn-and-info">
                     <div className="upload-container-btn">
-                      <CButton className="btn" color="dark" for="imageFiles" htmlFor="imageFiles">
+                      <label className="label-btn" color="dark" htmlFor="imageFiles">
                         Upload
-                      </CButton>
-                      <input
-                        type="file"
-                        name="imageFiles"
-                        id="imageFiles"
-                        style={{ display: 'inline' }}
-                        multiple
-                        accept="image/*"
-                        onChange={(e) => uploadImagesHandler(e)}
-                      />
+                        <input
+                          type="file"
+                          name="imageFiles"
+                          id="imageFiles"
+                          style={{ display: 'none' }}
+                          multiple
+                          accept="image/*"
+                          onChange={(e) => uploadImagesHandler(e)}
+                        />
+                      </label>
                     </div>
                     <div className="upload-container-guidance">
                       <div className="upload-instruction"># Upto 10 files can be uploaded</div>
@@ -300,18 +338,18 @@ const CreatePost = () => {
                 <div className="upload-file-main-container">
                   <div className="upload-img-btn-and-info">
                     <div className="upload-container-btn">
-                      <CButton className="btn" color="dark" for="files" htmlFor="files">
+                      <label className="label-btn" color="dark" htmlFor="files">
                         Upload
-                      </CButton>
-                      <input
-                        type="file"
-                        name="files"
-                        id="files"
-                        style={{ display: 'inline' }}
-                        multiple
-                        accept=".xlsx, .docx, .pdf"
-                        onChange={(e) => uploadFilesHandler(e)}
-                      />
+                        <input
+                          type="file"
+                          name="files"
+                          id="files"
+                          style={{ display: 'none' }}
+                          multiple
+                          accept=".xlsx, .docx, .pdf"
+                          onChange={(e) => uploadFilesHandler(e)}
+                        />
+                      </label>
                     </div>
                     <div className="upload-container-guidance">
                       <div className="upload-instruction"># Upto 10 files can be uploaded</div>
@@ -345,15 +383,24 @@ const CreatePost = () => {
                   <label className="fw-bolder ">Add</label>
                 </div>
                 <div className="recruit-poll-container">
-                  <div className="recruit-btn" onClick={() => recruitHandler(true)}>
+                  <div
+                    className={
+                      recruitData?.recruitmentDeadline || pollData?.pollEndTimestamp
+                        ? `recruit-btn disabled`
+                        : `recruit-btn`
+                    }
+                    onClick={() => recruitHandler(true)}
+                  >
                     <div>+</div>
                     <div>Recruit</div>
                   </div>
                   <div
-                    className="poll-btn"
-                    onClick={() =>
-                      enqueueSnackbar('Recruit - Work In Progress', { variant: 'warning' })
+                    className={
+                      recruitData?.recruitmentDeadline || pollData?.pollEndTimestamp
+                        ? `poll-btn disabled`
+                        : `poll-btn`
                     }
+                    onClick={() => pollHandler(true)}
                   >
                     <div>+</div>
                     <div>Poll</div>
