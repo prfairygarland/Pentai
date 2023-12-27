@@ -1,0 +1,35 @@
+.deadline-container {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 10px;
+}
+
+.deadline-label {
+    width: 40%;
+}
+
+.board-dropdown {
+    width: 90%;
+    margin: 0px 10px;
+}
+
+.no-of-participants-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 20px 0px;
+}
+
+.participant-change-container {
+    display: flex;
+    justify-content: end;
+}
+
+.txt-participant-change {
+    width: 30%;
+}
+
+.option-container {
+    display: flex;
+    margin: 10px 0px;
+}

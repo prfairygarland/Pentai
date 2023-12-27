@@ -120,3 +120,21 @@
 .delete-btn {
     margin: 0px 10px;
 }
+
+.label-btn {
+    background-color: #4f5d73;
+    padding: 0px !important;
+    color: #ffffff;
+    cursor: pointer;
+    border-radius: 8px;
+    height: 40px;
+    width: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.disabled {
+    pointer-events: none;
+    opacity: 0.5;
+}
