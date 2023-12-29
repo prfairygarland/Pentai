@@ -2,6 +2,7 @@ import React, { Component, Suspense } from 'react'
 import { BrowserRouter, HashRouter, Route, Routes } from 'react-router-dom'
 import './scss/style.scss'
 import BoardManagement from './views/pages/communityManagement/BoardManagement'
+import { SnackbarProvider } from 'notistack'
 
 const loading = (
   <div className="pt-3 text-center">
@@ -24,6 +25,13 @@ class App extends Component {
   render() {
     return (
       <BrowserRouter >
+      <SnackbarProvider
+      autoHideDuration={2000}
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'center',
+        }}
+      />
         <Suspense fallback={loading}>
           <Routes>
             <Route exact path="/login" name="Login Page" element={<Login />} />

@@ -2,19 +2,18 @@ import {
   CButton,
   CFormCheck,
   CFormInput,
-  CFormSelect,
   CModal,
   CModalBody,
   CModalHeader,
   CModalTitle,
 } from '@coreui/react'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import './PollManagement.scss'
 import DatePicker from 'react-date-picker'
+import { enqueueSnackbar } from 'notistack'
 
 const PollManagement = ({ isPollOpen, setModal, data = '', changePollDataHandle }) => {
-  const defaultOptions = ['', '']
-  const [options, setOptions] = useState(defaultOptions)
+  const [options, setOptions] = useState(['', ''])
   const [pollTitle, setPollTitle] = useState('')
   const [isNoOfParticipationChecked, setIsNoOfParticipationChecked] = useState(false)
   const [isAllowSecretVotingChecked, setIsAllowSecretVotingChecked] = useState(false)
@@ -22,35 +21,6 @@ const PollManagement = ({ isPollOpen, setModal, data = '', changePollDataHandle 
   const [deadlineDate, setDeadlineDate] = useState('')
   const [selectedHours, setSelectedHours] = useState('00')
   const [selectedMins, setSelectedMins] = useState('00')
-  const hours = [
-    '00',
-    '01',
-    '02',
-    '03',
-    '04',
-    '05',
-    '06',
-    '07',
-    '08',
-    '09',
-    '10',
-    '11',
-    '12',
-    '13',
-    '14',
-    '15',
-    '16',
-    '17',
-    '18',
-    '19',
-    '20',
-    '21',
-    '22',
-    '23',
-  ]
-
-  const mins = ['00', '05', '10', '15', '20', '25', '30', '35', '40', '45', '50', '55']
-
   const handleDeadlineDate = (event) => {
     let d = new Date(event),
       month = '' + (d.getMonth() + 1),
@@ -61,7 +31,14 @@ const PollManagement = ({ isPollOpen, setModal, data = '', changePollDataHandle 
     setDeadlineDate([year, month, day].join('-'))
   }
 
+  const timeHandler = (e) => {
+    setSelectedHours(e.target.value.split(':')[0])
+    setSelectedMins(e.target.value.split(':')[1])
+  }
   const handleClose = () => {
+    setPollTitle('')
+    setIsAllowSecretVotingChecked(false)
+    setOptions(['', ''])
     setNoOfParticipants(1)
     setDeadlineDate('')
     setModal(false)
@@ -105,6 +82,11 @@ const PollManagement = ({ isPollOpen, setModal, data = '', changePollDataHandle 
     const availOptions = [...options]
     availOptions.splice(index, 1)
     setOptions(availOptions)
+    if (isNoOfParticipationChecked) {
+      setNoOfParticipants(2)
+    } else {
+      setNoOfParticipants(1)
+    }
   }
 
   const addNewOptionHandler = () => {
@@ -115,13 +97,28 @@ const PollManagement = ({ isPollOpen, setModal, data = '', changePollDataHandle 
     }
   }
   const saveHandler = () => {
-    const date = new Date(deadlineDate + 'T' + selectedHours + ':' + selectedMins)
+    const currentDate = new Date()
+    const selectedDate = new Date(deadlineDate + 'T' + selectedHours + ':' + selectedMins)
+    currentDate.setHours(currentDate.getHours() + 1)
+    if (currentDate >= selectedDate) {
+      enqueueSnackbar('The deadline can not be earlier than an hour from now', { variant: 'error' })
+      return
+    }
+    if (pollTitle.trim() === '') {
+      enqueueSnackbar('Please enter poll title', { variant: 'error' })
+      return
+    }
+    if (options.some((opt) => opt.trim() === '')) {
+      enqueueSnackbar('Options cannot be empty - Empty space(s) not allowed', { variant: 'error' })
+      return
+    }
     const pollData = {
       pollEnabled: true,
       pollTitle: pollTitle,
       pollAllowSecretVoting: isAllowSecretVotingChecked,
       pollMaxSelections: noOfParticipants,
-      pollEndTimestamp: date.toUTCString(),
+      pollEndTimestamp: selectedDate,
+      pollDisplayOptions: options,
     }
     options.forEach((opt, index) => {
       pollData[`pollOptions[${index}]`] = opt
@@ -129,6 +126,26 @@ const PollManagement = ({ isPollOpen, setModal, data = '', changePollDataHandle 
     changePollDataHandle({ ...pollData })
     handleClose()
   }
+
+  useEffect(() => {
+    let currentDateTime = new Date(),
+      month = '' + (currentDateTime.getMonth() + 1),
+      day = '' + currentDateTime.getDate(),
+      year = currentDateTime.getFullYear()
+    if (month.length < 2) month = '0' + month
+    if (day.length < 2) day = '0' + day
+    setDeadlineDate([year, month, day].join('-'))
+    if (currentDateTime.getHours() + 1 < 10) {
+      setSelectedHours('0' + (currentDateTime.getHours() + 1))
+    } else {
+      setSelectedHours(currentDateTime.getHours() + 1)
+    }
+    if (currentDateTime.getMinutes() < 10) {
+      setSelectedMins('0' + currentDateTime.getMinutes())
+    } else {
+      setSelectedMins(currentDateTime.getMinutes())
+    }
+  }, [])
   return (
     <div>
       <CModal
@@ -141,16 +158,18 @@ const PollManagement = ({ isPollOpen, setModal, data = '', changePollDataHandle 
           <CModalTitle>Poll</CModalTitle>
         </CModalHeader>
         <CModalBody>
-          <div>
+          <div className="txt-poll-title-container">
             <CFormInput
               type="text"
               placeholder="Enter Poll Title"
+              className="txt-poll-title"
               name="pollTitle"
               value={pollTitle}
               onChange={(e) => {
-                setPollTitle(e.target.value)
+                setPollTitle(e.target.value.substring(0, 62))
               }}
             />
+            <span className="txt-byte-information">{pollTitle.length} / 62 byte</span>
           </div>
           {options &&
             options.map((opt, index) => (
@@ -160,10 +179,11 @@ const PollManagement = ({ isPollOpen, setModal, data = '', changePollDataHandle 
                   placeholder="Please Enter Option"
                   value={opt}
                   onChange={(e) => {
-                    setOptionValue(e.target.value, index)
+                    setOptionValue(e.target.value.substring(0, 50), index)
                   }}
                 />
                 {index > 1 && <CButton onClick={() => removeOption(index)}>-</CButton>}
+                <span className="txt-byte-information">{options[index].length} / 50 byte</span>
               </div>
             ))}
           <CButton onClick={addNewOptionHandler}>Add New Option</CButton>
@@ -212,36 +232,14 @@ const PollManagement = ({ isPollOpen, setModal, data = '', changePollDataHandle 
               />
             </div>
             <div>
-              <CFormSelect
-                size="sm"
-                name="boardId"
-                className="board-dropdown"
-                onChange={(e) => {
-                  setSelectedHours(e.target.value)
-                }}
-              >
-                {hours.map((option) => (
-                  <option key={option} value={option}>
-                    {option}
-                  </option>
-                ))}
-              </CFormSelect>
-            </div>
-            <div>
-              <CFormSelect
-                size="sm"
-                name="boardId"
-                className="board-dropdown"
-                onChange={(e) => {
-                  setSelectedMins(e.target.value)
-                }}
-              >
-                {mins.map((option) => (
-                  <option key={option} value={option}>
-                    {option}
-                  </option>
-                ))}
-              </CFormSelect>
+              <input
+                type="time"
+                name="time"
+                id="time"
+                className="time-picker"
+                value={`${selectedHours}:${selectedMins}`}
+                onChange={(e) => timeHandler(e)}
+              />
             </div>
           </div>
           <div className="d-flex justify-content-end">

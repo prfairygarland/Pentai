@@ -5,7 +5,7 @@
 }
 
 .deadline-label {
-    width: 40%;
+    width: 70%;
 }
 
 .board-dropdown {
@@ -32,4 +32,12 @@
 .option-container {
     display: flex;
     margin: 10px 0px;
+}
+
+.txt-poll-title-container {
+    display: flex;
+    justify-content: space-between;
+}
+.txt-poll-title {
+    width: 100%;
 }

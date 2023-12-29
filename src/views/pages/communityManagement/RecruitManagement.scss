@@ -4,7 +4,7 @@
 }
 
 .deadline-label {
-    width: 40%;
+    width: 70%;
 }
 
 .board-dropdown {
@@ -16,5 +16,26 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    align-items: center;
     margin: 20px 0px;
+}
+
+.participants-raffle-inc-dec {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 20px 0px;
+}
+
+.txt-participant-raffle {
+    width: 45px;
+    text-align: center;
+    padding: 0px !important;
+    margin: 0px 3px;
+}
+
+.time-picker {
+    width: auto;
+    height: 29px;
+    margin: 0px 10px;
 }
