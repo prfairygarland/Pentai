@@ -5,6 +5,7 @@ import { Link, Navigate, useParams } from 'react-router-dom'
 import ReactTable from 'src/components/common/ReactTable';
 import { getBookRental, getOprationClub, getSupplyRental, getUserDetail } from 'src/utils/Api';
 import { ALL_CONSTANTS } from 'src/utils/config';
+import * as moment from 'moment';
 
 const UserDetails = () => {
 
@@ -51,11 +52,15 @@ const UserDetails = () => {
     },
     {
       Header: 'Rental Date',
-      accessor: 'RentalDate',
+      accessor: '',
+      Cell: ({ row }) => <p>{row.original.RentalDate ? moment(row.original.RentalDate).format('YYYY-MM-DD') : '-'}</p>
+
     },
     {
       Header: 'Return Date',
-      accessor: 'returnDate'
+      accessor: 'returnDate',
+      Cell: ({ row }) => <p>{row.original.returnDate ? moment(row.original.returnDate).format('YYYY-MM-DD') : '-'}</p>
+
     },
     {
       Header: 'Status',
@@ -86,11 +91,13 @@ const UserDetails = () => {
     },
     {
       Header: 'Rental Date',
-      accessor: 'rentalDate'
+      accessor: 'rentalDate',
+      Cell: ({ row }) => <p>{moment(row.original.rentalDate).format('YYYY-MM-DD')}</p>
     },
     {
       Header: 'Return Date',
-      accessor: 'returnDate'
+      accessor: 'returnDate',
+      Cell: ({ row }) => <p>{row.original.returnDate ? moment(row.original.returnDate).format('YYYY-MM-DD') : '-'}</p>
     },
     {
       Header: 'Status',
@@ -114,7 +121,9 @@ const UserDetails = () => {
     },
     {
       Header: 'Created Date',
-      accessor: 'CreatedAt'
+      accessor: 'CreatedAt',
+      Cell: ({ row }) => <p>{row.original.CreatedAt ? moment(row.original.CreatedAt).format('YYYY-MM-DD') : '-'}</p>
+
     }
 
   ], [currentOperationClubPage, itemsPerPage])
@@ -363,6 +372,7 @@ const UserDetails = () => {
                               {userDetails[0]?.supplyCount == 0 ? 0 : <Link onClick={() => { setSuppliesRentalVisible(!suppliesRentalVisible); getSupplyRentallistData(1) }}>{userDetails[0]?.supplyCount}</Link>}
                             </p>
                             <CModal
+                              backdrop="static"
                               alignment="center"
                               size='lg'
                               visible={suppliesRentalVisible}
@@ -404,6 +414,7 @@ const UserDetails = () => {
                               }
                             </p>
                             <CModal
+                              backdrop="static"
                               alignment="center"
                               size='lg'
                               visible={bookRentalVisible}
@@ -455,6 +466,7 @@ const UserDetails = () => {
                               }
                             </p>
                             <CModal
+                              backdrop="static"
                               alignment="center"
                               size='lg'
                               visible={operationClubVisible}

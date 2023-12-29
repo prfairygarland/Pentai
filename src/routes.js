@@ -5,6 +5,7 @@ import BoardManagement from './views/pages/communityManagement/BoardManagement'
 import CreatePost from './views/pages/communityManagement/CreatePost'
 import UserInformationSettings from './views/pages/userManagement/userInformationSettings'
 import UserDetails from './views/pages/userManagement/userDetails'
+import BulletinBoardPostDetails from './views/pages/communityManagement/BulletinBoardPostDetails'
 import BoardPostListing from './views/pages/communityManagement/BoardPostListing'
 
 
@@ -21,10 +22,12 @@ const routes = [
   { path: '/User', name: 'User List', element: UserList },
   { path: '/UserInformation', name: 'User Information Settings', element: UserInformationSettings },
   { path: '/UserDetails/:id', name: 'User Details', element: UserDetails },
-  
+
   //{ community management}
   { path: '/BoardManagement', name: 'Board Management', element: BoardManagement },
   { path: '/BulletinBoard', name: 'Bulletin Board Management', element: BoardPostListing },
+  { path: '/BulletinBoardPostDetails/:id/:boardId', name: 'Bulletin post details ', element: BulletinBoardPostDetails },
+
   { path: '/BulletinBoard/createPost', name: 'Create A Post', element: CreatePost },
 ]
 

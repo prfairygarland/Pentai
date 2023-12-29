@@ -157,7 +157,7 @@ const UserList = () => {
   useEffect(() => {
     getImportHistoryData(1).then((item) => {
     })
-  }, [currentImportHistoryPage, startDate, endDate, searchImportInputValue])
+  }, [startDate, endDate, searchImportInputValue])
 
   const undo = () => {
     console.log('undo');
@@ -216,7 +216,7 @@ const UserList = () => {
 
         console.log('Actual Column Headers:', headers);
 
-        const expectedHeaders = ['srNo', 'username', 'password', 'roleName', 'division', 'company'];
+        const expectedHeaders = ['srNo', 'email', 'roleName', 'division', 'company'];
         const isValidHeaders = expectedHeaders.every(expectedHeader =>
           headers.includes(expectedHeader)
         );
@@ -265,7 +265,7 @@ const UserList = () => {
 
         console.log('Actual Column Headers:', headers);
 
-        const expectedHeaders = ['srNo', 'username', 'password', 'roleName', 'division', 'company'];
+        const expectedHeaders = ['srNo', 'employeeCode', 'KnoxId', 'englishName', 'koreanName', 'email', 'mobile', 'gender', 'company', 'division', 'group', 'jobTitle', 'team'];
         const isValidHeaders = expectedHeaders.every(expectedHeader =>
           headers.includes(expectedHeader)
         );
@@ -435,6 +435,7 @@ const UserList = () => {
   }
 
   const getImportHistoryData = async (currentImportHistoryPage) => {
+    console.log('currentImportHistoryPage =>', currentImportHistoryPage);
     try {
       let url = `https://ptkapi.experiencecommerce.com/api/adminPanel/importModifiedHistory?pageNo=${currentImportHistoryPage}&limit=${itemsPerPage}`;
       console.log('start date =>', startDate);
@@ -653,10 +654,10 @@ const UserList = () => {
           <p style={{ margin: 0 }}>Total:{totalUser}</p>
           <div>
 
-            {/* <button className='btn btn-light  me-3' onClick={() => setUserImportVisible(!userImportVisible)} >User Import</button> */}
-            <button className='btn btn-light  me-3' >User Import</button>
+            <button className='btn btn-light  me-3' onClick={() => setUserImportVisible(!userImportVisible)} >User Import</button>
 
             <CModal
+              backdrop="static"
               alignment="center"
               visible={userImportVisible}
               onClose={() => setUserImportVisible(false)}
@@ -670,7 +671,7 @@ const UserList = () => {
                     onChange={handleFileSelect}
                     multiple
                     accept=".xlsx, .xls" />
-                  <CButton onClick={handleUploadUserImport} disabled={!selectedFile}>Upload</CButton>
+                  <CButton onClick={() => handleUploadUserImport()} disabled={!selectedFile}>Upload</CButton>
                 </div>
                 {userFileFormat && <p className='text-danger text-center'>Please add the correct header</p>}
                 {fileSize && <p className='text-danger text-center'>File size is not more 5 mb</p>}
@@ -681,6 +682,7 @@ const UserList = () => {
             </CModal>
             <button className='btn btn-light  me-3' onClick={() => setOrgImportVisible(!orgImportVisible)}>Org Import</button>
             <CModal
+              backdrop="static"
               alignment="center"
               visible={orgImportVisible}
               onClose={() => setOrgImportVisible(false)}
@@ -694,7 +696,7 @@ const UserList = () => {
                     onChange={handleFileSelect}
                     multiple
                     accept=".xlsx, .xls" />
-                  <CButton onClick={handleOrgUpload} disabled={!selectedFile}>Upload</CButton>
+                  <CButton onClick={() => handleOrgUpload()} disabled={!selectedFile}>Upload</CButton>
                 </div>
                 {fileFormat && <p className='text-danger text-center'>Please add the correct header</p>}
                 {fileSize && <p className='text-danger text-center'>File size is not more 5 mb</p>}
@@ -704,6 +706,7 @@ const UserList = () => {
 
             <button className='btn btn-light  me-3' onClick={() => checkExportSelectid(!exportSelectid)}>Export</button>
             <CModal
+              backdrop="static"
               alignment="center"
               visible={exportSelectid}
               onClose={() => checkExportSelectid(false)}
@@ -763,6 +766,7 @@ const UserList = () => {
           </div>
           <div>
             <CModal
+              backdrop="static"
               alignment="center"
               size="lg"
               visible={importVisible}

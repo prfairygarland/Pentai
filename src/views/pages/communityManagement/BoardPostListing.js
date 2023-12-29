@@ -37,6 +37,7 @@ const BoardPostListing = () => {
     const [filterApplied, setFilterApplied] = useState(0)
     const [userInfoPopup, setUserInfoPopup] = useState(false)
     const [userInfoData, setUserInfoData] = useState({})
+  const navigate = useNavigate();
     const [startDate, setStartDate] = useState('');
     const [endDate, setEndDate] = useState('');
 
@@ -352,7 +353,7 @@ const BoardPostListing = () => {
             accessor: 'PostTitle',
             Cell: ({ row }) => <div>
                {row.original.isAnnouncement > 0 && <i className='icon-announce'></i> }
-                <Link style={{
+              <Link to={`/BulletinBoardPostDetails/${row.original.postId}/${row.original.boardId}`} style={{
                     width: '200px',
                     overflow: 'hidden',
                     whiteSpace: 'nowrap',
@@ -400,7 +401,6 @@ const BoardPostListing = () => {
         },
     ], [currentPage, itemsPerPage])
 
-    const navigate = useNavigate();
     const createPostHandler = () => {
         navigate("./createPost", {
             state: {

@@ -17,8 +17,9 @@ import {
 } from '@coreui/react'
 import { Formik, Form, Field } from 'formik'
 import * as Yup from 'yup'
-import { LoginApi } from 'src/utils/Api'
+import { LoginApi, postApi } from 'src/utils/Api'
 import { useState, useEffect, useCallback } from 'react'
+import { API_ENDPOINT } from 'src/utils/config'
 
 
 const Login = () => {
@@ -52,26 +53,28 @@ const Login = () => {
                           username: values.username,
                           password: values.password
                         }
-                        LoginApi(value).then((data) => {
-                          console.log('data =>', data.userdata);
-                          if (data.status == 200) {
+                        try {
+                          const res = await postApi(API_ENDPOINT.login_api, value)
+                          if (res.data.status == 200) {
                             if (values.remembermecheck == true) {
-                              localStorage.setItem('token', data.token)
-                              localStorage.setItem('userdata', JSON.stringify(data.userdata))
-                              localStorage.setItem('roleWisePermission', JSON.stringify(data.rolePermissions))
+                              localStorage.setItem('token', res.data.token)
+                              localStorage.setItem('userdata', JSON.stringify(res.data.userdata))
+                              localStorage.setItem('roleWisePermission', JSON.stringify(res.data.rolePermissions))
                               setValidCredential(false)
                               navigate("/Dashboard")
                             } else {
-                              sessionStorage.setItem('sessionToken', data.token)
-                              sessionStorage.setItem('sessionUserdata', JSON.stringify(data.userdata))
-                              sessionStorage.setItem('roleWisePermission', JSON.stringify(data.rolePermissions))
+                              sessionStorage.setItem('sessionToken', res.data.token)
+                              sessionStorage.setItem('sessionUserdata', JSON.stringify(res.data.userdata))
+                              sessionStorage.setItem('roleWisePermission', JSON.stringify(res.data.rolePermissions))
                               setValidCredential(false)
                               navigate("/Dashboard")
                             }
                           } else {
                             setValidCredential(true)
                           }
-                        })
+                        } catch (error) {
+                          console.log(error)
+                        }
                       }}
                     >
                       {({ isValid, dirty, errors, touched, isValidating }) => (
