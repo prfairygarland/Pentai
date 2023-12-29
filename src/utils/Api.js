@@ -5,6 +5,7 @@ import { API_ENDPOINT } from 'src/utils/config'
 const getToken = localStorage.getItem('token') ? localStorage.getItem('token') : sessionStorage.getItem('sessionToken')
 
 
+
 // export const PostApi = async (url,value) => {
 //  try {
 //      const resLogin = await axios.post(url,value)
@@ -125,9 +126,9 @@ export const getUserDetail = async (url) => {
 export const userImportApi = async (values) => {
   try {
 
-    const userImportApi = await axios.post('https://ptkapi.experiencecommerce.com/api/adminPanel/orgBulkUpload', values,
+    const userImportApi = await axios.post('https://ptkapi.experiencecommerce.com/api/adminPanel/userBulkUpload', values,
       { headers: { token: `${getToken}` } })
-    console.log('orgImportApiData data  =>', userImportApi.data);
+    console.log('userImportApi data  =>', userImportApi.data);
     return userImportApi.data
   } catch (error) {
     console.log('error =>', error);
@@ -189,6 +190,66 @@ export const getOprationClub = async (url) => {
       { headers: { token: `${getToken}` } })
     console.log('resGetOprationClub data  =>', resGetOprationClub.data);
     return resGetOprationClub.data
+  } catch (error) {
+    console.log('error =>', error);
+  }
+}
+
+export const getBulletinBoardPostDetails = async (url) => {
+  try {
+
+    const resBulletinBoardPostDetails = await axios.get(url,
+      { headers: { token: `${getToken}` } })
+    console.log('resBulletinBoardPostDetails data  =>', resBulletinBoardPostDetails.data);
+    return resBulletinBoardPostDetails.data
+  } catch (error) {
+    console.log('error =>', error);
+  }
+}
+
+export const getPostLikeListData = async (url) => {
+  try {
+
+    const resPostLikeListData = await axios.get(url,
+      { headers: { token: `${getToken}` } })
+    console.log('resPostLikeListData data  =>', resPostLikeListData.data);
+    return resPostLikeListData.data
+  } catch (error) {
+    console.log('error =>', error);
+  }
+}
+
+export const getPostCommentListData = async (url) => {
+  try {
+
+    const resPostCommentData = await axios.get(url,
+      { headers: { token: `${getToken}` } })
+    console.log('resPostCommentData data  =>', resPostCommentData.data);
+    return resPostCommentData.data
+  } catch (error) {
+    console.log('error =>', error);
+  }
+}
+
+export const getRepoerHistoryList = async (url) => {
+  try {
+
+    const getRepoerHistoryList = await axios.get(url,
+      { headers: { token: `${getToken}` } })
+    console.log('RepoerHistoryList data  =>', getRepoerHistoryList.data);
+    return getRepoerHistoryList.data
+  } catch (error) {
+    console.log('error =>', error);
+  }
+}
+
+export const getDeleteReasonsList = async (url) => {
+  try {
+
+    const getDeleteReasonsList = await axios.get(url,
+      { headers: { token: `${getToken}` } })
+    console.log('DeleteReasonsList data  =>', getDeleteReasonsList.data);
+    return getDeleteReasonsList.data
   } catch (error) {
     console.log('error =>', error);
   }
@@ -261,11 +322,11 @@ export const putApi = async (url, postIdToUpdate, data, header) => {
     return response;
   }
 };
-export const deleteApi = async (url, postIdToDelete, data, header) => {
+export const deleteApi = async (url, data, header) => {
   {
     let response = null;
     try {
-      response = await axios.delete(url + postIdToDelete, data, {
+      response = await axios.delete(url, data, {
         headers: {
           accept: 'text/plain',
           ...CustomHeader,

@@ -20,8 +20,9 @@ import CIcon from '@coreui/icons-react'
 import { cilInfo } from '@coreui/icons'
 import { Formik, Form, Field } from 'formik'
 import * as Yup from 'yup'
-import { changePassWordApi } from 'src/utils/Api'
+import { changePassWordApi, postApi } from 'src/utils/Api'
 import { useState, useEffect, useCallback } from 'react'
+import { API_ENDPOINT } from 'src/utils/config'
 
 
 
@@ -70,20 +71,23 @@ const ChangePassword = () => {
                       onSubmit={async (values, re) => {
                         setError('')
                         console.log('value =>', values);
-                        changePassWordApi(values).then((data) => {
-                          if (data.status == 200) {
+                        try {
+                          const res = await postApi(API_ENDPOINT.change_password_api, values)
+
+                          if (res.data.status == 200) {
                             navigate('/Login')
                             setError('')
-                          } else if (data.status == 400) {
-                            setError(data.msg)
-                          } else if (data.status == 420) {
-                            setError(data.msg)
+                          } else if (res.data.status == 400) {
+                            setError(res.data.msg)
+                          } else if (res.data.status == 420) {
+                            setError(res.data.msg)
                           } else {
 
                           }
-                        }).catch((error) => {
-                          console.log('error =>', error);
-                        })
+                        } catch (error) {
+                          console.log(error)
+                        }
+
                       }}
                     >
                       {({ isValid, dirty, errors, touched, isValidating }) => (
