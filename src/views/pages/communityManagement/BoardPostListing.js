@@ -3,16 +3,17 @@ import moment from 'moment/moment';
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import DatePicker from 'react-date-picker';
 import ReactPaginate from 'react-paginate';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import ReactTable from 'src/components/common/ReactTable';
 import { getApi } from 'src/utils/Api';
 import { API_ENDPOINT } from 'src/utils/config';
 import { postTypeOptions, classificationsOptions, reportedOptions, paginationItemPerPageOptions } from 'src/utils/constant';
 import Loader from 'src/components/common/Loader';
+import { enqueueSnackbar } from 'notistack'
 
 
 const BoardPostListing = () => {
-
+    const location = useLocation()
     const initialFilter = {
         department: 'title',
         searchstring: '',
@@ -42,6 +43,9 @@ const BoardPostListing = () => {
 
     useEffect(() => {
         getBoardDropDownData()
+        if(location?.state?.enqueueSnackbarMsg) {
+            enqueueSnackbar(location.state.enqueueSnackbarMsg, { variant: location.state.variant })
+        }
     }, [])
 
     useEffect(() => {

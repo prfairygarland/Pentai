@@ -1,22 +1,22 @@
 import React, { useEffect, useState } from 'react'
 import { CButton, CFormCheck, CFormInput, CFormSelect, CFormTextarea } from '@coreui/react'
-import { useLocation } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 
 import './createPost.scss'
 import { getApi, postApi } from 'src/utils/Api'
 import { API_ENDPOINT } from 'src/utils/config'
-import { SnackbarProvider, enqueueSnackbar } from 'notistack'
+import { enqueueSnackbar } from 'notistack'
 import RecruitManagement from './RecruitManagement'
 import PollManagement from './PollManagement'
 
 const CreatePost = () => {
   const location = useLocation()
+  const navigate = useNavigate()
   const [boardDropdownValues, setBoardDropdownValues] = useState([{ id: 0, name: 'All' }])
   const [recruitData, setRecruitData] = useState({})
   const [pollData, setPollData] = useState({})
   const [uploadedImages, setUploadedImages] = useState([])
   const [uploadedFiles, setUploadedFiles] = useState([])
-  const [titleCharCount, setTitleCharCount] = useState(0)
   const [isRecruitOpen, setIsRecruitOpen] = useState(false)
   const [isPollOpen, setIsPollOpen] = useState(false)
   const [data, setData] = useState({
@@ -35,6 +35,7 @@ const CreatePost = () => {
       }
       files.push(file)
     })
+    e.target.value = null
     setData((prev) => ({ ...prev, images: files }))
     setUploadedImages(files)
   }
@@ -53,6 +54,7 @@ const CreatePost = () => {
       }
       files.push(file)
     })
+    e.target.value = null
     setData((prev) => ({ ...prev, attachments: files }))
     setUploadedFiles(files)
   }
@@ -65,7 +67,10 @@ const CreatePost = () => {
 
   const handleInputChange = (e) => {
     const keyName = e.target.name
-    const value = e.target.value
+    let value = e.target.value
+    if (keyName === 'title') {
+      value = value.substring(0, 120)
+    }
     setData((prev) => ({ ...prev, [keyName]: value }))
   }
 
@@ -91,10 +96,17 @@ const CreatePost = () => {
             content: '',
             isAnnouncement: false,
             isPushNotification: false,
+            images: [],
+            attachments: [],
             recruitData: {},
             pollData: {},
           })
-          enqueueSnackbar('Post Created Successfully', { variant: 'success' })
+          navigate('../BulletinBoard', {
+            state: {
+              enqueueSnackbarMsg: 'Post Created Successfully And Redirected to Post Listing Page',
+              variant: 'success',
+            },
+          })
         } else {
           enqueueSnackbar(`${res?.data?.msg}`, { variant: 'error' })
         }
@@ -105,11 +117,11 @@ const CreatePost = () => {
   }
 
   const validate = () => {
-    if (!data.title || data.title.trim() === '') {
+    if (data.title.trim() === '') {
       enqueueSnackbar('Please enter title', { variant: 'error' })
       return false
     }
-    if (!data.content || data.content.trim() === '') {
+    if (data.content.trim() === '') {
       enqueueSnackbar('Please enter content', { variant: 'error' })
       return false
     }
@@ -138,21 +150,25 @@ const CreatePost = () => {
 
   const changeRecruitDataHandle = (data) => {
     setRecruitData(data)
+    const date = new Date(data.recruitmentDeadline)
     setData((prev) => ({
       ...prev,
       recruitmentEnabled: data.recruitmentEnabled,
       recruitmentAllowRaffle: data.recruitmentAllowRaffle,
       recruitmentMaxParticipants: data.recruitmentMaxParticipants,
-      recruitmentDeadline: data.recruitmentDeadline,
+      recruitmentDeadline: date.toUTCString(),
       recruitmentRaffleMaxWinners: data.recruitmentRaffleMaxWinners,
     }))
   }
 
   const changePollDataHandle = (paramData) => {
     setPollData(paramData)
+    const date = new Date(paramData.pollEndTimestamp)
+    const pollParamData = { ...paramData, pollEndTimestamp: date.toUTCString() }
+    delete pollParamData.pollDisplayOptions
     setData((prev) => ({
       ...prev,
-      ...paramData,
+      ...pollParamData,
     }))
   }
 
@@ -162,12 +178,6 @@ const CreatePost = () => {
 
   return (
     <>
-      <SnackbarProvider
-        anchorOrigin={{
-          vertical: 'top',
-          horizontal: 'center',
-        }}
-      />
       <RecruitManagement
         isRecruitOpen={isRecruitOpen}
         setModal={recruitHandler}
@@ -219,10 +229,9 @@ const CreatePost = () => {
                       value={data.title}
                       onChange={(e) => {
                         handleInputChange(e)
-                        setTitleCharCount(e.target.value.length)
                       }}
                     />
-                    <span className="txt-byte-information">{titleCharCount} / 120 byte</span>
+                    <span className="txt-byte-information">{data.title.length} / 120 byte</span>
                   </div>
                   {/* <span className="err-msg-txt" ref={titleErrRef}>
                     Please enter title
@@ -248,7 +257,13 @@ const CreatePost = () => {
                   </div>
                   {recruitData?.recruitmentDeadline && (
                     <div>
-                      <div>{recruitData.recruitmentDeadline}</div>
+                      <div>
+                        {recruitData.recruitmentDeadline.getFullYear()}-
+                        {recruitData.recruitmentDeadline.getMonth() + 1}-
+                        {recruitData.recruitmentDeadline.getDate()}&nbsp;
+                        {recruitData.recruitmentDeadline.getHours()}:
+                        {recruitData.recruitmentDeadline.getMinutes()}
+                      </div>
                       <div>Status : Not Open</div>
                       <div>No. of Participants : {recruitData.recruitmentMaxParticipants}</div>
                       <div>
@@ -269,7 +284,24 @@ const CreatePost = () => {
                       <div>Anonymous : None</div>
                       <div>Select : {pollData.pollMaxSelections === 1 ? 'Single' : 'Multi'}</div>
                       <h3>Poll : {pollData.pollTitle}</h3>
-                      <div>{pollData?.pollEndTimestamp}</div>
+                      <div style={{ fontWeight: 800 }}>
+                        {pollData?.pollEndTimestamp.getFullYear()}-
+                        {pollData?.pollEndTimestamp.getMonth() + 1}-
+                        {pollData?.pollEndTimestamp.getDate()}&nbsp;
+                        {pollData?.pollEndTimestamp.getHours()}:
+                        {pollData?.pollEndTimestamp.getMinutes()}
+                      </div>
+                      {/* <div>{pollData?.pollEndTimestamp}</div> */}
+                      <div>
+                        <ul>
+                          {pollData?.pollDisplayOptions &&
+                            pollData?.pollDisplayOptions.map((opt, index) => (
+                              <li key={index}>
+                                Option {index + 1} : {opt}
+                              </li>
+                            ))}
+                        </ul>
+                      </div>
                       <CButton className="btn" color="dark" onClick={() => alert('WIP')}>
                         Modify
                       </CButton>

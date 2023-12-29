@@ -2,7 +2,6 @@ import {
   CButton,
   CFormCheck,
   CFormInput,
-  CFormSelect,
   CModal,
   CModalBody,
   CModalHeader,
@@ -11,6 +10,7 @@ import {
 import React, { useEffect, useState } from 'react'
 import './RecruitManagement.scss'
 import DatePicker from 'react-date-picker'
+import { enqueueSnackbar } from 'notistack'
 
 const RecruitManagement = ({ isRecruitOpen, setModal, data = '', changeRecruitDataHandle }) => {
   const [isNoOfParticipationChecked, setIsNoOfParticipationChecked] = useState(false)
@@ -20,34 +20,6 @@ const RecruitManagement = ({ isRecruitOpen, setModal, data = '', changeRecruitDa
   const [deadlineDate, setDeadlineDate] = useState('')
   const [selectedHours, setSelectedHours] = useState('00')
   const [selectedMins, setSelectedMins] = useState('00')
-  const hours = [
-    '00',
-    '01',
-    '02',
-    '03',
-    '04',
-    '05',
-    '06',
-    '07',
-    '08',
-    '09',
-    '10',
-    '11',
-    '12',
-    '13',
-    '14',
-    '15',
-    '16',
-    '17',
-    '18',
-    '19',
-    '20',
-    '21',
-    '22',
-    '23',
-  ]
-
-  const mins = ['00', '05', '10', '15', '20', '25', '30', '35', '40', '45', '50', '55']
 
   const handleDeadlineDate = (event) => {
     let d = new Date(event),
@@ -59,9 +31,15 @@ const RecruitManagement = ({ isRecruitOpen, setModal, data = '', changeRecruitDa
     setDeadlineDate([year, month, day].join('-'))
   }
 
+  const timeHandler = (e) => {
+    setSelectedHours(e.target.value.split(':')[0])
+    setSelectedMins(e.target.value.split(':')[1])
+  }
   const handleClose = () => {
-    setNoOfParticipants(0)
-    setNoOfRaffle(0)
+    setIsNoOfParticipationChecked(false)
+    setIsNoOfRaffleChecked(false)
+    setNoOfParticipants(1)
+    setNoOfRaffle(1)
     setDeadlineDate('')
     setModal(false)
   }
@@ -70,24 +48,27 @@ const RecruitManagement = ({ isRecruitOpen, setModal, data = '', changeRecruitDa
     if (isNoOfParticipationChecked) {
       setNoOfParticipants(1)
     }
+    setNoOfRaffle(1)
     setIsNoOfParticipationChecked(!isNoOfParticipationChecked)
   }
 
   const handleParticipantChange = (e) => {
     if (isNoOfParticipationChecked) {
-      if ((noOfParticipants > 0 && e === -1) || (noOfParticipants < 999 && e === 1)) {
+      setNoOfRaffle(1)
+      if ((noOfParticipants > 1 && e === -1) || (noOfParticipants < 999 && e === 1)) {
         setNoOfParticipants(Number(noOfParticipants + e))
       }
       if (
         e?.target?.value &&
         !isNaN(e.target.value) &&
         e.target.value.length > 0 &&
-        e.target.value.length < 4
+        e.target.value.length < 4 &&
+        e?.target?.value > 0
       ) {
         setNoOfParticipants(Number(e.target.value))
       }
-      if (e?.target?.value === '' && e.target.value.length === 0) {
-        setNoOfParticipants(0)
+      if (e?.target?.value === '0' || (e?.target?.value === '' && e.target.value.length === 0)) {
+        setNoOfParticipants(1)
       }
     }
   }
@@ -100,34 +81,63 @@ const RecruitManagement = ({ isRecruitOpen, setModal, data = '', changeRecruitDa
   }
   const handleRaffleChange = (e) => {
     if (isNoOfRaffleChecked) {
-      if ((noOfRaffle > 0 && e === -1) || (noOfRaffle < 999 && e === 1)) {
+      const maxLimit = isNoOfParticipationChecked ? noOfParticipants : 1000
+      if ((noOfRaffle > 1 && e === -1) || (noOfRaffle < maxLimit - 1 && e === 1)) {
         setNoOfRaffle(Number(noOfRaffle + e))
       }
       if (
         e?.target?.value &&
         !isNaN(e.target.value) &&
         e.target.value.length > 0 &&
-        e.target.value.length < 4
+        e.target.value.length < 4 &&
+        e?.target?.value > 0 &&
+        e?.target?.value < maxLimit
       ) {
         setNoOfRaffle(Number(e.target.value))
       }
-      if (e?.target?.value === '' && e.target.value.length === 0) {
-        setNoOfRaffle(0)
+      if (e?.target?.value === '0' || (e?.target?.value === '' && e.target.value.length === 0)) {
+        setNoOfRaffle(1)
       }
     }
   }
 
   const saveHandler = () => {
-    const date = new Date(deadlineDate + 'T' + selectedHours + ':' + selectedMins)
+    const currentDate = new Date()
+    const selectedDate = new Date(deadlineDate + 'T' + selectedHours + ':' + selectedMins)
+    currentDate.setHours(currentDate.getHours() + 1)
+    if (currentDate >= selectedDate) {
+      enqueueSnackbar('The deadline can not be earlier than an hour from now', { variant: 'error' })
+      return
+    }
     changeRecruitDataHandle({
       recruitmentEnabled: true,
       recruitmentAllowRaffle: isNoOfRaffleChecked,
       recruitmentMaxParticipants: noOfParticipants,
-      recruitmentDeadline: date.toUTCString(),
+      recruitmentDeadline: selectedDate,
       recruitmentRaffleMaxWinners: noOfRaffle,
     })
     handleClose()
   }
+
+  useEffect(() => {
+    let currentDateTime = new Date(),
+      month = '' + (currentDateTime.getMonth() + 1),
+      day = '' + currentDateTime.getDate(),
+      year = currentDateTime.getFullYear()
+    if (month.length < 2) month = '0' + month
+    if (day.length < 2) day = '0' + day
+    setDeadlineDate([year, month, day].join('-'))
+    if (currentDateTime.getHours() + 1 < 10) {
+      setSelectedHours('0' + (currentDateTime.getHours() + 1))
+    } else {
+      setSelectedHours(currentDateTime.getHours() + 1)
+    }
+    if (currentDateTime.getMinutes() < 10) {
+      setSelectedMins('0' + currentDateTime.getMinutes())
+    } else {
+      setSelectedMins(currentDateTime.getMinutes())
+    }
+  }, [])
   return (
     <div>
       <CModal
@@ -141,7 +151,9 @@ const RecruitManagement = ({ isRecruitOpen, setModal, data = '', changeRecruitDa
         </CModalHeader>
         <CModalBody>
           <div className="deadline-container">
-            <div className="deadline-label">Deadline</div>
+            <div className="deadline-label">
+              Deadline<span className="mandatory-red-asterisk">*</span>
+            </div>
             <div>
               <DatePicker
                 value={deadlineDate}
@@ -150,51 +162,30 @@ const RecruitManagement = ({ isRecruitOpen, setModal, data = '', changeRecruitDa
               />
             </div>
             <div>
-              <CFormSelect
-                size="sm"
-                name="boardId"
-                className="board-dropdown"
-                onChange={(e) => {
-                  setSelectedHours(e.target.value)
-                }}
-              >
-                {hours.map((option) => (
-                  <option key={option} value={option}>
-                    {option}
-                  </option>
-                ))}
-              </CFormSelect>
-            </div>
-            <div>
-              <CFormSelect
-                size="sm"
-                name="boardId"
-                className="board-dropdown"
-                onChange={(e) => {
-                  setSelectedMins(e.target.value)
-                }}
-              >
-                {mins.map((option) => (
-                  <option key={option} value={option}>
-                    {option}
-                  </option>
-                ))}
-              </CFormSelect>
+              <input
+                type="time"
+                name="time"
+                id="time"
+                className="time-picker"
+                value={`${selectedHours}:${selectedMins}`}
+                onChange={(e) => timeHandler(e)}
+              />
             </div>
           </div>
           <div className="horizontal-line"></div>
           <div className="no-of-participants-container">
             <div>
               <CFormCheck
-                id="flexCheckDefault"
+                id="noOfParticipants"
                 label="Max no. of participants"
                 checked={isNoOfParticipationChecked}
                 onClick={handleIsNoOfParticipationChecked}
               />
             </div>
-            <div>
+            <div className="participants-raffle-inc-dec">
               <CButton onClick={() => handleParticipantChange(-1)}>-</CButton>
               <CFormInput
+                className="txt-participant-raffle"
                 disabled={!isNoOfParticipationChecked}
                 type="text"
                 placeholder=""
@@ -210,16 +201,17 @@ const RecruitManagement = ({ isRecruitOpen, setModal, data = '', changeRecruitDa
           <div className="no-of-participants-container">
             <div>
               <CFormCheck
-                id="flexCheckDefault"
+                id="noOfRaffle"
                 label="Raffle"
                 checked={isNoOfRaffleChecked}
                 onClick={handleIsNoOfRaffleChecked}
               />
             </div>
             <div>
-              <div>
+              <div className="participants-raffle-inc-dec">
                 <CButton onClick={() => handleRaffleChange(-1)}>-</CButton>
                 <CFormInput
+                  className="txt-participant-raffle"
                   disabled={!isNoOfRaffleChecked}
                   type="text"
                   placeholder=""
