@@ -12,7 +12,12 @@ import './RecruitManagement.scss'
 import DatePicker from 'react-date-picker'
 import { enqueueSnackbar } from 'notistack'
 
-const RecruitManagement = ({ isRecruitOpen, setModal, data = '', changeRecruitDataHandle }) => {
+const RecruitManagement = ({
+  isRecruitOpen,
+  setModal,
+  recruitModifyData = '',
+  changeRecruitDataHandle,
+}) => {
   const [isNoOfParticipationChecked, setIsNoOfParticipationChecked] = useState(false)
   const [isNoOfRaffleChecked, setIsNoOfRaffleChecked] = useState(false)
   const [noOfParticipants, setNoOfParticipants] = useState(1)
@@ -41,6 +46,8 @@ const RecruitManagement = ({ isRecruitOpen, setModal, data = '', changeRecruitDa
     setNoOfParticipants(1)
     setNoOfRaffle(1)
     setDeadlineDate('')
+    setSelectedHours('00')
+    setSelectedMins('00')
     setModal(false)
   }
 
@@ -138,6 +145,42 @@ const RecruitManagement = ({ isRecruitOpen, setModal, data = '', changeRecruitDa
       setSelectedMins(currentDateTime.getMinutes())
     }
   }, [])
+
+  //loading recruit data to modify
+  useEffect(() => {
+    let currentDateTime
+    if (recruitModifyData?.recruitmentEnabled) {
+      setIsNoOfParticipationChecked(
+        recruitModifyData?.recruitmentMaxParticipants > 1 ? true : false,
+      )
+      setIsNoOfRaffleChecked(recruitModifyData?.recruitmentAllowRaffle)
+      setNoOfParticipants(recruitModifyData?.recruitmentMaxParticipants)
+      setNoOfRaffle(recruitModifyData?.recruitmentRaffleMaxWinners)
+      currentDateTime = new Date(recruitModifyData?.recruitmentDeadline)
+    } else {
+      currentDateTime = new Date()
+    }
+    let month = '' + (currentDateTime.getMonth() + 1),
+      day = '' + currentDateTime.getDate(),
+      year = currentDateTime.getFullYear()
+    if (month.length < 2) month = '0' + month
+    if (day.length < 2) day = '0' + day
+    setDeadlineDate([year, month, day].join('-'))
+    const hours = recruitModifyData?.recruitmentEnabled
+      ? currentDateTime.getHours()
+      : currentDateTime.getHours() + 1
+    if (hours + 1 < 10) {
+      setSelectedHours('0' + hours)
+    } else {
+      setSelectedHours(hours)
+    }
+    if (currentDateTime.getMinutes() < 10) {
+      setSelectedMins('0' + currentDateTime.getMinutes())
+    } else {
+      setSelectedMins(currentDateTime.getMinutes())
+    }
+  }, [isRecruitOpen])
+
   return (
     <div>
       <CModal
