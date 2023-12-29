@@ -12,7 +12,7 @@ import './PollManagement.scss'
 import DatePicker from 'react-date-picker'
 import { enqueueSnackbar } from 'notistack'
 
-const PollManagement = ({ isPollOpen, setModal, data = '', changePollDataHandle }) => {
+const PollManagement = ({ isPollOpen, setModal, pollModifyData = '', changePollDataHandle }) => {
   const [options, setOptions] = useState(['', ''])
   const [pollTitle, setPollTitle] = useState('')
   const [isNoOfParticipationChecked, setIsNoOfParticipationChecked] = useState(false)
@@ -37,10 +37,13 @@ const PollManagement = ({ isPollOpen, setModal, data = '', changePollDataHandle 
   }
   const handleClose = () => {
     setPollTitle('')
-    setIsAllowSecretVotingChecked(false)
     setOptions(['', ''])
+    setIsAllowSecretVotingChecked(false)
+    setIsNoOfParticipationChecked(false)
     setNoOfParticipants(1)
     setDeadlineDate('')
+    setSelectedHours('00')
+    setSelectedMins('00')
     setModal(false)
   }
 
@@ -128,24 +131,37 @@ const PollManagement = ({ isPollOpen, setModal, data = '', changePollDataHandle 
   }
 
   useEffect(() => {
-    let currentDateTime = new Date(),
-      month = '' + (currentDateTime.getMonth() + 1),
+    let currentDateTime
+    if (pollModifyData?.pollEnabled) {
+      currentDateTime = new Date(pollModifyData?.pollEndTimestamp)
+      setPollTitle(pollModifyData?.pollTitle)
+      setOptions(pollModifyData?.pollDisplayOptions)
+      setIsNoOfParticipationChecked(pollModifyData?.pollMaxSelections > 1 ? true : false)
+      setNoOfParticipants(pollModifyData?.pollMaxSelections)
+      setIsAllowSecretVotingChecked(pollModifyData?.pollAllowSecretVoting)
+    } else {
+      currentDateTime = new Date()
+    }
+    let month = '' + (currentDateTime.getMonth() + 1),
       day = '' + currentDateTime.getDate(),
       year = currentDateTime.getFullYear()
     if (month.length < 2) month = '0' + month
     if (day.length < 2) day = '0' + day
     setDeadlineDate([year, month, day].join('-'))
-    if (currentDateTime.getHours() + 1 < 10) {
-      setSelectedHours('0' + (currentDateTime.getHours() + 1))
+    const hours = pollModifyData?.pollEnabled
+      ? currentDateTime.getHours()
+      : currentDateTime.getHours() + 1
+    if (hours + 1 < 10) {
+      setSelectedHours('0' + hours)
     } else {
-      setSelectedHours(currentDateTime.getHours() + 1)
+      setSelectedHours(hours)
     }
     if (currentDateTime.getMinutes() < 10) {
       setSelectedMins('0' + currentDateTime.getMinutes())
     } else {
       setSelectedMins(currentDateTime.getMinutes())
     }
-  }, [])
+  }, [isPollOpen])
   return (
     <div>
       <CModal

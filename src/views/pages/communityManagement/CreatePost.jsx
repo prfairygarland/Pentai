@@ -172,6 +172,14 @@ const CreatePost = () => {
     }))
   }
 
+  const modifyRecruit = () => {
+    setIsRecruitOpen(true)
+  }
+
+  const modifyPoll = () => {
+    setIsPollOpen(true)
+  }
+
   useEffect(() => {
     getBoardList()
   }, [])
@@ -182,11 +190,13 @@ const CreatePost = () => {
         isRecruitOpen={isRecruitOpen}
         setModal={recruitHandler}
         changeRecruitDataHandle={changeRecruitDataHandle}
+        recruitModifyData={recruitData}
       />
       <PollManagement
         isPollOpen={isPollOpen}
         setModal={pollHandler}
         changePollDataHandle={changePollDataHandle}
+        pollModifyData={pollData}
       />
       <main>
         <h4>Create a Post</h4>
@@ -270,7 +280,7 @@ const CreatePost = () => {
                         Raffle : {recruitData.recruitmentAllowRaffle ? 'Yes' : 'No'} /{' '}
                         {recruitData.recruitmentRaffleMaxWinners}
                       </div>
-                      <CButton className="btn" color="dark" onClick={() => alert('WIP')}>
+                      <CButton className="btn" color="dark" onClick={() => modifyRecruit()}>
                         Modify
                       </CButton>
                       <CButton className="delete-btn" onClick={() => setRecruitData({})}>
@@ -291,7 +301,6 @@ const CreatePost = () => {
                         {pollData?.pollEndTimestamp.getHours()}:
                         {pollData?.pollEndTimestamp.getMinutes()}
                       </div>
-                      {/* <div>{pollData?.pollEndTimestamp}</div> */}
                       <div>
                         <ul>
                           {pollData?.pollDisplayOptions &&
@@ -302,7 +311,7 @@ const CreatePost = () => {
                             ))}
                         </ul>
                       </div>
-                      <CButton className="btn" color="dark" onClick={() => alert('WIP')}>
+                      <CButton className="btn" color="dark" onClick={() => modifyPoll()}>
                         Modify
                       </CButton>
                       <CButton className="delete-btn" onClick={() => setPollData({})}>
