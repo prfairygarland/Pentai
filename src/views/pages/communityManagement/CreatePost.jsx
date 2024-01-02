@@ -8,6 +8,7 @@ import { API_ENDPOINT } from 'src/utils/config'
 import { enqueueSnackbar } from 'notistack'
 import RecruitManagement from './RecruitManagement'
 import PollManagement from './PollManagement'
+import ConfirmationModal from 'src/utils/ConfirmationModal'
 
 const CreatePost = () => {
   const location = useLocation()
@@ -19,6 +20,7 @@ const CreatePost = () => {
   const [uploadedFiles, setUploadedFiles] = useState([])
   const [isRecruitOpen, setIsRecruitOpen] = useState(false)
   const [isPollOpen, setIsPollOpen] = useState(false)
+  const [modalProps, setModalProps] = useState({})
   const [data, setData] = useState({
     title: '',
     content: '',
@@ -29,6 +31,12 @@ const CreatePost = () => {
 
   const uploadImagesHandler = (e) => {
     const files = [...uploadedImages]
+    const eventFiles = e.target.files
+    if (eventFiles.length + files.length > 10) {
+      enqueueSnackbar(` Upto 10 images can be uploaded`, { variant: 'error' })
+      e.target.value = null
+      return
+    }
     Array.from(e.target.files).forEach((file) => {
       if (files.length === 10) {
         return //only first 10 files will be uploaded
@@ -41,13 +49,35 @@ const CreatePost = () => {
   }
 
   const deleteUploadedImageHandler = (imgFileIndex) => {
+    setModalProps({
+      isModalOpen: false,
+    })
     const imgFiles = [...uploadedImages]
     imgFiles.splice(imgFileIndex, 1)
     setUploadedImages(imgFiles)
   }
 
+  const confirmationDeleteImgModalHandler = (isOpen, imgFileIndex = 0) => {
+    setModalProps({
+      isModalOpen: isOpen,
+      title: 'Confirmation',
+      content: 'Are you sure you  want to delete image?',
+      cancelBtn: 'No',
+      cancelBtnHandler: cancelConfirmation,
+      successBtn: 'Yes',
+      successBtnHandler: () => deleteUploadedImageHandler(imgFileIndex),
+      modalCloseHandler: confirmationDeleteImgModalHandler,
+    })
+  }
+
   const uploadFilesHandler = (e) => {
     const files = [...uploadedFiles]
+    const eventFiles = e.target.files
+    if (eventFiles.length + files.length > 10) {
+      enqueueSnackbar(` Upto 10 files can be uploaded`, { variant: 'error' })
+      e.target.value = null
+      return
+    }
     Array.from(e.target.files).forEach((file) => {
       if (files.length === 10) {
         return //only first 10 files will be uploaded
@@ -60,9 +90,25 @@ const CreatePost = () => {
   }
 
   const deleteUploadedFileHandler = (fileIndex) => {
+    setModalProps({
+      isModalOpen: false,
+    })
     const files = [...uploadedFiles]
     files.splice(fileIndex, 1)
     setUploadedFiles(files)
+  }
+
+  const confirmationDeleteFileModalHandler = (isOpen, fileIndex = 0) => {
+    setModalProps({
+      isModalOpen: isOpen,
+      title: 'Confirmation',
+      content: 'Are you sure you  want to delete file?',
+      cancelBtn: 'No',
+      cancelBtnHandler: cancelConfirmation,
+      successBtn: 'Yes',
+      successBtnHandler: () => deleteUploadedFileHandler(fileIndex),
+      modalCloseHandler: confirmationDeleteFileModalHandler,
+    })
   }
 
   const handleInputChange = (e) => {
@@ -74,45 +120,73 @@ const CreatePost = () => {
     setData((prev) => ({ ...prev, [keyName]: value }))
   }
 
+  const confirmationModalHandler = (isOpen) => {
+    setModalProps({
+      isModalOpen: isOpen,
+      title: 'Confirmation',
+      content: 'Are you sure to save post?',
+      cancelBtn: 'No',
+      cancelBtnHandler: cancelConfirmation,
+      successBtn: 'Yes',
+      successBtnHandler: successConfirmation,
+      modalCloseHandler: confirmationModalHandler,
+    })
+  }
+
+  const successConfirmation = () => {
+    savePostHandler()
+    setModalProps({
+      isModalOpen: false,
+    })
+  }
+
+  const cancelConfirmation = () => {
+    setModalProps({
+      isModalOpen: false,
+    })
+  }
+
+  const cancelPostHandler = () => {
+    navigate('../BulletinBoard')
+  }
+
   const savePostHandler = async () => {
-    if (validate()) {
-      try {
-        const formData = new FormData()
-        for (let obj in data) {
-          if (obj !== 'pollData') {
-            if (Array.isArray(data[obj])) {
-              for (let i = 0; i < data[obj].length; i++) {
-                formData.append(obj, data[obj][i])
-              }
-            } else {
-              formData.append(obj, data[obj])
+    try {
+      const formData = new FormData()
+      for (let obj in data) {
+        if (obj !== 'pollData') {
+          if (Array.isArray(data[obj])) {
+            for (let i = 0; i < data[obj].length; i++) {
+              formData.append(obj, data[obj][i])
             }
+          } else {
+            formData.append(obj, data[obj])
           }
         }
-        const res = await postApi(API_ENDPOINT.create_post_bulletin, formData)
-        if (res?.data?.status === 201) {
-          setData({
-            title: '',
-            content: '',
-            isAnnouncement: false,
-            isPushNotification: false,
-            images: [],
-            attachments: [],
-            recruitData: {},
-            pollData: {},
-          })
-          navigate('../BulletinBoard', {
-            state: {
-              enqueueSnackbarMsg: 'Post Created Successfully And Redirected to Post Listing Page',
-              variant: 'success',
-            },
-          })
-        } else {
-          enqueueSnackbar(`${res?.data?.msg}`, { variant: 'error' })
-        }
-      } catch (error) {
-        console.log(error)
       }
+      const res = await postApi(API_ENDPOINT.create_post_bulletin, formData)
+      if (res?.data?.status === 201) {
+        setData({
+          title: '',
+          content: '',
+          isAnnouncement: false,
+          isPushNotification: false,
+          images: [],
+          attachments: [],
+          recruitData: {},
+          pollData: {},
+        })
+        navigate('../BulletinBoard', {
+          state: {
+            enqueueSnackbarMsg: 'Post Created Successfully And Redirected to Post Listing Page',
+            variant: 'success',
+          },
+        })
+      } else {
+        enqueueSnackbar(`${res?.data?.msg}`, { variant: 'error' })
+      }
+    } catch (error) {
+      console.log(error)
     }
   }
 
@@ -125,7 +199,7 @@ const CreatePost = () => {
       enqueueSnackbar('Please enter content', { variant: 'error' })
       return false
     }
-    return true
+    confirmationModalHandler(true)
   }
 
   const getBoardList = async () => {
@@ -186,6 +260,7 @@ const CreatePost = () => {
 
   return (
     <>
+      <ConfirmationModal modalProps={modalProps} />
       <RecruitManagement
         isRecruitOpen={isRecruitOpen}
         setModal={recruitHandler}
@@ -215,7 +290,7 @@ const CreatePost = () => {
                 <option
                   key={option.id}
                   value={option.id}
-                  selected={option.id === location.state.boardID}
+                  selected={option.id === location?.state?.boardID}
                 >
                   {option.name}
                 </option>
@@ -342,7 +417,7 @@ const CreatePost = () => {
                       </label>
                     </div>
                     <div className="upload-container-guidance">
-                      <div className="upload-instruction"># Upto 10 files can be uploaded</div>
+                      <div className="upload-instruction"># Upto 10 images can be uploaded</div>
                       <div className="upload-instruction">
                         # The first image is registered as a representative image [thumbnail] in the
                         order of upload
@@ -365,7 +440,9 @@ const CreatePost = () => {
                           key={index}
                         >
                           <img src={URL.createObjectURL(uploadedImages[index])} alt="" />
-                          <span onClick={() => deleteUploadedImageHandler(index)}>X</span>
+                          <span onClick={() => confirmationDeleteImgModalHandler(true, index)}>
+                            X
+                          </span>
                         </div>
                       ))}
                     </div>
@@ -409,7 +486,7 @@ const CreatePost = () => {
                           <div className="uploaded-file-name">{file.name}</div>
                           <div
                             className="uploaded-file-delete"
-                            onClick={() => deleteUploadedFileHandler(index)}
+                            onClick={() => confirmationDeleteFileModalHandler(true, index)}
                           >
                             X
                           </div>
@@ -499,8 +576,11 @@ const CreatePost = () => {
             </div>
           </div>
         </div>
-        <div className="d-grid gap-2 col-2 mx-auto m-4">
-          <CButton className="btn" color="dark" onClick={savePostHandler}>
+        <div className="save-cancel-btn-container">
+          <CButton className="btn save-cancel-btn" color="dark" onClick={cancelPostHandler}>
+            Cancel
+          </CButton>
+          <CButton className="btn save-cancel-btn" color="dark" onClick={validate}>
             Save
           </CButton>
         </div>

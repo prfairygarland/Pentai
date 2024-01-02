@@ -138,3 +138,14 @@
     pointer-events: none;
     opacity: 0.5;
 }
+
+.save-cancel-btn-container {
+    display: flex;
+    justify-content: center;
+    align-content: space-around;
+}
+
+.save-cancel-btn {
+    width: 85px;
+    margin: 20px 5px;
+}
