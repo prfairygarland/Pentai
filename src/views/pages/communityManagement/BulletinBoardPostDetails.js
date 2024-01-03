@@ -1,22 +1,23 @@
 import { cilUser } from '@coreui/icons'
 import CIcon from '@coreui/icons-react'
-import { CAccordion, CAccordionBody, CAccordionHeader, CAccordionItem, CButton, CForm, CFormCheck, CFormSelect, CFormTextarea, CImage, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle } from '@coreui/react'
+import { CAccordion, CAccordionBody, CAccordionHeader, CAccordionItem, CButton, CContainer, CForm, CFormCheck, CFormSelect, CFormTextarea, CImage, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle } from '@coreui/react'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useParams } from 'react-router'
 import { NavLink, useNavigate } from 'react-router-dom'
+import Loader from 'src/components/common/Loader'
 import ReactTable from 'src/components/common/ReactTable'
 import { deleteApi, getApi, getBulletinBoardPostDetails, getDeleteReasonsList, getPostCommentListData, getPostLikeListData, getRepoerHistoryList, postApi } from 'src/utils/Api'
 import { ALL_CONSTANTS, API_ENDPOINT } from 'src/utils/config'
+import * as moment from 'moment';
 
 const getUserData = JSON.parse(localStorage.getItem('userdata') ? localStorage.getItem('userdata') : sessionStorage.getItem('sessionUserdata'))
-
-console.log('id check =>', getUserData.id);
 
 
 const BulletinBoardPostDetails = () => {
   const [bulletinBoardPostDetail, setBulletinBoardPostDetail] = useState([])
   const [postLikeListData, setPostLikeListData] = useState([])
   const [postLikeListDataTotalCount, setPostLikeListDataTotalCount] = useState(0)
+  const [winnerDataTotalCount, setWinnerDataTotalCount] = useState(0)
   const [postCommentListData, setPostCommentListData] = useState([])
   const [commentsData, setCommentsData] = useState([])
   const [commentCurrentPage, setCommentCurrentPage] = useState(0)
@@ -43,8 +44,19 @@ const BulletinBoardPostDetails = () => {
   const [showEnoughParticiapantModal, setShowEnoughParticiapantModal] = useState(false)
   const [winnerCurrentPage, setWinnerCurrentPage] = useState(0)
   const [editComment, setEditComment] = useState({ mode: '', ids: null })
+  const [recuritmentParticipantDataCount, setRecuritmentParticipantDataCount] = useState(0)
+  const [recuritmentParticipantCurrentPage, setRecuritmentParticipantCurrentPageCount] = useState(0)
+  const [isLoading, setIsLoading] = useState(false);
+  const [deletePostConfirm, setDeletePostConfirm] = useState(false)
+  const [pollParticipantOptionData, setPollParticipantOptionData] = useState([])
+  const [pollParticipantOptionDataList, setPollParticipantOptionDataList] = useState([])
+  const [totalPollParticipantOptionDataCount, setTotalPollParticipantOptionDataCount] = useState([])
+  const [pollParticipantOptionDataCurrentPage, setPollParticipantOptionDataCurrentPage] = useState(0)
 
 
+
+
+  console.log('poldbdhd', pollParticipantOptionDataList)
 
 
   const navigate = useNavigate();
@@ -79,6 +91,8 @@ const BulletinBoardPostDetails = () => {
     {
       Header: 'Reported time',
       accessor: 'commentReportedAt',
+      Cell: ({ row }) => <p>{row.original.commentReportedAt ? moment(row.original.commentReportedAt).format('YYYY-MM-DD HH:mm:ss') : '-'}</p>
+
     }
 
 
@@ -114,20 +128,21 @@ const BulletinBoardPostDetails = () => {
   // https://ptkapi.experiencecommerce.com
 
   const BulletinBoardPostDetail = async () => {
+    setIsLoading(true)
     try {
       let url = `https://ptkapi.experiencecommerce.com/api/adminPanel/community/postDetailsBulletin?postId=${id}&boardId=${boardId}`
       const res = await getBulletinBoardPostDetails(url);
       console.log('res BulletinBoardPostDetail=>', res);
 
       if (res.status == 200) {
+        setIsLoading(false)
         setBulletinBoardPostDetail(res.getPostdetails)
         if (res.getPostdetails[0].type == 'poll') {
-          pollParticipantData()
+          pollParticipantData(1)
+          pollParticipantOption()
         } else if (res.getPostdetails[0].type == 'recruit' || res.getPostdetails[0].type == 'raffle') {
-          recuritmentParticipantData(res.getPostdetails[0].recruitmentId, id)
+          recuritmentParticipantData(res.getPostdetails[0].recruitmentId, id, 1)
         }
-
-        console.log('date q=>', res.getPostdetails[0]?.recruitmentId);
 
         if (res.getPostdetails[0]?.isDrawWinners == 1) {
           handleWinnerList(res.getPostdetails[0]?.recruitmentId, id, 1)
@@ -136,6 +151,7 @@ const BulletinBoardPostDetails = () => {
 
       }
     } catch (error) {
+      setIsLoading(false)
       console.log('error getCompaniesData =>', error);
     }
   }
@@ -227,22 +243,29 @@ const BulletinBoardPostDetails = () => {
 
 
   const handleICommentnputChange = (event) => {
-    setCommentInput(event.target.value)
+    let value = event.target.value
+
+    value = value.substring(0, 1000)
+    setCommentInput(value)
   }
 
   const handleDeleteReasonInputChange = (event) => {
     console.log('event =>', event);
-    setOtherDeleteInput(event?.target?.value)
+    let value = event.target.value
+    value = value.substring(0, 500)
+
+    setOtherDeleteInput(value)
   }
 
   console.log('selectedDeleteReason =>', otherDeleteInput)
 
   const clearDeleteModuleValues = () => {
     setSelectedDeleteReason('')
+    setOtherDeleteInput('')
   }
 
   const handlePostComment = async () => {
-
+    setIsLoading(true)
     try {
       const url = editComment?.mode === 'update' ? API_ENDPOINT.bulletin_post_comment_edit : API_ENDPOINT.bulletin_post_add_comment
       const body = editComment?.mode === 'update' ? { postId: id, text: commentInput, commentId: editComment.ids } : { postId: id, text: commentInput }
@@ -250,18 +273,26 @@ const BulletinBoardPostDetails = () => {
       console.log('test new =>', res.status)
 
       if (res.status == 200) {
-        console.log('test new test=>', res.status)
+        setIsLoading(false)
         setEditComment({ mode: '', ids: null })
         setCommentInput('')
         getPostCommentList(1)
+      } else {
+        setEditComment({ mode: '', ids: null })
+        setCommentInput('')
+        getPostCommentList(1)
+        setIsLoading(false)
       }
 
     } catch (error) {
+      setIsLoading(false)
       console.log('error =>', error)
     }
   }
 
   const handlePostDelete = async () => {
+    console.log('console Delete');
+    setIsLoading(true)
     try {
 
       let data = {
@@ -276,9 +307,13 @@ const BulletinBoardPostDetails = () => {
       const res = await postApi(API_ENDPOINT.bulletin_post_delete, data)
       console.log('res =>', res.data.status);
       if (res.data.status == 200) {
+        setDeletePostConfirm(false)
+        setDeleteModal(false)
+        setIsLoading(false)
         navigate('/BulletinBoard')
       }
     } catch (error) {
+      setIsLoading(false)
       console.log('handlePostDelete error =>', error);
     }
   }
@@ -287,15 +322,22 @@ const BulletinBoardPostDetails = () => {
 
 
   const handleReportCancle = async (comId, useId) => {
+    setIsLoading(true)
     try {
       const res = await postApi(API_ENDPOINT.bulletin_post_cancel, { postId: id, commentId: comId, commentCancel: true, reportedUserId: useId })
       console.log('res =>', res);
       if (res.status == 200) {
+        setIsLoading(false)
+        getPostCommentList(1)
+        setReportCancelvisible(false)
+      } else {
+        setIsLoading(false)
         getPostCommentList(1)
         setReportCancelvisible(false)
       }
     } catch (error) {
       setReportCancelvisible(false)
+      setIsLoading(false)
       console.log('handlePostDelete error =>', error);
     }
   }
@@ -303,6 +345,7 @@ const BulletinBoardPostDetails = () => {
   const handlePostCommentDelete = async (comId, useId) => {
     console.log('useId', useId);
     console.log('comId', comId);
+    setIsLoading(true)
 
     let dataPass = {
       postId: id, commentId: comId,
@@ -318,6 +361,15 @@ const BulletinBoardPostDetails = () => {
       const res = await postApi(API_ENDPOINT.bulletin_post_cancel, dataPass)
       console.log('res =>', res);
       if (res.status == 200) {
+        setIsLoading(false)
+        setSelectedDeleteReason('');
+        setOtherDeleteInput('')
+        clearDeleteModuleValues()
+        getPostCommentList(1)
+        setDeleteCommentModal(false)
+        setGetIdAnduserId({ type: '', ids: null, userIds: null })
+      } else {
+        setIsLoading(false)
         setSelectedDeleteReason('');
         setOtherDeleteInput('')
         clearDeleteModuleValues()
@@ -393,9 +445,9 @@ const BulletinBoardPostDetails = () => {
     }
   }
 
-  const pollParticipantData = async () => {
+  const pollParticipantData = async (pageNo) => {
     try {
-      const res = await getApi(API_ENDPOINT.bulletin_post_poll_participant + `?postId=${id}`)
+      const res = await getApi(API_ENDPOINT.bulletin_post_poll_participant + `?postId=${id}&pageNo=${pageNo}`)
       console.log('getapi usage =>', res.data);
       if (res.status === 200) {
         setPostPollParticipantDetail(res.data)
@@ -405,13 +457,53 @@ const BulletinBoardPostDetails = () => {
     }
   }
 
-  const recuritmentParticipantData = async (reqId, postId) => {
+  const pollParticipantOption = async () => {
     try {
-      const res = await getApi(API_ENDPOINT.bulletin_post_recurit_participant + `?recuritmentId=${reqId}&postId=${postId}`)
-      console.log('getapi usage status =>', res);
+      const res = await getApi(API_ENDPOINT.bulletin_post_poll_participant_option + `?postId=${id}`)
+      console.log('getapi usage =>', res.data);
       if (res.status === 200) {
-        setPostRecuritParticipantDetail(res.data)
-        console.log('ProceedAnyway =>', postRecuritParticipantDetail.length);
+        setPollParticipantOptionData(res.getPollDetails)
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const handlePollParticipantOptionData = async (pollOptionId, pageNo) => {
+    console.log('test 1=>', pollOptionId);
+    console.log('test 2=>', pageNo);
+
+    try {
+      const res = await getApi(API_ENDPOINT.bulletin_post_poll_participant_option_data + `?pollOptionId=${pollOptionId}&pageNo=${pageNo}`)
+      console.log('getapi new =>', res.data);
+      setPollParticipantOptionDataCurrentPage(pageNo)
+      if (res.status === 200) {
+        // setPollParticipantOptionData(res.getPollDetails)
+        // setPollParticipantOptionDataList(res.data)
+        setTotalPollParticipantOptionDataCount(res.totalCount)
+        if (pageNo == 1) {
+          setPollParticipantOptionDataList(res.data)
+        } else {
+          setPollParticipantOptionDataList((prevData) => [...prevData, ...res.data]);
+        }
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const recuritmentParticipantData = async (reqId, postId, pageNo) => {
+    try {
+      const res = await getApi(API_ENDPOINT.bulletin_post_recurit_participant + `?&pageNo=${pageNo}&recuritmentId=${reqId}&postId=${postId}`)
+      console.log('getapi usage status =>', res);
+      setRecuritmentParticipantCurrentPageCount(pageNo)
+      if (res.status === 200) {
+        setRecuritmentParticipantDataCount(res.totalCount)
+        if (pageNo == 1) {
+          setPostRecuritParticipantDetail(res.data)
+        } else {
+          setPostRecuritParticipantDetail((prevData) => [...prevData, ...res.data]);
+        }
       }
     } catch (error) {
       console.log(error)
@@ -495,12 +587,14 @@ const BulletinBoardPostDetails = () => {
       console.log('test success =>', bulletinBoardPostDetail[0]?.recruitmentId);
       const res = await postApi(API_ENDPOINT.bulletin_post_winnerList, { recuritmentId: reqId, postId: ids, pageNo: pageNo })
       setWinnerCurrentPage(pageNo)
-      console.log('res ets=>', res.data)
+      console.log('res ets=>', res.data.data.totalCount)
       if (res.status == 200) {
+
+        setWinnerDataTotalCount(res.data.data.totalCount)
         if (pageNo == 1) {
-          setWinnerListData(res.data.data)
+          setWinnerListData(res.data.data.dataResult)
         } else {
-          setWinnerListData((prevData) => [...prevData, ...res.data.data]);
+          setWinnerListData((prevData) => [...prevData, ...res.data.data.dataResult]);
         }
       }
 
@@ -518,8 +612,10 @@ const BulletinBoardPostDetails = () => {
 
 
 
+
   return (
     <>
+      {isLoading && <Loader />}
       <div>
         <div className='container bg-light p-3 mb-3'>
           <div className='d-flex mb-3 gap-5'>
@@ -688,7 +784,7 @@ const BulletinBoardPostDetails = () => {
                                   <div className='formWrpInpt d-flex'>
                                     {bulletinBoardPostDetail[0]?.images?.map((imageUrl, index) => (
                                       <div className='d-flex' key={index}>
-                                        <CImage crossOrigin='anonymous' src={ALL_CONSTANTS.API_URL + imageUrl} fluid />
+                                        <CImage alt='NA' rounded crossorigin="anonymous" src={ALL_CONSTANTS.API_URL + imageUrl.url} fluid />
                                       </div>
                                     ))}
                                   </div>
@@ -766,18 +862,23 @@ const BulletinBoardPostDetails = () => {
                         <div>
                           <CFormTextarea
                             id="floatingTextarea"
-                            floatingLabel="Enter the report details."
+                            label="Enter the report details."
                             placeholder="Leave a comment here"
-                            onChange={handleDeleteReasonInputChange}
+                            value={otherDeleteInput}
+                            onChange={(e) => handleDeleteReasonInputChange(e)}
                           ></CFormTextarea>
+                          <div className='mt-2'>
+                            <span className="txt-byte-information">{otherDeleteInput.length} / 500 byte</span>
+                          </div>
                         </div>
+
                       }
                     </CModalBody>
                     <CModalFooter className='d-flex justify-content-center'>
                       <CButton color="secondary" onClick={() => { setDeleteModal(false); clearDeleteModuleValues() }}>
                         Cancel
                       </CButton>
-                      <CButton color="primary" disabled={selectedDeleteReason == ''} onClick={() => handlePostDelete()} >Confirm</CButton>
+                      <CButton color="primary" disabled={selectedDeleteReason == ''} onClick={() => setDeletePostConfirm(true)} >Confirm</CButton>
                     </CModalFooter>
                   </CModal>
                 </div>
@@ -794,7 +895,7 @@ const BulletinBoardPostDetails = () => {
                     &&
                     <CButton className='btn btn-primary'>Modify</CButton>
                   }
-                  <NavLink to='/BulletinBoard'><CButton className='btn btn-primary'  >Back</CButton></NavLink>
+                  <NavLink to='/BulletinBoard'><CButton className='btn btn-primary'>Back</CButton></NavLink>
                 </div>
               </div>
 
@@ -806,7 +907,7 @@ const BulletinBoardPostDetails = () => {
           <div>
             <CAccordion alwaysOpen activeItemKey={1}>
               <CAccordionItem >
-                <CAccordionHeader>Likes</CAccordionHeader>
+                <CAccordionHeader>Likes &nbsp; {postLikeListDataTotalCount}</CAccordionHeader>
                 <CAccordionBody>
                   {postLikeListData?.map((item, index) => (
                     <div className='participantList' key={index}>
@@ -844,7 +945,7 @@ const BulletinBoardPostDetails = () => {
           <div>
             <CAccordion alwaysOpen activeItemKey={1}>
               <CAccordionItem >
-                <CAccordionHeader>Comments</CAccordionHeader>
+                  <CAccordionHeader>Comments  &nbsp; {commentsData[0]?.currentCommentCount}</CAccordionHeader>
                 <CAccordionBody>
                   <div>
                     <div className='container d-flex justify-content-center gap-5'>
@@ -852,31 +953,31 @@ const BulletinBoardPostDetails = () => {
                         <p>
                           Current Comments
                         </p>
-                        <p onClick={() => setCommentTab('currentComments')}>
+                          <a onClick={() => setCommentTab('currentComments')} role="button">
                           {commentsData[0]?.currentCommentCount}
-                        </p>
+                          </a>
                       </div>
                       <div>
                         <p>
                           Deleted by Admin
                         </p>
-                        <p onClick={() => setCommentTab('deletedByAdmin')}>
+                          <a onClick={() => setCommentTab('deletedByAdmin')} role="button">
                           {commentsData[0]?.deletedByAdmin}
-                        </p>
+                          </a>
                       </div>
                       <div>
                         <p>
                           Deleted by Writer
                         </p>
-                        <p onClick={() => setCommentTab('deletedByWriter')}>
+                          <a onClick={() => setCommentTab('deletedByWriter')} role="button">
                           {commentsData[0]?.deletedByUserId}
-                        </p>
+                          </a>
                       </div>
                       <div>
                         <p>
                           Reported
                         </p>
-                        <p onClick={() => setCommentTab('commentReported')}>
+                          <p onClick={() => setCommentTab('commentReported')} role="button">
                           {commentsData[0]?.commentsReported}
                         </p>
                       </div>
@@ -885,10 +986,11 @@ const BulletinBoardPostDetails = () => {
                       <CForm>
                         <CFormTextarea
                           id="postTextarea"
-                          placeholder="Write your post here..."
+                            placeholder="Write a comment…"
                           value={commentInput}
-                          onChange={handleICommentnputChange}
-                        />
+                            onChange={(e) => handleICommentnputChange(e)}
+                          />
+                          <div className='d-flex justify-content-between'>
                         <CButton
                           color="primary"
                           // onClick={handlePost}
@@ -897,7 +999,9 @@ const BulletinBoardPostDetails = () => {
                             onClick={() => { handlePostComment() }}
                         >
                           Post
-                        </CButton>
+                            </CButton>
+                            <span className="txt-byte-information">{commentInput.length} / 1000 byte</span>
+                          </div>
                       </CForm>
                     </div>
 
@@ -905,12 +1009,12 @@ const BulletinBoardPostDetails = () => {
                       <div className=' mb-4 mt-3' key={index}>
                         <div className='d-flex justify-content-between align-items-center'>
                           <div className='flex'>
-                            <h4 style={{ margin: 0 }}>{item?.commentPostedAt} | {item?.englishName}</h4>
+                            <h4 style={{ margin: 0 }}>{moment(item?.commentPostedAt).format('YYYY-MM-DD HH:mm:ss')} | {item?.englishName}</h4>
                           </div>
                           {commentcurrentTab != 'deletedByAdmin' && commentcurrentTab != 'deletedByWriter' &&
                             <div >
-                              {commentcurrentTab == 'commentReported' && <a onClick={() => setReportCancelvisible(!reportCancelvisible)} > Report Cancel &nbsp; | &nbsp; </a>}
-                              {(commentcurrentTab == 'currentComments' && getUserData.id == bulletinBoardPostDetail[0]?.authorId) && <a onClick={() => { modifyHandler(item) }} > Modify &nbsp; | &nbsp; </a>}
+                              {commentcurrentTab == 'commentReported' && <a onClick={() => setReportCancelvisible(!reportCancelvisible)} role="button"> Report Cancel &nbsp; | &nbsp; </a>}
+                              {(commentcurrentTab == 'currentComments' && getUserData.id == item?.userId) && <a onClick={() => { modifyHandler(item) }} > Modify &nbsp; | &nbsp; </a>}
                               <CModal
                                 backdrop="static"
                                 visible={reportCancelvisible}
@@ -930,7 +1034,7 @@ const BulletinBoardPostDetails = () => {
                                   <CButton color="primary" onClick={() => handleReportCancle(item?.id, item?.userId)}>Report Cancel</CButton>
                                 </CModalFooter>
                               </CModal>
-                              <a onClick={() => { handleIdAndUserID('commentDelete', item?.id, item?.userId) }} >Delete</a>
+                              <a onClick={() => { handleIdAndUserID('commentDelete', item?.id, item?.userId) }} role="button">Delete</a>
 
                             </div>
                           }
@@ -939,7 +1043,7 @@ const BulletinBoardPostDetails = () => {
                           <p style={{ margin: 0, marginBottom: 5 }}>{item?.comment}</p>
                         </div>
                         {commentcurrentTab == 'commentReported' &&
-                          <div className='d-flex justify-content-end'>
+                          <div className='d-flex justify-content-end' role="button">
                             <a onClick={() => { setVisible(!visible); getReportHistoryData(item?.id) }}>View Report History</a>
                           </div>
                         }
@@ -1002,8 +1106,12 @@ const BulletinBoardPostDetails = () => {
                                   id="floatingTextarea"
                                   floatingLabel="Enter the report details."
                                   placeholder="Leave a comment here"
-                                  onChange={handleDeleteReasonInputChange}
+                                  value={otherDeleteInput}
+                                  onChange={(e) => handleDeleteReasonInputChange(e)}
                                 ></CFormTextarea>
+                                <div className='mt-2'>
+                                  <span className="txt-byte-information">{otherDeleteInput.length} / 500 byte</span>
+                                </div>
                               </div>
                             }
                           </CModalBody>
@@ -1043,13 +1151,13 @@ const BulletinBoardPostDetails = () => {
             <div>
               <CAccordion alwaysOpen activeItemKey={1}>
                 <CAccordionItem >
-                  <CAccordionHeader>Participants</CAccordionHeader>
+                  <CAccordionHeader>Participants &nbsp; {postPollParticipantDetail[0]?.totalParticipantCounts}</CAccordionHeader>
                   <CAccordionBody>
-                    {postPollParticipantDetail?.map((item, index) => (
+                    {/* {postPollParticipantDetail?.map((item, index) => (
                       <div key={index}>
-                        <div className='container' >
+                        <div className='container'>
                           <div>
-                            <h4>{item?.title}</h4>
+                            <h4>{item?.title} &nbsp; {item?.totalParticipantCount} </h4>
                           </div>
                           {item?.participants?.map((items, index) => (
                             <div className='p-3 col-md-12' key={index}>
@@ -1061,13 +1169,103 @@ const BulletinBoardPostDetails = () => {
                               </div>
                             </div>
                           ))}
+
+                          {item?.participants.length == 0 &&
+                            <div className="text-center mt-3">
+                              <h5>No data Available</h5>
+                            </div>
+                          }
                         </div>
                       </div>
-                    ))}
-
+                    ))} */}
+                    <CAccordion>
+                      {pollParticipantOptionData.map((item, index) => (
+                        <CAccordionItem key={index}>
+                          <CAccordionHeader onClick={() => { handlePollParticipantOptionData(item.pollOptionId, 1) }}>{item.pollTitle}</CAccordionHeader>
+                          <CAccordionBody>
+                            <div>
+                              {pollParticipantOptionDataList.length > 0 && pollParticipantOptionDataList?.map((value, no) => (
+                                <div className='p-3 col-md-12' key={no}>
+                                  <div className='d-flex gap-4'>
+                                    {value?.url ?
+                                      <CImage style={{ width: '5%' }} rounded crossorigin="anonymous" src={'https://ptkapi.experiencecommerce.com' + value?.url} /> : <CIcon icon={cilUser} size="lg" />
+                                    }
+                                    <p>{value?.englishaName}</p>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                            {pollParticipantOptionDataList.length == 0 &&
+                              <div className="text-center mt-3">
+                                <h5>No data Available</h5>
+                              </div>
+                            }
+                            {(pollParticipantOptionDataList.length >= 5 && totalPollParticipantOptionDataCount != pollParticipantOptionDataList.length) &&
+                              <div className="text-center mt-3">
+                                <CButton color="primary" onClick={() => handlePollParticipantOptionData(item.pollOptionId, pollParticipantOptionDataCurrentPage + 1)}>
+                                  See More
+                                </CButton>
+                              </div>
+                            }
+                          </CAccordionBody>
+                        </CAccordionItem>
+                      ))}
+                    </CAccordion>
                   </CAccordionBody>
                 </CAccordionItem>
               </CAccordion>
+
+              {(postPollParticipantDetail.length >= 5) &&
+                <div className="text-center mt-3">
+                  <CButton color="primary" onClick={() => recuritmentParticipantData(recuritmentParticipantCurrentPage + 1)}>
+                    See More
+                  </CButton>
+                </div>
+              }
+              {/* <CAccordion>
+                {pollParticipantOptionData.map((item, index) => (
+                  <CAccordionItem key={index}>
+                    <CAccordionHeader onClick={() => { handlePollParticipantOptionData(item.pollOptionId, 1) }}>{item.pollTitle}</CAccordionHeader>
+                    <CAccordionBody>
+                      <div>
+                        {pollParticipantOptionDataList.length > 0 && pollParticipantOptionDataList?.map((value, no) => (
+                          <div className='p-3 col-md-12' key={no}>
+                            <div className='d-flex gap-4'>
+                              {value?.url ?
+                                <CImage style={{ width: '5%' }} rounded crossorigin="anonymous" src={'https://ptkapi.experiencecommerce.com' + value?.url} /> : <CIcon icon={cilUser} size="lg" />
+                              }
+                              <p>{value?.englishaName}</p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                      {pollParticipantOptionDataList.length == 0 &&
+                        <div className="text-center mt-3">
+                          <h5>No data Available</h5>
+                        </div>
+                      }
+                      {(pollParticipantOptionDataList.length >= 5 && totalPollParticipantOptionDataCount != pollParticipantOptionDataList.length) &&
+                        <div className="text-center mt-3">
+                          <CButton color="primary" onClick={() => handlePollParticipantOptionData(item.pollOptionId, pollParticipantOptionDataCurrentPage + 1)}>
+                            See More
+                          </CButton>
+                        </div>
+                      }
+                    </CAccordionBody>
+
+
+
+
+                  </CAccordionItem>
+                ))}
+              </CAccordion> */}
+
+
+              {/* {postRecuritParticipantDetail.length == 0 &&
+                <div className="text-center mt-3">
+                  <h5>No data Available</h5>
+                </div>
+              } */}
 
             </div>
           </div>
@@ -1078,7 +1276,7 @@ const BulletinBoardPostDetails = () => {
               <CAccordion alwaysOpen activeItemKey={1}>
                 <CAccordionItem >
                   <div>
-                    <CAccordionHeader>Participants  &nbsp;&nbsp;&nbsp;
+                    <CAccordionHeader>Participants {recuritmentParticipantDataCount}  &nbsp;&nbsp;&nbsp;
                       {bulletinBoardPostDetail[0]?.type == 'raffle' && getUserData.id == bulletinBoardPostDetail[0]?.authorId && bulletinBoardPostDetail[0].isConfirmed == 1 && bulletinBoardPostDetail[0].isDrawWinners == null && <CButton className='btn btn-primary' onClick={() => setDrawWinnersvisible(!drawWinnersvisible)}>Draw Winners</CButton>}
                       &nbsp;&nbsp;&nbsp;
                       {bulletinBoardPostDetail[0]?.type == 'raffle' && getUserData.id == bulletinBoardPostDetail[0]?.authorId && bulletinBoardPostDetail[0]?.recruitmentDeadlineExceeded == 1 && bulletinBoardPostDetail[0]?.status != 'cancelled' && bulletinBoardPostDetail[0]?.isConfirmed == null && <CButton className='btn btn-primary' onClick={() => handleConfirmParticipantCheck()}>Confirm</CButton>}
@@ -1108,7 +1306,7 @@ const BulletinBoardPostDetails = () => {
                       <div className='participantList' key={index}>
                         <div className='participatntCont'>
                           <div className='participatntimgBox'>
-                            {item?.profileImage ?
+                            {item?.profileImage != null ?
                               <CImage rounded crossorigin="anonymous" src={ALL_CONSTANTS.API_URL + item?.profileImage} /> : <CIcon icon={cilUser} size="lg" />
                             }
                           </div>
@@ -1126,12 +1324,13 @@ const BulletinBoardPostDetails = () => {
                     ))}
 
 
-
-                    {/* <div className="text-center mt-3">
-                    <CButton color="primary">
-                        See More
-                    </CButton>
-                  </div> */}
+                    {(postRecuritParticipantDetail.length >= 5 && postRecuritParticipantDetail.length != recuritmentParticipantDataCount) &&
+                      <div className="text-center mt-3">
+                        <CButton color="primary" onClick={() => recuritmentParticipantData(bulletinBoardPostDetail[0]?.recruitmentId, id, recuritmentParticipantCurrentPage + 1)}>
+                          See More
+                        </CButton>
+                      </div>
+                    }
 
                     {postRecuritParticipantDetail.length == 0 &&
                       <div className="text-center mt-3">
@@ -1198,7 +1397,7 @@ const BulletinBoardPostDetails = () => {
             <div>
               <CAccordion alwaysOpen activeItemKey={1}>
                 <CAccordionItem >
-                  <CAccordionHeader>Winner</CAccordionHeader>
+                  <CAccordionHeader>Winner {winnerDataTotalCount}</CAccordionHeader>
                   <CAccordionBody>
                     {winnerListData?.map((item, index) => (
                       <div className='participantList' key={index}>
@@ -1216,14 +1415,14 @@ const BulletinBoardPostDetails = () => {
 
                       </div>
                     ))}
-                    {winnerListData.length >= 1 &&
+                    {winnerListData?.length >= 1 && winnerListData?.length != winnerDataTotalCount &&
                       <div className="text-center mt-3">
                         <CButton color="primary" onClick={() => handleWinnerList(bulletinBoardPostDetail[0]?.recruitmentId, id, winnerCurrentPage + 1)}>
                           See More
                         </CButton>
                       </div>
                     }
-                    {winnerListData.length == 0 &&
+                    {winnerListData?.length == 0 &&
                       <div className="text-center mt-3">
                         <h5>No data Available</h5>
                       </div>
@@ -1275,6 +1474,28 @@ const BulletinBoardPostDetails = () => {
             </CModalBody>
             <CModalFooter>
               <CButton disabled={enoughParticiapantValues == null || (enoughParticiapantValues == 'ProceedAnyway' && postRecuritParticipantDetail.length == 0)} onClick={() => handleEnoughParticiapantValues()} color="primary">Ok</CButton>
+            </CModalFooter>
+          </CModal>
+        </div>
+
+        <div>
+          <CModal
+            backdrop="static"
+            visible={deletePostConfirm}
+            onClose={() => setDeletePostConfirm(false)}
+            aria-labelledby="LiveDemoExampleLabel"
+          >
+            <CModalHeader onClose={() => setDeletePostConfirm(false)}>
+              <CModalTitle id="LiveDemoExampleLabel">Delete Post</CModalTitle>
+            </CModalHeader>
+            <CModalBody>
+              <p>Are you sure you want to delete this post?</p>
+            </CModalBody>
+            <CModalFooter>
+              <CButton color="secondary" onClick={() => setDeletePostConfirm(false)}>
+                Close
+              </CButton>
+              <CButton color="primary" onClick={() => { handlePostDelete() }}>Delete</CButton>
             </CModalFooter>
           </CModal>
         </div>

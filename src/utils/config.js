@@ -42,6 +42,8 @@ export let API_ENDPOINT = {
   bulletin_post_add_comment: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/addComments",
   bulletin_post_cancel: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/adminReportComments",
   bulletin_post_poll_participant: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/pollsParticipants",
+  bulletin_post_poll_participant_option: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/getPollOptions",
+  bulletin_post_poll_participant_option_data: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/getPollOptionsData",
   bulletin_post_recurit_participant: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/postRecuritmentParticipants",
   bulletin_post_recurit_draw_winners: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/drawWinners",
   bulletin_post_recurit_delete_participant: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/deleteParticipants",
@@ -49,6 +51,9 @@ export let API_ENDPOINT = {
   bulletin_post_confirm_participant: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/confirmParticipants",
   bulletin_post_winnerList: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/winnerList",
   bulletin_post_comment_edit: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/editComments",
+  bulletin_board_post_history: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/postReportList",
+  bulletin_board_post_comment_history: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/postCommentsList",
+
 
 
 

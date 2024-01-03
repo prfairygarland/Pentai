@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 
 import { CSidebar, CSidebarBrand, CSidebarNav, CSidebarToggler } from '@coreui/react'
@@ -23,8 +23,12 @@ import {
 const AppSidebar = () => {
   const dispatch = useDispatch()
   const unfoldable = useSelector((state) => state.sideBarState.sidebarUnfoldable)
-  const sidebarShow = useSelector((state) =>state.sideBarState.sidebarShow)
+  const sidebarShow = useSelector((state) => state.sideBarState.sidebarShow)
+  const [getNavitems, setNavitems] = useState()
 
+  useEffect(() => {
+    setNavitems(localStorage.getItem('roleWisePermission') ? JSON.parse(localStorage.getItem('roleWisePermission')) : JSON.parse(sessionStorage.getItem('roleWisePermission')))
+  }, [])
 
   return (
     <CSidebar
@@ -45,7 +49,9 @@ const AppSidebar = () => {
       <CSidebarNav>
         {/* <h4 className="sidebar-brand-narrow">PTK APP Admin</h4> */}
         <SimpleBar>
-          <AppSidebarNav items={navigation} />
+
+          <AppSidebarNav items={getNavitems} />
+
         </SimpleBar>
       </CSidebarNav>
       {/* <CSidebarToggler

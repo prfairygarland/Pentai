@@ -7,6 +7,7 @@ import UserInformationSettings from './views/pages/userManagement/userInformatio
 import UserDetails from './views/pages/userManagement/userDetails'
 import BulletinBoardPostDetails from './views/pages/communityManagement/BulletinBoardPostDetails'
 import BoardPostListing from './views/pages/communityManagement/BoardPostListing'
+import CommunityReportHistory from './views/pages/communityManagement/CommunityReportHistory'
 
 
 const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
@@ -21,7 +22,7 @@ const routes = [
   // User Management Module
   { path: '/User', name: 'User List', element: UserList },
   { path: '/UserInformation', name: 'User Information Settings', element: UserInformationSettings },
-  { path: '/UserDetails/:id', name: 'User Details', element: UserDetails },
+  { path: '/User/UserDetails', name: 'User Details', element: UserDetails },
 
   //{ community management}
   { path: '/BoardManagement', name: 'Board Management', element: BoardManagement },
@@ -29,6 +30,8 @@ const routes = [
   { path: '/BulletinBoardPostDetails/:id/:boardId', name: 'Bulletin post details ', element: BulletinBoardPostDetails },
 
   { path: '/BulletinBoard/createPost', name: 'Create A Post', element: CreatePost },
+  { path: '/BulletinBoard/CommunityReportHistory', name: 'Community Report History', element: CommunityReportHistory },
+
 ]
 
 export default routes

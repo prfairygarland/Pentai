@@ -8,8 +8,11 @@ import { getCompaniesMasterData, getDivisionMasterData, getGroupMasterData, getI
 import DatePicker from 'react-date-picker'
 import 'react-date-picker/dist/DatePicker.css';
 import 'react-calendar/dist/Calendar.css';
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import * as XLSX from 'xlsx';
+import moment from 'moment'
+import Loader from 'src/components/common/Loader'
+import { enqueueSnackbar } from 'notistack'
 
 
 
@@ -51,6 +54,8 @@ const UserList = () => {
   const [currentImportHistoryPage, setCurrentImportHistoryPage] = useState(1)
   const [totalImport, setTotalImport] = useState(0)
   const [totalImportPages, setTotalImportPages] = useState(0)
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
 
   const statusDropdownValues = [{ id: 2, Name: 'All' }, { id: 1, Name: 'Active' }, { id: 0, Name: 'Inactive' }];
@@ -77,7 +82,9 @@ const UserList = () => {
     {
       Header: 'English Name',
       accessor: 'englishName',
-      Cell: ({ row }) => <Link to={`/UserDetails/${row.original.id}`}>{row.original.englishName}</Link>
+      // Cell: ({ row }) => <Link to={`/UserDetails/${row.original.id}`}>{row.original.englishName}</Link>
+      Cell: ({ row }) => <p role='button' onClick={() => viewDetailsHandler(row.original.id)} className='text-center'>{row.original.englishName}</p>
+
     },
     {
       Header: 'E-mail',
@@ -126,23 +133,34 @@ const UserList = () => {
     },
     {
       Header: 'Imported on',
-      accessor: 'importDate'
+      accessor: 'importDate',
+      Cell: ({ row }) => <p>{row.original.importDate ? moment(row.original.importDate).format('YYYY-MM-DD HH:mm:ss') : '-'}</p>
+
     },
     {
       Header: 'Imported by',
       accessor: 'adminUsername',
+      Cell: ({ row }) => <p>{row.original.adminUsername ? row.original.adminUsername : '-'}</p>
     },
     {
       Header: 'Total Records',
       accessor: 'importedUsersCount'
     },
-    {
-      Header: 'Action',
-      Cell: ({ row }) => <CButton className='btn btn-light w-100' onClick={() => undo(row.original)}>undo</CButton>
+    // {
+    //   Header: 'Action',
+    //   Cell: ({ row }) => <CButton className='btn btn-light w-100' onClick={() => undo(row.original)}>undo</CButton>
 
-    }
+    // }
 
   ], [currentImportHistoryPage, itemsPerPage])
+
+  const viewDetailsHandler = (id) => {
+    navigate("./UserDetails", {
+      state: {
+        userId: id
+      }
+    })
+  }
 
   useEffect(() => {
     getUserListData().then((item) => {
@@ -159,9 +177,7 @@ const UserList = () => {
     })
   }, [startDate, endDate, searchImportInputValue])
 
-  const undo = () => {
-    console.log('undo');
-  }
+
 
   const handleStartDateChange = async (date) => {
     // console.log('startDate =>', date);
@@ -200,6 +216,7 @@ const UserList = () => {
   };
 
   const handleOrgUpload = () => {
+    setIsLoading(true)
     if (selectedFile) {
       const reader = new FileReader();
 
@@ -228,18 +245,27 @@ const UserList = () => {
           formData.append('attachments', selectedFile);
           orgImportApi(formData).then(response => response)
             .then(data => {
-              console.log('Upload successful:', data);
+              console.log('Upload successful:', data.error);
               if (data.status == 200) {
+                getUserListData()
                 setOrgImportVisible(false)
+                setIsLoading(false)
+                enqueueSnackbar(data?.success, { variant: 'success' })
+              } else {
+                enqueueSnackbar(data?.error, { variant: 'error' })
+                setOrgImportVisible(false)
+                setIsLoading(false)
               }
             })
             .catch(error => {
+              setOrgImportVisible(false)
+              setIsLoading(false)
               console.error('Upload failed:', error);
             });
         } else {
           console.log('correct wrong')
           checkFileFormat(true)
-
+          setIsLoading(false)
         }
       };
 
@@ -249,6 +275,7 @@ const UserList = () => {
   };
 
   const handleUploadUserImport = () => {
+    setIsLoading(true)
     if (selectedFile) {
       const reader = new FileReader();
 
@@ -278,13 +305,27 @@ const UserList = () => {
           userImportApi(formData).then(response => response)
             .then(data => {
               console.log('Upload successful:', data);
+              if (data.status == 200) {
+                getUserListData()
+                setUserImportVisible(false)
+                setIsLoading(false)
+                enqueueSnackbar(data?.success, { variant: 'success' })
+              } else {
+                setUserImportVisible(false)
+                setIsLoading(false)
+                enqueueSnackbar(data?.error, { variant: 'error' })
+              }
             })
             .catch(error => {
+              setUserImportVisible(false)
               console.error('Upload failed:', error);
+              setIsLoading(false)
             });
         } else {
           console.log('correct wrong')
           checkUserFileFormat(true)
+          setIsLoading(false)
+
         }
       };
 
@@ -295,6 +336,7 @@ const UserList = () => {
 
 
   const getUserListData = async () => {
+    setIsLoading(true)
     try {
       let url = `https://ptkapi.experiencecommerce.com/api/adminPanel/userList?pageNo=${currentPage + 1
         }&limit=${itemsPerPage}&status=${statusSelectedValue.id}`;
@@ -321,12 +363,14 @@ const UserList = () => {
 
       const res = await getUserList(url);
       if (res.status == 200) {
+        setIsLoading(false)
         setUserListData(res.data)
         setTotalUser(res.totalCount)
         setTotalPages(Math.ceil(res.totalCount / Number(itemsPerPage)));
       }
 
     } catch (error) {
+      setIsLoading(false)
       console.log(error);
     }
   };
@@ -334,6 +378,7 @@ const UserList = () => {
   // http://192.168.9.175:3000
   // https://ptkapi.experiencecommerce.com
   const getUserListExport = async () => {
+    setIsLoading(true)
     let url = `https://ptkapi.experiencecommerce.com/api/adminPanel/userListExport?pageNo=${currentPage + 1
       }&limit=${itemsPerPage}&status=${statusSelectedValue.id}`;
 
@@ -377,10 +422,14 @@ const UserList = () => {
 
       link.click();
       checkExportSelectid(false)
+      setIsLoading(false)
+      enqueueSnackbar('Data exported succesfully', { variant: 'success' })
 
     } else {
       checkExportSelectid(false)
       console.log('No data found');
+      setIsLoading(false)
+      enqueueSnackbar('Something went wrong', { variant: 'error' })
     }
   }
 
@@ -397,44 +446,54 @@ const UserList = () => {
   }
 
   const getDivisionData = async (id) => {
+    setIsLoading(true)
     try {
       let url = `https://ptkapi.experiencecommerce.com/api/adminPanel/getDivision?id=${id}`
       const res = await getDivisionMasterData(url);
       if (res.status == 200) {
         setDivisionData(res.data)
+        setIsLoading(false)
       }
     } catch (error) {
+      setIsLoading(false)
       console.log('error getCompaniesData =>', error);
     }
   }
 
   const getGroupData = async (id) => {
+    setIsLoading(true)
     try {
       let url = `https://ptkapi.experiencecommerce.com/api/adminPanel/getGroup?id=${id}`
       const res = await getGroupMasterData(url);
       if (res.status == 200) {
         setGroupData(res.data)
+        setIsLoading(false)
       }
     } catch (error) {
+      setIsLoading(false)
       console.log('error getCompaniesData =>', error);
     }
 
   }
 
   const getTeamData = async (id) => {
+    setIsLoading(true)
     try {
       let url = `https://ptkapi.experiencecommerce.com/api/adminPanel/getTeam?groupId=${id}`
       const res = await getTeamMasterData(url);
       if (res.status == 200) {
         setTeamData(res.data)
+        setIsLoading(false)
       }
     } catch (error) {
+      setIsLoading(false)
       console.log('error getCompaniesData =>', error);
     }
 
   }
 
   const getImportHistoryData = async (currentImportHistoryPage) => {
+    setIsLoading(true)
     console.log('currentImportHistoryPage =>', currentImportHistoryPage);
     try {
       let url = `https://ptkapi.experiencecommerce.com/api/adminPanel/importModifiedHistory?pageNo=${currentImportHistoryPage}&limit=${itemsPerPage}`;
@@ -456,9 +515,11 @@ const UserList = () => {
         setTotalImport(res.totalCount)
         setTotalImportPages(Math.ceil(res.totalCount / Number(itemsPerPage)));
         // setTotalUser(res.totalUser)
+        setIsLoading(false)
       }
 
     } catch (error) {
+      setIsLoading(false)
       console.log(error);
     }
   };
@@ -547,17 +608,27 @@ const UserList = () => {
     setSearchInputValue('');
   }
 
-  // setSelectCompany({});
-  // setSelectDivision({});
-  // setSelectGroup({});
-  // setSelectTeam({});
-  // setIsLeader('');
-  // setTypeSelect({});
-  // setSearchInput('');
-  // setSearchInputValue('');
-  // getUserListData()
+  const sampleUserExportFile = async () => {
+    console.log('sampleUserExportFile =>');
+    const link = document.createElement('a');
+    link.href = 'https://ptkapi.experiencecommerce.com/public/uploads/samplefile/sample-file-user-Import.xlsx';
+    link.setAttribute('download', `Sample_User_downLoad_${new Date().getTime()}.xlsx`);
+
+    link.click();
+  }
+
+  const sampleOrgExportFile = async () => {
+    console.log('sampleUserExportFile =>');
+    const link = document.createElement('a');
+    link.href = 'https://ptkapi.experiencecommerce.com/public/uploads/samplefile/organisation-Import.xlsx';
+    link.setAttribute('download', `Sample_User_downLoad_${new Date().getTime()}.xlsx`);
+
+    link.click();
+  }
 
   return (
+    <>
+      {isLoading && <Loader />}
     <div>
       <div className='container bg-light p-3 mb-3'>
         <div className='d-flex mb-3'>
@@ -592,6 +663,7 @@ const UserList = () => {
               <CDropdownToggle color="white">{selectDivision.DivisionsName ? selectDivision.DivisionsName : 'Division'}</CDropdownToggle>
 
               <CDropdownMenu >
+                  <CDropdownItem role="button" onClick={() => setSelectDivision({ DivisionsName: 'None' })}>None</CDropdownItem>
                 {divisionData.length > 0 && divisionData?.map((option, index) => (
                   <CDropdownItem role="button" key={index} onClick={() => { getGroupData(option.id); setSelectDivision(option) }}>
                     {option.DivisionsName}
@@ -602,6 +674,7 @@ const UserList = () => {
             <CDropdown className={groupData.length > 0 ? 'dropDownbackground me-3 drpBtn' : 'dropDownbackground me-3 drpBtn disable-class'}>
               <CDropdownToggle color="white">{selectGroup.groupName ? selectGroup.groupName : 'Group'}</CDropdownToggle>
               <CDropdownMenu>
+                  <CDropdownItem role="button" onClick={() => setSelectGroup({ groupName: 'None' })}>None</CDropdownItem>
                 {groupData.map((option, index) => (
                   <CDropdownItem role="button" key={index} onClick={() => { getTeamData(option.id); setSelectGroup(option) }}>
                     {option.groupName}
@@ -612,6 +685,7 @@ const UserList = () => {
             <CDropdown className={TeamData.length > 0 ? 'dropDownbackground me-4 drpBtn' : 'dropDownbackground me-4 drpBtn disable-class'}>
               <CDropdownToggle color="white">{selectTeam.teamName ? selectTeam.teamName : 'Team'}</CDropdownToggle>
               <CDropdownMenu>
+                  <CDropdownItem role="button" onClick={() => setSelectTeam({ teamName: 'None' })}>None</CDropdownItem>
                 {TeamData.map((option, index) => (
                   <CDropdownItem role="button" key={index} onClick={() => setSelectTeam(option)} >
                     {option.teamName}
@@ -676,7 +750,10 @@ const UserList = () => {
                 {userFileFormat && <p className='text-danger text-center'>Please add the correct header</p>}
                 {fileSize && <p className='text-danger text-center'>File size is not more 5 mb</p>}
 
-
+                  <div className='p-1'>
+                    {/* <p>Download Sample File</p> */}
+                    <CButton className='btn btn-primary' onClick={() => sampleUserExportFile()}>Sample File</CButton>
+                  </div>
 
               </CModalBody>
             </CModal>
@@ -701,6 +778,10 @@ const UserList = () => {
                 {fileFormat && <p className='text-danger text-center'>Please add the correct header</p>}
                 {fileSize && <p className='text-danger text-center'>File size is not more 5 mb</p>}
 
+                  <div className='p-1'>
+                    {/* <p>Download Sample File</p> */}
+                    <CButton className='btn btn-primary' onClick={() => sampleOrgExportFile()}>Sample File</CButton>
+                  </div>
               </CModalBody>
             </CModal>
 
@@ -820,6 +901,7 @@ const UserList = () => {
         </div>
       </div>
     </div>
+    </>
   )
 }
 

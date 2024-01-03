@@ -1,7 +1,7 @@
 import { CButton, CImage, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle } from '@coreui/react';
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import ReactPaginate from 'react-paginate';
-import { Link, Navigate, useParams } from 'react-router-dom'
+import { Link, Navigate, useLocation, useParams } from 'react-router-dom'
 import ReactTable from 'src/components/common/ReactTable';
 import { getBookRental, getOprationClub, getSupplyRental, getUserDetail } from 'src/utils/Api';
 import { ALL_CONSTANTS } from 'src/utils/config';
@@ -11,7 +11,6 @@ const UserDetails = () => {
 
 
   const { id } = useParams();
-  console.log("id", id);
 
   const [userDetails, setUserDetailsData] = useState([])
   const [supplyRentalData, setSupplyRentalData] = useState([])
@@ -32,6 +31,7 @@ const UserDetails = () => {
   const [itemsPerPage, setItemsPerPage] = useState(5)
   const [currentOperationClubPage, setCurrentOperationClubPage] = useState(1)
   const [totalOperationClubPages, setTotalOperationClubPages] = useState(0)
+  const location = useLocation()
 
 
   const suppliesRentalColumns = useMemo(() => [
@@ -128,9 +128,11 @@ const UserDetails = () => {
 
   ], [currentOperationClubPage, itemsPerPage])
 
+  // console.log('location =>', location.state.userId)
+
   const getSupplyRentallistData = async (currentSuppliesRentalPage) => {
     try {
-      let url = `https://ptkapi.experiencecommerce.com/api/adminPanel/supplyRental?pageNo=${currentSuppliesRentalPage}&limit=${itemsPerPage}&userId=${id}`
+      let url = `https://ptkapi.experiencecommerce.com/api/adminPanel/supplyRental?pageNo=${currentSuppliesRentalPage}&limit=${itemsPerPage}&userId=${location.state.userId}`
       const res = await getSupplyRental(url);
       if (res.status == 200) {
         setCurrentSuppliesRentalPage(currentSuppliesRentalPage)
@@ -146,7 +148,7 @@ const UserDetails = () => {
 
   const getBookRentallistData = async (currentBookRentalPage) => {
     try {
-      let url = `https://ptkapi.experiencecommerce.com/api/adminPanel/bookRental?pageNo=${currentBookRentalPage}&limit=${itemsPerPage}&userId=${id}`
+      let url = `https://ptkapi.experiencecommerce.com/api/adminPanel/bookRental?pageNo=${currentBookRentalPage}&limit=${itemsPerPage}&userId=${location.state.userId}`
       const res = await getBookRental(url);
       if (res.status == 200) {
         setCurrentBookRentalPage(currentBookRentalPage)
@@ -164,7 +166,7 @@ const UserDetails = () => {
 
   const getOprationClublistData = async (currentOperationClubPage) => {
     try {
-      let url = `https://ptkapi.experiencecommerce.com/api/adminPanel/userClubDetails?pageNo=${currentOperationClubPage}&limit=${itemsPerPage}&userId=${id}`
+      let url = `https://ptkapi.experiencecommerce.com/api/adminPanel/userClubDetails?pageNo=${currentOperationClubPage}&limit=${itemsPerPage}&userId=${location.state.userId}`
       const res = await getOprationClub(url);
       if (res.status == 200) {
         setCurrentOperationClubPage(currentOperationClubPage)
@@ -183,7 +185,7 @@ const UserDetails = () => {
 
   const getUserDetailData = async () => {
     try {
-      let url = `https://ptkapi.experiencecommerce.com/api/adminPanel/userDetails?userId=${id}`
+      let url = `https://ptkapi.experiencecommerce.com/api/adminPanel/userDetails?userId=${location.state.userId}`
       const res = await getUserDetail(url);
       if (res.status == 200) {
         // setCompaniesData(res.data)
@@ -252,8 +254,10 @@ const UserDetails = () => {
                           <label className="fw-bolder ">Profile Image</label>
                         </div>
                         <div className='formWrpInpt'>
-                          { }
-                          <CImage alt='NA' rounded crossorigin="anonymous" src={ALL_CONSTANTS.API_URL + userDetails[0]?.imageUrl} width={200} height={200} />
+                          {userDetails[0]?.imageUrl != null ?
+                            <CImage alt='NA' rounded crossorigin="anonymous" src={ALL_CONSTANTS.API_URL + userDetails[0]?.imageUrl} width={200} height={200} />
+                            : '-'
+                          }
                         </div>
                       </div>
 

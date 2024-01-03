@@ -23,6 +23,7 @@ import * as Yup from 'yup'
 import { changePassWordApi, postApi } from 'src/utils/Api'
 import { useState, useEffect, useCallback } from 'react'
 import { API_ENDPOINT } from 'src/utils/config'
+import Loader from 'src/components/common/Loader'
 
 
 
@@ -37,10 +38,12 @@ const ChangePassword = () => {
   }
 
   const [showError, setError] = useState('')
+  const [isLoading, setIsLoading] = useState(false);
 
 
   return (
     <>
+      {isLoading && <Loader />}
       <section className="d-flex flex-row align-items-center">
         <div className='container'>
           <div className="row justify-content-center">
@@ -71,18 +74,22 @@ const ChangePassword = () => {
                       onSubmit={async (values, re) => {
                         setError('')
                         console.log('value =>', values);
+                        setIsLoading(true)
                         try {
                           const res = await postApi(API_ENDPOINT.change_password_api, values)
 
                           if (res.data.status == 200) {
+                            setIsLoading(false)
                             navigate('/Login')
                             setError('')
                           } else if (res.data.status == 400) {
+                            setIsLoading(false)
                             setError(res.data.msg)
                           } else if (res.data.status == 420) {
+                            setIsLoading(false)
                             setError(res.data.msg)
                           } else {
-
+                            setIsLoading(false)
                           }
                         } catch (error) {
                           console.log(error)

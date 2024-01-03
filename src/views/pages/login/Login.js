@@ -20,6 +20,8 @@ import * as Yup from 'yup'
 import { LoginApi, postApi } from 'src/utils/Api'
 import { useState, useEffect, useCallback } from 'react'
 import { API_ENDPOINT } from 'src/utils/config'
+import Loader from 'src/components/common/Loader'
+import { enqueueSnackbar } from 'notistack'
 
 
 const Login = () => {
@@ -27,9 +29,12 @@ const Login = () => {
   const navigate = useNavigate();
 
   const [validCredential, setValidCredential] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
 
   return (
     <>
+      {isLoading && <Loader />}
       <section className="bg-light min-vh-100 d-flex flex-row align-items-center">
         <div className='container'>
           <div className="row justify-content-center">
@@ -53,6 +58,7 @@ const Login = () => {
                           username: values.username,
                           password: values.password
                         }
+                        setIsLoading(true)
                         try {
                           const res = await postApi(API_ENDPOINT.login_api, value)
                           if (res.data.status == 200) {
@@ -60,19 +66,35 @@ const Login = () => {
                               localStorage.setItem('token', res.data.token)
                               localStorage.setItem('userdata', JSON.stringify(res.data.userdata))
                               localStorage.setItem('roleWisePermission', JSON.stringify(res.data.rolePermissions))
+                              setIsLoading(false)
                               setValidCredential(false)
-                              navigate("/Dashboard")
+                              navigate('../Dashboard', {
+                                state: {
+                                  enqueueSnackbarMsg: 'Login Successfully',
+                                  variant: 'success',
+                                },
+                              })
+                              // navigate("/Dashboard")
                             } else {
                               sessionStorage.setItem('sessionToken', res.data.token)
                               sessionStorage.setItem('sessionUserdata', JSON.stringify(res.data.userdata))
                               sessionStorage.setItem('roleWisePermission', JSON.stringify(res.data.rolePermissions))
+                              setIsLoading(false)
                               setValidCredential(false)
-                              navigate("/Dashboard")
+                              navigate('../Dashboard', {
+                                state: {
+                                  enqueueSnackbarMsg: 'Login Successfully',
+                                  variant: 'success',
+                                },
+                              })
                             }
                           } else {
+                            setIsLoading(false)
                             setValidCredential(true)
+                            enqueueSnackbar(`${res?.data?.msg}`, { variant: 'error' })
                           }
                         } catch (error) {
+                          setIsLoading(false)
                           console.log(error)
                         }
                       }}
@@ -81,13 +103,13 @@ const Login = () => {
                         <Form>
                           <h2 className='logHead'>Login</h2>
                           <div className="form-outline form-white mb-4 mt-4">
-                            <label className="fw-bolder">ID</label>
+                            <label className="fw-bolder p-1">ID</label>
                             <Field placeholder="Enter your ID" autoComplete="id" type="text" id="typeEmailX" className="form-control form-control-md mb-3" name="username" />
                             {errors?.username && touched?.username ? (<p className='text-danger'>{errors?.username}</p>) : null}
                           </div>
 
                           <div className="form-outline form-white mb-4">
-                            <label className="fw-bolder">Password</label>
+                            <label className="fw-bolder p-1">Password</label>
                             <Field placeholder='Password' type="password" id="typePasswordX" className="form-control form-control-md" name="password" />
                             {errors.password && touched.password ? (<p className='text-danger'>{errors.password}</p>) : null}
                             <div className='mt-2'>
