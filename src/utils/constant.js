@@ -14,7 +14,7 @@ export const classificationsOptions = [
     { label: 'Proceeding', value: 'proceeding' },
     { label: 'Closed', value: 'closed' },
     { label: 'Cancelled', value: 'cancelled' }
-    
+
 ]
 
 export const postTypeOptions = [
@@ -23,6 +23,34 @@ export const postTypeOptions = [
     { label: 'Raffle', value: 'raffle' },
     { label : 'Poll',value : 'poll'}
 ]
+
+export const classificationsTypeOptions = {
+  standard: [
+    { label: 'Deleted', value: 'deleted' },
+    { label: 'Deleted(Admin)', value: 'deletedAdmin' }
+  ],
+  recruit: [
+    { label: 'Deleted', value: 'deleted' },
+    { label: 'Deleted(Admin)', value: 'deletedAdmin' },
+    { label: 'Recruiting', value: 'recruiting' },
+    { label: 'Closed', value: 'closed' },
+    { label: 'Cancelled', value: 'cancelled' }
+  ],
+  raffle: [
+    { label: 'Deleted', value: 'deleted' },
+    { label: 'Deleted(Admin)', value: 'deletedAdmin' },
+    { label: 'Recruiting', value: 'recruiting' },
+    { label: 'Announcement', value: 'winner' },
+    { label: 'Closed', value: 'closed' },
+    { label: 'Cancelled', value: 'cancelled' }
+  ],
+  poll: [
+    { label: 'Deleted', value: 'deleted' },
+    { label: 'Deleted(Admin)', value: 'deletedAdmin' },
+    { label: 'Proceeding', value: 'proceeding' },
+    { label: 'Closed', value: 'closed' }
+  ],
+};
 
 export const paginationItemPerPageOptions = [
     { label: '5', value: 5},
