@@ -41,7 +41,7 @@ const AppSidebar = () => {
     >
       <CSidebarBrand className="d-none d-md-flex">
         {/* <CIcon className="sidebar-brand-full" icon={logoNegative} height={35} /> */}
-        <h4 className="sidebar-brand-full mt-3">PTK APP Admin</h4>
+        <h4 className="sidebar-brand-full ">PTK APP Admin</h4>
         <h4 className="sidebar-brand-narrow">PTK APP Admin</h4>
         {/* <CIcon className="sidebar-brand-narrow" icon={sygnet} height={35} /> */}
       </CSidebarBrand>

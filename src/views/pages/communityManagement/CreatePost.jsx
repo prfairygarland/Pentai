@@ -431,7 +431,7 @@ const CreatePost = () => {
                     </div>
                   </div>
                   {uploadedImages.length > 0 && (
-                    <div className="upload-images-container">
+                    <div className="upload-images-container uploadImgWrap">
                       {uploadedImages.map((imgFile, index) => (
                         <div
                           className={
@@ -440,9 +440,12 @@ const CreatePost = () => {
                           key={index}
                         >
                           <img src={URL.createObjectURL(uploadedImages[index])} alt="" />
-                          <span onClick={() => confirmationDeleteImgModalHandler(true, index)}>
-                            X
-                          </span>
+                          <button
+                            className="thumbclsBtn"
+                            onClick={() => deleteUploadedImageHandler(index)}
+                          >
+                            <i className="icon-close"></i>
+                          </button>
                         </div>
                       ))}
                     </div>
@@ -530,7 +533,7 @@ const CreatePost = () => {
                   <div className="formWrpLabel">
                     <label className="fw-bolder ">Push Notification</label>
                   </div>
-                  <div className="push-notification-container">
+                  <div className="push-notification-container gap-3">
                     <CFormCheck
                       type="radio"
                       name="isPushNotification"
@@ -553,7 +556,7 @@ const CreatePost = () => {
                   <div className="formWrpLabel">
                     <label className="fw-bolder ">Add As Notice</label>
                   </div>
-                  <div className="add-as-notice-container">
+                  <div className="add-as-notice-container gap-3">
                     <CFormCheck
                       type="radio"
                       name="isAnnouncement"

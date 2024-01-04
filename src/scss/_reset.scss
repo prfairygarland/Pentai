@@ -186,5 +186,112 @@ p {
     word-break: break-word;
 }
 
+h1 {
+    font-size: 30px;
+}
+
+h2 {
+    font-size: 25px;
+}
+
+h3 {
+    font-size: 23px;
+}
+
+h4 {
+    font-size: 20px;
+}
+
+h5 {
+    font-size: 16px;
+}
+
+h6 {
+    font-size: 1.3em;
+}
 
 
+textarea {
+    resize: none;
+    outline: none;
+}
+
+select {
+    outline: none;
+}
+
+
+th,
+td {
+    text-align: left;
+    padding: 10px;
+}
+
+.clear {
+    clear: both;
+}
+
+.clear:after {
+    visibility: hidden;
+    display: block;
+    font-size: 0;
+    content: " ";
+    clear: both;
+    height: 0;
+}
+
+p:empty {
+    display: none;
+}
+
+::-moz-selection {
+    background: var(--primary-color);
+    color: #fff;
+    text-shadow: none;
+    padding: 1em 0;
+}
+
+::selection {
+    background: var(--primary-color);
+    color: #fff;
+    text-shadow: none;
+}
+
+ ::-webkit-input-placeholder {
+    color: var(--primary-color) !important;
+}
+
+::-moz-placeholder {
+    color: var(--primary-color) !important;
+    opacity: 1;
+}
+
+:-moz-placeholder {
+    color: var(--primary-color)!important;
+    opacity: 1;
+}
+
+:-ms-input-placeholder {
+    color: var(--primary-color) !important;
+}
+
+input:-moz-placeholder {
+    box-shadow: none !important;
+}
+
+select::-ms-expand {
+    display: none;
+}
+
+button,
+button:active,
+button:focus {
+    outline: none;
+}
+
+.btn-success{
+    background: ($green);
+}
+.btn-primary,.btn-primary:hover,.btn.btn-primary:disabled,.btn-primary:active{
+    color: ($white);
+  }

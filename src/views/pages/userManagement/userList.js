@@ -693,7 +693,7 @@ const UserList = () => {
                 ))}
               </CDropdownMenu>
             </CDropdown>
-            <CFormCheck reverse id="reverseCheckbox1" checked={isLeader} onChange={handleCheckboxChange} label="Leader only" />
+            <CFormCheck className='d-flex flex-row-reverse reveseCheckBox'  id="reverseCheckbox1" checked={isLeader} onChange={handleCheckboxChange} label="Leader only" />
           </div>
 
         </div>
