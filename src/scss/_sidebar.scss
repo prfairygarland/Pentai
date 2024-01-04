@@ -28,7 +28,7 @@
 
 
 .sidebar-brand{
-  background: ($primary);
+  background: ($black);
 }
 .sidebar{
   background: ($white);
@@ -46,14 +46,16 @@
     }
   }
   &.show{
-    
+.nav-icon{
+  color: ($white);
+}
   }
 }
  
 }
 
 .sidebar-brand-cat{
-  color: ($primary);
+  color: ($primary);margin-bottom: 10px;
 }
 .sidebar-nav .nav-group.show .nav-group-toggle{
   background:  ($primary);

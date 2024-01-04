@@ -1,0 +1,38 @@
+
+.formWraper{
+  border: 1px solid #ccc;
+}
+.formWraper .form-outline{
+  border-bottom: 1px solid #ccc;
+
+
+}
+.formWraper .form-outline .formWrpLabel{
+background: #e3e0e0;
+display: flex;
+    align-items: center;
+border-left: 1px solid #ccc;
+padding: 20px;
+    min-width: 250px;
+}
+
+.form-check{
+  display: flex;
+  align-items: center;
+}
+.formWraper .form-outline label{
+  padding-left: 5px;
+     }
+     .form-check .form-check-input{
+      margin-top: 0;
+     }
+  .formWraper .form-outline .formWrpInpt{
+    padding: 20px;
+    flex: 1;
+  }
+  .reveseCheckBox{
+    padding-left: 0 !important;
+    input{
+      margin-left: 5px !important;
+    }
+  }

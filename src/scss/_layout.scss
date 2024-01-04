@@ -7,29 +7,6 @@
   @include transition(padding .15s);
 }
 
-.formWraper{
-  border: 1px solid #ccc;
-}
-.formWraper .form-outline{
-  border-bottom: 1px solid #ccc;
-
-
-}
-.formWraper .form-outline .formWrpLabel{
-background: #e3e0e0;
-display: flex;
-    align-items: center;
-border-left: 1px solid #ccc;
-padding: 20px;
-    min-width: 250px;
-}
- .formWraper .form-outline label{
-padding-right: 10px;
-   }
-.formWraper .form-outline .formWrpInpt{
-  padding: 20px;
-  flex: 1;
-}
 // .formWraper .form-outline input{
 //   height: 50px;
 // }
@@ -70,7 +47,8 @@ background: ($primary);
 color: ($white);
     white-space: nowrap;
     padding: 10px;
-    font-family: ($fontrg);position: relative;
+    font-family: ($fontrg);
+    position: relative;
 }
 .ptk-table {
   width: 100%;
@@ -126,7 +104,9 @@ border-left:none;
   border: 1px solid #999;
   margin-right: 5px;
   min-height: 30px;
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
 }
 
 .userlist-pagination ul li a button {
@@ -144,9 +124,7 @@ border-left:none;
   opacity: 0.5;
 }
 
-.btn-primary,.btn-primary:hover,.btn.btn-primary:disabled,.btn-primary:active{
-  color: ($white);
-}
+
 
 .bg-light{
   background: ($lightGray);
@@ -178,6 +156,84 @@ h3{
 .participRightBtns{
 margin-left: 15px;
 }
+}
+
+.uploadImgWrap{
+  margin-top: 10px;
+   overflow-x: auto;
+  max-width: 700px;
+   align-items: end;
+    border: none !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  .thubmnail-img-container{
+    min-width: 250px;
+    position: relative;
+      border: 1px solid #ccc;
+      height: 200px;
+      margin-right: 10px;
+      margin-bottom: 10px;
+    img{
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  &:hover{
+    .thumbclsBtn{
+      display: block;
+    }
+  }
+
+  }
+  .remaining-img-container{
+    min-width: 100px;
+    height: 100px;
+    position: relative;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+    img{
+      width: 100%;
+      height: 100%;
+      margin: 0;
+    }
+   
+    &:last-child{
+      margin-right: 0;
+    }
+      &:hover{
+    .thumbclsBtn{
+      display: block;
+    }}
+  }
+  .thumbclsBtn{
+    background: none;
+    border: none;
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    display: none;
+  }
+  &::-webkit-scrollbar-track
+{
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	border-radius: 10px;
+	background-color: #F5F5F5;
+}
+
+&::-webkit-scrollbar
+{
+	height: 5px;
+	background-color: #F5F5F5;
+}
+
+&::-webkit-scrollbar-thumb
+{
+	border-radius: 10px;
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+	background-color: #555;
+}
+ 
 }
 
 
