@@ -33,7 +33,15 @@ export let API_ENDPOINT = {
   get_postuserdetail : ALL_CONSTANTS.API_URL + "/api/adminPanel/community/userDetailsBulletin",
   get_board_list: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/boardList",
   create_post_bulletin: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/createPostBulletin",
+  update_post_bulletin: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/updateBulletin",
+
+  // create_post_bulletin: "http://192.168.9.175:3000/api/adminPanel/community/createPostBulletin",
+  // update_post_bulletin: "http://192.168.9.175:3000/api/adminPanel/community/updateBulletin",
+
   bulletin_board_details: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/postDetailsBulletin",
+  // bulletin_board_details: "http://192.168.9.175:3000/api/adminPanel/community/postDetailsBulletin",
+
+
   bulletin_post_like_list: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/postlikeList",
   bulletin_post_comment_details: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/commentDetails",
   bulletin_post_report_history: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/reportHistoryComments",

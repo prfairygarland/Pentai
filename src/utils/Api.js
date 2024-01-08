@@ -188,19 +188,20 @@ export const getOprationClub = async (url) => {
 
     const resGetOprationClub = await axios.get(url,
       { headers: { token: `${getToken}` } })
-    console.log('resGetOprationClub data  =>', resGetOprationClub.data);
+console.log('resGetOprationClub data  =>', resGetOprationClub.data);
     return resGetOprationClub.data
   } catch (error) {
     console.log('error =>', error);
   }
 }
 
-export const getBulletinBoardPostDetails = async (url) => {
+export const getBulletinBoardPostDetails = async (params) => {
   try {
-
+    const url = `https://ptkapi.experiencecommerce.com/api/adminPanel/community/postDetailsBulletin${params}`;
+    // const url = `http://192.168.9.175:3000/api/adminPanel/community/postDetailsBulletin${params}`;
     const resBulletinBoardPostDetails = await axios.get(url,
       { headers: { token: `${getToken}` } })
-    console.log('resBulletinBoardPostDetails data  =>', resBulletinBoardPostDetails.data);
+console.log('resBulletinBoardPostDetails data  =>', resBulletinBoardPostDetails.data);
     return resBulletinBoardPostDetails.data
   } catch (error) {
     console.log('error =>', error);
@@ -308,7 +309,7 @@ export const putApi = async (url, postIdToUpdate, data, header) => {
   {
     let response = null;
     try {
-      response = await axios.put(url + postIdToUpdate, data, {
+      response = await axios.put(url + '?postId=' + postIdToUpdate, data, {
         headers: {
           accept: 'text/plain',
           ...CustomHeader,

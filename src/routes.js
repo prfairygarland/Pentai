@@ -28,10 +28,9 @@ const routes = [
   { path: '/BoardManagement', name: 'Board Management', element: BoardManagement },
   { path: '/BulletinBoard', name: 'Bulletin Board Management', element: BoardPostListing },
   { path: '/BulletinBoardPostDetails/:id/:boardId', name: 'Bulletin post details ', element: BulletinBoardPostDetails },
-
   { path: '/BulletinBoard/createPost', name: 'Create A Post', element: CreatePost },
   { path: '/BulletinBoard/CommunityReportHistory', name: 'Community Report History', element: CommunityReportHistory },
-
+  { path: '/BulletinBoard/updatePost', name: 'Update A Post', element: CreatePost },
 ]
 
 export default routes
