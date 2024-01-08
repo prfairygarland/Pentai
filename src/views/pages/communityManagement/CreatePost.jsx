@@ -3,12 +3,13 @@ import { CButton, CFormCheck, CFormInput, CFormSelect, CFormTextarea } from '@co
 import { useNavigate, useLocation } from 'react-router-dom'
 
 import './createPost.scss'
-import { getApi, postApi } from 'src/utils/Api'
+import { getApi, postApi, putApi, getBulletinBoardPostDetails } from 'src/utils/Api'
 import { API_ENDPOINT } from 'src/utils/config'
 import { enqueueSnackbar } from 'notistack'
 import RecruitManagement from './RecruitManagement'
 import PollManagement from './PollManagement'
 import ConfirmationModal from 'src/utils/ConfirmationModal'
+import { ALL_CONSTANTS } from 'src/utils/config'
 
 const CreatePost = () => {
   const location = useLocation()
@@ -29,8 +30,9 @@ const CreatePost = () => {
     isPushNotification: false,
   })
 
+  //====================================common code starts here====================================//
   const uploadImagesHandler = (e) => {
-    const files = [...uploadedImages]
+    const files = uploadedImages ? [...uploadedImages] : []
     const eventFiles = e.target.files
     if (eventFiles.length + files.length > 10) {
       enqueueSnackbar(` Upto 10 images can be uploaded`, { variant: 'error' })
@@ -54,6 +56,7 @@ const CreatePost = () => {
     })
     const imgFiles = [...uploadedImages]
     imgFiles.splice(imgFileIndex, 1)
+    setData((prev) => ({ ...prev, images: imgFiles }))
     setUploadedImages(imgFiles)
   }
 
@@ -71,7 +74,7 @@ const CreatePost = () => {
   }
 
   const uploadFilesHandler = (e) => {
-    const files = [...uploadedFiles]
+    const files = uploadedFiles ? [...uploadedFiles] : []
     const eventFiles = e.target.files
     if (eventFiles.length + files.length > 10) {
       enqueueSnackbar(` Upto 10 files can be uploaded`, { variant: 'error' })
@@ -95,6 +98,7 @@ const CreatePost = () => {
     })
     const files = [...uploadedFiles]
     files.splice(fileIndex, 1)
+    setData((prev) => ({ ...prev, attachments: files }))
     setUploadedFiles(files)
   }
 
@@ -120,6 +124,80 @@ const CreatePost = () => {
     setData((prev) => ({ ...prev, [keyName]: value }))
   }
 
+  const validate = (mode) => {
+    if (data.title.trim() === '') {
+      enqueueSnackbar('Please enter title', { variant: 'error' })
+      return false
+    }
+    if (data.content.trim() === '') {
+      enqueueSnackbar('Please enter content', { variant: 'error' })
+      return false
+    }
+    if (mode === 'save') {
+      confirmationModalHandler(true)
+    } else {
+      confirmationUpdateModalHandler(true)
+    }
+  }
+
+  const getBoardList = async () => {
+    try {
+      const res = await getApi(API_ENDPOINT.get_board_list)
+      if (res.status === 200) {
+        setBoardDropdownValues(res?.getBoardData)
+        setData((prev) => ({ ...prev, boardId: res?.getBoardData[0].id.toString() }))
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const recruitHandler = (isOpen) => {
+    setIsRecruitOpen(isOpen)
+  }
+
+  const pollHandler = (isOpen) => {
+    setIsPollOpen(isOpen)
+  }
+
+  const changeRecruitDataHandle = (data) => {
+    setRecruitData(data)
+    const date = new Date(data.recruitmentDeadline)
+    setData((prev) => ({
+      ...prev,
+      recruitmentEnabled: data.recruitmentEnabled,
+      recruitmentAllowRaffle: data.recruitmentAllowRaffle,
+      recruitmentMaxParticipants: data.recruitmentMaxParticipants,
+      recruitmentDeadline: date.toUTCString(),
+      recruitmentRaffleMaxWinners: data.recruitmentRaffleMaxWinners,
+    }))
+  }
+
+  const changePollDataHandle = (paramData) => {
+    setPollData(paramData)
+    const date = new Date(paramData.pollEndTimestamp)
+    const pollParamData = { ...paramData, pollEndTimestamp: date.toUTCString() }
+    delete pollParamData.pollDisplayOptions
+    setData((prev) => ({
+      ...prev,
+      ...pollParamData,
+    }))
+  }
+
+  const modifyRecruit = () => {
+    setIsRecruitOpen(true)
+  }
+
+  const modifyPoll = () => {
+    setIsPollOpen(true)
+  }
+
+  useEffect(() => {
+    getBoardList()
+  }, [])
+  //====================================common code ends here====================================//
+
+  //===================================Create code starts here===================================//
   const confirmationModalHandler = (isOpen) => {
     setModalProps({
       isModalOpen: isOpen,
@@ -183,80 +261,163 @@ const CreatePost = () => {
           },
         })
       } else {
-        enqueueSnackbar(`${res?.data?.msg}`, { variant: 'error' })
+        enqueueSnackbar(`${res?.data?.error}`, { variant: 'error' })
       }
     } catch (error) {
       console.log(error)
     }
   }
 
-  const validate = () => {
-    if (data.title.trim() === '') {
-      enqueueSnackbar('Please enter title', { variant: 'error' })
-      return false
-    }
-    if (data.content.trim() === '') {
-      enqueueSnackbar('Please enter content', { variant: 'error' })
-      return false
-    }
-    confirmationModalHandler(true)
+  //====================================Create code ends here====================================//
+
+  //===================================Update code starts here===================================//
+  const confirmationUpdateModalHandler = (isOpen) => {
+    setModalProps({
+      isModalOpen: isOpen,
+      title: 'Confirmation',
+      content: 'Are you sure to update post?',
+      cancelBtn: 'No',
+      cancelBtnHandler: cancelConfirmation,
+      successBtn: 'Yes',
+      successBtnHandler: successUpdateConfirmation,
+      modalCloseHandler: confirmationUpdateModalHandler,
+    })
   }
 
-  const getBoardList = async () => {
+  const successUpdateConfirmation = () => {
+    updatePostHandler()
+    setModalProps({
+      isModalOpen: false,
+    })
+  }
+
+  const getPostDetails = async (postId, boardId) => {
     try {
-      const res = await getApi(API_ENDPOINT.get_board_list)
-      if (res.status === 200) {
-        setBoardDropdownValues(res?.getBoardData)
-        setData((prev) => ({ ...prev, boardId: res?.getBoardData[0].id.toString() }))
+      let urlParams = `?postId=${postId}&boardId=${boardId}`
+      const res = await getBulletinBoardPostDetails(urlParams)
+      const respData = res?.getPostdetails[0]
+      if (respData?.type === 'recruit' || respData?.type === 'raffle') {
+        const recruitmentData = {
+          recruitmentEnabled: true,
+          recruitmentAllowRaffle: Boolean(respData.recruitAllowRaffle),
+          recruitmentMaxParticipants: respData.recruitmentMaxParticipants,
+          recruitmentDeadline: new Date(respData?.recruitmentDeadline),
+          recruitmentStatus: respData?.status,
+          recruitmentRaffleMaxWinners: respData.recruitmentRaffleMaxWinners,
+        }
+        setRecruitData(recruitmentData)
+        if (
+          recruitData?.recruitmentStatus === 'recruiting' ||
+          recruitData?.recruitmentStatus === 'none'
+        ) {
+          setData((prev) => ({ ...prev, recruitmentData }))
+        }
       }
+
+      if (respData?.type === 'poll') {
+        const pollData = {
+          pollEnabled: true,
+          pollTitle: respData.pollTitle,
+          pollAllowSecretVoting: Boolean(respData.pollAllowSecretVoting),
+          pollMaxSelections: respData.pollMaxSelections,
+          pollEndTimestamp: new Date(respData.pollEndTimestamp),
+          pollDisplayOptions: respData.pollInfo,
+        }
+        respData?.pollInfo?.forEach((opt, index) => {
+          pollData[`pollOptions[${index}]`] = opt.title
+        })
+        setPollData(pollData)
+        if (recruitData?.pollParticipants > 0) {
+          setData((prev) => ({ ...prev, pollData }))
+        }
+      }
+
+      const images = await urlsToFiles(respData?.images)
+      setUploadedImages(images)
+      const files = await urlsToFiles(respData?.attachments)
+      setUploadedFiles(files)
+      setData((prev) => ({
+        ...prev,
+        title: respData.title,
+        content: respData.content,
+        boardId: respData.boardId,
+        isAnnouncement: respData.isAnnouncement ? true : false,
+        isPushNotification: respData.isPushNotificationSent ? true : false,
+        images: images ? images : [],
+        attachments: files ? files : [],
+      }))
     } catch (error) {
-      console.log(error)
+      console.log('error =>', error)
     }
   }
 
-  const recruitHandler = (isOpen) => {
-    setIsRecruitOpen(isOpen)
+  async function urlToBlob(url) {
+    const response = await fetch(url)
+    const blob = await response.blob()
+    return blob
   }
 
-  const pollHandler = (isOpen) => {
-    setIsPollOpen(isOpen)
-  }
-
-  const changeRecruitDataHandle = (data) => {
-    setRecruitData(data)
-    const date = new Date(data.recruitmentDeadline)
-    setData((prev) => ({
-      ...prev,
-      recruitmentEnabled: data.recruitmentEnabled,
-      recruitmentAllowRaffle: data.recruitmentAllowRaffle,
-      recruitmentMaxParticipants: data.recruitmentMaxParticipants,
-      recruitmentDeadline: date.toUTCString(),
-      recruitmentRaffleMaxWinners: data.recruitmentRaffleMaxWinners,
-    }))
-  }
-
-  const changePollDataHandle = (paramData) => {
-    setPollData(paramData)
-    const date = new Date(paramData.pollEndTimestamp)
-    const pollParamData = { ...paramData, pollEndTimestamp: date.toUTCString() }
-    delete pollParamData.pollDisplayOptions
-    setData((prev) => ({
-      ...prev,
-      ...pollParamData,
-    }))
-  }
-
-  const modifyRecruit = () => {
-    setIsRecruitOpen(true)
-  }
-
-  const modifyPoll = () => {
-    setIsPollOpen(true)
+  const urlsToFiles = async (urls) => {
+    if (!urls) return
+    const filePromises = urls?.map(async ({ url }) => {
+      const blob = await urlToBlob(ALL_CONSTANTS.BASE_URL + url)
+      // const blob = await urlToBlob('http://192.168.9.175:3000' + url)
+      const fileName = url
+      return new File([blob], fileName, { type: blob.type })
+    })
+    const files = await Promise.all(filePromises)
+    return files
   }
 
   useEffect(() => {
-    getBoardList()
+    if (location?.state?.boardID && location?.state?.postId) {
+      getPostDetails(location?.state?.postId, location?.state?.boardID)
+    }
   }, [])
+
+  const updatePostHandler = async () => {
+    try {
+      const formData = new FormData()
+      for (let obj in data) {
+        if (obj !== 'pollData') {
+          if (Array.isArray(data[obj])) {
+            for (let i = 0; i < data[obj].length; i++) {
+              formData.append(obj, data[obj][i])
+            }
+          } else {
+            formData.append(obj, data[obj])
+          }
+        }
+      }
+      console.log('data :: ', data)
+      formData.append('postId', location?.state?.postId)
+      const res = await putApi(API_ENDPOINT.update_post_bulletin, location?.state?.postId, formData)
+      console.log('res :: ', res)
+      if (res?.data?.status === 201) {
+        setData({
+          title: '',
+          content: '',
+          isAnnouncement: false,
+          isPushNotification: false,
+          images: [],
+          attachments: [],
+          recruitData: {},
+          pollData: {},
+        })
+        navigate('../BulletinBoard', {
+          state: {
+            enqueueSnackbarMsg: 'Post Updated Successfully And Redirected to Post Listing Page',
+            variant: 'success',
+          },
+        })
+      } else {
+        enqueueSnackbar(`${res?.data?.error}`, { variant: 'error' })
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  //===================================Update code ends here===================================//
 
   return (
     <>
@@ -274,7 +435,7 @@ const CreatePost = () => {
         pollModifyData={pollData}
       />
       <main>
-        <h4>Create a Post</h4>
+        <h4>{location?.state?.boardID && location?.state?.postId ? 'Update' : 'Create'} a Post</h4>
         <div className="card p-2 mb-2 mt-4">
           <div className="dropdown-container">
             <label className="me-3">Board</label>
@@ -318,9 +479,6 @@ const CreatePost = () => {
                     />
                     <span className="txt-byte-information">{data.title.length} / 120 byte</span>
                   </div>
-                  {/* <span className="err-msg-txt" ref={titleErrRef}>
-                    Please enter title
-                  </span> */}
                 </div>
               </div>
               <div className="form-outline form-white  d-flex ">
@@ -349,18 +507,27 @@ const CreatePost = () => {
                         {recruitData.recruitmentDeadline.getHours()}:
                         {recruitData.recruitmentDeadline.getMinutes()}
                       </div>
-                      <div>Status : Not Open</div>
+                      <div>
+                        Status :{' '}
+                        {recruitData?.recruitmentStatus
+                          ? recruitData?.recruitmentStatus
+                          : 'Not Open'}
+                      </div>
                       <div>No. of Participants : {recruitData.recruitmentMaxParticipants}</div>
                       <div>
                         Raffle : {recruitData.recruitmentAllowRaffle ? 'Yes' : 'No'} /{' '}
                         {recruitData.recruitmentRaffleMaxWinners}
                       </div>
-                      <CButton className="btn" color="dark" onClick={() => modifyRecruit()}>
-                        Modify
-                      </CButton>
-                      <CButton className="delete-btn" onClick={() => setRecruitData({})}>
-                        Delete
-                      </CButton>
+                      {recruitData?.recruitmentStatus !== 'closed' && (
+                        <CButton className="btn" color="dark" onClick={() => modifyRecruit()}>
+                          Modify
+                        </CButton>
+                      )}
+                      {!location?.state?.postId && (
+                        <CButton className="delete-btn" onClick={() => setRecruitData({})}>
+                          Delete
+                        </CButton>
+                      )}
                     </div>
                   )}
                   {pollData?.pollEndTimestamp && (
@@ -381,7 +548,7 @@ const CreatePost = () => {
                           {pollData?.pollDisplayOptions &&
                             pollData?.pollDisplayOptions.map((opt, index) => (
                               <li key={index}>
-                                Option {index + 1} : {opt}
+                                Option {index + 1} : {opt?.title ? opt?.title : opt}
                               </li>
                             ))}
                         </ul>
@@ -389,9 +556,11 @@ const CreatePost = () => {
                       <CButton className="btn" color="dark" onClick={() => modifyPoll()}>
                         Modify
                       </CButton>
-                      <CButton className="delete-btn" onClick={() => setPollData({})}>
-                        Delete
-                      </CButton>
+                      {!location?.state?.postId && (
+                        <CButton className="delete-btn" onClick={() => setPollData({})}>
+                          Delete
+                        </CButton>
+                      )}
                     </div>
                   )}
                 </div>
@@ -459,7 +628,15 @@ const CreatePost = () => {
                 <div className="upload-file-main-container">
                   <div className="upload-img-btn-and-info">
                     <div className="upload-container-btn">
-                      <label className="label-btn" color="dark" htmlFor="files">
+                      <label
+                        className={
+                          recruitData?.recruitmentStatus === 'closed'
+                            ? `label-btn disabled`
+                            : `label-btn`
+                        }
+                        color="dark"
+                        htmlFor="files"
+                      >
                         Upload
                         <input
                           type="file"
@@ -469,6 +646,7 @@ const CreatePost = () => {
                           multiple
                           accept=".xlsx, .docx, .pdf"
                           onChange={(e) => uploadFilesHandler(e)}
+                          disabled={recruitData?.recruitmentStatus === 'closed' ? true : false}
                         />
                       </label>
                     </div>
@@ -482,7 +660,7 @@ const CreatePost = () => {
                       </div>
                     </div>
                   </div>
-                  {uploadedFiles.length > 0 && (
+                  {uploadedFiles?.length > 0 && (
                     <div className="upload-files-container">
                       {uploadedFiles.map((file, index) => (
                         <div key={index} className="individual-file-and-delete">
@@ -541,6 +719,7 @@ const CreatePost = () => {
                       onClick={() => setData((prev) => ({ ...prev, isPushNotification: true }))}
                       label="Yes"
                       value={true}
+                      disabled={location?.state?.postId ? true : false}
                     />
                     <CFormCheck
                       type="radio"
@@ -549,6 +728,7 @@ const CreatePost = () => {
                       onClick={() => setData((prev) => ({ ...prev, isPushNotification: false }))}
                       label="No"
                       value={false}
+                      disabled={location?.state?.postId ? true : false}
                     />
                   </div>
                 </div>
@@ -583,9 +763,20 @@ const CreatePost = () => {
           <CButton className="btn save-cancel-btn" color="dark" onClick={cancelPostHandler}>
             Cancel
           </CButton>
-          <CButton className="btn save-cancel-btn" color="dark" onClick={validate}>
-            Save
-          </CButton>
+          {location?.state?.postId && (
+            <CButton
+              className="btn save-cancel-btn"
+              color="dark"
+              onClick={() => validate('update')}
+            >
+              Update
+            </CButton>
+          )}
+          {!location?.state?.postId && (
+            <CButton className="btn save-cancel-btn" color="dark" onClick={() => validate('save')}>
+              Save
+            </CButton>
+          )}
         </div>
       </main>
     </>

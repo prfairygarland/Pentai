@@ -159,9 +159,9 @@ const BulletinBoardPostDetails = () => {
   const BulletinBoardPostDetail = async () => {
     setIsLoading(true)
     try {
-      let url = `https://ptkapi.experiencecommerce.com/api/adminPanel/community/postDetailsBulletin?postId=${id}&boardId=${boardId}`
-      const res = await getBulletinBoardPostDetails(url)
-      console.log('res BulletinBoardPostDetail=>', res)
+      let urlParams = `?postId=${id}&boardId=${boardId}`
+      const res = await getBulletinBoardPostDetails(urlParams);
+      console.log('res BulletinBoardPostDetail=>', res);
 
       if (res.status == 200) {
         setIsLoading(false)
