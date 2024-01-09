@@ -160,8 +160,8 @@ const BulletinBoardPostDetails = () => {
     setIsLoading(true)
     try {
       let urlParams = `?postId=${id}&boardId=${boardId}`
-      const res = await getBulletinBoardPostDetails(urlParams);
-      console.log('res BulletinBoardPostDetail=>', res);
+      const res = await getBulletinBoardPostDetails(urlParams)
+      console.log('res BulletinBoardPostDetail=>', res)
 
       if (res.status == 200) {
         setIsLoading(false)
