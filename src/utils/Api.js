@@ -198,11 +198,21 @@ console.log('resGetOprationClub data  =>', resGetOprationClub.data);
 export const getBulletinBoardPostDetails = async (params) => {
   try {
     const url = `https://ptkapi.experiencecommerce.com/api/adminPanel/community/postDetailsBulletin${params}`;
-    // const url = `http://192.168.9.175:3000/api/adminPanel/community/postDetailsBulletin${params}`;
     const resBulletinBoardPostDetails = await axios.get(url,
       { headers: { token: `${getToken}` } })
 console.log('resBulletinBoardPostDetails data  =>', resBulletinBoardPostDetails.data);
     return resBulletinBoardPostDetails.data
+  } catch (error) {
+    console.log('error =>', error);
+  }
+}
+
+export const getWelfareBoardPostDetails = async (params) => {
+  try {
+    const url = `${API_ENDPOINT.welfare_board_details}${params}`;
+    const resWelfareBoardPostDetails = await axios.get(url,
+      { headers: { token: `${getToken}` } })
+    return resWelfareBoardPostDetails.data
   } catch (error) {
     console.log('error =>', error);
   }

@@ -29,19 +29,21 @@ export let API_ENDPOINT = {
   get_board_usage_setting: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/getUsageStatus",
   get_prohabited_words: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/getProhibitedWords",
   get_boards: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/boardList",
+  get_categories: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/categoryList",
   get_bulletinboard_posts: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/bulletinBoardManagement",
+  get_welfare_board_posts: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/welfareBoardManagement",  
   get_boarddata_byID: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/getBoardId",
+  get_categorydata_byID: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/getCategoryId",
   get_postuserdetail : ALL_CONSTANTS.API_URL + "/api/adminPanel/community/userDetailsBulletin",
-  get_board_list: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/boardList",
   create_post_bulletin: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/createPostBulletin",
+  create_post_welfare: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/createPostWelfare",
   
   update_post_bulletin: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/updateBulletin",
+  update_post_welfare: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/updateWelfare",
 
-  // create_post_bulletin: "http://192.168.9.175:3000/api/adminPanel/community/createPostBulletin",
-  // update_post_bulletin: "http://192.168.9.175:3000/api/adminPanel/community/updateBulletin",
 
   bulletin_board_details: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/postDetailsBulletin",
-  // bulletin_board_details: "http://192.168.9.175:3000/api/adminPanel/community/postDetailsBulletin",
+  welfare_board_details: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/postDetailsWelfare",
 
 
   bulletin_post_like_list: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/postlikeList",
