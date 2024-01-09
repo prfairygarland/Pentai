@@ -345,8 +345,7 @@ const BulletinBoardPostDetails = () => {
         navigate('/BulletinBoard')
       }
     } catch (error) {
-      setIsLoading(false)
-      console.log('handlePostDelete error =>', error)
+      console.log('handlePostDelete error =>', error);
     }
   }
 
@@ -377,9 +376,8 @@ const BulletinBoardPostDetails = () => {
   }
 
   const handlePostCommentDelete = async (comId, useId) => {
-    console.log('useId', useId)
-    console.log('comId', comId)
-    setIsLoading(true)
+    console.log('useId', useId);
+    console.log('comId', comId);
 
     let dataPass = {
       postId: id,
@@ -660,6 +658,8 @@ const BulletinBoardPostDetails = () => {
     setEditComment({ mode: 'update', ids: value.id })
     // handlePostComment('update', value.id)
   }
+
+
 
   return (
     <>
@@ -1022,9 +1022,12 @@ const BulletinBoardPostDetails = () => {
                   </CModal>
                 </div>
                 <div>
-                  {bulletinBoardPostDetail[0]?.isReported == 1 && (
-                    <button className="btn btn-danger">Cancel Report</button>
-                  )}
+                  {bulletinBoardPostDetail[0]?.isReported == 1
+                    &&
+                    <button className='btn btn-danger'>
+                      Cancel Report
+                    </button>
+                  }
                 </div>
                 <div className="d-flex gap-3">
                   {getUserData.id == bulletinBoardPostDetail[0]?.authorId &&

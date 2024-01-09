@@ -1,12 +1,12 @@
 export let ALL_CONSTANTS = {
 
-  // IS_PRODUCTION: false,
+  IS_PRODUCTION: false,
   BASE_URL: "https://ptkapi.experiencecommerce.com",       // API URL staging
   API_URL: "https://ptkapi.experiencecommerce.com",    // API URL staging
   // API_URL: "http://192.168.10.46:3000/",    // API URL staging
 
-    // IS_PRODUCTION: true,
-    // BASE_URL: "",       // API URL Live
+  // IS_PRODUCTION: true,
+  // BASE_URL: "",       // API URL Live
   // API_URL: "",    // API URL Live
 
   // IS_PRODUCTION: false,
@@ -65,6 +65,14 @@ export let API_ENDPOINT = {
   bulletin_post_comment_edit: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/editComments",
   bulletin_board_post_history: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/postReportList",
   bulletin_board_post_comment_history: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/postCommentsList",
+  bulletin_board_post_adminPostCancel: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/adminPostCancel",
+  bulletin_search: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/searchBulletinBoards",
+  add_bulletin_board: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/addBoards",
+  update_bulletin_board: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/updateBoardDetails",
+  delete_bulletin_board: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/deleteBoards",
+
+
+
 
 
   //{ BookRental Management}

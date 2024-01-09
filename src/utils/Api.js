@@ -4,7 +4,7 @@ import { API_ENDPOINT } from 'src/utils/config'
 
 const getToken = localStorage.getItem('token') ? localStorage.getItem('token') : sessionStorage.getItem('sessionToken')
 
-
+console.log('test dipak =>', getToken);
 
 // export const PostApi = async (url,value) => {
 //  try {
@@ -43,7 +43,7 @@ export const getUserList = async (url) => {
 
     const resUserList = await axios.get(url,
       { headers: { token: `${getToken}` } })
-    console.log('resUserList data  =>', resUserList.data);
+    console.log('resUserList data  =>', resUserList.data, getToken);
     return resUserList.data
   } catch (error) {
     console.log('error =>', error);
@@ -188,7 +188,7 @@ export const getOprationClub = async (url) => {
 
     const resGetOprationClub = await axios.get(url,
       { headers: { token: `${getToken}` } })
-console.log('resGetOprationClub data  =>', resGetOprationClub.data);
+    console.log('resGetOprationClub data  =>', resGetOprationClub.data);
     return resGetOprationClub.data
   } catch (error) {
     console.log('error =>', error);
@@ -200,7 +200,7 @@ export const getBulletinBoardPostDetails = async (params) => {
     const url = `https://ptkapi.experiencecommerce.com/api/adminPanel/community/postDetailsBulletin${params}`;
     const resBulletinBoardPostDetails = await axios.get(url,
       { headers: { token: `${getToken}` } })
-console.log('resBulletinBoardPostDetails data  =>', resBulletinBoardPostDetails.data);
+    console.log('resBulletinBoardPostDetails data  =>', resBulletinBoardPostDetails.data);
     return resBulletinBoardPostDetails.data
   } catch (error) {
     console.log('error =>', error);
@@ -300,6 +300,7 @@ export const getApi = async (url, header) => {
 export const postApi = async (url, data, header) => {
   {
     let response = null;
+    console.log('date check =>', data);
     try {
       response = await axios.post(url, data, {
         headers: {
@@ -315,11 +316,11 @@ export const postApi = async (url, data, header) => {
     return response;
   }
 };
-export const putApi = async (url, postIdToUpdate, data, header) => {
+export const putApi = async (url, data, header) => {
   {
     let response = null;
     try {
-      response = await axios.put(url + '?postId=' + postIdToUpdate, data, {
+      response = await axios.put(url, data, {
         headers: {
           accept: 'text/plain',
           ...CustomHeader,

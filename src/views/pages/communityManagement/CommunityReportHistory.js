@@ -31,12 +31,13 @@ const CommunityReportHistory = () => {
     },
     {
       Header: 'Writer Username',
-      accessor: 'authUserName'
+      accessor: 'authUserName',
+      Cell: ({ row }) => <p>{row.original.authUserName != null ? row.original.authUserName : '-'}</p>
     },
     {
       Header: 'Full name',
       // accessor: 'authUserName'
-      Cell: ({ row }) => <p>{row.original.authUserName}</p>
+      Cell: ({ row }) => <p>{row.original.authUserName != null ? row.original.authUserName : '-'}</p>
     },
     {
       Header: 'History Classification',
@@ -49,8 +50,8 @@ const CommunityReportHistory = () => {
     },
     {
       Header: 'Admin Username',
-      // accessor: 'reportedUserName',
-      Cell: ({ row }) => <p>{row.original.reportedUserName != null ? row.original.reportedUserName : '-'}</p>
+      accessor: 'adminUserName',
+      Cell: ({ row }) => <p>{row.original.adminUserName != null ? row.original.adminUserName : '-'}</p>
     },
     {
       Header: 'Reason',
@@ -61,9 +62,7 @@ const CommunityReportHistory = () => {
     {
       Header: 'Date',
       accessor: 'reportedAt',
-      Cell: ({ row }) => <p>{row.original.reportedAt ? moment(row.original.reportedAt).format('YYYY-MM-DD HH:mm:ss') : '-'}</p>
-
-
+      Cell: ({ row }) => <p>{row.original.reportedAt ? moment(row.original.reportedAt).format('YYYY-MM-DD HH:mm:ss') : (row.original.approveOn ? moment(row.original.approveOn).format('YYYY-MM-DD HH:mm:ss') : '-')}</p>
     }
 
   ], [])
@@ -78,16 +77,19 @@ const CommunityReportHistory = () => {
     },
     {
       Header: 'Writer Username',
-      accessor: 'authUserName'
+      accessor: 'authUserName',
+      Cell: ({ row }) => <p>{row.original.authUserName != null ? row.original.authUserName : '-'}</p>
     },
     {
       Header: 'Full name',
       // accessor: 'authUserName'
-      Cell: ({ row }) => <p>{row.original.authUserName}</p>
+      Cell: ({ row }) => <p>{row.original.authUserName != null ? row.original.authUserName : '-'}</p>
+
     },
     {
       Header: 'History Classification',
       accessor: 'approvalStatus',
+      Cell: ({ row }) => <p>{row.original.approvalStatus != null ? row.original.approvalStatus : '-'}</p>
     },
     {
       Header: 'Reporter Username',
@@ -97,7 +99,7 @@ const CommunityReportHistory = () => {
     {
       Header: 'Admin Username',
       // accessor: 'reportedUserName',
-      Cell: ({ row }) => <p>{row.original.reportedUserName != null ? row.original.reportedUserName : '-'}</p>
+      Cell: ({ row }) => <p>{row.original.adminUserName != null ? row.original.adminUserName : '-'}</p>
     },
     {
       Header: 'Reason',
@@ -108,9 +110,7 @@ const CommunityReportHistory = () => {
     {
       Header: 'Date',
       accessor: 'reportedAt',
-      Cell: ({ row }) => <p>{row.original.reportedAt ? moment(row.original.reportedAt).format('YYYY-MM-DD HH:mm:ss') : '-'}</p>
-
-
+      Cell: ({ row }) => <p>{row.original.approveOn ? moment(row.original.approveOn).format('YYYY-MM-DD HH:mm:ss') : (row.original.reportedAt ? moment(row.original.reportedAt).format('YYYY-MM-DD HH:mm:ss') : (row.original.AdminCommentDeletedOn ? moment(row.original.AdminCommentDeletedOn).format('YYYY-MM-DD HH:mm:ss') : ('-')))}</p>
     }
 
   ], [])
