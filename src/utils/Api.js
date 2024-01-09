@@ -323,11 +323,11 @@ export const putApi = async (url, postIdToUpdate, data, header) => {
     return response;
   }
 };
-export const deleteApi = async (url, data, header) => {
+export const deleteApi = async (url, postIdToDelete, header) => {
   {
     let response = null;
     try {
-      response = await axios.delete(url, data, {
+      response = await axios.delete(url + postIdToDelete, {
         headers: {
           accept: 'text/plain',
           ...CustomHeader,

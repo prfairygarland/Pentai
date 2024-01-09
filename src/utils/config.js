@@ -3,6 +3,7 @@ export let ALL_CONSTANTS = {
   // IS_PRODUCTION: false,
   BASE_URL: "https://ptkapi.experiencecommerce.com",       // API URL staging
   API_URL: "https://ptkapi.experiencecommerce.com",    // API URL staging
+  // API_URL: "http://192.168.10.46:3000/",    // API URL staging
 
     // IS_PRODUCTION: true,
     // BASE_URL: "",       // API URL Live
@@ -33,6 +34,7 @@ export let API_ENDPOINT = {
   get_postuserdetail : ALL_CONSTANTS.API_URL + "/api/adminPanel/community/userDetailsBulletin",
   get_board_list: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/boardList",
   create_post_bulletin: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/createPostBulletin",
+  
   update_post_bulletin: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/updateBulletin",
 
   // create_post_bulletin: "http://192.168.9.175:3000/api/adminPanel/community/createPostBulletin",
@@ -63,7 +65,16 @@ export let API_ENDPOINT = {
   bulletin_board_post_comment_history: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/postCommentsList",
 
 
-
+  //{ BookRental Management}
+  get_book_list: ALL_CONSTANTS.API_URL + "/admin/bookRental/list",
+  get_genre_list: ALL_CONSTANTS.API_URL + "/admin/bookRental/genre/list",
+  get_userdetails: ALL_CONSTANTS.API_URL + "/admin/bookRental/userDetail",
+  get_rentaldetails: ALL_CONSTANTS.API_URL + "/admin/bookRental/rentalDetail",
+  get_rentalhistory: ALL_CONSTANTS.API_URL + "/admin/bookRental/rentalHistory",
+  get_all_book: ALL_CONSTANTS.API_URL + "/admin/bookRental/allBook",
+  delete_book: ALL_CONSTANTS.API_URL + "/admin/bookRental/deleteBook",
+  book_listexport: ALL_CONSTANTS.API_URL + "/admin/bookRental/export",
+  searchGoogleBook: ALL_CONSTANTS.API_URL + "/admin/bookRental/searchGoogleBook",
 
 
 

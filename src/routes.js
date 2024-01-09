@@ -8,7 +8,7 @@ import UserDetails from './views/pages/userManagement/userDetails'
 import BulletinBoardPostDetails from './views/pages/communityManagement/BulletinBoardPostDetails'
 import BoardPostListing from './views/pages/communityManagement/BoardPostListing'
 import CommunityReportHistory from './views/pages/communityManagement/CommunityReportHistory'
-
+import BookRentalStatus from './views/pages/BookRentalManagement/BookRentalStatus'
 
 const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
 
@@ -31,6 +31,9 @@ const routes = [
   { path: '/BulletinBoard/createPost', name: 'Create A Post', element: CreatePost },
   { path: '/BulletinBoard/CommunityReportHistory', name: 'Community Report History', element: CommunityReportHistory },
   { path: '/BulletinBoard/updatePost', name: 'Update A Post', element: CreatePost },
+
+    //{ Book Rental Management}
+    { path: '/BookRentalStatus', name: 'Book Rental Status', element: BookRentalStatus },
 ]
 
-export default routes
+export default routes;
