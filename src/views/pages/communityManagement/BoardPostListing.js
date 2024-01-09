@@ -323,24 +323,24 @@ const BoardPostListing = () => {
     } catch (error) {
       console.log(error)
       setIsLoading(false)
-        }
     }
+  }
 
-    const modifyPostHandler = (e, row) => {
-        e.preventDefault()
-        if (row.original.userId === JSON.parse(localStorage.getItem('userdata')).id) {
-            navigate("./updatePost", {
-                state: {
-                    postId: row?.original?.postId,
-                    boardID: row?.original?.boardId
-                }
-            })
-        } else {
-            enqueueSnackbar('Not allowed to change!', { variant: 'error' })
-        }        
+  const modifyPostHandler = (e, row) => {
+    e.preventDefault()
+    if (row.original.userId === JSON.parse(localStorage.getItem('userdata')).id) {
+      navigate('./updatePost', {
+        state: {
+          postId: row?.original?.postId,
+          boardID: row?.original?.boardId,
+        },
+      })
+    } else {
+      enqueueSnackbar('Not allowed to change!', { variant: 'error' })
     }
+  }
 
-  const [selectedRows, setSelectedRows] = useState([]);
+  const [selectedRows, setSelectedRows] = useState([])
   const handleSelectionChange = useCallback((selectedRowsIds) => {
     // setSelectedRows([...selectedRows, selectedRowsIds]);
     // console.log('selected rows type =>', typeof selectedRowsIds);
@@ -482,8 +482,16 @@ const BoardPostListing = () => {
         ),
       },
       {
-          Header: 'Modify',
-          Cell: ({ row }) => <Link onClick={(e) => modifyPostHandler(e, row)} className='text-dark text-center' style={{ curser: 'pointer' }}>Edit</Link>,
+        Header: 'Modify',
+        Cell: ({ row }) => (
+          <Link
+            onClick={(e) => modifyPostHandler(e, row)}
+            className="text-dark text-center"
+            style={{ curser: 'pointer' }}
+          >
+            Edit
+          </Link>
+        ),
       },
     ],
     [currentPage, itemsPerPage],
