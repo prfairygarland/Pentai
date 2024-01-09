@@ -5,12 +5,17 @@ export const reportedOptions = [
     { label : 'None', value : 0}
 ]
 
+export const reportedOptionsWelfare = [
+  { label: 'Reported Comment', value: 2 },
+  { label : 'None', value : 0}
+]
+
 export const classificationsOptions = [
     { label : 'None',value : 'none'},
     { label: 'Deleted', value: 'deleted' },
     { label: 'Deleted(Admin)', value: 'deletedAdmin' },
     { label: 'Recruiting', value: 'recruiting' },
-    { label: 'Announcement', value: 'winner' },
+    { label: 'Winner', value: 'winner' },
     { label: 'Proceeding', value: 'proceeding' },
     { label: 'Closed', value: 'closed' },
     { label: 'Cancelled', value: 'cancelled' }

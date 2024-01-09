@@ -3,7 +3,13 @@ import { CButton, CFormCheck, CFormInput, CFormSelect, CFormTextarea } from '@co
 import { useNavigate, useLocation } from 'react-router-dom'
 
 import './createPost.scss'
-import { getApi, postApi, putApi, getBulletinBoardPostDetails } from 'src/utils/Api'
+import {
+  getApi,
+  postApi,
+  putApi,
+  getBulletinBoardPostDetails,
+  getWelfareBoardPostDetails,
+} from 'src/utils/Api'
 import { API_ENDPOINT } from 'src/utils/config'
 import { enqueueSnackbar } from 'notistack'
 import RecruitManagement from './RecruitManagement'
@@ -142,7 +148,14 @@ const CreatePost = () => {
 
   const getBoardList = async () => {
     try {
-      const res = await getApi(API_ENDPOINT.get_board_list)
+      let url = ''
+      if (location?.state?.redirectTo === 'WelfareBoard') {
+        url = `${API_ENDPOINT.get_categories}`
+      } else if (location?.state?.redirectTo === 'BulletinBoard') {
+        url = `${API_ENDPOINT.get_boards}`
+      }
+      const res = await getApi(url)
+
       if (res.status === 200) {
         setBoardDropdownValues(res?.getBoardData)
         setData((prev) => ({ ...prev, boardId: res?.getBoardData[0].id.toString() }))
@@ -225,7 +238,11 @@ const CreatePost = () => {
   }
 
   const cancelPostHandler = () => {
-    navigate('../BulletinBoard')
+    if (location?.state?.redirectTo === 'BulletinBoard') {
+      navigate('../BulletinBoard')
+    } else if (location?.state?.redirectTo === 'WelfareBoard') {
+      navigate('../WelfareBoard')
+    }
   }
 
   const savePostHandler = async () => {
@@ -242,7 +259,14 @@ const CreatePost = () => {
           }
         }
       }
-      const res = await postApi(API_ENDPOINT.create_post_bulletin, formData)
+      let url = ''
+      if (location?.state?.redirectTo === 'WelfareBoard') {
+        url = `${API_ENDPOINT.create_post_welfare}`
+      } else if (location?.state?.redirectTo === 'BulletinBoard') {
+        url = `${API_ENDPOINT.create_post_bulletin}`
+      }
+      const res = await postApi(url, formData)
+
       if (res?.data?.status === 201) {
         setData({
           title: '',
@@ -254,14 +278,20 @@ const CreatePost = () => {
           recruitData: {},
           pollData: {},
         })
-        navigate('../BulletinBoard', {
+        let redirectTo = ''
+        if (location?.state?.redirectTo === 'BulletinBoard') {
+          redirectTo = '../BulletinBoard'
+        } else if (location?.state?.redirectTo === 'WelfareBoard') {
+          redirectTo = '../WelfareBoard'
+        }
+        navigate(redirectTo, {
           state: {
-            enqueueSnackbarMsg: 'Post Created Successfully And Redirected to Post Listing Page',
+            enqueueSnackbarMsg: 'Post Created Successfully And Redirected to Listing Page',
             variant: 'success',
           },
         })
       } else {
-        enqueueSnackbar(`${res?.data?.error}`, { variant: 'error' })
+        enqueueSnackbar(`${res?.data?.msg}`, { variant: 'error' })
       }
     } catch (error) {
       console.log(error)
@@ -291,10 +321,15 @@ const CreatePost = () => {
     })
   }
 
-  const getPostDetails = async (postId, boardId) => {
+  const getPostDetails = async (postId, boardId, redirectTo = 'BulletinBoard') => {
     try {
       let urlParams = `?postId=${postId}&boardId=${boardId}`
-      const res = await getBulletinBoardPostDetails(urlParams)
+      let res
+      if (redirectTo === 'BulletinBoard') {
+        res = await getBulletinBoardPostDetails(urlParams)
+      } else if (redirectTo === 'WelfareBoard') {
+        res = await getWelfareBoardPostDetails(urlParams)
+      }
       const respData = res?.getPostdetails[0]
       if (respData?.type === 'recruit' || respData?.type === 'raffle') {
         const recruitmentData = {
@@ -361,7 +396,6 @@ const CreatePost = () => {
     if (!urls) return
     const filePromises = urls?.map(async ({ url }) => {
       const blob = await urlToBlob(ALL_CONSTANTS.BASE_URL + url)
-      // const blob = await urlToBlob('http://192.168.9.175:3000' + url)
       const fileName = url
       return new File([blob], fileName, { type: blob.type })
     })
@@ -371,7 +405,7 @@ const CreatePost = () => {
 
   useEffect(() => {
     if (location?.state?.boardID && location?.state?.postId) {
-      getPostDetails(location?.state?.postId, location?.state?.boardID)
+      getPostDetails(location?.state?.postId, location?.state?.boardID, location?.state?.redirectTo)
     }
   }, [])
 
@@ -389,9 +423,14 @@ const CreatePost = () => {
           }
         }
       }
-      console.log('data :: ', data)
       formData.append('postId', location?.state?.postId)
-      const res = await putApi(API_ENDPOINT.update_post_bulletin, location?.state?.postId, formData)
+      let url
+      if (location?.state?.redirectTo === 'BulletinBoard') {
+        url = API_ENDPOINT.update_post_bulletin
+      } else if (location?.state?.redirectTo === 'WelfareBoard') {
+        url = API_ENDPOINT.update_post_welfare
+      }
+      const res = await putApi(url, location?.state?.postId, formData)
       console.log('res :: ', res)
       if (res?.data?.status === 201) {
         setData({
@@ -404,9 +443,15 @@ const CreatePost = () => {
           recruitData: {},
           pollData: {},
         })
-        navigate('../BulletinBoard', {
+        let redirectTo = ''
+        if (location?.state?.redirectTo === 'BulletinBoard') {
+          redirectTo = '../BulletinBoard'
+        } else if (location?.state?.redirectTo === 'WelfareBoard') {
+          redirectTo = '../WelfareBoard'
+        }
+        navigate(redirectTo, {
           state: {
-            enqueueSnackbarMsg: 'Post Updated Successfully And Redirected to Post Listing Page',
+            enqueueSnackbarMsg: 'Post Updated Successfully And Redirected to Listing Page',
             variant: 'success',
           },
         })
@@ -611,7 +656,7 @@ const CreatePost = () => {
                           <img src={URL.createObjectURL(uploadedImages[index])} alt="" />
                           <button
                             className="thumbclsBtn"
-                            onClick={() => deleteUploadedImageHandler(index)}
+                            onClick={() => confirmationDeleteImgModalHandler(true, index)}
                           >
                             <i className="icon-close"></i>
                           </button>

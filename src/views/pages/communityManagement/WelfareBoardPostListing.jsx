@@ -1,3 +1,6 @@
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { API_ENDPOINT } from 'src/utils/config'
+import { getApi } from 'src/utils/Api'
 import {
   CButton,
   CFormInput,
@@ -9,26 +12,25 @@ import {
   CSpinner,
 } from '@coreui/react'
 import moment from 'moment/moment'
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import DatePicker from 'react-date-picker'
 import ReactPaginate from 'react-paginate'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import ReactTable from 'src/components/common/ReactTable'
-import { getApi } from 'src/utils/Api'
-import { API_ENDPOINT } from 'src/utils/config'
 import {
   postTypeOptions,
   classificationsOptions,
-  reportedOptions,
   paginationItemPerPageOptions,
-  classificationsTypeOptions,
+  reportedOptionsWelfare,
 } from 'src/utils/constant'
 import Loader from 'src/components/common/Loader'
 import { enqueueSnackbar } from 'notistack'
 import CIcon from '@coreui/icons-react'
 import { cilCircle, cilDescription, cilFile, cilImage } from '@coreui/icons'
 
-const BoardPostListing = () => {
+const WelfareBoardPostListing = () => {
+  const [boardSelectOptions, setBoardSelectOptions] = useState([{ label: 'All', value: '' }])
+  const [boardID, setBoardID] = useState(0)
+  const navigate = useNavigate()
   const location = useLocation()
   const initialFilter = {
     department: 'title',
@@ -40,8 +42,6 @@ const BoardPostListing = () => {
     reported: '',
   }
 
-  const [boardSelectOptions, setBoeardSelectOptions] = useState([{ label: 'All', value: '' }])
-  const [boardID, setBoardID] = useState(0)
   const [boardDetails, setBoardDetails] = useState({})
   const [postData, setPostData] = useState([])
   const [isLoading, setIsLoading] = useState(false)
@@ -53,12 +53,49 @@ const BoardPostListing = () => {
   const [filterApplied, setFilterApplied] = useState(0)
   const [userInfoPopup, setUserInfoPopup] = useState(false)
   const [userInfoData, setUserInfoData] = useState({})
-  const navigate = useNavigate()
   const [startDate, setStartDate] = useState('')
   const [endDate, setEndDate] = useState('')
 
+  const createPostHandler = () => {
+    navigate('./createPost', {
+      state: {
+        boardID: boardID,
+        redirectTo: 'WelfareBoard',
+      },
+    })
+  }
+
+  // const handleSelectBoardChange = async (event) => {
+  //   setBoardID(parseInt(event.target.value))
+  // }
+
+  const getBoardDropDownData = async () => {
+    try {
+      let url = `${API_ENDPOINT.get_categories}`
+
+      const responce = await getApi(url)
+
+      if (responce.status === 200) {
+        const boardData = responce.getBoardData.map((ele) => {
+          return { label: ele.name, value: ele.id }
+        })
+
+        setBoardSelectOptions((prev) => {
+          return [{ label: 'All', value: 0 }, ...boardData]
+        })
+      } else {
+        console.log('board list error')
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   useEffect(() => {
     getBoardDropDownData()
+  }, [])
+
+  useEffect(() => {
     if (location?.state?.enqueueSnackbarMsg) {
       enqueueSnackbar(location.state.enqueueSnackbarMsg, { variant: location.state.variant })
     }
@@ -76,7 +113,7 @@ const BoardPostListing = () => {
     setFilterData(initialFilter)
     setFilterApplied(0)
     if (value) {
-      const boardInfo = await getBoardDataByID(value)
+      const boardInfo = await getCategoryDataByID(value)
       setBoardDetails(boardInfo.getBoardData[0])
     } else {
       setBoardDetails({})
@@ -84,36 +121,11 @@ const BoardPostListing = () => {
     // getPostData(value)
   }
 
-  const getBoardDropDownData = async () => {
-    setIsLoading(true)
-    try {
-      let url = `${API_ENDPOINT.get_boards}`
-
-      const responce = await getApi(url)
-
-      if (responce.status === 200) {
-        const boardData = responce.getBoardData.map((ele) => {
-          return { label: ele.name, value: ele.id }
-        })
-
-        setBoeardSelectOptions((prev) => {
-          return [{ label: 'All', value: 0 }, ...boardData]
-        })
-        setIsLoading(false)
-      } else {
-        setIsLoading(false)
-      }
-    } catch (error) {
-      setIsLoading(false)
-      console.log(error)
-    }
-  }
-
   const getPostData = async (boardId) => {
     console.log('filterData', filterData)
     setIsLoading(true)
     try {
-      let url = `${API_ENDPOINT.get_bulletinboard_posts}?pageNo=${
+      let url = `${API_ENDPOINT.get_welfare_board_posts}?pageNo=${
         currentPage + 1
       }&limit=${itemsPerPage}`
 
@@ -163,10 +175,10 @@ const BoardPostListing = () => {
     }
   }
 
-  const getBoardDataByID = async (id) => {
+  const getCategoryDataByID = async (id) => {
     let data = []
     try {
-      let url = API_ENDPOINT.get_boarddata_byID + `?boardId=${id}`
+      let url = API_ENDPOINT.get_categorydata_byID + `?boardId=${id}`
 
       const response = await getApi(url)
       console.log(response)
@@ -335,6 +347,7 @@ const BoardPostListing = () => {
         state: {
           postId: row?.original?.postId,
           boardID: row?.original?.boardId,
+          redirectTo: 'WelfareBoard',
         },
       })
     } else {
@@ -382,13 +395,13 @@ const BoardPostListing = () => {
           }`}</p>
         ),
       },
-      {
-        Header: 'Reported Post',
-        accessor: 'englishName',
-        Cell: ({ row }) => (
-          <p className="text-center">{`${row.original.reportsPostCount ? 'Y' : 'N'}`}</p>
-        ),
-      },
+      // {
+      //   Header: 'Reported Post',
+      //   accessor: 'englishName',
+      //   Cell: ({ row }) => (
+      //     <p className="text-center">{`${row.original.reportsPostCount ? 'Y' : 'N'}`}</p>
+      //   ),
+      // },
       {
         Header: 'Title',
         accessor: 'PostTitle',
@@ -418,7 +431,7 @@ const BoardPostListing = () => {
                 ''
               )}
               {/* {<CIcon style={{ width: '10px', color: 'red' }} icon={cilCircle
-          } size="lg" />} */}
+            } size="lg" />} */}
             </div>
           </div>
         ),
@@ -499,15 +512,6 @@ const BoardPostListing = () => {
     [currentPage, itemsPerPage],
   )
 
-  const createPostHandler = () => {
-    navigate('./createPost', {
-      state: {
-        boardID: boardID,
-        redirectTo: 'BulletinBoard',
-      },
-    })
-  }
-
   const viewPostHistoryHandler = (id) => {
     navigate('./CommunityReportHistory', {
       state: {
@@ -522,57 +526,37 @@ const BoardPostListing = () => {
       <main>
         <div>
           <div className="d-flex justify-content-between align-items-center">
-            <p>Bulletin Board Information</p>
+            <p>Welfare Board Management</p>
             <CButton onClick={createPostHandler}>Create a post</CButton>
           </div>
-          <div className="d-flex p-3 justify-content-between h-100 w-100 bg-light rounded mt-2">
+          <div className="d-flex p-3 h-100 w-100 bg-light rounded mt-2">
             <div className="d-flex align-items-center w-25 ms-2 align-items-center">
               <p className="fw-medium me-3" style={{ 'white-space': 'nowrap' }}>
-                Board
+                Category
               </p>
               <CFormSelect
                 className="mb-2"
                 aria-label="Default select example"
                 options={boardSelectOptions}
-                onChange={handleSelectBoardChange}
+                onChange={(e) => handleSelectBoardChange(e)}
               />
             </div>
             <div className="d-flex align-items-center  ms-2 align-items-center">
               <p className="fw-medium me-1">Usage status :</p>
-              <p>{boardDetails?.usageStatus ? boardDetails?.usageStatus : '-'}</p>
-            </div>
-            <div className="d-flex align-items-center  ms-2 align-items-center">
-              <p className="fw-medium me-1">Permissions to write :</p>
-              <p>
-                {boardDetails?.isAdminOnly === 0 || boardDetails?.isAdminOnly === 1
-                  ? boardDetails?.isAdminOnly === 0
-                    ? 'All'
-                    : 'Admin only'
-                  : '-'}
-              </p>
-            </div>
-            <div className="d-flex align-items-center me-2 align-items-center">
-              <p className="fw-medium me-1">Anonymous Board :</p>
-              <p>
-                {boardDetails?.annonymousBoard === 0 || boardDetails?.annonymousBoard === 1
-                  ? boardDetails?.annonymousBoard === 0
-                    ? 'No'
-                    : 'Yes'
-                  : '-'}
-              </p>
+              <p>{boardDetails?.usageStatus ? boardDetails?.usageStatus : 'None'}</p>
             </div>
           </div>
           <div className="d-flex p-4  flex-column bg-light rounded mt-3">
             <div className="d-flex align-items-center w-100">
               <div className="d-flex align-items-center me-5">
-                <label className="me-3 fw-medium">Department</label>
+                <label className="me-3 fw-medium">Search</label>
                 <CFormSelect
                   className="w-50 me-2"
                   aria-label="Default select example"
-                  options={boardDetails?.annonymousBoard === 0 ? [
+                  options={[
                     { label: 'Title', value: 'title' },
                     { label: 'Writter', value: 'writter' },
-                  ] : [{ label: 'Title', value: 'title' },]}
+                  ]}
                   onChange={handleDepartmentChange}
                 />
                 <CFormInput
@@ -608,13 +592,9 @@ const BoardPostListing = () => {
                 <CFormSelect
                   className="me-2"
                   aria-label="Default select example"
-                  options={[
-                    { label: 'All', value: '' },
-                    ...(classificationsTypeOptions[filterData.posttype] || []),
-                  ]}
+                  options={[{ label: 'All', value: '' }, ...classificationsOptions]}
                   onChange={handleClassificationChange}
                   value={filterData.classification}
-                  disabled={!filterData.posttype}
                 />
               </div>
               <div className="d-flex align-items-center me-5">
@@ -622,7 +602,7 @@ const BoardPostListing = () => {
                 <CFormSelect
                   className="me-2"
                   aria-label="Default select example"
-                  options={[{ label: 'All', value: '' }, ...reportedOptions]}
+                  options={[{ label: 'All', value: '' }, ...reportedOptionsWelfare]}
                   onChange={handleReportedChange}
                   value={filterData.reported}
                 />
@@ -710,4 +690,4 @@ const BoardPostListing = () => {
   )
 }
 
-export default BoardPostListing
+export default WelfareBoardPostListing

@@ -7,6 +7,7 @@ import UserInformationSettings from './views/pages/userManagement/userInformatio
 import UserDetails from './views/pages/userManagement/userDetails'
 import BulletinBoardPostDetails from './views/pages/communityManagement/BulletinBoardPostDetails'
 import BoardPostListing from './views/pages/communityManagement/BoardPostListing'
+import WelfareBoardPostListing from './views/pages/communityManagement/WelfareBoardPostListing'
 import CommunityReportHistory from './views/pages/communityManagement/CommunityReportHistory'
 import BookRentalStatus from './views/pages/BookRentalManagement/BookRentalStatus'
 
@@ -31,6 +32,9 @@ const routes = [
   { path: '/BulletinBoard/createPost', name: 'Create A Post', element: CreatePost },
   { path: '/BulletinBoard/CommunityReportHistory', name: 'Community Report History', element: CommunityReportHistory },
   { path: '/BulletinBoard/updatePost', name: 'Update A Post', element: CreatePost },
+  { path: '/WelfareBoard', name: 'Welfare Board Management', element: WelfareBoardPostListing },
+  { path: '/WelfareBoard/createPost', name: 'Create A Post', element: CreatePost },
+  { path: '/WelfareBoard/updatePost', name: 'Update A Post', element: CreatePost },
 
     //{ Book Rental Management}
     { path: '/BookRentalStatus', name: 'Book Rental Status', element: BookRentalStatus },
