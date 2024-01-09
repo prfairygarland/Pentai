@@ -53,3 +53,22 @@
       transform: rotate(360deg);
     }
   }
+  .bookListHeader{
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+  }
+  .booklstLft{
+    width: 25%;
+  }
+  .booklstRgt{
+    width: 25%;
+  }
+  .booklstMidd{
+    // width: 50%;
+    flex: 1;
+  }
+  .bookListbody{
+    // display: flex;
+    // flex-direction: row;
+  }

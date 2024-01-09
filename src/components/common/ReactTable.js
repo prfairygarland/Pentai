@@ -48,7 +48,7 @@ const ReactTable = ({
           {
             id: 'selection',
             Header: ({ getToggleAllRowsSelectedProps }) => (
-              <ReactTableCheckbox {...getToggleAllRowsSelectedProps()} />
+              <ReactTable eckbox {...getToggleAllRowsSelectedProps()} />
             ),
             Cell: ({ row }) => (
               <ReactTableCheckbox {...row.getToggleRowSelectedProps()} />
