@@ -71,6 +71,10 @@ export let API_ENDPOINT = {
   update_bulletin_board: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/updateBoardDetails",
   delete_bulletin_board: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/deleteBoards",
 
+  welfare_search: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/searchWelfareBoards",
+  add_welfare_board: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/addWelfare",
+  update_welfare_board: ALL_CONSTANTS.API_URL + "http://192.168.9.175:3000/api/adminPanel/community/updateWelfareDetails",
+  delete_welfare_board: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/deleteWelfare",
 
 
 
