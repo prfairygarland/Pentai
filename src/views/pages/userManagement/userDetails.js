@@ -13,6 +13,7 @@ const UserDetails = () => {
   const { id } = useParams();
 
   const [userDetails, setUserDetailsData] = useState([])
+  const [userId, setUserId] = useState();
   const [supplyRentalData, setSupplyRentalData] = useState([])
   const [bookRentalData, setBookRentalData] = useState([])
   const [oprationClubData, setOprationClubData] = useState([])
@@ -132,7 +133,7 @@ const UserDetails = () => {
 
   const getSupplyRentallistData = async (currentSuppliesRentalPage) => {
     try {
-      let url = `https://ptkapi.experiencecommerce.com/api/adminPanel/supplyRental?pageNo=${currentSuppliesRentalPage}&limit=${itemsPerPage}&userId=${location.state.userId}`
+      let url = `https://ptkapi.experiencecommerce.com/api/adminPanel/supplyRental?pageNo=${currentSuppliesRentalPage}&limit=${itemsPerPage}&userId=${userId}`
       const res = await getSupplyRental(url);
       if (res.status == 200) {
         setCurrentSuppliesRentalPage(currentSuppliesRentalPage)
@@ -148,7 +149,7 @@ const UserDetails = () => {
 
   const getBookRentallistData = async (currentBookRentalPage) => {
     try {
-      let url = `https://ptkapi.experiencecommerce.com/api/adminPanel/bookRental?pageNo=${currentBookRentalPage}&limit=${itemsPerPage}&userId=${location.state.userId}`
+      let url = `https://ptkapi.experiencecommerce.com/api/adminPanel/bookRental?pageNo=${currentBookRentalPage}&limit=${itemsPerPage}&userId=${userId}`
       const res = await getBookRental(url);
       if (res.status == 200) {
         setCurrentBookRentalPage(currentBookRentalPage)
@@ -166,7 +167,7 @@ const UserDetails = () => {
 
   const getOprationClublistData = async (currentOperationClubPage) => {
     try {
-      let url = `https://ptkapi.experiencecommerce.com/api/adminPanel/userClubDetails?pageNo=${currentOperationClubPage}&limit=${itemsPerPage}&userId=${location.state.userId}`
+      let url = `https://ptkapi.experiencecommerce.com/api/adminPanel/userClubDetails?pageNo=${currentOperationClubPage}&limit=${itemsPerPage}&userId=${userId}`
       const res = await getOprationClub(url);
       if (res.status == 200) {
         setCurrentOperationClubPage(currentOperationClubPage)
@@ -185,7 +186,7 @@ const UserDetails = () => {
 
   const getUserDetailData = async () => {
     try {
-      let url = `https://ptkapi.experiencecommerce.com/api/adminPanel/userDetails?userId=${location.state.userId}`
+      let url = `https://ptkapi.experiencecommerce.com/api/adminPanel/userDetails?userId=${location?.state?.userId}`
       const res = await getUserDetail(url);
       if (res.status == 200) {
         // setCompaniesData(res.data)
@@ -232,6 +233,7 @@ const UserDetails = () => {
   }, []);
 
   useEffect(() => {
+    setUserId(location?.state?.userId)
     getUserDetailData()
   }, [])
 
@@ -386,8 +388,9 @@ const UserDetails = () => {
                                 <CModalTitle>Supplies Rental Status</CModalTitle>
                               </CModalHeader>
                               <CModalBody>
-                                <p>Total: {totalSupply}</p>
-                                <ReactTable showCheckbox={false} columns={suppliesRentalColumns} data={supplyRentalData} totalCount={5} onSelectionChange={handleSelectionChange} />
+                                <p className='mb-2'>Total: {totalSupply}</p>
+                                <div className='userdetailPopTable'>
+                                <ReactTable showCheckbox={false} columns={suppliesRentalColumns} data={supplyRentalData} totalCount={5} onSelectionChange={handleSelectionChange} /></div>
                                 <div className='userlist-pagination dataTables_paginate'>
                                   <ReactPaginate
                                     breakLabel={'...'}
@@ -403,7 +406,7 @@ const UserDetails = () => {
                                 </div>
                               </CModalBody>
                               <CModalFooter>
-                                <CButton color="secondary" onClick={() => setSuppliesRentalVisible(false)}>
+                                <CButton className='btn btn-black' onClick={() => setSuppliesRentalVisible(false)}>
                                   Close
                                 </CButton>
                               </CModalFooter>
@@ -428,8 +431,10 @@ const UserDetails = () => {
                                 <CModalTitle>Book Rental Status</CModalTitle>
                               </CModalHeader>
                               <CModalBody>
-                                <p>Total: {totalBookSupply}</p>
+                                <p className='mb-2'>Total: {totalBookSupply}</p>
+                                <div className='userdetailPopTable'>
                                 <ReactTable showCheckbox={false} columns={bookRentalColumns} data={bookRentalData} totalCount={5} onSelectionChange={handleSelectionChange} />
+                                </div>
                                 <div className='userlist-pagination dataTables_paginate'>
                                   <ReactPaginate
                                     breakLabel={'...'}
@@ -445,7 +450,7 @@ const UserDetails = () => {
                                 </div>
                               </CModalBody>
                               <CModalFooter>
-                                <CButton color="secondary" onClick={() => setBookRentalVisible(false)}>
+                                <CButton className='btn btn-black' onClick={() => setBookRentalVisible(false)}>
                                   Close
                                 </CButton>
                               </CModalFooter>
@@ -480,9 +485,12 @@ const UserDetails = () => {
                                 <CModalTitle>Operation Club Status</CModalTitle>
                               </CModalHeader>
                               <CModalBody>
-                                <p>Total: {totalOprationClub}</p>
-                                <ReactTable className='d-flex' showCheckbox={false} columns={operationClubColumns} data={oprationClubData} totalCount={5} onSelectionChange={handleSelectionChange} />
-                                <div className='userlist-pagination dataTables_paginate'>
+                                <p  className='mb-2'>Total: {totalOprationClub}</p>
+                              <div className='userdetailPopTable'>
+                               <ReactTable className='d-flex ' showCheckbox={false} columns={operationClubColumns} data={oprationClubData} totalCount={5} onSelectionChange={handleSelectionChange} />
+                               </div>
+                           
+                                <div className='userlist-pagination dataTables_paginate '>
                                   <ReactPaginate
                                     breakLabel={'...'}
                                     marginPagesDisplayed={1}
@@ -497,7 +505,7 @@ const UserDetails = () => {
                                 </div>
                               </CModalBody>
                               <CModalFooter>
-                                <CButton color="secondary" onClick={() => setOperationClubVisible(false)}>
+                                <CButton className='btn btn-black' onClick={() => setOperationClubVisible(false)}>
                                   Close
                                 </CButton>
                               </CModalFooter>

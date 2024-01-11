@@ -698,7 +698,7 @@ const BoardPostListing = () => {
             <CModalTitle className="p-1">User Information</CModalTitle>
           </CModalHeader>
           <CModalBody>
-            <div className="">
+            <div className="UserInfoList">
               <p>Username : {userInfoData.englishName ? userInfoData.englishName : '-'}</p>
               <p>Group/Team : {userInfoData.teamName ? userInfoData.teamName : '-'} </p>
               <p>E-mail address : {userInfoData.email ? userInfoData.email : '-'}</p>

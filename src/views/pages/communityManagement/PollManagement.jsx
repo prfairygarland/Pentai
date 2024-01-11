@@ -209,6 +209,7 @@ const PollManagement = ({ isPollOpen, setModal, pollModifyData = '', changePollD
           <div className="no-of-participants-container">
             <div>
               <CFormCheck
+                className="gap-2"
                 id="allowSecretVoting"
                 label="Allow Secret Voting"
                 checked={isAllowSecretVotingChecked}
@@ -219,13 +220,14 @@ const PollManagement = ({ isPollOpen, setModal, pollModifyData = '', changePollD
           <div className="no-of-participants-container">
             <div>
               <CFormCheck
+                className="gap-2"
                 id="allowMultiSelect"
                 label="Allow multi-select"
                 checked={isNoOfParticipationChecked}
                 onClick={handleIsNoOfParticipationChecked}
               />
             </div>
-            <div className="participant-change-container">
+            <div className="participant-change-container minMaxBtn">
               <CButton onClick={() => handleParticipantChange(-1)}>-</CButton>
               <CFormInput
                 className="txt-participant-change"
