@@ -31,7 +31,9 @@ export let API_ENDPOINT = {
   get_boards: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/boardList",
   get_categories: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/categoryList",
   get_bulletinboard_posts: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/bulletinBoardManagement",
-  get_welfare_board_posts: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/welfareBoardManagement",  
+  get_welfare_board_posts: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/welfareBoardManagement",
+  get_club_board: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/clubBoardSearch",
+  get_club_posts: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/clubPostSearch",
   get_boarddata_byID: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/getBoardId",
   get_categorydata_byID: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/getCategoryId",
   get_postuserdetail : ALL_CONSTANTS.API_URL + "/api/adminPanel/community/userDetailsBulletin",
@@ -73,9 +75,13 @@ export let API_ENDPOINT = {
 
   welfare_search: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/searchWelfareBoards",
   add_welfare_board: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/addWelfare",
-  update_welfare_board: ALL_CONSTANTS.API_URL + "http://192.168.9.175:3000/api/adminPanel/community/updateWelfareDetails",
+  update_welfare_board: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/updateWelfareDetails",
   delete_welfare_board: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/deleteWelfare",
 
+  hide_show_club_change: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/clubDisplay",
+  delete_selected_clubs: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/deleteClub",
+  get_club_history: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/clubHistory",
+  
 
 
 

@@ -63,3 +63,10 @@ export const paginationItemPerPageOptions = [
     { label: '25', value: 25 },
     { label : '50',value : 50}
 ]
+
+export const clubStatusOptions = [
+  { label: 'Active', value: 'Active' },
+  { label: 'Inactive', value: 'Inactive' },
+  { label: 'Deleted', value: 'Deleted' },
+  { label : 'Deleted(Admin)', value : 'Deleted(admin)'}
+]
