@@ -219,13 +219,14 @@ const RecruitManagement = ({
           <div className="no-of-participants-container">
             <div>
               <CFormCheck
+                className="gap-2"
                 id="noOfParticipants"
                 label="Max no. of participants"
                 checked={isNoOfParticipationChecked}
                 onClick={handleIsNoOfParticipationChecked}
               />
             </div>
-            <div className="participants-raffle-inc-dec">
+            <div className="participants-raffle-inc-dec minMaxBtn">
               <CButton onClick={() => handleParticipantChange(-1)}>-</CButton>
               <CFormInput
                 className="txt-participant-raffle"
@@ -244,6 +245,7 @@ const RecruitManagement = ({
           <div className="no-of-participants-container">
             <div>
               <CFormCheck
+                className="gap-2"
                 id="noOfRaffle"
                 label="Raffle"
                 checked={isNoOfRaffleChecked}
@@ -251,7 +253,7 @@ const RecruitManagement = ({
               />
             </div>
             <div>
-              <div className="participants-raffle-inc-dec">
+              <div className="participants-raffle-inc-dec minMaxBtn">
                 <CButton onClick={() => handleRaffleChange(-1)}>-</CButton>
                 <CFormInput
                   className="txt-participant-raffle"

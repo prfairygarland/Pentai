@@ -545,26 +545,26 @@ const CreatePost = () => {
                   </div>
                   {recruitData?.recruitmentDeadline && (
                     <div>
-                      <div>
+                      <p>
                         {recruitData.recruitmentDeadline.getFullYear()}-
                         {recruitData.recruitmentDeadline.getMonth() + 1}-
                         {recruitData.recruitmentDeadline.getDate()}&nbsp;
                         {recruitData.recruitmentDeadline.getHours()}:
                         {recruitData.recruitmentDeadline.getMinutes()}
-                      </div>
-                      <div>
+                      </p>
+                      <p>
                         Status :{' '}
                         {recruitData?.recruitmentStatus
                           ? recruitData?.recruitmentStatus
                           : 'Not Open'}
-                      </div>
-                      <div>No. of Participants : {recruitData.recruitmentMaxParticipants}</div>
-                      <div>
+                      </p>
+                      <p>No. of Participants : {recruitData.recruitmentMaxParticipants}</p>
+                      <p>
                         Raffle : {recruitData.recruitmentAllowRaffle ? 'Yes' : 'No'} /{' '}
                         {recruitData.recruitmentRaffleMaxWinners}
-                      </div>
+                      </p>
                       {recruitData?.recruitmentStatus !== 'closed' && (
-                        <CButton className="btn" color="dark" onClick={() => modifyRecruit()}>
+                        <CButton className="btn mt-3" color="dark" onClick={() => modifyRecruit()}>
                           Modify
                         </CButton>
                       )}
@@ -577,9 +577,9 @@ const CreatePost = () => {
                   )}
                   {pollData?.pollEndTimestamp && (
                     <div>
-                      <div>Status : Not Open</div>
-                      <div>Anonymous : None</div>
-                      <div>Select : {pollData.pollMaxSelections === 1 ? 'Single' : 'Multi'}</div>
+                      <p>Status : Not Open</p>
+                      <p>Anonymous : None</p>
+                      <p>Select : {pollData.pollMaxSelections === 1 ? 'Single' : 'Multi'}</p>
                       <h3>Poll : {pollData.pollTitle}</h3>
                       <div style={{ fontWeight: 800 }}>
                         {pollData?.pollEndTimestamp.getFullYear()}-
@@ -631,11 +631,11 @@ const CreatePost = () => {
                       </label>
                     </div>
                     <div className="upload-container-guidance">
-                      <div className="upload-instruction"># Upto 10 images can be uploaded</div>
-                      <div className="upload-instruction">
+                      <p className="upload-instruction"># Upto 10 images can be uploaded</p>
+                      <p className="upload-instruction">
                         # The first image is registered as a representative image [thumbnail] in the
                         order of upload
-                      </div>
+                      </p>
                       <div className="file-information">
                         <ul>
                           <li>Maximum File Size : 00</li>
@@ -696,7 +696,7 @@ const CreatePost = () => {
                       </label>
                     </div>
                     <div className="upload-container-guidance">
-                      <div className="upload-instruction"># Upto 10 files can be uploaded</div>
+                      <p className="upload-instruction"># Upto 10 files can be uploaded</p>
                       <div className="file-information">
                         <ul>
                           <li>Maximum File Size : 00</li>
@@ -706,16 +706,16 @@ const CreatePost = () => {
                     </div>
                   </div>
                   {uploadedFiles?.length > 0 && (
-                    <div className="upload-files-container">
+                    <div className="upload-files-container uploadFileWrp gap-3">
                       {uploadedFiles.map((file, index) => (
                         <div key={index} className="individual-file-and-delete">
                           <div className="uploaded-file-name">{file.name}</div>
-                          <div
+                          <button
                             className="uploaded-file-delete"
                             onClick={() => confirmationDeleteFileModalHandler(true, index)}
                           >
-                            X
-                          </div>
+                            <i className="icon-close"></i>
+                          </button>
                         </div>
                       ))}
                     </div>

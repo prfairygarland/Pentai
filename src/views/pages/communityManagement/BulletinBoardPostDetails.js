@@ -753,7 +753,7 @@ const BulletinBoardPostDetails = () => {
                                             {bulletinBoardPostDetail[0]?.createdAt?.split('T')[0]}
                                           </p>
                                         </div>
-                                        <div className="d-flex gap-2 mt-3">
+                                        <div className="d-flex flex-column gap-2 mt-3">
                                           <div className="d-flex gap-2">
                                             <p>Status:</p>
                                             <p>{bulletinBoardPostDetail[0]?.status}</p>
@@ -862,12 +862,12 @@ const BulletinBoardPostDetails = () => {
                                   <div className="formWrpLabel">
                                     <label className="fw-bolder ">Upload image</label>
                                   </div>
-                                  <div className="formWrpInpt d-flex">
+                                  <div className="formWrpInpt d-flex uploadImgWrap uploadImgDetail" style={{padding:20}}>
                                     {bulletinBoardPostDetail[0]?.images?.map((imageUrl, index) => (
-                                      <div className="d-flex" key={index}>
+                                      <div className="thubmnail-img-container" key={index}>
                                         <CImage
                                           alt="NA"
-                                          rounded
+                                          
                                           crossorigin="anonymous"
                                           src={ALL_CONSTANTS.API_URL + imageUrl.url}
                                           fluid
@@ -944,10 +944,10 @@ const BulletinBoardPostDetails = () => {
               </CAccordionItem>
             </CAccordion>
             <div>
-              <div className="d-flex gap-5 mt-3">
+              <div className="d-flex justify-content-end gap-2 mt-3">
                 <div>
                   <button
-                    className="btn btn-danger"
+                    className="btn btn-black"
                     onClick={() => {
                       setDeleteModal(!deleteModal)
                       getDeleteReason()
@@ -1029,7 +1029,7 @@ const BulletinBoardPostDetails = () => {
                     </button>
                   }
                 </div>
-                <div className="d-flex gap-3">
+                <div className="d-flex gap-2">
                   {getUserData.id == bulletinBoardPostDetail[0]?.authorId &&
                     bulletinBoardPostDetail[0]?.status != 'cancelled' && (
                       <CButton className="btn btn-primary">Modify</CButton>

@@ -53,22 +53,36 @@
       transform: rotate(360deg);
     }
   }
-  .bookListHeader{
-    display: flex;
-    width: 100%;
-    justify-content: space-between;
+  .userdetailPopTable{
+    table{
+      thead{
+        tr{
+          th{
+            &:first-child{
+              width: 40px !important;
+            }
+          }
+        }
+      }
+    }
   }
-  .booklstLft{
-    width: 25%;
+  .UserInfoList{
+    p{
+      margin-bottom: 10px;
+    }
   }
-  .booklstRgt{
-    width: 25%;
-  }
-  .booklstMidd{
-    // width: 50%;
-    flex: 1;
-  }
-  .bookListbody{
-    // display: flex;
-    // flex-direction: row;
+  .minMaxBtn{
+    button{
+      width: 38px;
+      height: 38px;
+      font-size: 20px;
+      align-items: center;
+      display: flex;
+      justify-content: center;
+    }
+    input{
+      margin: 0 5px;
+      text-align: center;
+      width: 50px;
+    }
   }
