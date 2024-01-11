@@ -1,0 +1,22 @@
+.active-club {
+    color: blue;
+}
+
+.inactive-club {
+    color: red;
+}
+
+.deleted-club {
+    color: blue;
+    text-decoration: line-through;
+}
+
+.active-club, .deleted-club, .inactive-club {
+    text-align: center;
+    font-weight: 700;
+}
+
+.club-host-name {
+    text-decoration: underline;
+    cursor: pointer;
+}

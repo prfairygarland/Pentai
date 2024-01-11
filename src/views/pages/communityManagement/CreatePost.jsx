@@ -625,7 +625,7 @@ const CreatePost = () => {
                           id="imageFiles"
                           style={{ display: 'none' }}
                           multiple
-                          accept="image/*"
+                          accept=".png, .jpg, .jpeg, .gif"
                           onChange={(e) => uploadImagesHandler(e)}
                         />
                       </label>
