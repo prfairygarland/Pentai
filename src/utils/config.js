@@ -81,7 +81,11 @@ export let API_ENDPOINT = {
   hide_show_club_change: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/clubDisplay",
   delete_selected_clubs: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/deleteClub",
   get_club_history: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/clubHistory",
-  
+  get_club_details: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/clubDetails",  
+  get_club_post_details: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/postDetailsClub",
+  club_post_delete: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/deletePostClub",
+
+
 
 
 

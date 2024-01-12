@@ -6,9 +6,11 @@ import CreatePost from './views/pages/communityManagement/CreatePost'
 import UserInformationSettings from './views/pages/userManagement/userInformationSettings'
 import UserDetails from './views/pages/userManagement/userDetails'
 import BulletinBoardPostDetails from './views/pages/communityManagement/BulletinBoardPostDetails'
+import ClubBoardPostDetails from './views/pages/communityManagement/ClubBoardPostDetails'
 import BoardPostListing from './views/pages/communityManagement/BoardPostListing'
 import WelfareBoardPostListing from './views/pages/communityManagement/WelfareBoardPostListing'
 import ClubBoardListing from './views/pages/communityManagement/ClubBoardListing'
+import ClubDetails from './views/pages/communityManagement/ClubDetails'
 import CommunityReportHistory from './views/pages/communityManagement/CommunityReportHistory'
 
 import BookRentalStatus from './views/pages/BookRentalManagement/BookRentalStatus'
@@ -40,7 +42,9 @@ const routes = [
   { path: '/WelfareBoard/updatePost', name: 'Update A Post', element: CreatePost },
   { path: '/WelfareBoard/CommunityReportHistory', name: 'Community Report History', element: CommunityReportHistory },
   { path: '/ClubBoard', name: 'Club Board Management', element: ClubBoardListing },
+  { path: '/ClubBoard/ClubDetails', name: 'Clud Details', element: ClubDetails },
   { path: '/ClubBoard/CommunityReportHistory', name: 'Community Report History', element: CommunityReportHistory },
+  { path: '/ClubBoard/ClubBoardPostDetails', name: 'Bulletin post details ', element: ClubBoardPostDetails },
 
   //{ Book Rental Management}
   { path: '/BookRentalStatus', name: 'Book Rental Status', element: BookRentalStatus },
