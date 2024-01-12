@@ -356,15 +356,23 @@ const ClubBoardListing = () => {
   }
 
   const clubViewHandler = (clubId) => {
-    console.log(clubId)
     getClubHistoryData(clubId)
     setClubHistoryInfoPopup(true)
   }
 
   const viewPostHistoryHandler = (id) => {
-    navigate('./CommunityReportHistory', {
+    navigate('/BulletinBoard/CommunityReportHistory', {
       state: {
         postId: id,
+      },
+    })
+  }
+
+  const redirectToPostDetailHandler = (e, postId) => {
+    e.preventDefault()
+    navigate('/ClubBoard/ClubBoardPostDetails', {
+      state: {
+        postId: postId,
       },
     })
   }
@@ -415,9 +423,8 @@ const ClubBoardListing = () => {
           <div className="d-flex gap-1">
             {row.original.isAnnouncement > 0 && <i className="icon-announce"></i>}
             <Link
-              to={`/BulletinBoardPostDetails/${row.original.postId}/${row.original.boardId}`}
+              onClick={(e) => redirectToPostDetailHandler(e, row.original.postId)}
               style={{
-                // width: '200px',
                 overflow: 'hidden',
                 whiteSpace: 'nowrap',
                 textOverflow: 'ellipsis',
@@ -440,9 +447,12 @@ const ClubBoardListing = () => {
         Header: <p className="text-center">Host</p>,
         accessor: 'englishname',
         Cell: ({ row }) => (
-          <Link className="text-dark text-center" style={{ curser: 'pointer' }}>
-            {row.original.englishname ? row.original.englishname : <p>{'-'}</p>}
-          </Link>
+          <p
+            className="text-center club-host-name"
+            onClick={() => redirectToUserDetailHandler(row.original.createdBy)}
+          >
+            {row.original.englishname ? row.original.englishname : <span>{'-'}</span>}
+          </p>
         ),
       },
       {
@@ -523,6 +533,7 @@ const ClubBoardListing = () => {
                 ? 'inactive-club'
                 : 'deleted-club'
             }
+            onClick={() => redirectToClubDetailHandler(row.original.clubId)}
           >
             {row.original.clubName}{' '}
           </p>
@@ -608,6 +619,13 @@ const ClubBoardListing = () => {
     [],
   )
 
+  const redirectToClubDetailHandler = (clubId) => {
+    navigate('./ClubDetails', {
+      state: {
+        clubId: clubId,
+      },
+    })
+  }
   const redirectToUserDetailHandler = (userId) => {
     navigate('/User/UserDetails', {
       state: {
