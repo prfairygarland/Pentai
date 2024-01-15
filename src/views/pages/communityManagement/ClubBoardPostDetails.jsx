@@ -19,7 +19,13 @@ import {
 import React, { useEffect, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router'
 import Loader from 'src/components/common/Loader'
-import { getApi, getDeleteReasonsList, getPostLikeListData, postApi } from 'src/utils/Api'
+import {
+  getApi,
+  getDeleteReasonsList,
+  getPostLikeListData,
+  getPostCommentListData,
+  postApi,
+} from 'src/utils/Api'
 import { ALL_CONSTANTS, API_ENDPOINT } from 'src/utils/config'
 
 const BulletinBoardPostDetails = () => {
@@ -28,6 +34,11 @@ const BulletinBoardPostDetails = () => {
   const [postLikeListData, setPostLikeListData] = useState([])
   const [likeCurrentPage, setLikeCurrentPage] = useState(0)
   const [postLikeListDataTotalCount, setPostLikeListDataTotalCount] = useState(0)
+
+  const [postCommentListData, setPostCommentListData] = useState([])
+  const [commentCurrentPage, setCommentCurrentPage] = useState(0)
+  const [postCommentListDataTotalCount, setPostCommentListDataTotalCount] = useState(0)
+
   const [deleteModal, setDeleteModal] = useState(false)
   const [deleteReason, setDeleteReason] = useState([])
   const [selectedDeleteReason, setSelectedDeleteReason] = useState('')
@@ -64,6 +75,28 @@ const BulletinBoardPostDetails = () => {
           setPostLikeListData(res.data)
         } else {
           setPostLikeListData((prevData) => [...prevData, ...res.data])
+        }
+      }
+    } catch (error) {
+      console.log('error getCompaniesData =>', error)
+    }
+  }
+
+  const getPostCommentList = async (commentPageNo) => {
+    try {
+      let url = `${ALL_CONSTANTS.API_URL}/api/adminPanel/community/clubPostCommentList?postId=${location.state.postId}&pageNo=${commentPageNo}`
+
+      setCommentCurrentPage(commentPageNo)
+      const res = await getPostCommentListData(url)
+      console.log('res comment=>', res.data)
+      console.log('res totalCount=>', res.totalCount)
+
+      if (res.status == 200) {
+        setPostCommentListDataTotalCount(res.totalCount)
+        if (commentPageNo == 1) {
+          setPostCommentListData(res.data)
+        } else {
+          setPostCommentListData((prevData) => [...prevData, ...res.data])
         }
       }
     } catch (error) {
@@ -130,6 +163,7 @@ const BulletinBoardPostDetails = () => {
   useEffect(() => {
     getClubPostDetails()
     getPostLikeList(1)
+    getPostCommentList(1)
   }, [])
 
   return (
@@ -440,16 +474,55 @@ const BulletinBoardPostDetails = () => {
             </CAccordion>
           </div>
         </div>
-        {/* <div className="container bg-light p-3 mb-3 mt-4">
+        <div className="container bg-light p-3 mb-3 mt-4">
           <div>
             <CAccordion alwaysOpen activeItemKey={1}>
               <CAccordionItem>
-                <CAccordionHeader>Comments &nbsp; {22}</CAccordionHeader>
-                <CAccordionBody></CAccordionBody>
+                <CAccordionHeader>Comments &nbsp; {postCommentListDataTotalCount}</CAccordionHeader>
+                <CAccordionBody>
+                  {postCommentListData?.map((item, index) => (
+                    <div className="participantList" key={index}>
+                      <div className="participatntCont">
+                        <div className="participatntimgBox">
+                          {item?.imageUrl ? (
+                            <CImage
+                              rounded
+                              crossorigin="anonymous"
+                              src={ALL_CONSTANTS.API_URL + item?.imageUrl}
+                            />
+                          ) : (
+                            <CIcon icon={cilUser} size="lg" />
+                          )}
+                        </div>
+                        <p>
+                          <h5>
+                            {item?.EnglishName} : {item?.commentText}
+                          </h5>
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                  {postCommentListData.length >= 5 &&
+                    postCommentListData.length != postCommentListDataTotalCount && (
+                      <div className="text-center mt-3">
+                        <CButton
+                          color="primary"
+                          onClick={() => getPostCommentList(commentCurrentPage + 1)}
+                        >
+                          See More
+                        </CButton>
+                      </div>
+                    )}
+                  {postCommentListData.length == 0 && (
+                    <div className="text-center mt-3">
+                      <h5>No data Available</h5>
+                    </div>
+                  )}
+                </CAccordionBody>
               </CAccordionItem>
             </CAccordion>
           </div>
-        </div> */}
+        </div>
       </div>
     </>
   )

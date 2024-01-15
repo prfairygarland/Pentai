@@ -8,7 +8,7 @@ const UsageSetting = (props) => {
     const [radioGroupValue, setradioGroupValue] = useState({
         bulletin_board: '1',
         club_board: '1',
-        walfare_board: '1'
+        welfare_board: '1'
     })
     const [prohabitedWords, setProhabitedWords] = useState([])
     const [addInputValue, setAddInputValue] = useState('')
@@ -89,20 +89,20 @@ const UsageSetting = (props) => {
                         <label className="fw-bolder ">Usage status</label>
                     </div>
                     <div className='formWrpInpt'>
-                        {<div className='d-flex formradiogroup mb-2' style={radioGroupValue.club_board === '0' && radioGroupValue.walfare_board === '0' ? disableStyle : {}}>
+                        {<div className='d-flex formradiogroup mb-2' style={radioGroupValue.club_board === '0' && radioGroupValue.welfare_board === '0' ? disableStyle : {}}>
                             <label className='radiolabel' htmlFor="Bulletin board">Bulletin board​</label>
                             <CFormCheck type="radio" name="bulletin_board" id="exampleRadios1" checked={radioGroupValue.bulletin_board === '1'} onChange={handleRadioCheck} value="1" label="Grant" />
                             <CFormCheck type="radio" name="bulletin_board" id="exampleRadios2" checked={radioGroupValue.bulletin_board === '0'} onChange={handleRadioCheck} value="0" label="Deny" />
                         </div>}
-                        <div className='d-flex formradiogroup mb-2' style={radioGroupValue.bulletin_board === '0' && radioGroupValue.walfare_board === '0' ? disableStyle : {}}>
+                        <div className='d-flex formradiogroup mb-2' style={radioGroupValue.bulletin_board === '0' && radioGroupValue.welfare_board === '0' ? disableStyle : {}}>
                             <label className='radiolabel' htmlFor="Club board">Club board​</label>
                             <CFormCheck type="radio" name="club_board" id="exampleRadios1" checked={radioGroupValue.club_board === '1'} onChange={handleRadioCheck} value="1" label="Grant" />
                             <CFormCheck type="radio" name="club_board" id="exampleRadios2" checked={radioGroupValue.club_board === '0'} onChange={handleRadioCheck} value="0" label="Deny" />
                         </div>
                         <div className='d-flex formradiogroup mb-2' style={radioGroupValue.club_board === '0' && radioGroupValue.bulletin_board === '0' ? disableStyle : {}}>
-                            <label className='radiolabel' htmlFor="Walfare board​">Walfare board​</label>
-                            <CFormCheck type="radio" name="walfare_board" id="exampleRadios1" checked={radioGroupValue.walfare_board === '1'} onChange={handleRadioCheck} value="1" label="Grant" />
-                            <CFormCheck type="radio" name="walfare_board" id="exampleRadios2" checked={radioGroupValue.walfare_board === '0'} onChange={handleRadioCheck} value="0" label="Deny" />
+                            <label className='radiolabel' htmlFor="Welfare board​">Welfare board​</label>
+                            <CFormCheck type="radio" name="welfare_board" id="exampleRadios1" checked={radioGroupValue.welfare_board === '1'} onChange={handleRadioCheck} value="1" label="Grant" />
+                            <CFormCheck type="radio" name="welfare_board" id="exampleRadios2" checked={radioGroupValue.welfare_board === '0'} onChange={handleRadioCheck} value="0" label="Deny" />
                         </div>
                     </div>
                 </div>

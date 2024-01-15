@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import UsageSetting from './Component/UsageSetting';
-import WalfareBoard from './Component/WalfareBoard';
+import WelfareBoard from './Component/WelfareBoard';
 import ButtingBorad from './Component/ButtingBoard';
 import ClubBoard from './Component/ClubBoard';
 
@@ -60,23 +60,23 @@ const BoardManagement = () => {
                                     Club board
                                 </button>
                                 <button
-                                    className={`primary-btn ${currentTab == 'Walfare board' && 'active'}`}
+                                    className={`primary-btn ${currentTab == 'Welfare board' && 'active'}`}
                                     id='history-tab'
                                     data-bs-toggle='tab'
                                     data-bs-target='#history'
                                     type='button'
                                     role='tab'
                                     aria-selected='false'
-                                    onClick={() => setTab('Walfare board')}
+                                    onClick={() => setTab('Welfare board')}
                                 >
-                                    Walfare board
+                                    Welfare board
                                 </button>
                             </div>
                         </div>
                         {currentTab === 'General settings' && <UsageSetting />}
                         {currentTab === 'Bulletin board' &&  <ButtingBorad />}
                         {currentTab === 'Club board' && <ClubBoard />}
-                        {currentTab === 'Walfare board' && <WalfareBoard />}
+                        {currentTab === 'Welfare board' && <WelfareBoard />}
                     </div>
 
                 </div>

@@ -294,49 +294,7 @@ const WelfareBoard = () => {
                 </div>
               </div>
             </div>
-            :
-            <div className='p-4'>
-              <div>
-                <div className='p-3'>
-                  <main>
-                    <div>
-                      <div className='card-body'>
-                        <div className='formWraper'>
-                          <div className="form-outline form-white d-flex">
-                            <div className='formWrpLabel' style={{ minWidth: '140px' }}>
-                              <label className="fw-bolder ">Point settings</label>
-                            </div>
-                            <div >
-                              <div className='formWrpInpt'>
-                                <div className='d-flex formradiogroup gap-3' >
-                                  <CFormCheck id="flexCheckDefault" className='text-center' label="Points per post" />
-                                  <CFormInput type="number" className='h-25 w-25 ' id="inputPassword2" placeholder="0" /> <span>Points</span>
-                                </div>
-                              </div>
-                              <div className='formWrpInpt'>
-                                <div className='d-flex formradiogroup gap-3' >
-                                  <CFormCheck id="flexCheckDefault" className='text-center' label="Points per comment" />
-                                  <CFormInput type="number" className='h-25 w-25 me-2' id="inputPassword2" placeholder="1~999" /> <span>Points</span>
-                                </div>
-                              </div>
-
-                            </div>
-
-                          </div>
-                          <div className='prohabitinfo mt-2 p-3'>
-                            <p>※ Guide for setting points​</p>
-                            <p>1. Points are only applied to welfare board.​</p>
-                            <p>2. If enabled, users will get set points per post, comment.​</p>
-                            <p>3. If users delete their own post, comment they got points from, the points will be retrieved.</p>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </main>
-
-              </div>
-            </div>
-          </div>
+            : <></>
           }
         </div>
 
