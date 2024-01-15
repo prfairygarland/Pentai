@@ -1,8 +1,8 @@
 export let ALL_CONSTANTS = {
 
   IS_PRODUCTION: false,
-  BASE_URL: "https://ptkapi.experiencecommerce.com",       // API URL staging
-  API_URL: "https://ptkapi.experiencecommerce.com",    // API URL staging
+  // BASE_URL: "https://ptkapi.experiencecommerce.com",       // API URL staging
+  // API_URL: "https://ptkapi.experiencecommerce.com",    // API URL staging
   // API_URL: "http://192.168.10.46:3000/",    // API URL staging
 
   // IS_PRODUCTION: true,
@@ -10,8 +10,8 @@ export let ALL_CONSTANTS = {
   // API_URL: "",    // API URL Live
 
   // IS_PRODUCTION: false,
-  // BASE_URL: "http://192.168.9.175:3000",       // Local
-  // API_URL: "http://192.168.9.175:3000",    // Local
+  BASE_URL: "http://192.168.9.175:3000",       // Local
+  API_URL: "http://192.168.9.175:3000",    // Local
 }
 
 

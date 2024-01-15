@@ -44,7 +44,7 @@ const routes = [
   { path: '/ClubBoard', name: 'Club Board Management', element: ClubBoardListing },
   { path: '/ClubBoard/ClubDetails', name: 'Clud Details', element: ClubDetails },
   { path: '/ClubBoard/CommunityReportHistory', name: 'Community Report History', element: CommunityReportHistory },
-  { path: '/ClubBoard/ClubBoardPostDetails', name: 'Bulletin post details ', element: ClubBoardPostDetails },
+  { path: '/ClubBoard/ClubBoardPostDetails', name: 'Club post details ', element: ClubBoardPostDetails },
 
   //{ Book Rental Management}
   { path: '/BookRentalStatus', name: 'Book Rental Status', element: BookRentalStatus },
