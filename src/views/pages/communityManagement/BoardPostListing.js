@@ -309,6 +309,8 @@ const BoardPostListing = () => {
       classification: '',
       reported: '',
     })
+    setStartDate('')
+    setEndDate('')
     // }
   }, [])
 

@@ -8,7 +8,7 @@ import { ALL_CONSTANTS } from 'src/utils/config';
 import { imageUrl } from '../BookRentalStatus';
 import moment from 'moment/moment';
 
-const RentalStatus = ({ RentalStatusData, setRentalStatusData, setUserInfoPopup }) => {
+const RentalStatus = ({ RentalStatusData, setRentalStatusData, setUserInfoPopup, type }) => {
     const [name, setName] = useState('Ak')
     const [visible, setVisible] = useState(false)
 
@@ -38,10 +38,16 @@ const RentalStatus = ({ RentalStatusData, setRentalStatusData, setUserInfoPopup 
                             <div className="card p-2">
                                 <div className='card-body p-0'>
                                     <div className='formWraper'>
-                                        <div className="form-outline form-white  d-flex ">
-                                            <div className='formWrpLabel'>
-                                                <label className="fw-bolder ">Book Cover Image</label>
-                                            </div>
+                      <div className="form-outline form-white  d-flex ">
+                        {type === 'supplyRentDetalils' ?
+                          <div className='formWrpLabel'>
+                            <label className="fw-bolder ">item Image</label>
+                          </div>
+                          :
+                          <div className='formWrpLabel'>
+                            <label className="fw-bolder ">Book Cover Image</label>
+                          </div>
+                        }
                                             <div className='formWrpInpt'>
                                                 { }
                                                 <CImage alt='NA' rounded src={RentalStatusData?.image} width={150} height={150} />

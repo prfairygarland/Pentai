@@ -198,7 +198,7 @@ margin-left: 15px;
       margin: 0;
       object-fit: cover;
     }
-   
+
     &:last-child{
       margin-right: 0;
     }
@@ -234,7 +234,11 @@ margin-left: 15px;
 	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
 	background-color: #555;
 }
- 
+
+}
+
+.getColour {
+  color: blue;
 }
 .uploadFileWrp{
   border: none !important;
