@@ -21,6 +21,7 @@ const ButtingBorad = () => {
   const [isEdited, setIsedited] = useState(false);
   const [visible, setVisible] = useState(false)
   const [deleteVisible, setDeleteVisible] = useState(false)
+  const [pointsData, setPointsData] = useState({})
   const [getId, setId] = useState()
   const [isLoading, setIsLoading] = useState(false);
 
@@ -41,6 +42,7 @@ const ButtingBorad = () => {
 
   useEffect(() => {
     handleBulletinSearchData()
+    handlePointsData()
   }, [])
 
 
@@ -72,9 +74,24 @@ const ButtingBorad = () => {
       console.log('res =>', res.status);
       if (res.status == 200) {
         setSearchData(res.data)
+        setFilteredData(res.data);
       }
     } catch (error) {
 
+      console.log('handlePostDelete error =>', error);
+    }
+  }
+
+  const handlePointsData = async () => {
+    try {
+      const res = await getApi(API_ENDPOINT.get_points_settings)
+      console.log('res =>', res.status);
+      if(res?.status === 200) {
+        setPointsData(res.data)
+      } else {
+        // handle pending
+      }
+    } catch (error) {
       console.log('handlePostDelete error =>', error);
     }
   }
@@ -197,6 +214,37 @@ const ButtingBorad = () => {
       setVisible(!visible)
     }
 
+  }
+
+  const handlePointsPerPostCheckbox = () => {
+    const newValue = !pointsData.pointsPerPostenabled
+    setPointsData((prev) => {
+      return {
+        ...prev,
+        pointsPerPost: 1,
+        pointsPerPostenabled: Number(newValue)
+      }
+    })
+  }
+
+  const handlePointsPerCommentCheckbox = () => {
+    const newValue = !pointsData.pointsPerCommentenabled
+    setPointsData((prev) => {
+      return {
+        ...prev,
+        pointsPerComment: 1,
+        pointsPerCommentenabled: Number(newValue)
+      }
+    })
+  }
+
+  const savePointsHandler = async () => {
+    try {
+      let res = await putApi(API_ENDPOINT.update_points_settings, pointsData)
+      console.log(res)
+    } catch(error) {
+      console.log()
+    }
   }
 
   return (
@@ -347,14 +395,18 @@ const ButtingBorad = () => {
                             <div >
                               <div className='formWrpInpt'>
                                 <div className='d-flex formradiogroup gap-3' >
-                                  <CFormCheck id="flexCheckDefault" className='text-center' label="Points per post" />
-                                  <CFormInput type="number" className='h-25 w-25 ' id="inputPassword2" placeholder="0" /> <span>Points</span>
+                                  <CFormCheck id="flexCheckDefault" className='text-center' label="Points per post" checked={pointsData?.pointsPerPostenabled} 
+                                  onChange={handlePointsPerPostCheckbox}/>
+                                  <CFormInput type="number" className='h-25 w-25 ' id="inputPassword2" placeholder="0" value={pointsData?.pointsPerPost} 
+                                  disabled={!pointsData?.pointsPerPostenabled} onChange={(e) => setPointsData((prev) => ({ ...prev, pointsPerPost: e.target.value }))}/> <span>Points</span>
                                 </div>
                               </div>
                               <div className='formWrpInpt'>
                                 <div className='d-flex formradiogroup gap-3' >
-                                  <CFormCheck id="flexCheckDefault" className='text-center' label="Points per comment" />
-                                  <CFormInput type="number" className='h-25 w-25 me-2' id="inputPassword2" placeholder="1~999" /> <span>Points</span>
+                                  <CFormCheck id="flexCheckDefault" className='text-center' label="Points per comment" checked={pointsData?.pointsPerCommentenabled}
+                                  onChange={handlePointsPerCommentCheckbox}/>
+                                  <CFormInput type="number" className='h-25 w-25 me-2' id="inputPassword2" placeholder="1~999" value={pointsData?.pointsPerComment} 
+                                  disabled={!pointsData?.pointsPerCommentenabled} onChange={(e) => setPointsData((prev) => ({ ...prev, pointsPerComment: e.target.value }))}/> <span>Points</span>
                                 </div>
                               </div>
 
@@ -371,6 +423,11 @@ const ButtingBorad = () => {
                       </div>
                     </div>
                   </main>
+                  <div className="save-cancel-btn-container">
+                    <CButton className="btn save-cancel-btn" color="dark" onClick={savePointsHandler}>
+                      Update
+                    </CButton>
+                  </div>
 
               </div>
             </div>

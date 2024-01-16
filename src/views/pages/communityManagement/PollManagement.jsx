@@ -167,6 +167,7 @@ const PollManagement = ({ isPollOpen, setModal, pollModifyData = '', changePollD
       <CModal
         alignment="center"
         visible={isPollOpen}
+        backdrop="static"
         onClose={() => handleClose()}
         aria-labelledby="LiveDemoExampleLabel"
       >

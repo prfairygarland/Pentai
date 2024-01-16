@@ -1,8 +1,8 @@
 export let ALL_CONSTANTS = {
 
   IS_PRODUCTION: false,
-  // BASE_URL: "https://ptkapi.experiencecommerce.com",       // API URL staging
-  // API_URL: "https://ptkapi.experiencecommerce.com",    // API URL staging
+  BASE_URL: "https://ptkapi.experiencecommerce.com",       // API URL staging
+  API_URL: "https://ptkapi.experiencecommerce.com",    // API URL staging
   // API_URL: "http://192.168.10.46:3000/",    // API URL staging
 
   // IS_PRODUCTION: true,
@@ -10,8 +10,8 @@ export let ALL_CONSTANTS = {
   // API_URL: "",    // API URL Live
 
   // IS_PRODUCTION: false,
-  BASE_URL: "http://192.168.9.175:3000",       // Local
-  API_URL: "http://192.168.9.175:3000",    // Local
+  // BASE_URL: "http://192.168.9.175:3000",       // Local
+  // API_URL: "http://192.168.9.175:3000",    // Local
 }
 
 
@@ -27,7 +27,14 @@ export let API_ENDPOINT = {
   userdetails: ALL_CONSTANTS.API_URL + "/api/adminPanel/userDetails",
   // {Community Mangagement} //
   get_board_usage_setting: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/getUsageStatus",
+  update_board_usage_setting: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/UpdateUsageStatus",
   get_prohabited_words: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/getProhibitedWords",
+  add_prohabited_words: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/addProhibitedWords",
+
+  get_club_registration_periods: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/getClubRegistrationPeriods",
+  get_search_club_registration_periods: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/searchClubRegistrationPeriod",
+  get_club_activity_list: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/getClubActivitiesByRegistrationPeriod",
+
   get_boards: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/boardList",
   get_categories: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/categoryList",
   get_bulletinboard_posts: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/bulletinBoardManagement",
@@ -49,6 +56,9 @@ export let API_ENDPOINT = {
 
 
   bulletin_post_like_list: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/postlikeList",
+  get_points_settings: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/getPointSettings",
+  update_points_settings: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/updatePointSettings",
+
   bulletin_post_comment_details: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/commentDetails",
   bulletin_post_report_history: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/reportHistoryComments",
   bulletin_post_delete_reasons: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/deleteReason",

@@ -1,0 +1,15 @@
+.toggleContainer {
+    border: 1px solid black;
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    padding: 7px;
+    border-radius: 20px;
+    margin: 10px 0px;
+}
+
+.cFormSwitch {
+    width: 40px !important;
+    height: 20px !important;
+}

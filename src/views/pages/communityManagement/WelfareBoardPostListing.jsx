@@ -285,6 +285,11 @@ const WelfareBoardPostListing = () => {
       return
     }
 
+    if (filterData.searchstring.trim().length === 1) {
+      enqueueSnackbar('Please enter at least 2 characters.!', { variant: 'error' })
+      return
+    }
+
     if (
       (filterData.searchstring && filterData.department) ||
       (filterData.startdate && filterData.enddate) ||
