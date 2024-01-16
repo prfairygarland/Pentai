@@ -430,7 +430,7 @@ const CreatePost = () => {
       } else if (location?.state?.redirectTo === 'WelfareBoard') {
         url = API_ENDPOINT.update_post_welfare
       }
-      const res = await putApi(url, location?.state?.postId, formData)
+      const res = await putApi(url, formData)
       console.log('res :: ', res)
       if (res?.data?.status === 201) {
         setData({
@@ -564,7 +564,7 @@ const CreatePost = () => {
                         {recruitData.recruitmentRaffleMaxWinners}
                       </p>
                       {recruitData?.recruitmentStatus !== 'closed' && (
-                        <CButton className="btn mt-3" color="dark" onClick={() => modifyRecruit()}>
+                        <CButton className="btn" color="dark" onClick={() => modifyRecruit()}>
                           Modify
                         </CButton>
                       )}
@@ -644,7 +644,7 @@ const CreatePost = () => {
                       </div>
                     </div>
                   </div>
-                  {uploadedImages.length > 0 && (
+                  {uploadedImages?.length > 0 && (
                     <div className="upload-images-container uploadImgWrap">
                       {uploadedImages.map((imgFile, index) => (
                         <div

@@ -64,6 +64,7 @@ const WelfareBoard = () => {
       console.log('res =>', res.status);
       if (res.status == 200) {
         setSearchData(res.data)
+        setFilteredData(res.data);
       }
     } catch (error) {
 

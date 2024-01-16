@@ -11,6 +11,7 @@ import React, { useEffect, useState } from 'react'
 import './RecruitManagement.scss'
 import DatePicker from 'react-date-picker'
 import { enqueueSnackbar } from 'notistack'
+import ConfirmationModal from 'src/utils/ConfirmationModal'
 
 const RecruitManagement = ({
   isRecruitOpen,
@@ -25,6 +26,7 @@ const RecruitManagement = ({
   const [deadlineDate, setDeadlineDate] = useState('')
   const [selectedHours, setSelectedHours] = useState('00')
   const [selectedMins, setSelectedMins] = useState('00')
+  const [modalProps, setModalProps] = useState({})
 
   const handleDeadlineDate = (event) => {
     let d = new Date(event),
@@ -108,7 +110,29 @@ const RecruitManagement = ({
     }
   }
 
+  const confirmationSaveModalHandler = (isOpen) => {
+    setModalProps({
+      isModalOpen: isOpen,
+      title: 'Confirmation',
+      content: 'Are you sure you  want to save?',
+      cancelBtn: 'No',
+      cancelBtnHandler: cancelConfirmation,
+      successBtn: 'Yes',
+      successBtnHandler: saveHandler,
+      modalCloseHandler: confirmationSaveModalHandler,
+    })
+  }
+
+  const cancelConfirmation = () => {
+    setModalProps({
+      isModalOpen: false,
+    })
+  }
+
   const saveHandler = () => {
+    setModalProps({
+      isModalOpen: false,
+    })
     const currentDate = new Date()
     const selectedDate = new Date(deadlineDate + 'T' + selectedHours + ':' + selectedMins)
     currentDate.setHours(currentDate.getHours() + 1)
@@ -183,9 +207,11 @@ const RecruitManagement = ({
 
   return (
     <div>
+      <ConfirmationModal modalProps={modalProps} />
       <CModal
         alignment="center"
         visible={isRecruitOpen}
+        backdrop="static"
         onClose={() => handleClose()}
         aria-labelledby="LiveDemoExampleLabel"
       >
@@ -271,7 +297,7 @@ const RecruitManagement = ({
             </div>
           </div>
           <div className="d-flex justify-content-end">
-            <CButton onClick={saveHandler}>Save</CButton>
+            <CButton onClick={confirmationSaveModalHandler}>Save</CButton>
           </div>
         </CModalBody>
       </CModal>
