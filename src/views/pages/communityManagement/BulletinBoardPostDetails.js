@@ -82,6 +82,7 @@ const BulletinBoardPostDetails = () => {
   const [totalPollParticipantOptionDataCount, setTotalPollParticipantOptionDataCount] = useState([])
   const [pollParticipantOptionDataCurrentPage, setPollParticipantOptionDataCurrentPage] =
     useState(0)
+  const [cancleVisible, setCancleVisible] = useState(false)
 
   console.log('poldbdhd', pollParticipantOptionDataList)
 
@@ -659,6 +660,26 @@ const BulletinBoardPostDetails = () => {
     // handlePostComment('update', value.id)
   }
 
+  const handleCancleReport = async () => {
+    setIsLoading(true)
+    try {
+      console.log('test bulletinBoardPostDetail =>', bulletinBoardPostDetail)
+      const res = await postApi(API_ENDPOINT.bulletin_board_post_adminPostCancel, {
+        postId: id,
+        reportedUserId: bulletinBoardPostDetail[0]?.authorId
+      })
+      console.log('res ets=>', res.status)
+      if (res.status == 200) {
+        setCancleVisible(false)
+        setIsLoading(false)
+        BulletinBoardPostDetail()
+      }
+    } catch (error) {
+      setIsLoading(false)
+      console.log('error =>', error)
+    }
+  }
+
 
 
   return (
@@ -1024,7 +1045,7 @@ const BulletinBoardPostDetails = () => {
                 <div>
                   {bulletinBoardPostDetail[0]?.isReported == 1
                     &&
-                    <button className='btn btn-danger'>
+                    <button className='btn btn-danger' onClick={() => setCancleVisible(true)}>
                       Cancel Report
                     </button>
                   }
@@ -1853,6 +1874,26 @@ const BulletinBoardPostDetails = () => {
             </CModalFooter>
           </CModal>
         </div>
+
+        <CModal
+          backdrop="static"
+          visible={cancleVisible}
+          onClose={() => setCancleVisible(false)}
+          aria-labelledby="LiveDemoExampleLabel"
+        >
+          <CModalHeader onClose={() => setCancleVisible(false)}>
+            <CModalTitle id="LiveDemoExampleLabel">Confirm report cancellation</CModalTitle>
+          </CModalHeader>
+          <CModalBody>
+            <p>Are you sure you want to cancel the report?</p>
+          </CModalBody>
+          <CModalFooter>
+            <CButton color="secondary" onClick={() => setCancleVisible(false)}>
+              Close
+            </CButton>
+            <CButton color="primary" onClick={() => handleCancleReport()}>Confirm</CButton>
+          </CModalFooter>
+        </CModal>
       </div>
     </>
   )

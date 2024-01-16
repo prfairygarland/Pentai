@@ -91,7 +91,7 @@ const Login = () => {
                           } else {
                             setIsLoading(false)
                             setValidCredential(true)
-                            enqueueSnackbar(`${res?.data?.msg}`, { variant: 'error' })
+                            enqueueSnackbar(`${res?.data?.errors[0]?.msg}`, { variant: 'error' })
                           }
                         } catch (error) {
                           setIsLoading(false)

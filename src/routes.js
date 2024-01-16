@@ -14,6 +14,8 @@ import ClubDetails from './views/pages/communityManagement/ClubDetails'
 import CommunityReportHistory from './views/pages/communityManagement/CommunityReportHistory'
 
 import BookRentalStatus from './views/pages/BookRentalManagement/BookRentalStatus'
+import supplyRentalStatus from './views/pages/supplyRentalManagement/supplyRentalStatus'
+import allSupplies from './views/pages/supplyRentalManagement/allSupplies'
 
 const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
 
@@ -48,6 +50,12 @@ const routes = [
 
   //{ Book Rental Management}
   { path: '/BookRentalStatus', name: 'Book Rental Status', element: BookRentalStatus },
+
+
+  //{ Supply Rental Management}
+  { path: '/SupplyRentalStatus', name: 'Supply Rental Status', element: supplyRentalStatus },
+  { path: '/AllSupplies', name: 'All Supplies', element: allSupplies },
+
 ]
 
 export default routes;

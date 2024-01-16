@@ -292,7 +292,7 @@ export const getApi = async (url, header) => {
     } catch (err) {
       console.log(err);
     }
-
+    console.log('data =>', data.data);
     return data;
   }
 };

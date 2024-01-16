@@ -43,10 +43,10 @@ export let API_ENDPOINT = {
   get_club_posts: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/clubPostSearch",
   get_boarddata_byID: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/getBoardId",
   get_categorydata_byID: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/getCategoryId",
-  get_postuserdetail : ALL_CONSTANTS.API_URL + "/api/adminPanel/community/userDetailsBulletin",
+  get_postuserdetail: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/userDetailsBulletin",
   create_post_bulletin: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/createPostBulletin",
   create_post_welfare: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/createPostWelfare",
-  
+
   update_post_bulletin: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/updateBulletin",
   update_post_welfare: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/updateWelfare",
 
@@ -91,7 +91,7 @@ export let API_ENDPOINT = {
   hide_show_club_change: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/clubDisplay",
   delete_selected_clubs: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/deleteClub",
   get_club_history: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/clubHistory",
-  get_club_details: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/clubDetails",  
+  get_club_details: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/clubDetails",
   get_club_post_details: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/postDetailsClub",
   club_post_delete: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/deletePostClub",
 
@@ -109,6 +109,59 @@ export let API_ENDPOINT = {
   delete_book: ALL_CONSTANTS.API_URL + "/admin/bookRental/deleteBook",
   book_listexport: ALL_CONSTANTS.API_URL + "/admin/bookRental/export",
   searchGoogleBook: ALL_CONSTANTS.API_URL + "/admin/bookRental/searchGoogleBook",
+
+
+
+
+
+  //{ Supply Rental Management}
+
+  get_supply_list: ALL_CONSTANTS.API_URL + "/admin/supplies/list",
+  get_supply_category_list: ALL_CONSTANTS.API_URL + "/admin/supplies/mainCategoryList",
+  get_supply_userdetails: ALL_CONSTANTS.API_URL + "/admin/bookRental/userDetail",
+  get_supply_rentaldetails: ALL_CONSTANTS.API_URL + "/admin/supplies/rentalDetail",
+  get_supply_rental_history: ALL_CONSTANTS.API_URL + "/admin/supplies/rentalHistory",
+  get_supply_confirm: ALL_CONSTANTS.API_URL + "/admin/supplies/rental/requestConfirm",
+  get_supply_export: ALL_CONSTANTS.API_URL + "/admin/supplies/listExport",
+  get_supply_rental_history_export: ALL_CONSTANTS.API_URL + "/admin/supplies/historyExport",
+  get_main_category_list: ALL_CONSTANTS.API_URL + "/admin/supplies/mainCategoryList",
+  get_category_list: ALL_CONSTANTS.API_URL + "/admin/supplies/categoryList",
+  get_sub_category_list: ALL_CONSTANTS.API_URL + "/admin/supplies/subCategoryList",
+  get_model_list: ALL_CONSTANTS.API_URL + "/admin/supplies/modelList",
+  get_item_list: ALL_CONSTANTS.API_URL + "/admin/supplies/supplyItemList",
+  get_all_supplies: ALL_CONSTANTS.API_URL + "/admin/supplies/allSupplies",
+  get_all_supplies_export: ALL_CONSTANTS.API_URL + "/admin/supplies/allSupplyExport",
+  del_supply_type: ALL_CONSTANTS.API_URL + "/admin/supplies/deleteSupplyType",
+  add_supply_type: ALL_CONSTANTS.API_URL + "/admin/supplies/createSupplyType",
+  get_supply_type_details: ALL_CONSTANTS.API_URL + "/admin/supplies/mainCategoryDetail",
+  update_supply_type: ALL_CONSTANTS.API_URL + "/admin/supplies/updateSupplyType",
+  delete_supply_type: ALL_CONSTANTS.API_URL + "/admin/supplies/deleteSupplyType",
+  add_categoriy: ALL_CONSTANTS.API_URL + "/admin/supplies/createCategory",
+  update_categoriy: ALL_CONSTANTS.API_URL + "/admin/supplies/updateCategory",
+  get_category_details: ALL_CONSTANTS.API_URL + "/admin/supplies/categoryDetail",
+  delete_category: ALL_CONSTANTS.API_URL + "/admin/supplies/deleteCategory",
+  add_sub_category: ALL_CONSTANTS.API_URL + "/admin/supplies/createSubCategory",
+  get_sub_category_details: ALL_CONSTANTS.API_URL + "/admin/supplies/subCategoryDetail",
+  update_sub_categoriy: ALL_CONSTANTS.API_URL + "/admin/supplies/updateSubCategory",
+  delete_sub_category: ALL_CONSTANTS.API_URL + "/admin/supplies/deleteSubCategory",
+  add_modal: ALL_CONSTANTS.API_URL + "/admin/supplies/createSupplyModel",
+  update_modal: ALL_CONSTANTS.API_URL + "/admin/supplies/modelUpdate",
+  get_modal_details: ALL_CONSTANTS.API_URL + "/admin/supplies/modelDetail",
+  delete_modal: ALL_CONSTANTS.API_URL + "/admin/supplies/deleteModel",
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
