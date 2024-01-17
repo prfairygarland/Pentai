@@ -215,8 +215,7 @@ const AddSupplyType = ({ setModal, getMod, Modal, getId, removeIds }) => {
 
 
   return (
-    <div>
-      <div>
+     <div className='col-md-9'>
         {isLoading && <Loader />}
         <div>
           {getId &&
@@ -426,7 +425,7 @@ const AddSupplyType = ({ setModal, getMod, Modal, getId, removeIds }) => {
           </CModalFooter>
         </CModal>
       </div>
-    </div>
+   
   )
 }
 

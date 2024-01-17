@@ -341,7 +341,7 @@ const BookRentalStatus = () => {
             <div>
                 <ReactTable columns={columns} data={bookList} showCheckbox={false} onSelectionChange={handleSelectionChange} />
             </div>
-            <div className='d-flex w-100 justify-content-center gap-3'>
+            <div className='d-flex w-100 justify-content-center gap-3 mb-4'>
                 {bookList.length > 0 &&
                     <div className='userlist-pagination'>
                         <div className='userlist-pagination dataTables_paginate'>

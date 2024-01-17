@@ -442,9 +442,9 @@ const AllSupplies = () => {
 
   return (
     <div>
-      <div className='d-flex justify-content-around gap-4 mb-4'>
+      <div className='d-flex justify-content-between gap-4 mb-4'>
         {isLoading && <Loader />}
-        <div>
+        <div className='col-md-3'>
           <CSidebar>
             <CSidebarBrand className=' black-text d-flex justify-content-start p-3' style={{ color: 'black', background: 'none' }}><h5>Category Hierarchy</h5></CSidebarBrand>
             <CSidebarBrand className=' black-text d-flex justify-content-between mb-2' style={{ color: 'black', borderBottom: '1px solid #000', background: 'none', alignItems: 'center' }}>
@@ -556,7 +556,7 @@ const AllSupplies = () => {
           </CSidebar>
         </div>
         {getModal === 'allList' &&
-          <div className='mb-4'>
+          <div className='mb-4 col-md-9'>
             <div className='clearfix'>
               <CButton className='float-end mx-2 mb-2' onClick={exportData}>Export</CButton>
             </div>
@@ -659,33 +659,33 @@ const AllSupplies = () => {
         </CModal>
 
         {getModal === 'addSupplyType' &&
-          <div>
+          
             <AddSupplyType Modal={setModal} getId={ids} removeIds={setIds} />
-          </div>
+         
         }
 
         {getModal === 'addCategory' &&
-          <div>
+          
             <AddCategory setModal={setState} getMod={getState} Modal={setModal} getMainCatId={suppyId} getCatId={catIds} removeCatIds={setCatIds} />
-          </div>
+          
         }
 
         {getModal === 'addSubCategory' &&
-          <div>
+        
             <AddSubCategory setModal={setState} getMod={getState} Modal={setModal} getMainSubCatId={catId} getSubCatId={subCatIds} removeSubCatIds={setSubCatIds} />
-          </div>
+         
         }
 
         {getModal === 'addModal' &&
-          <div>
+        
             <AddModel setModal={setState} getMod={getState} Modal={setModal} getMainModalId={modalId} getModalId={subModalIds} removeModalIds={setModalIds} />
-          </div>
+         
         }
 
         {getModal === 'addItem' &&
-          <div>
+       
             <AddItem setModal={setState} getMod={getState} modalName={itemName} supplyID={mainID} />
-          </div>
+          
         }
 
 

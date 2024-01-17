@@ -12,7 +12,7 @@ background: #e3e0e0;
 display: flex;
     align-items: center;
 border-left: 1px solid #ccc;
-padding: 20px;
+padding: 10px;
     min-width: 250px;
 }
 
@@ -27,7 +27,7 @@ padding: 20px;
       margin-top: 0;
      }
   .formWraper .form-outline .formWrpInpt{
-    padding: 20px;
+    padding: 10px;
     flex: 1;
   }
   .reveseCheckBox{
@@ -35,4 +35,31 @@ padding: 20px;
     input{
       margin-left: 5px !important;
     }
+  }
+  .addItemWrp {
+    .formWraper{
+      .form-outline{
+        .formWrpLabel{
+          max-width: 150px;
+          width: 100%;
+          min-width: auto;
+        }
+      }
+    }
+  }
+  .lableWidthMin{
+    .formWraper{
+      .form-outline{
+        .formWrpLabel{
+          max-width: 150px;
+          width: 100%;
+          min-width: auto;
+        }
+      }
+    }
+  }
+  .popMiddl{
+    max-height: 500px;
+    overflow-x: hidden;
+    overflow-y: auto;
   }

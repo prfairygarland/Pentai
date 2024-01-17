@@ -164,8 +164,8 @@ const AddModel = ({ setModal, getMod, Modal, getMainModalId, getModalId, removeM
 
 
   return (
-    <div>
-      <div>
+    
+      <div  className='col-md-9'>
         {isLoading && <Loader />}
         <div>
           <div className='d-flex justify-content-end'>
@@ -264,7 +264,7 @@ const AddModel = ({ setModal, getMod, Modal, getMainModalId, getModalId, removeM
           </CModalFooter>
         </CModal>
       </div>
-    </div>
+   
   )
 }
 

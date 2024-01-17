@@ -163,8 +163,8 @@ const AddSubCategory = ({ setModal, getMod, Modal, getMainSubCatId, getSubCatId,
   }
 
   return (
-    <div>
-      <div>
+ 
+      <div  className='col-md-9'>
         {isLoading && <Loader />}
         <div>
           <div className='d-flex justify-content-end'>
@@ -264,7 +264,7 @@ const AddSubCategory = ({ setModal, getMod, Modal, getMainSubCatId, getSubCatId,
           </CModalFooter>
         </CModal>
       </div>
-    </div>
+    
   )
 }
 

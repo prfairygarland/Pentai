@@ -86,3 +86,19 @@
       width: 50px;
     }
   }
+.tabNav{
+  .nav-item{
+    margin-right: 10px;
+    .nav-link {
+      border-radius: 6px;
+      &.active{
+        background:($primary);
+        color: ($white);
+      }
+      &:hover{
+        background:($primary);
+        color: ($white);
+      }
+    }
+  }
+}
