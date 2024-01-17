@@ -122,10 +122,10 @@ const AddItem = ({ modalName, supplyID }) => {
   };
 
   return (
-    <div>
-      <div>
+   
+      <div className='col-md-9'>
         {isLoading && <Loader />}
-        <div>
+        <div className='addItemWrp'>
           <div className='d-flex justify-content-end'>
             <CButton onClick={() => setDeleteVisible(true)}>Delete</CButton>
           </div>
@@ -167,18 +167,18 @@ const AddItem = ({ modalName, supplyID }) => {
                 </div>
               </div>
 
-              <div className="form-outline form-white d-flex gap-3">
-                <div className='d-flex'>
+              <div className="form-outline form-white d-flex ">
+                <div className='d-flex col-md-6'>
                   <div className="formWrpLabel" >
                     <label className="fw-bolder ">
                       Item Status
                     </label>
                   </div>
-                  <div className="formWrpInpt d-flex">
-                    <div className="d-flex formradiogroup mb-2 gap-3">
+                  <div className="formWrpInpt d-flex w-100">
+                    <div className="d-flex formradiogroup mb-2 gap-3 w-100">
                       <CFormSelect
-                        className='mx-4'
-                        style={{ width: '170px' }}
+                        
+                        
                         name='itemStatus'
                         value={addItemData.itemStatus}
                         options={[
@@ -195,15 +195,15 @@ const AddItem = ({ modalName, supplyID }) => {
                     </div>
                   </div>
                 </div>
-                <div className='d-flex'>
-                  <div className="formWrpLabel" >
+                <div className='d-flex col-md-6'>
+                  <div className="formWrpLabel " >
                     <label className="fw-bolder ">
                       Item Registered Date
                     </label>
                   </div>
-                  <div className="formWrpInpt d-flex">
-                    <div className="d-flex formradiogroup mb-2 gap-3">
-                      <DatePicker
+                  <div className="formWrpInpt d-flex w-100">
+                    <div className="d-flex formradiogroup gap-3 w-100">
+                      <DatePicker 
                         // value={deadlineDate}
                         minDate={new Date()}
                         onChange={(event) => handleDeadlineDate(event)}
@@ -399,7 +399,7 @@ const AddItem = ({ modalName, supplyID }) => {
           </CModalFooter>
         </CModal>
       </div>
-    </div>
+ 
   )
 }
 

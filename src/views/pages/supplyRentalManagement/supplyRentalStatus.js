@@ -710,8 +710,8 @@ const SupplyRentalStatus = () => {
     <div className='mb-5'>
       {isLoading && <Loader />}
       <main>
-        <div className='mb-5'>
-          <CNav variant="underline" className='d-flex gap3'>
+        <div className='mb-2'>
+          <CNav variant="underline" className='d-flex gap3 tabNav'>
             <CNavItem >
               <CNavLink role='button' active onClick={() => handleTabClick('')}>
                 All
@@ -841,6 +841,7 @@ const SupplyRentalStatus = () => {
 
 
           </CModalHeader>
+          <CModalBody>
           {popUp === 'userDetails' ?
             <SupplyRentalUserDetals userInfoData={userInfoData} type={'supply'} />
             : ''}
@@ -890,6 +891,7 @@ const SupplyRentalStatus = () => {
 
               : ''
           }
+          </CModalBody>
         </CModal >
       </main>
 

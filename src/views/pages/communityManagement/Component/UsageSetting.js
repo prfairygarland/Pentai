@@ -127,7 +127,7 @@ const UsageSetting = (props) => {
           <div className="formWrpInpt">
             {
               <div
-                className="d-flex formradiogroup mb-2"
+                className="d-flex formradiogroup mb-2 gap-2"
                 style={
                   radioGroupValue.ClubBoard?.status === 0 &&
                   radioGroupValue.WelfareBoard?.status === 0
@@ -159,7 +159,7 @@ const UsageSetting = (props) => {
               </div>
             }
             <div
-              className="d-flex formradiogroup mb-2"
+              className="d-flex formradiogroup mb-2 gap-2"
               style={
                 radioGroupValue.BulletinBoard?.status === 0 &&
                 radioGroupValue.WelfareBoard?.status === 0
@@ -190,7 +190,7 @@ const UsageSetting = (props) => {
               />
             </div>
             <div
-              className="d-flex formradiogroup mb-2"
+              className="d-flex formradiogroup mb-2 gap-2"
               style={
                 radioGroupValue.ClubBoard?.status === 0 &&
                 radioGroupValue.BulletinBoard?.status === 0
@@ -275,7 +275,8 @@ const UsageSetting = (props) => {
                       <div className="prohibitword m-2" key={index}>
                         <p>{word}&nbsp;&nbsp;&nbsp;</p>
                         <button onClick={() => handleRemoveWord(index)}>
-                          <p style={{ lineHeight: '0.5' }}>x</p>
+                          {/* <p style={{ lineHeight: '0.5' }}>x</p> */}
+                          <i className='icon-close'></i>
                         </button>
                       </div>
                     ))}
