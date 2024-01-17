@@ -527,6 +527,9 @@ const BoardPostListing = () => {
     <>
       {isLoading && <Loader />}
       <main>
+
+
+    
         <div>
           <div className="d-flex justify-content-between align-items-center">
             <p>Bulletin Board Information</p>

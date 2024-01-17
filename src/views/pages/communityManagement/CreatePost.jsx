@@ -564,7 +564,7 @@ const CreatePost = () => {
                         {recruitData.recruitmentRaffleMaxWinners}
                       </p>
                       {recruitData?.recruitmentStatus !== 'closed' && (
-                        <CButton className="btn" color="dark" onClick={() => modifyRecruit()}>
+                        <CButton className="btn mt-3" color="dark" onClick={() => modifyRecruit()}>
                           Modify
                         </CButton>
                       )}
