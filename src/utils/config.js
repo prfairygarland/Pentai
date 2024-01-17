@@ -34,6 +34,9 @@ export let API_ENDPOINT = {
   get_club_registration_periods: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/getClubRegistrationPeriods",
   get_search_club_registration_periods: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/searchClubRegistrationPeriod",
   get_club_activity_list: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/getClubActivitiesByRegistrationPeriod",
+  create_club_registration_period: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/createClubRegistrationPeriod",
+  update_club_registration_period: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/updateClubRegistrationPeriod",
+  
 
   get_boards: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/boardList",
   get_categories: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/categoryList",
