@@ -9,12 +9,11 @@ import { imageUrl } from '../supplyRentalStatus';
 import moment from 'moment/moment';
 
 const SupplyRentalDetails = ({ endModal, RentalStatusData, setRentalStatusData, setUserInfoPopup, type }) => {
-  console.log('test get Data =>', RentalStatusData);
   const [name, setName] = useState('Ak')
   const [visible, setVisible] = useState(false)
   const [rentalVisible, setRentalVisible] = useState(false)
+  const [returnVisible, setReturnVisible] = useState(false)
   const [selectedCheckbox, setSelectedCheckbox] = useState(RentalStatusData?.longTerm !== 'no' ? 'Rental' : 'Provide');
-  console.log('ssnsn =>', selectedCheckbox);
   const handleCheckboxChange = (checkbox) => {
     // Update the selected checkbox state
     setSelectedCheckbox(checkbox);
@@ -33,8 +32,7 @@ const SupplyRentalDetails = ({ endModal, RentalStatusData, setRentalStatusData, 
   }
 
   const confirmSupply = async (type, id) => {
-    console.log('type =>', type);
-    console.log('id =>', id);
+
     const formData = new FormData()
 
     let data = {
@@ -47,7 +45,6 @@ const SupplyRentalDetails = ({ endModal, RentalStatusData, setRentalStatusData, 
     // const res = await putApi('http://192.168.10.46:3000/admin/supplies/rental/requestConfirm', data)
 
 
-    console.log('res =>', res)
     if (res.status === 200) {
       endModal(false)
     } else {
@@ -207,53 +204,64 @@ const SupplyRentalDetails = ({ endModal, RentalStatusData, setRentalStatusData, 
                       </div>
                     </div>
 
-                    <div className="form-outline form-white d-flex justify-content-center">
-                      <div className='p-3'>
-                        <label className="fw-bolder">Rental Request Confirmation</label>
-                      </div>
-                    </div>
-                    <div className="form-outline form-white d-flex">
-                      <div className='formWrpLabel'>
-                        <label className="fw-bolder ">Rental Request Confirmation</label>
-                      </div>
-                      <div className='formWrpInpt clearfix d-flex justify-content-between'>
-                        <div className='d-flex formradiogroup mb-2 gap-3'>
-                          <CFormCheck type="radio" name="club_board" id="exampleRadios1" label="Rental" checked={selectedCheckbox === 'Rental'} onChange={() => handleCheckboxChange('Rental')} />
-                          <CFormCheck type="radio" name="club_board" id="exampleRadios2" label="Provide" checked={selectedCheckbox === 'Provide'} onChange={() => handleCheckboxChange('Provide')} />
-                        </div>
-                        <div>
-                          <button className='mx-2 px-3 py-2 rounded border-1 float-end' onClick={() => setRentalVisible(!rentalVisible)}>confirm</button>
-                        </div>
-                      </div>
-                    </div>
 
-                    <div className="form-outline form-white d-flex">
-                      <div className='formWrpLabel'>
-                        <label className="fw-bolder ">Return Request Confirmation</label>
-                      </div>
-                      <div className='formWrpInpt clearfix d-flex justify-content-end'>
-                        <div className='d-flex formradiogroup mb-2 gap-3'>
 
+                    {RentalStatusData?.status === 'pending' &&
+                      <div>
+                        <div className="form-outline form-white d-flex justify-content-center">
+                          <div className='p-3'>
+                            <label className="fw-bolder">Rental Request Confirmation</label>
+                          </div>
                         </div>
-                        <div>
-                          <button className='mx-2 px-3 py-2 rounded border-1 float-end'>confirm</button>
+                        <div className="form-outline form-white d-flex">
+                          <div className='formWrpLabel'>
+                            <label className="fw-bolder ">Rental Request Confirmation</label>
+                          </div>
+                          <div className='formWrpInpt clearfix d-flex justify-content-between'>
+                            <div className='d-flex formradiogroup mb-2 gap-3'>
+                              <CFormCheck type="radio" name="club_board" id="exampleRadios1" label="Rental" checked={selectedCheckbox === 'Rental'} onChange={() => handleCheckboxChange('Rental')} />
+                              <CFormCheck type="radio" name="club_board" id="exampleRadios2" label="Provide" checked={selectedCheckbox === 'Provide'} onChange={() => handleCheckboxChange('Provide')} />
+                            </div>
+                            <div>
+                              <button className='mx-2 px-3 py-2 rounded border-1 float-end' onClick={() => setRentalVisible(!rentalVisible)}>confirm</button>
+                            </div>
+                          </div>
                         </div>
                       </div>
-                    </div>
+                    }
 
-                    <div className="form-outline form-white d-flex justify-content-center">
-                      <div className='p-3'>
-                        <label className="fw-bolder">Change Rental status</label>
+                    {RentalStatusData?.status === 'returned' &&
+                      <div className="form-outline form-white d-flex">
+                        <div className='formWrpLabel'>
+                          <label className="fw-bolder ">Return Request Confirmation</label>
+                        </div>
+                        <div className='formWrpInpt clearfix d-flex justify-content-end'>
+                          <div className='d-flex formradiogroup mb-2 gap-3'>
+
+                          </div>
+                          <div>
+                            <button className='mx-2 px-3 py-2 rounded border-1 float-end' onClick={() => setReturnVisible(!returnVisible)}>confirm</button>
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                    <div className="form-outline form-white d-flex">
-                      <div className='formWrpLabel'>
-                        <label className="fw-bolder ">End Rental</label>
+                    }
+                    {RentalStatusData?.status !== 'cancel' && RentalStatusData?.status !== 'handOver' &&
+                      <div>
+                        <div className="form-outline form-white d-flex justify-content-center">
+                          <div className='p-3'>
+                            <label className="fw-bolder">Change Rental status</label>
+                          </div>
+                        </div>
+                        <div className="form-outline form-white d-flex">
+                          <div className='formWrpLabel'>
+                            <label className="fw-bolder ">End Rental</label>
+                          </div>
+                          <div className='formWrpInpt clearfix'>
+                            <button onClick={() => setVisible(!visible)} className='mx-2 px-3 py-2 rounded border-1 float-end'>confirm</button>
+                          </div>
+                        </div>
                       </div>
-                      <div className='formWrpInpt clearfix'>
-                        <button onClick={() => setVisible(!visible)} className='mx-2 px-3 py-2 rounded border-1 float-end'>confirm</button>
-                      </div>
-                    </div>
+                    }
                   </div>
                 </div>
               </div>
@@ -296,6 +304,25 @@ const SupplyRentalDetails = ({ endModal, RentalStatusData, setRentalStatusData, 
                   Cancel
                 </CButton>
                 <CButton className='px-4' color="primary" onClick={() => confirmSupply('Returned', RentalStatusData.id)}>Yes</CButton>
+              </CModalFooter>
+            </CModal>
+            <CModal
+              visible={returnVisible}
+              onClose={() => setReturnVisible(false)}
+              aria-labelledby="LiveDemoExampleLabel"
+            >
+              <CModalHeader onClose={() => setReturnVisible(false)}>
+                <CModalTitle id="LiveDemoExampleLabel">Rental Request Confirm</CModalTitle>
+              </CModalHeader>
+              <CModalBody className='text-center'>
+                <p>Are you sure?
+                </p>
+              </CModalBody>
+              <CModalFooter className='d-flex justify-content-center gap-md-4 border-0 '>
+                <CButton className='px-4' color="primary" onClick={() => confirmSupply('Returned', RentalStatusData.id)} >Yes</CButton>
+                <CButton color="secondary" onClick={() => setReturnVisible(false)}>
+                  Cancel
+                </CButton>
               </CModalFooter>
             </CModal>
           </div>

@@ -5,7 +5,7 @@ import Loader from 'src/components/common/Loader';
 import { deleteApi, getApi, postApi, putApi } from 'src/utils/Api';
 import { API_ENDPOINT } from 'src/utils/config';
 
-const AddCategory = ({ setModal, getMod, Modal, getMainCatId, getCatId, removeCatIds }) => {
+const AddCategory = ({ setModal, getMod, Modal, getMainCatId, getCatId, removeCatIds, getVal }) => {
   console.log('get Id =>', getMainCatId);
 
   const [deleteVisible, setDeleteVisible] = useState(false)
@@ -34,7 +34,6 @@ const AddCategory = ({ setModal, getMod, Modal, getMainCatId, getCatId, removeCa
       let url = API_ENDPOINT.get_category_details + `?id=${id}`
       const response = await getApi(url)
 
-      console.log('test responce =>', response.data);
 
       if (response?.status === 200) {
         setAddCategoryData({
@@ -55,11 +54,11 @@ const AddCategory = ({ setModal, getMod, Modal, getMainCatId, getCatId, removeCa
       let url = API_ENDPOINT.delete_category
       const response = await deleteApi(url, `?id=${getCatId}`)
 
-      console.log('test responce =>', response);
       if (response?.status === 200) {
         // setUserInfoPopup(true)
         enqueueSnackbar('Delete succefully', { variant: 'success' })
         removeCatIds(null)
+        getVal(null)
         // Modal('allList')
         setModal(!getMod)
       }
@@ -112,9 +111,14 @@ const AddCategory = ({ setModal, getMod, Modal, getMainCatId, getCatId, removeCa
             mainCategoryId: null,
             visibility: true,
           })
-          enqueueSnackbar(`It has been saved`, { variant: 'success' })
+          if (res.data.status === 409) {
+            enqueueSnackbar(`${res?.data?.msg}`, { variant: 'error' })
+          } else {
+            enqueueSnackbar(`It has been saved`, { variant: 'success' })
+          }
           setIsLoading(false)
           removeCatIds(null)
+          getVal(null)
           // Modal('allList')
           setModal(!getMod)
           //
@@ -136,6 +140,7 @@ const AddCategory = ({ setModal, getMod, Modal, getMainCatId, getCatId, removeCa
         })
         setIsLoading(false)
         removeCatIds(null)
+        getVal(null)
         // Modal('allList')
         setModal(!getMod)
       } catch (error) {
@@ -164,8 +169,8 @@ const AddCategory = ({ setModal, getMod, Modal, getMainCatId, getCatId, removeCa
 
 
   return (
-    
-      <div className='col-md-9'>
+
+    <div className='col-md-9'>
       {isLoading && <Loader />}
       <div>
         <div className='d-flex justify-content-end'>
@@ -191,7 +196,7 @@ const AddCategory = ({ setModal, getMod, Modal, getMainCatId, getCatId, removeCa
                     value={addCategoryData.name}
                     onChange={(e) => {
                       handleInputChange(e);
-                    } } />
+                    }} />
                 </div>
                 <span className="txt-byte-information">{addCategoryData.name.length} / 28 byte</span>
               </div>
@@ -227,7 +232,7 @@ const AddCategory = ({ setModal, getMod, Modal, getMainCatId, getCatId, removeCa
                       value={addCategoryData.associatedItem}
                       onChange={(e) => {
                         handleInputChange(e);
-                      } }
+                      }}
                       style={{ width: '30%' }} />
                   </p>
                 </div>
@@ -239,13 +244,13 @@ const AddCategory = ({ setModal, getMod, Modal, getMainCatId, getCatId, removeCa
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '5%', gap: 10 }}>
         <CButton onClick={() => saveCategory('cancle')} style={{ marginRight: '2%', background: '#ccc', border: 'none' }}>Cancel</CButton>
         <CButton onClick={() => saveCategory('save')}>Save</CButton>
-      </div>]
+      </div>
       <CModal
-      backdrop="static"
-      visible={deleteVisible}
-      onClose={() => setDeleteVisible(false)}
-      aria-labelledby="StaticBackdropExampleLabel"
-    >
+        backdrop="static"
+        visible={deleteVisible}
+        onClose={() => setDeleteVisible(false)}
+        aria-labelledby="StaticBackdropExampleLabel"
+      >
         <CModalHeader>
           <CModalTitle id="StaticBackdropExampleLabel">Delete</CModalTitle>
         </CModalHeader>
@@ -261,8 +266,7 @@ const AddCategory = ({ setModal, getMod, Modal, getMainCatId, getCatId, removeCa
           </CButton>
         </CModalFooter>
       </CModal>
-    </div>
-    
+    </div >
   )
 }
 

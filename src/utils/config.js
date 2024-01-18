@@ -36,7 +36,7 @@ export let API_ENDPOINT = {
   get_club_activity_list: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/getClubActivitiesByRegistrationPeriod",
   create_club_registration_period: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/createClubRegistrationPeriod",
   update_club_registration_period: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/updateClubRegistrationPeriod",
-  
+
 
   get_boards: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/boardList",
   get_categories: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/categoryList",
@@ -151,6 +151,12 @@ export let API_ENDPOINT = {
   update_modal: ALL_CONSTANTS.API_URL + "/admin/supplies/modelUpdate",
   get_modal_details: ALL_CONSTANTS.API_URL + "/admin/supplies/modelDetail",
   delete_modal: ALL_CONSTANTS.API_URL + "/admin/supplies/deleteModel",
+  add_item: ALL_CONSTANTS.API_URL + "/admin/supplies/createSupplyItem",
+  get_item_details: ALL_CONSTANTS.API_URL + "/admin/supplies/supplyItemDetail",
+  update_item: ALL_CONSTANTS.API_URL + "/admin/supplies/updateSupplyItem",
+  upload_image: ALL_CONSTANTS.API_URL + "/admin/bookRental/imageUpload",
+  delete_item: ALL_CONSTANTS.API_URL + "/admin/supplies/deleteSupplyItem",
+
 
 
 

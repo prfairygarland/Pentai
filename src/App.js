@@ -20,7 +20,7 @@ const Page404 = React.lazy(() => import('./views/pages/page404/Page404'))
 const Page500 = React.lazy(() => import('./views/pages/page500/Page500'))
 const AuthLayout = React.lazy(() => import('./layout/AuthLayout'))
 
-
+const getToken = localStorage.getItem('token') ? localStorage.getItem('token') : sessionStorage.getItem('sessionToken')
 class App extends Component {
   render() {
     return (
@@ -39,7 +39,7 @@ class App extends Component {
             <Route exact path='/auth' name="auth" element={<AuthLayout/>}/>
             <Route exact path="/404" name="Page 404" element={<Page404 />} />
             <Route exact path="/500" name="Page 500" element={<Page500 />} />
-            <Route path="*" name="Home" element={<DefaultLayout />} />
+            <Route path="*" name="Home" element={<DefaultLayout token={getToken} />} />
           </Routes>
         </Suspense>
       </BrowserRouter>

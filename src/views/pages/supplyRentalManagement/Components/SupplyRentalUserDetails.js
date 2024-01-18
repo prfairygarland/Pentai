@@ -14,157 +14,157 @@ const SupplyRentalUserDetals = ({ userInfoData, type }) => {
 
   return (
     <div className='popMiddl'>
-    
-          <div className="row justify-content-center">
-            {/* <div className="row justify-content-center"> */}
-            <div className='col-md-12' >
-              <div className="card p-2">
-                <div className='card-body p-0 lableWidthMin'>
-                  <div className='formWraper'>
-                    <div className="form-outline form-white  d-flex ">
-                      <div className='formWrpLabel'>
-                        <label className="fw-bolder ">Profile Image</label>
-                      </div>
-                      <div className='formWrpInpt'>
-                        {userInfoData?.imageUrl != null ?
-                          <CImage alt='NA' rounded crossorigin="anonymous" src={imageUrl + userInfoData?.userImage} width={150} height={150} />
-                          : '-'
-                        }
-                        {/* <CImage alt='NA' rounded crossorigin="anonymous" src={imageUrl + userInfoData?.userImage} width={150} height={150} /> */}
-                      </div>
+
+      <div className="row justify-content-center">
+        {/* <div className="row justify-content-center"> */}
+        <div className='col-md-12' >
+          <div className="card p-2">
+            <div className='card-body p-0 lableWidthMin'>
+              <div className='formWraper'>
+                <div className="form-outline form-white  d-flex ">
+                  <div className='formWrpLabel'>
+                    <label className="fw-bolder ">Profile Image</label>
+                  </div>
+                  <div className='formWrpInpt'>
+                    {userInfoData?.userImage != null ?
+                      <CImage alt='NA' rounded crossorigin="anonymous" src={imageUrl + userInfoData?.userImage} width={150} height={150} />
+                      : '-'
+                    }
+                    {/* <CImage alt='NA' rounded crossorigin="anonymous" src={imageUrl + userInfoData?.userImage} width={150} height={150} /> */}
+                  </div>
+                </div>
+
+                <div className="form-outline form-white  d-flex ">
+                  <div className='formWrpLabel'>
+                    <label className="fw-bolder ">Employee No.</label>
+                  </div>
+                  <div className='formWrpInpt'>{userInfoData?.employeeCode ? userInfoData?.employeeCode : ''}</div>
+                </div>
+
+                <div className='d-flex col-md-12'>
+                  <div className="form-outline form-white d-flex col-md-6">
+                    <div className='formWrpLabel'>
+                      <label className="fw-bolder ">Name</label>
                     </div>
-
-                    <div className="form-outline form-white  d-flex ">
-                      <div className='formWrpLabel'>
-                        <label className="fw-bolder ">Employee No.</label>
-                      </div>
-                      <div className='formWrpInpt'>{userInfoData?.employeeCode ? userInfoData?.employeeCode : ''}</div>
+                    <div className='formWrpInpt'>{userInfoData?.koreanName ? userInfoData?.koreanName : 'NA'}
                     </div>
+                  </div>
 
-                    <div className='d-flex col-md-12'>
-                      <div className="form-outline form-white d-flex col-md-6">
-                        <div className='formWrpLabel'>
-                          <label className="fw-bolder ">Name</label>
-                        </div>
-                        <div className='formWrpInpt'>{userInfoData?.koreanName ? userInfoData?.koreanName : 'NA'}
-                        </div>
-                      </div>
-
-                      <div className="form-outline form-white  d-flex  col-md-6">
-                        <div className='formWrpLabel'>
-                          <label className="fw-bolder ">English Name</label>
-                        </div>
-                        <div className='formWrpInpt'>
-                          {userInfoData?.englishName ? userInfoData?.englishName : 'NA'}
-                        </div>
-                      </div>
+                  <div className="form-outline form-white  d-flex  col-md-6">
+                    <div className='formWrpLabel'>
+                      <label className="fw-bolder ">English Name</label>
                     </div>
-
-                    <div className="form-outline form-white d-flex ">
-                      <div className='formWrpLabel'>
-                        <label className="fw-bolder ">Email</label>
-                      </div>
-                      <div className='formWrpInpt'>{userInfoData?.email ? userInfoData.email : 'NA='}
-                      </div>
+                    <div className='formWrpInpt'>
+                      {userInfoData?.englishName ? userInfoData?.englishName : 'NA'}
                     </div>
+                  </div>
+                </div>
 
-                    <div className='d-flex col-md-12'>
-                      <div className="form-outline form-white d-flex col-md-6">
-                        <div className='formWrpLabel'>
-                          <label className="fw-bolder ">Company</label>
-                        </div>
-                        <div className='formWrpInpt'>{userInfoData?.companyName ? userInfoData?.companyName : 'NA'}
-                        </div>
-                      </div>
-                      <div className="form-outline form-white  d-flex  col-md-6">
-                        <div className='formWrpLabel'>
-                          <label className="fw-bolder ">Division</label>
-                        </div>
-                        <div className='formWrpInpt'>
-                          {userInfoData?.divisionName ? userInfoData?.divisionName : 'NA'}
-                        </div>
-                      </div>
+                <div className="form-outline form-white d-flex ">
+                  <div className='formWrpLabel'>
+                    <label className="fw-bolder ">Email</label>
+                  </div>
+                  <div className='formWrpInpt'>{userInfoData?.email ? userInfoData.email : 'NA='}
+                  </div>
+                </div>
+
+                <div className='d-flex col-md-12'>
+                  <div className="form-outline form-white d-flex col-md-6">
+                    <div className='formWrpLabel'>
+                      <label className="fw-bolder ">Company</label>
                     </div>
-
-                    <div className='d-flex col-md-12'>
-                      <div className="form-outline form-white d-flex col-md-6">
-                        <div className='formWrpLabel'>
-                          <label className="fw-bolder ">Group</label>
-                        </div>
-                        <div className='formWrpInpt'>
-                          {userInfoData?.groupName ? userInfoData?.groupName : 'NA'}
-                        </div>
-                      </div>
-                      <div className="form-outline form-white  d-flex  col-md-6">
-                        <div className='formWrpLabel'>
-                          <label className="fw-bolder ">Team</label>
-                        </div>
-                        <div className='formWrpInpt'>
-                          {userInfoData?.teamName ? userInfoData?.teamName : 'NA'}
-                        </div>
-                      </div>
+                    <div className='formWrpInpt'>{userInfoData?.companyName ? userInfoData?.companyName : 'NA'}
                     </div>
-
-
-                    <div className="form-outline form-white d-flex ">
-                      <div className='formWrpLabel'>
-                        <label className="fw-bolder ">Last Access
-                        </label>
-                      </div>
-                      <div className='formWrpInpt'>
-                        {userInfoData?.lastLoginAt ? userInfoData?.lastLoginAt : 'NA'}
-                      </div>
+                  </div>
+                  <div className="form-outline form-white  d-flex  col-md-6">
+                    <div className='formWrpLabel'>
+                      <label className="fw-bolder ">Division</label>
                     </div>
+                    <div className='formWrpInpt'>
+                      {userInfoData?.divisionName ? userInfoData?.divisionName : 'NA'}
+                    </div>
+                  </div>
+                </div>
 
-                    <div className="form-outline d-flex">
-                      <div className='formWrpLabel'>
-                        <label className="fw-bolder ">Rental Info.
-                        </label>
+                <div className='d-flex col-md-12'>
+                  <div className="form-outline form-white d-flex col-md-6">
+                    <div className='formWrpLabel'>
+                      <label className="fw-bolder ">Group</label>
+                    </div>
+                    <div className='formWrpInpt'>
+                      {userInfoData?.groupName ? userInfoData?.groupName : 'NA'}
+                    </div>
+                  </div>
+                  <div className="form-outline form-white  d-flex  col-md-6">
+                    <div className='formWrpLabel'>
+                      <label className="fw-bolder ">Team</label>
+                    </div>
+                    <div className='formWrpInpt'>
+                      {userInfoData?.teamName ? userInfoData?.teamName : 'NA'}
+                    </div>
+                  </div>
+                </div>
+
+
+                <div className="form-outline form-white d-flex ">
+                  <div className='formWrpLabel'>
+                    <label className="fw-bolder ">Last Access
+                    </label>
+                  </div>
+                  <div className='formWrpInpt'>
+                    {userInfoData?.lastLoginAt ? userInfoData?.lastLoginAt : 'NA'}
+                  </div>
+                </div>
+
+                <div className="form-outline d-flex">
+                  <div className='formWrpLabel'>
+                    <label className="fw-bolder ">Rental Info.
+                    </label>
+                  </div>
+                  <div className='d-flex'>
+                    <div className='col-md-6'>
+                      <div className='formWrpLabel' style={{ maxWidth: '100%' }}>
+                        <label className="fw-bolder">Supply Rental :{userInfoData.suppliesCount ? userInfoData.suppliesCount : '0'} </label>
                       </div>
-                      <div className='d-flex'>
-                        <div className='col-md-6'>
-                          <div className='formWrpLabel' style={{maxWidth:'100%'}}>
-                            <label className="fw-bolder">Supply Rental :{userInfoData.suppliesCount ? userInfoData.suppliesCount : '0'} </label>
-                          </div>
-                          <div className="border-end px-1">
-                            {userInfoData.suppliesInfo?.map((data, i) => (
-                              <div className='d-flex justify-content-between py-1 gap-2' key={i}>
-                                <div className='d-flex w-50'>
-                                  <p >{data.name ? data?.name : 'NA'} {data.itemNumber ? data?.itemNumber : 'NA'}</p>
-                                </div>
-                                <span className='w-50'> {data?.startDateTime ? `${moment(data?.startDateTime).format("YYYY-MM-DD")}
+                      <div className="border-end px-1">
+                        {userInfoData.suppliesInfo?.map((data, i) => (
+                          <div className='d-flex justify-content-between py-1 gap-2' key={i}>
+                            <div className='d-flex w-50'>
+                              <p >{data.name ? data?.name : 'NA'} {data.itemNumber ? data?.itemNumber : 'NA'}</p>
+                            </div>
+                            <span className='w-50'> {data?.startDateTime ? `${moment(data?.startDateTime).format("YYYY-MM-DD")}
                                                                   ${moment(data?.endDateTime).format("YYYY-MM-DD")}`
-                                  : 'NA'}</span>
-                              </div>
+                              : 'NA'}</span>
+                          </div>
 
-                            ))}
+                        ))}
+                      </div>
+                    </div>
+                    <div className='col-md-6'>
+                      <div className='formWrpLabel' style={{ maxWidth: '100%' }}>
+                        <label className="fw-bolder">Book Rental :{userInfoData.bookRentalCount ? userInfoData.bookRentalCount : '0'} </label>
+                      </div>
+                      <div className="border-start px-1">
+                        {userInfoData.bookRentalInfo?.map((data, i) => (
+                          <div className='d-flex justify-content-between py-1  gap-2' key={i}>
+                            <div className='d-flex w-50'>
+                              <p >{data.title ? data?.title : 'NA'} {data.SIBNCode ? data?.SIBNCode : 'NA'}</p>
+                            </div>
+                            <span className='w-50'> {data?.startDateTime ? `${moment(data?.startDateTime).format("YYYY-MM-DD")} ${moment(data?.endDateTime).format("YYYY-MM-DD")}`
+                              : 'NA'}</span>
                           </div>
-                        </div>
-                        <div className='col-md-6'>
-                          <div className='formWrpLabel' style={{maxWidth:'100%'}}>
-                            <label className="fw-bolder">Book Rental :{userInfoData.bookRentalCount ? userInfoData.bookRentalCount : '0'} </label>
-                          </div>
-                          <div className="border-start px-1">
-                            {userInfoData.bookRentalInfo?.map((data, i) => (
-                              <div className='d-flex justify-content-between py-1  gap-2' key={i}>
-                                <div className='d-flex w-50'>
-                                  <p >{data.title ? data?.title : 'NA'} {data.SIBNCode ? data?.SIBNCode : 'NA'}</p>
-                                </div>
-                                <span className='w-50'> {data?.startDateTime ? `${moment(data?.startDateTime).format("YYYY-MM-DD")} ${moment(data?.endDateTime).format("YYYY-MM-DD")}`
-                                  : 'NA'}</span>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
+                        ))}
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-            {/* </div> */}
           </div>
-       
+        </div>
+        {/* </div> */}
+      </div>
+
     </div>
   )
 }
