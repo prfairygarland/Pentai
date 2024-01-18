@@ -180,7 +180,6 @@ const UserList = () => {
 
 
   const handleStartDateChange = async (date) => {
-    // console.log('startDate =>', date);
     const formattedStartDate = date?.toISOString();
     setStartDate(formattedStartDate);
 
@@ -192,8 +191,7 @@ const UserList = () => {
     setEndDate(formattedEndDate);
 
   };
-  console.log('startDate =>', startDate);
-  console.log('endDate =>', endDate)
+
   // file upload
   const handleFileSelect = (e) => {
     setSelectedFile(null)
@@ -231,7 +229,6 @@ const UserList = () => {
 
         const headers = XLSX.utils.sheet_to_json(worksheet, { header: 1 })[0];
 
-        console.log('Actual Column Headers:', headers);
 
         const expectedHeaders = ['srNo', 'email', 'roleName', 'division', 'company'];
         const isValidHeaders = expectedHeaders.every(expectedHeader =>
@@ -239,13 +236,11 @@ const UserList = () => {
         );
         if (isValidHeaders) {
 
-          console.log('correct')
           // Upload logic
           const formData = new FormData();
           formData.append('attachments', selectedFile);
           orgImportApi(formData).then(response => response)
             .then(data => {
-              console.log('Upload successful:', data.error);
               if (data.status == 200) {
                 getUserListData()
                 setOrgImportVisible(false)
@@ -260,10 +255,8 @@ const UserList = () => {
             .catch(error => {
               setOrgImportVisible(false)
               setIsLoading(false)
-              console.error('Upload failed:', error);
             });
         } else {
-          console.log('correct wrong')
           checkFileFormat(true)
           setIsLoading(false)
         }
@@ -290,7 +283,6 @@ const UserList = () => {
 
         const headers = XLSX.utils.sheet_to_json(worksheet, { header: 1 })[0];
 
-        console.log('Actual Column Headers:', headers);
 
         const expectedHeaders = ['srNo', 'employeeCode', 'KnoxId', 'englishName', 'koreanName', 'email', 'mobile', 'gender', 'company', 'division', 'group', 'jobTitle', 'team'];
         const isValidHeaders = expectedHeaders.every(expectedHeader =>
@@ -298,13 +290,11 @@ const UserList = () => {
         );
         if (isValidHeaders) {
 
-          console.log('correct')
           // Upload logic
           const formData = new FormData();
           formData.append('attachments', selectedFile);
           userImportApi(formData).then(response => response)
             .then(data => {
-              console.log('Upload successful:', data);
               if (data.status == 200) {
                 getUserListData()
                 setUserImportVisible(false)
@@ -318,11 +308,9 @@ const UserList = () => {
             })
             .catch(error => {
               setUserImportVisible(false)
-              console.error('Upload failed:', error);
               setIsLoading(false)
             });
         } else {
-          console.log('correct wrong')
           checkUserFileFormat(true)
           setIsLoading(false)
 
@@ -371,7 +359,6 @@ const UserList = () => {
 
     } catch (error) {
       setIsLoading(false)
-      console.log(error);
     }
   };
 
@@ -402,17 +389,14 @@ const UserList = () => {
       url = url + `&searchId=${typeSelect.id}&${typeSelect.type}=${searchInput}`;
     }
 
-    console.log('dataIds =>', dataIds);
 
     if (dataIds.length > 0) {
       url = url + `&exportId=${JSON.stringify(dataIds)}`;
     }
 
 
-    console.log('url check =>', url);
 
     const res = await getUserListExportData(url)
-    console.log('res =>', res);
 
     if (res.downloadLink) {
       const downloadLink = res.downloadLink;
@@ -427,7 +411,6 @@ const UserList = () => {
 
     } else {
       checkExportSelectid(false)
-      console.log('No data found');
       setIsLoading(false)
       enqueueSnackbar('Something went wrong', { variant: 'error' })
     }
@@ -441,7 +424,6 @@ const UserList = () => {
         setCompaniesData(res.data)
       }
     } catch (error) {
-      console.log('error getCompaniesData =>', error);
     }
   }
 
@@ -456,7 +438,6 @@ const UserList = () => {
       }
     } catch (error) {
       setIsLoading(false)
-      console.log('error getCompaniesData =>', error);
     }
   }
 
@@ -471,7 +452,6 @@ const UserList = () => {
       }
     } catch (error) {
       setIsLoading(false)
-      console.log('error getCompaniesData =>', error);
     }
 
   }
@@ -487,17 +467,14 @@ const UserList = () => {
       }
     } catch (error) {
       setIsLoading(false)
-      console.log('error getCompaniesData =>', error);
     }
 
   }
 
   const getImportHistoryData = async (currentImportHistoryPage) => {
     setIsLoading(true)
-    console.log('currentImportHistoryPage =>', currentImportHistoryPage);
     try {
       let url = `https://ptkapi.experiencecommerce.com/api/adminPanel/importModifiedHistory?pageNo=${currentImportHistoryPage}&limit=${itemsPerPage}`;
-      console.log('start date =>', startDate);
       if (startDate) {
         url = url + `&startDate=${startDate}`
       }
@@ -520,7 +497,6 @@ const UserList = () => {
 
     } catch (error) {
       setIsLoading(false)
-      console.log(error);
     }
   };
 
@@ -572,28 +548,21 @@ const UserList = () => {
 
   const handleImportInputvalue = (event) => {
     setSearchImportInputValue(searchImportInput)
-    console.log('searchImportInput =>', searchImportInput);
   }
 
 
   const [selectedRows, setSelectedRows] = useState([]);
-  console.log('selected ids', typeof selectedRows);
   const handleSelectionChange = useCallback((selectedRowsIds) => {
     setSelectedRows([...selectedRows, selectedRowsIds]);
-    console.log('selected rows type =>', typeof selectedRowsIds);
 
     const getIds = selectedRowsIds.map((item) => {
-      console.log('ites =>', item);
       return item.id.toString();
     })
-    console.log('getIds', getIds)
-    console.log('getIds =>', typeof getIds);
     setDataIds(getIds)
 
   }, []);
 
   const clearAllFilters = () => {
-    console.log('hello');
     setSelectCompany({});
     setSelectDivision({});
     setSelectGroup({});
@@ -609,7 +578,6 @@ const UserList = () => {
   }
 
   const sampleUserExportFile = async () => {
-    console.log('sampleUserExportFile =>');
     const link = document.createElement('a');
     link.href = 'https://ptkapi.experiencecommerce.com/public/uploads/samplefile/sample-file-user-Import.xlsx';
     link.setAttribute('download', `Sample_User_downLoad_${new Date().getTime()}.xlsx`);
@@ -618,7 +586,6 @@ const UserList = () => {
   }
 
   const sampleOrgExportFile = async () => {
-    console.log('sampleUserExportFile =>');
     const link = document.createElement('a');
     link.href = 'https://ptkapi.experiencecommerce.com/public/uploads/samplefile/organisation-Import.xlsx';
     link.setAttribute('download', `Sample_User_downLoad_${new Date().getTime()}.xlsx`);

@@ -428,7 +428,7 @@ const SupplyRentalStatus = () => {
 
   useEffect(() => {
     handleSupplyRenatalData()
-  }, [activeTab, filterData.rentalStatus, filterData.supplyType, filterData.startDate, filterData.endDate, itemsPerPage, currentPage])
+  }, [activeTab, filterData.rentalStatus, filterData.supplyType, filterData.startDate, filterData.endDate, itemsPerPage, currentPage, userInfoPopup])
 
   useEffect(() => {
     getSupplyType()
@@ -713,15 +713,15 @@ const SupplyRentalStatus = () => {
         <div className='mb-2'>
           <CNav variant="underline" className='d-flex gap3 tabNav'>
             <CNavItem >
-              <CNavLink role='button' active onClick={() => handleTabClick('')}>
+              <CNavLink role='button' className={activeTab === '' ? 'active' : ''} onClick={() => handleTabClick('')}>
                 All
               </CNavLink>
             </CNavItem>
             <CNavItem>
-              <CNavLink role='button' onClick={() => handleTabClick('rentalRequest')}>Rental Request</CNavLink>
+              <CNavLink role='button' className={activeTab === 'rentalRequest' ? 'active' : ''} onClick={() => handleTabClick('rentalRequest')}>Rental Request</CNavLink>
             </CNavItem>
             <CNavItem >
-              <CNavLink role='button' onClick={() => handleTabClick('returnRequest')}>Return Request</CNavLink>
+              <CNavLink role='button' className={activeTab === 'returnRequest' ? 'active' : ''} onClick={() => handleTabClick('returnRequest')}>Return Request</CNavLink>
             </CNavItem>
           </CNav>
         </div>
@@ -841,7 +841,6 @@ const SupplyRentalStatus = () => {
 
 
           </CModalHeader>
-          <CModalBody>
           {popUp === 'userDetails' ?
             <SupplyRentalUserDetals userInfoData={userInfoData} type={'supply'} />
             : ''}
@@ -891,7 +890,6 @@ const SupplyRentalStatus = () => {
 
               : ''
           }
-          </CModalBody>
         </CModal >
       </main>
 

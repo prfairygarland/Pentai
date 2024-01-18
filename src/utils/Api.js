@@ -2,9 +2,9 @@ import React from 'react'
 import axios from 'axios'
 import { API_ENDPOINT } from 'src/utils/config'
 
-const getToken = localStorage.getItem('token') ? localStorage.getItem('token') : sessionStorage.getItem('sessionToken')
+// const getToken = localStorage.getItem('token') ? localStorage.getItem('token') : sessionStorage.getItem('sessionToken')
 
-console.log('test dipak =>', getToken);
+// console.log('test token =>', getToken);
 
 // export const PostApi = async (url,value) => {
 //  try {
@@ -28,7 +28,7 @@ export const LoginApi = async (values) => {
 
 export const changePassWordApi = async (values) => {
   try {
-
+    const getToken = localStorage.getItem('token') ? localStorage.getItem('token') : sessionStorage.getItem('sessionToken')
     const reschangePassWord = await axios.post('https://ptkapi.experiencecommerce.com/api/adminPanel/adminChangePassword', values,
       { headers: { token: `${getToken}` } })
     console.log('reschangePassWord data  =>', reschangePassWord.data);
@@ -40,7 +40,7 @@ export const changePassWordApi = async (values) => {
 
 export const getUserList = async (url) => {
   try {
-
+    const getToken = localStorage.getItem('token') ? localStorage.getItem('token') : sessionStorage.getItem('sessionToken')
     const resUserList = await axios.get(url,
       { headers: { token: `${getToken}` } })
     console.log('resUserList data  =>', resUserList.data, getToken);
@@ -52,7 +52,7 @@ export const getUserList = async (url) => {
 
 export const getCompaniesMasterData = async (url) => {
   try {
-
+    const getToken = localStorage.getItem('token') ? localStorage.getItem('token') : sessionStorage.getItem('sessionToken')
     const resCompaniesMasterData = await axios.get(url,
       { headers: { token: `${getToken}` } })
     console.log('resCompaniesMasterData data  =>', resCompaniesMasterData.data);
@@ -64,7 +64,7 @@ export const getCompaniesMasterData = async (url) => {
 
 export const getDivisionMasterData = async (url) => {
   try {
-
+    const getToken = localStorage.getItem('token') ? localStorage.getItem('token') : sessionStorage.getItem('sessionToken')
     const resDivisionMasterData = await axios.get(url,
       { headers: { token: `${getToken}` } })
     console.log('resDivisionMasterData data  =>', resDivisionMasterData.data);
@@ -76,7 +76,7 @@ export const getDivisionMasterData = async (url) => {
 
 export const getGroupMasterData = async (url) => {
   try {
-
+    const getToken = localStorage.getItem('token') ? localStorage.getItem('token') : sessionStorage.getItem('sessionToken')
     const resGroupMasterData = await axios.get(url,
       { headers: { token: `${getToken}` } })
     console.log('resGroupMasterData data  =>', resGroupMasterData.data);
@@ -88,7 +88,7 @@ export const getGroupMasterData = async (url) => {
 
 export const getTeamMasterData = async (url) => {
   try {
-
+    const getToken = localStorage.getItem('token') ? localStorage.getItem('token') : sessionStorage.getItem('sessionToken')
     const resTeamMasterData = await axios.get(url,
       { headers: { token: `${getToken}` } })
     console.log('resTeamMasterData data  =>', resTeamMasterData.data);
@@ -100,7 +100,7 @@ export const getTeamMasterData = async (url) => {
 
 export const getUserListExportData = async (url) => {
   try {
-
+    const getToken = localStorage.getItem('token') ? localStorage.getItem('token') : sessionStorage.getItem('sessionToken')
     const resTeamMasterData = await axios.get(url,
       { headers: { token: `${getToken}` } })
     console.log('getUserListExportData data  =>', resTeamMasterData.data);
@@ -113,7 +113,7 @@ export const getUserListExportData = async (url) => {
 
 export const getUserDetail = async (url) => {
   try {
-
+    const getToken = localStorage.getItem('token') ? localStorage.getItem('token') : sessionStorage.getItem('sessionToken')
     const resUserDetail = await axios.get(url,
       { headers: { token: `${getToken}` } })
     console.log('resUserDetail data  =>', resUserDetail.data);
@@ -125,7 +125,7 @@ export const getUserDetail = async (url) => {
 
 export const userImportApi = async (values) => {
   try {
-
+    const getToken = localStorage.getItem('token') ? localStorage.getItem('token') : sessionStorage.getItem('sessionToken')
     const userImportApi = await axios.post('https://ptkapi.experiencecommerce.com/api/adminPanel/userBulkUpload', values,
       { headers: { token: `${getToken}` } })
     console.log('userImportApi data  =>', userImportApi.data);
@@ -137,7 +137,7 @@ export const userImportApi = async (values) => {
 
 export const orgImportApi = async (values) => {
   try {
-
+    const getToken = localStorage.getItem('token') ? localStorage.getItem('token') : sessionStorage.getItem('sessionToken')
     const orgImportApiData = await axios.post('https://ptkapi.experiencecommerce.com/api/adminPanel/orgBulkUpload', values,
       { headers: { token: `${getToken}` } })
     console.log('orgImportApiData data  =>', orgImportApiData.data);
@@ -149,7 +149,7 @@ export const orgImportApi = async (values) => {
 
 export const getImportHistory = async (url) => {
   try {
-
+    const getToken = localStorage.getItem('token') ? localStorage.getItem('token') : sessionStorage.getItem('sessionToken')
     const resGetImportHistory = await axios.get(url,
       { headers: { token: `${getToken}` } })
     console.log('resUserList data  =>', resGetImportHistory.data);
@@ -161,7 +161,7 @@ export const getImportHistory = async (url) => {
 
 export const getSupplyRental = async (url) => {
   try {
-
+    const getToken = localStorage.getItem('token') ? localStorage.getItem('token') : sessionStorage.getItem('sessionToken')
     const resGetSupplyRental = await axios.get(url,
       { headers: { token: `${getToken}` } })
     console.log('resGetSupplyRental data  =>', resGetSupplyRental.data);
@@ -173,7 +173,7 @@ export const getSupplyRental = async (url) => {
 
 export const getBookRental = async (url) => {
   try {
-
+    const getToken = localStorage.getItem('token') ? localStorage.getItem('token') : sessionStorage.getItem('sessionToken')
     const resGetBookRental = await axios.get(url,
       { headers: { token: `${getToken}` } })
     console.log('resGetBookRental data  =>', resGetBookRental.data);
@@ -185,7 +185,7 @@ export const getBookRental = async (url) => {
 
 export const getOprationClub = async (url) => {
   try {
-
+    const getToken = localStorage.getItem('token') ? localStorage.getItem('token') : sessionStorage.getItem('sessionToken')
     const resGetOprationClub = await axios.get(url,
       { headers: { token: `${getToken}` } })
     console.log('resGetOprationClub data  =>', resGetOprationClub.data);
@@ -197,6 +197,7 @@ export const getOprationClub = async (url) => {
 
 export const getBulletinBoardPostDetails = async (params) => {
   try {
+    const getToken = localStorage.getItem('token') ? localStorage.getItem('token') : sessionStorage.getItem('sessionToken')
     const url = `https://ptkapi.experiencecommerce.com/api/adminPanel/community/postDetailsBulletin${params}`;
     const resBulletinBoardPostDetails = await axios.get(url,
       { headers: { token: `${getToken}` } })
@@ -209,6 +210,7 @@ export const getBulletinBoardPostDetails = async (params) => {
 
 export const getWelfareBoardPostDetails = async (params) => {
   try {
+    const getToken = localStorage.getItem('token') ? localStorage.getItem('token') : sessionStorage.getItem('sessionToken')
     const url = `${API_ENDPOINT.welfare_board_details}${params}`;
     const resWelfareBoardPostDetails = await axios.get(url,
       { headers: { token: `${getToken}` } })
@@ -220,7 +222,7 @@ export const getWelfareBoardPostDetails = async (params) => {
 
 export const getPostLikeListData = async (url) => {
   try {
-
+    const getToken = localStorage.getItem('token') ? localStorage.getItem('token') : sessionStorage.getItem('sessionToken')
     const resPostLikeListData = await axios.get(url,
       { headers: { token: `${getToken}` } })
     console.log('resPostLikeListData data  =>', resPostLikeListData.data);
@@ -232,7 +234,7 @@ export const getPostLikeListData = async (url) => {
 
 export const getPostCommentListData = async (url) => {
   try {
-
+    const getToken = localStorage.getItem('token') ? localStorage.getItem('token') : sessionStorage.getItem('sessionToken')
     const resPostCommentData = await axios.get(url,
       { headers: { token: `${getToken}` } })
     console.log('resPostCommentData data  =>', resPostCommentData.data);
@@ -244,7 +246,7 @@ export const getPostCommentListData = async (url) => {
 
 export const getRepoerHistoryList = async (url) => {
   try {
-
+    const getToken = localStorage.getItem('token') ? localStorage.getItem('token') : sessionStorage.getItem('sessionToken')
     const getRepoerHistoryList = await axios.get(url,
       { headers: { token: `${getToken}` } })
     console.log('RepoerHistoryList data  =>', getRepoerHistoryList.data);
@@ -256,7 +258,7 @@ export const getRepoerHistoryList = async (url) => {
 
 export const getDeleteReasonsList = async (url) => {
   try {
-
+    const getToken = localStorage.getItem('token') ? localStorage.getItem('token') : sessionStorage.getItem('sessionToken')
     const getDeleteReasonsList = await axios.get(url,
       { headers: { token: `${getToken}` } })
     console.log('DeleteReasonsList data  =>', getDeleteReasonsList.data);
@@ -272,13 +274,17 @@ export const getDeleteReasonsList = async (url) => {
 //   accessToken: '12321321',
 // };
 
-const CustomHeader = {
-  accept: 'text/plain',
-  token: getToken,
-};
+// const CustomHeader = {
+//   accept: 'text/plain',
+//   token: localStorage.getItem('token') ? localStorage.getItem('token') : sessionStorage.getItem('sessionToken')
+// };
 
 export const getApi = async (url, header) => {
   {
+    const CustomHeader = {
+      accept: 'text/plain',
+      token: localStorage.getItem('token') ? localStorage.getItem('token') : sessionStorage.getItem('sessionToken')
+    };
     let data = null;
     try {
       let res = await axios.get(url, {
@@ -292,13 +298,16 @@ export const getApi = async (url, header) => {
     } catch (err) {
       console.log(err);
     }
-    console.log('data =>', data.data);
     return data;
   }
 };
 
 export const postApi = async (url, data, header) => {
   {
+    const CustomHeader = {
+      accept: 'text/plain',
+      token: localStorage.getItem('token') ? localStorage.getItem('token') : sessionStorage.getItem('sessionToken')
+    };
     let response = null;
     console.log('date check =>', data);
     try {
@@ -318,6 +327,10 @@ export const postApi = async (url, data, header) => {
 };
 export const putApi = async (url, data, header) => {
   {
+    const CustomHeader = {
+      accept: 'text/plain',
+      token: localStorage.getItem('token') ? localStorage.getItem('token') : sessionStorage.getItem('sessionToken')
+    };
     let response = null;
     try {
       response = await axios.put(url, data, {
@@ -336,6 +349,10 @@ export const putApi = async (url, data, header) => {
 };
 export const deleteApi = async (url, postIdToDelete, header) => {
   {
+    const CustomHeader = {
+      accept: 'text/plain',
+      token: localStorage.getItem('token') ? localStorage.getItem('token') : sessionStorage.getItem('sessionToken')
+    };
     let response = null;
     try {
       response = await axios.delete(url + postIdToDelete, {

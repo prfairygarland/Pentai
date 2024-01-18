@@ -51,15 +51,16 @@ const AllSupplies = () => {
   const [catIds, setCatIds] = useState(null)
   const [subCatIds, setSubCatIds] = useState(null)
   const [subModalIds, setModalIds] = useState(null)
+  const [subItemIds, setItemIds] = useState(null)
   const [getState, setState] = useState(false)
   const [iconSet, setIcon] = useState(null)
   const [iconCatSet, setCatIcon] = useState(null)
   const [iconSubCatSet, setSubCatIcon] = useState(null)
   const [iconModSet, setModIcon] = useState(null)
   const [mainID, setMainID] = useState(null)
-
-
-
+  const [categoryId, setCategoryId] = useState(null)
+  const [subCategoryId, setSubCategoryId] = useState(null)
+  const [getModalId, setGetModalId] = useState(null)
 
 
   const handleChange = (id) => {
@@ -121,6 +122,7 @@ const AllSupplies = () => {
     setSubCategoryData([])
     setModelData([])
     getMainCategoryList();
+    handleAllSupplyRentaldata()
     setModal('allList')
   }, [getState])
 
@@ -175,7 +177,7 @@ const AllSupplies = () => {
     {
       Header: 'Action',
       Cell: ({ row }) => <div className='d-flex gap-4'>
-        <CButton>Modify</CButton>
+        <CButton onClick={() => { handleSetModal('addItem'); setItemIds(row.original.id) }} >Modify</CButton>
         <CButton onClick={() => setDeleteVisible(true)}>Delete</CButton>
 
       </div>
@@ -190,7 +192,6 @@ const AllSupplies = () => {
       let url = API_ENDPOINT.get_main_category_list
       const response = await getApi(url)
 
-      console.log('test responce =>',);
       if (response?.status === 200) {
         setMainCategoryData(response?.data)
         // setUserInfoPopup(true)
@@ -206,7 +207,6 @@ const AllSupplies = () => {
       let url = API_ENDPOINT.get_category_list + `?mainCategoryId=${id}`
       const response = await getApi(url)
 
-      console.log('test responce =>', response);
       if (response?.status === 200) {
         setCategoryData(response?.data)
         // setUserInfoPopup(true)
@@ -224,7 +224,6 @@ const AllSupplies = () => {
       let url = API_ENDPOINT.get_sub_category_list + `?categoryId=${id}`
       const response = await getApi(url)
 
-      console.log('test responce =>', response);
       if (response?.status === 200) {
         setSubCategoryData(response?.data)
         // setUserInfoPopup(true)
@@ -242,7 +241,6 @@ const AllSupplies = () => {
       let url = API_ENDPOINT.get_model_list + `?subCategoryId=${id}`
       const response = await getApi(url)
 
-      console.log('test responce =>', response);
       if (response?.status === 200) {
         setModelData(response?.data)
         // setUserInfoPopup(true)
@@ -261,7 +259,6 @@ const AllSupplies = () => {
       let url = API_ENDPOINT.get_item_list + `?categoryId=${Cid}&subCategoryId=${Sid}&supplyModelId=${Mid}`
       const response = await getApi(url)
 
-      console.log('test responce =>', response);
       if (response?.status === 200) {
         setItemData(response?.data)
         // setUserInfoPopup(true)
@@ -434,7 +431,10 @@ const AllSupplies = () => {
       setModal('addModal')
     } else if (type === 'addItem') {
       if (add === 'add') {
-        setModalIds(null)
+        setItemIds(null)
+        console.log('supplyID =>', mainID);
+      } else {
+        setMainID(null)
       }
       setModal('addItem')
     }
@@ -511,7 +511,7 @@ const AllSupplies = () => {
                                                       <p role='button' onClick={() => (setModalId(subCatTab.id), setModalIds(modalTab.id), handleSetModal('addModal'))}>{modalTab.name}</p>
                                                     </div>
                                                     <div>
-                                                      <CButton className='btn-sm' onClick={() => { setMainID(tab.id); setItemName(modalTab.name); handleSetModal('addItem') }}>Add sub</CButton>
+                                                      <CButton className='btn-sm' onClick={() => { setCategoryId(catTab.id); setSubCategoryId(subCatTab.id); setMainID(tab.id); setItemName(modalTab.name); setGetModalId(modalTab.id); handleSetModal('addItem', 'add') }}>Add sub</CButton>
                                                     </div>
                                                   </div>
                                                   {sideItemId === modalTab.id &&
@@ -521,7 +521,7 @@ const AllSupplies = () => {
                                                           <div className='d-flex justify-content-between ms-5 mt-2'>
                                                             <div className='d-flex align-items-center gap-1'>
                                                               {/* <CIcon onClick={() => (getItemList(catTab.id, subCatTab.id, itemTab.id))} icon={cibZeit} size="sm" /> */}
-                                                              <p role='button' onClick={() => (setModalId(subCatTab.id), setModalIds(itemTab.id), handleSetModal('addItem'))}>{itemTab.name}</p>
+                                                              <p role='button' onClick={() => { setItemName(modalTab.name); setItemIds(itemTab.id); handleSetModal('addItem') }}>{itemTab.itemNumber}</p>
                                                             </div>
                                                             {/* <div>
                                                               <CButton className='btn-sm' onClick={() => handleSetModal('addSubCategory')}>Add sub</CButton>
@@ -659,33 +659,24 @@ const AllSupplies = () => {
         </CModal>
 
         {getModal === 'addSupplyType' &&
-          
-            <AddSupplyType Modal={setModal} getId={ids} removeIds={setIds} />
-         
+
+          <AddSupplyType setModal={setState} getMod={getState} Modal={setModal} getId={ids} removeIds={setIds} getVal={setIcon} />
         }
 
         {getModal === 'addCategory' &&
-          
-            <AddCategory setModal={setState} getMod={getState} Modal={setModal} getMainCatId={suppyId} getCatId={catIds} removeCatIds={setCatIds} />
-          
+          <AddCategory setModal={setState} getMod={getState} Modal={setModal} getMainCatId={suppyId} getCatId={catIds} removeCatIds={setCatIds} getVal={setIcon} />
         }
 
         {getModal === 'addSubCategory' &&
-        
-            <AddSubCategory setModal={setState} getMod={getState} Modal={setModal} getMainSubCatId={catId} getSubCatId={subCatIds} removeSubCatIds={setSubCatIds} />
-         
+          <AddSubCategory setModal={setState} getMod={getState} Modal={setModal} getMainSubCatId={catId} getSubCatId={subCatIds} removeSubCatIds={setSubCatIds} getVal={setIcon} setCat={setCatIcon} />
         }
 
         {getModal === 'addModal' &&
-        
-            <AddModel setModal={setState} getMod={getState} Modal={setModal} getMainModalId={modalId} getModalId={subModalIds} removeModalIds={setModalIds} />
-         
+          <AddModel setModal={setState} getMod={getState} Modal={setModal} getMainModalId={modalId} getModalId={subModalIds} removeModalIds={setModalIds} getVal={setIcon} setCat={setCatIcon} setModalI={setSubCatIcon} />
         }
 
         {getModal === 'addItem' &&
-       
-            <AddItem setModal={setState} getMod={getState} modalName={itemName} supplyID={mainID} />
-          
+          <AddItem setModal={setState} getMod={getState} Modal={setModal} modalName={itemName} supplyID={mainID} setMainIds={setMainID} getVal={setIcon} setCat={setCatIcon} setModalI={setSubCatIcon} getItemId={subItemIds} removeItemIds={setItemIds} getCatId={categoryId} setCatId={setCategoryId} getSubCatId={subCategoryId} setSubCatId={setSubCategoryId} getModId={getModalId} setModId={setGetModalId} />
         }
 
 

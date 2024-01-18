@@ -129,7 +129,6 @@ const UserDetails = () => {
 
   ], [currentOperationClubPage, itemsPerPage])
 
-  // console.log('location =>', location.state.userId)
 
   const getSupplyRentallistData = async (currentSuppliesRentalPage) => {
     try {
@@ -143,7 +142,6 @@ const UserDetails = () => {
         setTotalSuppliesRentalPages(Math.ceil(res.totalSupply / Number(itemsPerPage)));
       }
     } catch (error) {
-      console.log('error getCompaniesData =>', error);
     }
   }
 
@@ -161,7 +159,6 @@ const UserDetails = () => {
 
       }
     } catch (error) {
-      console.log('error getCompaniesData =>', error);
     }
   }
 
@@ -179,7 +176,6 @@ const UserDetails = () => {
 
       }
     } catch (error) {
-      console.log('error getCompaniesData =>', error);
     }
   }
 
@@ -193,7 +189,6 @@ const UserDetails = () => {
         setUserDetailsData(res.data)
       }
     } catch (error) {
-      console.log('error getCompaniesData =>', error);
     }
   }
 
@@ -203,7 +198,6 @@ const UserDetails = () => {
 
   const handleSupplyPageChange = (selectedPage) => {
     // setCurrentSuppliesRentalPage(selectedPage.selected)
-    console.log('selectedPage.selected =>', selectedPage.selected);
     getSupplyRentallistData(selectedPage.selected + 1)
   }
 
@@ -217,17 +211,12 @@ const UserDetails = () => {
 
 
   const [selectedRows, setSelectedRows] = useState([]);
-  console.log('selected ids', typeof selectedRows);
   const handleSelectionChange = useCallback((selectedRowsIds) => {
     setSelectedRows([...selectedRows, selectedRowsIds]);
-    console.log('selected rows type =>', typeof selectedRowsIds);
 
     const getIds = selectedRowsIds.map((item) => {
-      console.log('ites =>', item);
       return item.id.toString();
     })
-    console.log('getIds', getIds)
-    console.log('getIds =>', typeof getIds);
     // setDataIds(getIds)
 
   }, []);
@@ -489,7 +478,7 @@ const UserDetails = () => {
                               <div className='userdetailPopTable'>
                                <ReactTable className='d-flex ' showCheckbox={false} columns={operationClubColumns} data={oprationClubData} totalCount={5} onSelectionChange={handleSelectionChange} />
                                </div>
-                           
+
                                 <div className='userlist-pagination dataTables_paginate '>
                                   <ReactPaginate
                                     breakLabel={'...'}
