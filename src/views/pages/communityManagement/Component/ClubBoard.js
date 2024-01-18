@@ -1,8 +1,8 @@
-import { CButton, CForm, CFormInput, CFormLabel, CFormSelect, CFormSwitch, CModal, CModalBody, CModalHeader, CModalTitle } from '@coreui/react';
+import { CButton, CForm, CFormCheck, CFormInput, CFormSelect, CFormSwitch, CModal, CModalBody, CModalHeader, CModalTitle } from '@coreui/react';
 import React, { useEffect, useMemo, useState } from 'react'
 import './boardManagement.scss'
 import ReactTable from 'src/components/common/ReactTable';
-import { API_ENDPOINT } from 'src/utils/config';
+import { ALL_CONSTANTS, API_ENDPOINT } from 'src/utils/config';
 import { getApi, postApi } from 'src/utils/Api';
 import ReactPaginate from 'react-paginate';
 import { paginationItemPerPageOptions } from 'src/utils/constant';
@@ -32,9 +32,30 @@ const ClubBoard = () => {
     const [recruitmentEnd, setRecruitmentEnd] = useState('')
     const [minParticipants, setMinParticipants] = useState(1)
     const [maxParticipantsPerGroup, setMaxParticipantsPerGroup] = useState(10)
-
     const [searchTxt, setSearchTxt] = useState('')
     const [clubActivityListData, setClubActivityListData] = useState({})
+
+
+    const [addModifyClubBannerModal, setAddModifyClubBannerModal] = useState(false)
+    const [bannerTitle, setBannerTitle] = useState('')
+    const [bannerStartDate, setBannerStartDate] = useState('')
+    const [bannerStartHours, setBannerStartHours] = useState('00')
+    const [bannerStartMins, setBannerStartMins] = useState('00')
+    const [bannerEndDate, setBannerEndDate] = useState('')
+    const [bannerEndHours, setBannerEndHours] = useState('00')
+    const [bannerEndMins, setBannerEndMins] = useState('00')
+    const [uploadedBannerImage, setUploadedBannerImage] = useState('')
+    const [imageType, setImageType] = useState('bannerImageOnly')
+    const [linkToUrl, setLinkToUrl] = useState('')
+    const [popupImage, setPopupImage] = useState('')
+    const [clubBannerData, setClubBannerData] = useState({})
+    const [totalclubBannerDataCount, setTotalclubBannerDataCount] = useState(0)
+    const [currentPageClubBanner, setCurrentPageClubBanner] = useState(0)
+    const [itemsPerPageClubBanner, setItemsPerPageClubBanner] = useState(5)
+    const [totalPagesClubBanner, setTotalPagesClubBanner] = useState(0)
+    const [clubBannerImagesFromDB, setClubBannerImagesFromDB] = useState([])
+
+
 
 
     const getClubRegistrationPeriodsBySearch = async (id) => {
@@ -82,7 +103,7 @@ const ClubBoard = () => {
       setMinParticipants(minParticipants)
       setMaxParticipantsPerGroup(maxParticipantsPerGroup)
     }
-
+    
     const clubPeriodDataColumns = useMemo(
       () => [
         {
@@ -274,6 +295,10 @@ const ClubBoard = () => {
       setCurrentPage(selectedPage.selected)
     }
 
+    const handlePageChangeClubBanner = (selectedPage) => {
+      setCurrentPageClubBanner(selectedPage.selected)
+    }
+
     const handlePageChangeOfClubActivity = (selectedPage) => {
       setCurrentPageOfClubActivity(selectedPage.selected)
     }
@@ -281,6 +306,221 @@ const ClubBoard = () => {
     const handleShowClubPeriodToggle = () => {
       setShowClubPeriod((prev) => !prev)
     }
+
+    const handleShowClubBannerToggle = () => {
+      setShowClubBanner((prev) => !prev)
+    }
+
+    const cancelBannerModalHandler = () => {
+      setAddModifyClubBannerModal(false)
+    }  
+    
+    const validateClubBannerHandler = () => {
+      if(bannerTitle.trim() === '') {
+        enqueueSnackbar('Please enter title', { variant: 'error' })
+        return false
+      } else if(bannerStartDate === '') {
+        enqueueSnackbar('Please select start date', { variant: 'error' })
+        return false
+      } else if(bannerStartHours === '00' && bannerStartMins === '00') {
+        enqueueSnackbar('Please select start time', { variant: 'error' })
+        return false
+      } else if(bannerEndDate === '') {
+        enqueueSnackbar('Please select end date', { variant: 'error' })
+        return false
+      } else if(bannerEndHours === '00' && bannerEndMins === '00') {
+        enqueueSnackbar('Please select end time', { variant: 'error' })
+        return false
+      } else if(uploadedBannerImage === '') {
+        enqueueSnackbar('Please upload banner image', { variant: 'error' })
+        return false
+      } else if(imageType === 'linkTo' && linkToUrl === '') {
+        enqueueSnackbar('Please enter url', { variant: 'error' })
+        return false
+      } else if(imageType === 'popUpImage' && popupImage === '') {
+        enqueueSnackbar('Please upload popup image', { variant: 'error' })
+        return false
+      } else {
+        saveClubBannerHandler()
+      }
+    }
+
+    const saveClubBannerHandler = async () => {
+      try {
+        const formData = new FormData()
+        formData.append('title', bannerTitle)
+        formData.append('startDateTime', new Date(bannerStartDate + 'T' + bannerStartHours + ':' + bannerStartMins))
+        formData.append('endDateTime', new Date(bannerEndDate + 'T' + bannerEndHours + ':' + bannerEndHours))
+        formData.append('image', uploadedBannerImage)
+        formData.append('type', imageType)
+        if(imageType === 'linkTo') {
+          formData.append('linkUrl', linkToUrl)
+        }
+        if(imageType === 'popUpImage') {
+          formData.append('popUpImage', popupImage)
+        }
+        const res = await postApi(API_ENDPOINT.create_club_banner, formData)        
+        if(res.status === 200) {
+            enqueueSnackbar('Club Banner Added Successfully', { variant: 'success' })
+        }
+        setAddModifyClubBannerModal(false)
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
+    const handleBannerStartDate = (event) => {
+      let d = new Date(event),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear()
+      if (month.length < 2) month = '0' + month
+      if (day.length < 2) day = '0' + day
+      setBannerStartDate([year, month, day].join('-'))
+    }
+
+    const bannerStartTimeHandler = (e) => {
+      setBannerStartHours(e.target.value.split(':')[0])
+      setBannerStartMins(e.target.value.split(':')[1])
+    }
+
+    const handleBannerEndDate = (event) => {
+      let d = new Date(event),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear()
+      if (month.length < 2) month = '0' + month
+      if (day.length < 2) day = '0' + day
+      setBannerEndDate([year, month, day].join('-'))
+    }
+
+    const bannerEndTimeHandler = (e) => {
+      setBannerEndHours(e.target.value.split(':')[0])
+      setBannerEndMins(e.target.value.split(':')[1])
+    }
+
+    const getClubBanners = async () => {
+      try {
+        let url = `${API_ENDPOINT.get_club_banners}?offset=${currentPage+1}&limit=${itemsPerPage}`
+        const res = await getApi(url)
+  
+        if (res.status === 200) {
+          setClubBannerData(res.data)
+
+
+          //     const images = await urlsToFiles(respData?.images)
+          // setUploadedImages(images)
+          // const files = await urlsToFiles(respData?.attachments)
+          // setUploadedFiles(files)
+
+
+
+          setTotalclubBannerDataCount(res.totalCount)
+          setTotalPagesClubBanner(Math.ceil(res.totalCount / Number(itemsPerPageClubBanner)))
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
+    async function urlToBlob(url) {
+      const response = await fetch(url)
+      const blob = await response.blob()
+      return blob
+    }
+  
+    const urlToFiles = async (url) => {
+      console.log(url)
+        const blob = await urlToBlob(ALL_CONSTANTS.BASE_URL + url)
+        const fileName = url
+        return new File([blob], fileName, { type: blob.type })
+    }
+
+    const getImageUrl = async (image) => {
+      return await urlToFiles(image)
+    }
+
+    const clubBannerDataColumns = useMemo(
+     () => [
+        {
+          Header: <p className="text-center">No</p>,
+          accessor: 'number',
+          Cell: ({ row }) => {
+            return currentPageClubBanner * itemsPerPageClubBanner + (row.index + 1)
+          },
+        },
+        {
+          Header: <p className="text-center">Thumbnail Image</p>,
+          accessor: 'regPeriod',
+          Cell: ({ row }) => (
+            <div style={{width: '150px', height: '100px'}}>
+              <img crossOrigin="anonymous" style={{width: '150px', height: '100px'}} src={ALL_CONSTANTS.BASE_URL + row.original.image} alt='' />
+            </div>
+          ),
+        },
+        {
+          Header: <p className="text-center">Title</p>,
+          accessor: 'firstDeadline',
+          Cell: ({ row }) => (
+            <p
+              role="button"
+              className="text-center"
+            >
+              {row.original.title}
+            </p>
+          ),
+        },
+        {
+          Header: <p className="text-center">Posting Period</p>,
+          accessor: 'recPeriod',
+          Cell: ({ row }) => (
+            <p
+              role="button"
+              className="text-center"
+            >
+              {new Date(row.original.startDateTime).toLocaleString()} - {new Date(row.original.endDateTime).toLocaleString()}
+            </p>
+          ),
+        },
+        {
+          Header: <p className="text-center">Status</p>,
+          accessor: 'finalDeadline',
+          Cell: ({ row }) => (
+            <p
+              role="button"
+              className="text-center"
+            >
+              {row.original.status}
+            </p>
+          ),
+        },
+        {
+          Header: <p className="text-center">Type</p>,
+          accessor: 'minPart',
+          Cell: ({ row }) => (
+            <p
+              role="button"
+              className="text-center"
+            >
+              {row.original.type}
+            </p>
+          ),
+        },
+        {
+          Header: <p className="text-center">Action</p>,
+          accessor: 'maxLimit',
+          Cell: ({ row }) => (
+            <p
+              role="button"
+              className="text-center"
+            >
+              Delete
+            </p>
+          ),
+        },
+      ],
+      [currentPageClubBanner, itemsPerPageClubBanner],
+    )
 
     const viewActivityList = async (id = viewActivityRegistrationId) => {
       if(viewActivityRegistrationId === '' && id === '') {
@@ -300,6 +540,10 @@ const ClubBoard = () => {
       } catch (error) {
         console.log(error)
       }
+    }
+
+    const addNewClubBannerHandler = () => {
+      setAddModifyClubBannerModal(true)
     }
 
     const addNewClubPeriodHandler = () => {
@@ -355,11 +599,11 @@ const ClubBoard = () => {
       }
     }
 
-    const cancelHandler = () => {
+    const cancelPeriodModalHandler = () => {
       setAddModifyClubPeriodModal(false)
     }
 
-    const saveHandler = () => {
+    const validateClubPeriodHandler = () => {
       if(clubTitle.trim() === '') {
         enqueueSnackbar('Please enter title', { variant: 'error' })
         return false
@@ -428,6 +672,10 @@ const handleRecruitEndChange = (event) => {
     }, [currentPage, itemsPerPage])
 
     useEffect(() => {
+      getClubBanners()
+    }, [currentPageClubBanner, itemsPerPageClubBanner])
+
+    useEffect(() => {
       viewActivityList()
     }, [currentPageOfClubActivity, itemsPerPageOfClubActivity])
     return (
@@ -464,7 +712,7 @@ const handleRecruitEndChange = (event) => {
                   marginPagesDisplayed={1}
                   previousLabel={<button>Previous</button>}
                   nextLabel={<button>Next</button>}
-                  pageCount={totalPages}
+                  pageCount={totalPagesClubBanner}
                   onPageChange={handlePageChange}
                   forcePage={currentPage}
                   renderOnZeroPageCount={null}
@@ -551,9 +799,6 @@ const handleRecruitEndChange = (event) => {
             {clubActivityListData.length === 0 && <>No Data Available</>}
           </CModalBody>
         </CModal>
-
-
-
         <CModal className='modal-lg'
           alignment="center"
           visible={addModifyClubPeriodModal}
@@ -675,17 +920,246 @@ const handleRecruitEndChange = (event) => {
                 <div>&nbsp;&nbsp;&nbsp;&nbsp;%</div>
               </div>
               <div className="d-flex justify-content-evenly">
-                <CButton onClick={cancelHandler}>Cancel</CButton>
-                <CButton onClick={saveHandler}>{periodId ? 'Update' : 'Save'}</CButton>
+                <CButton onClick={cancelPeriodModalHandler}>Cancel</CButton>
+                <CButton onClick={validateClubPeriodHandler}>{periodId ? 'Update' : 'Save'}</CButton>
               </div>
           </CModalBody>
         </CModal>
-
       </div>}
       <div className='toggleContainer'>
         <div>Club Banner</div>
-        <div><CFormSwitch id="club_banner" className="cFormSwitch" defaultChecked={showClubBanner}/></div>
+        <div><CFormSwitch id="club_banner" className="cFormSwitch" onClick={handleShowClubBannerToggle} defaultChecked={showClubBanner}/></div>
       </div>
+      {showClubBanner && <div>
+        <CForm className="d-flex justify-content-end mt-2">
+          <CButton color="dark" className="my-2 my-sm-0 ps-3 pe-4" type="button" onClick={addNewClubBannerHandler}>
+            Add
+          </CButton>
+        </CForm>
+        {totalclubBannerDataCount > 0 && <p style={{ margin: 0 }}>Total&nbsp;:&nbsp; {totalclubBannerDataCount}</p>}
+        <ReactTable
+          columns={clubBannerDataColumns}
+          data={clubBannerData}
+          showCheckbox={false}
+          onSelectionChange={() => {}}
+        />
+        <div className="d-flex w-100 justify-content-center gap-3">
+          {clubBannerData?.length > 0 && (
+            <div className="userlist-pagination">
+              <div className="userlist-pagination dataTables_paginate">
+                <ReactPaginate
+                  breakLabel={'...'}
+                  marginPagesDisplayed={1}
+                  previousLabel={<button>Previous</button>}
+                  nextLabel={<button>Next</button>}
+                  pageCount={totalPagesClubBanner}
+                  onPageChange={handlePageChangeClubBanner}
+                  forcePage={currentPageClubBanner}
+                  renderOnZeroPageCount={null}
+                  pageRangeDisplayed={4}
+                />
+              </div>
+            </div>
+          )}
+          {clubPeriodData?.length > 0 && (
+            <div className="d-flex align-items-center gap-2 mt-2">
+              <label>Show</label>
+              <CFormSelect
+                className=""
+                aria-label=""
+                options={paginationItemPerPageOptions}
+                onChange={(event) => {
+                  setItemsPerPageClubBanner(parseInt(event?.target?.value))
+                  setCurrentPageClubBanner(0)
+                }}
+              />
+              <label>Lists</label>
+            </div>
+          )}
+        </div>
+        
+        <CModal className='modal-lg'
+          alignment="center"
+          visible={addModifyClubBannerModal}
+          onClose={() => {
+            setAddModifyClubBannerModal(false)
+          }}
+          backdrop="static"
+          aria-labelledby="LiveDemoExampleLabel"
+        >
+          <CModalHeader
+            onClose={() => {
+              setAddModifyClubBannerModal(false)
+            }}
+          >
+            <CModalTitle className="p-1">Banner Registration</CModalTitle>
+          </CModalHeader>
+          <CModalBody>              
+            <div className="card-body">
+              <div className="formWraper">
+                <div className="form-outline form-white  d-flex ">
+                  <div className="formWrpLabel">
+                    <label className="fw-bolder ">
+                      Banner Title <span className="mandatory-red-asterisk">*</span>
+                    </label>
+                  </div>
+                  <div className="formWrpInpt">
+                    <div className="d-flex formradiogroup mb-2 gap-3">
+                      <CFormInput
+                        type="text"
+                        placeholder="Enter Title Here"
+                        name="title"
+                        value={bannerTitle}
+                        onChange={(e) => {
+                          setBannerTitle(e.target.value)
+                        }}
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div className="form-outline form-white  d-flex ">
+                  <div className="formWrpLabel">
+                    <label className="fw-bolder ">Posting Period</label>
+                  </div>
+                  <div className="upload-image-main-container">
+                    <div className="upload-img-btn-and-info">
+                      <div>
+                        <DatePicker
+                          value={bannerStartDate}
+                          minDate={new Date()}
+                          onChange={(event) => handleBannerStartDate(event)}
+                        />
+                      </div>
+                      <div>
+                        <input
+                          type="time"
+                          name="time"
+                          id="time"
+                          className="time-picker"
+                          value={`${bannerStartHours}:${bannerStartMins}`}
+                          onChange={(e) => bannerStartTimeHandler(e)}
+                        />
+                      </div>
+                      -&nbsp;&nbsp;
+                      <div>
+                        <DatePicker
+                          value={bannerEndDate}
+                          minDate={new Date()}
+                          onChange={(event) => handleBannerEndDate(event)}
+                        />
+                      </div>
+                      <div>
+                        <input
+                          type="time"
+                          name="time"
+                          id="time"
+                          className="time-picker"
+                          value={`${bannerEndHours}:${bannerEndMins}`}
+                          onChange={(e) => bannerEndTimeHandler(e)}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="form-outline form-white  d-flex ">
+                  <div className="formWrpLabel">
+                    <label className="fw-bolder ">Upload Image</label>
+                  </div>
+                  <div className="upload-image-main-container">
+                    <div className="upload-img-btn-and-info">
+                      <div className="upload-container-btn">
+                        <label className="label-btn" color="dark" htmlFor="imageFiles">
+                          Upload
+                          <input
+                            type="file"
+                            name="imageFiles"
+                            id="imageFiles"
+                            style={{ display: 'none' }}
+                            accept=".png, .jpg, .jpeg, .gif"
+                            onChange={(e) => setUploadedBannerImage(e.target.files[0])}
+                          />
+                        </label>
+                      </div>
+                      {uploadedBannerImage && <div className="upload-images-container uploadImgWrap">
+                          <div className='thubmnail-img-container'>
+                            <img src={URL.createObjectURL(uploadedBannerImage)} alt="" />
+                          </div>
+                      </div>}
+                    </div>
+                  </div>
+                </div>
+                <div className="form-outline form-white  d-flex ">
+                  <div className="formWrpLabel">
+                    <label className="fw-bolder ">Banner Type</label>
+                  </div>
+                  <div className="upload-image-main-container">
+                  <div className="push-notification-container gap-3">
+                    <CFormCheck
+                      type="radio"
+                      name="imageType"
+                      defaultChecked={imageType === 'bannerImageOnly'}
+                      onClick={() => {setImageType('bannerImageOnly'); setLinkToUrl(''); setPopupImage('')}}
+                      label="Banner Image Only"
+                      value={true}
+                    />
+                  </div>
+                  <div className="push-notification-container gap-3">
+                    <CFormCheck
+                      type="radio"
+                      name="imageType"
+                      defaultChecked={imageType === 'linkTo'}
+                      onClick={() => {setImageType('linkTo'); setPopupImage('')}}
+                      label="Link To"
+                      value={false}
+                    />
+                    <CFormInput
+                        type="text"
+                        placeholder="Enter URL"
+                        name="title"
+                        value={linkToUrl}
+                        disabled={imageType !== 'linkTo'}
+                        onChange={(e) => {
+                          setLinkToUrl(e.target.value)
+                        }}
+                      />
+                  </div>
+                  <div className="push-notification-container gap-3">
+                    <CFormCheck
+                      type="radio"
+                      name="imageType"
+                      defaultChecked={imageType === 'popUpImage'}
+                      onClick={() => {setImageType('popUpImage'); setLinkToUrl('')}}
+                      label="Pop-up Image"
+                      value={false}
+                    />
+                    <label className="label-btn" color="dark" htmlFor="popupImg" style={{display: `${imageType === 'popUpImage' ? '' : 'none'}`}}>
+                          Upload
+                          <input
+                            type="file"
+                            name="popupImg"
+                            id="popupImg"
+                            style={{ display: 'none', disabled: 'true' }}
+                            accept=".png, .jpg, .jpeg, .gif"
+                            onChange={(e) => setPopupImage(e.target.files[0])}
+                          />
+                    </label>
+                  </div>
+                  {imageType === 'popUpImage' && popupImage && <div className="upload-images-container uploadImgWrap">
+                      <div className='thubmnail-img-container'>
+                        <img src={URL.createObjectURL(popupImage)} alt="" />
+                      </div>
+                  </div>}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="d-flex justify-content-evenly">
+              <CButton onClick={cancelBannerModalHandler}>Cancel</CButton>
+              <CButton onClick={validateClubBannerHandler}>{periodId ? 'Update' : 'Save'}</CButton>
+            </div>
+          </CModalBody>
+        </CModal>
+      </div>}
     </div>
   )
 }
