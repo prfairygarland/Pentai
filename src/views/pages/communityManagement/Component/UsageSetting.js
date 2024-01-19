@@ -3,11 +3,13 @@ import React, { useEffect, useState } from 'react'
 import { getApi, postApi, putApi } from 'src/utils/Api'
 import { API_ENDPOINT } from 'src/utils/config'
 import { enqueueSnackbar } from 'notistack'
+import ConfirmationModal from 'src/utils/ConfirmationModal'
 
 const UsageSetting = (props) => {
   const [radioGroupValue, setRadioGroupValue] = useState({})
   const [prohabitedWords, setProhabitedWords] = useState([])
   const [addInputValue, setAddInputValue] = useState('')
+  const [modalProps, setModalProps] = useState({})
 
   useEffect(() => {
     getUsageStatus()
@@ -81,8 +83,46 @@ const UsageSetting = (props) => {
     setProhabitedWords(filterdWord)
   }
 
-  const handleRemoveAllWords = () => {
-    setProhabitedWords([])
+  const removeAllWords = async () => {
+    // setProhabitedWords([])
+    const body = {
+      deleteAll: true,
+      id: '1',
+    }
+    try {
+      let url = `${API_ENDPOINT.delete_all_prohabited_words}`
+      const res = await putApi(url, body)
+      if (res?.status === 200) {
+        enqueueSnackbar(`Deleted All Prohibited Words Successfully`, { variant: 'success' })
+      } else {
+        enqueueSnackbar(`Something went wrong! `, { variant: 'error' })
+      }
+    } catch (error) {
+      enqueueSnackbar(`Something went wrong! `, { variant: 'error' })
+    }
+    setModalProps({
+      isModalOpen: false
+    })
+    getProhabitedWords()
+  }
+
+  const cancelRemoveAllWords = () => {
+    setModalProps({
+      isModalOpen: false
+    })
+  }
+
+  const confirmationDeleteAllHandler = (isOpen) => {
+    setModalProps({
+      isModalOpen: isOpen,
+      title: 'Confirmation',
+      content: 'Are you sure you want to delete all prohibited words?',
+      cancelBtn: 'No',
+      cancelBtnHandler: cancelRemoveAllWords,
+      successBtn: 'Yes',
+      successBtnHandler: () => removeAllWords(),
+      modalCloseHandler: confirmationDeleteAllHandler,
+    })
   }
 
   const addProhabitedWord = () => {
@@ -111,6 +151,28 @@ const UsageSetting = (props) => {
     } catch (error) {
       enqueueSnackbar(`Something went wrong! `, { variant: 'error' })
     }
+    setModalProps({
+      isModalOpen: false
+    })
+  }
+
+  const cancelSaveAllWords = () => {
+    setModalProps({
+      isModalOpen: false
+    })
+  }
+
+  const confirmationSaveAllHandler = (isOpen) => {
+    setModalProps({
+      isModalOpen: isOpen,
+      title: 'Confirmation',
+      content: 'Are you sure you want to save all prohibited words?',
+      cancelBtn: 'No',
+      cancelBtnHandler: cancelSaveAllWords,
+      successBtn: 'Yes',
+      successBtnHandler: () => handleSaveProhibitedWords(),
+      modalCloseHandler: confirmationSaveAllHandler,
+    })
   }
 
   const disableStyle = {
@@ -119,6 +181,7 @@ const UsageSetting = (props) => {
   }
   return (
     <section>
+      <ConfirmationModal modalProps={modalProps} />
       <div className="formWraper mt-3">
         <div className="form-outline form-white  d-flex ">
           <div className="formWrpLabel">
@@ -290,7 +353,7 @@ const UsageSetting = (props) => {
               </div>
               <div className="d-flex justify-content-end mt-2">
                 <CCol xs="auto">
-                  <CButton type="submit" onClick={handleRemoveAllWords} className="mb-3 btn-dark">
+                  <CButton type="submit" onClick={confirmationDeleteAllHandler} className="mb-3 btn-dark">
                     Delete All
                   </CButton>
                 </CCol>
@@ -302,7 +365,7 @@ const UsageSetting = (props) => {
       <hr />
       <div className="d-flex justify-content-center">
         <CCol xs="auto">
-          <CButton type="submit" className="mb-3 btn-dark" onClick={handleSaveProhibitedWords}>
+          <CButton type="submit" className="mb-3 btn-dark" onClick={confirmationSaveAllHandler}>
             Save Prohibited Words
           </CButton>
         </CCol>
