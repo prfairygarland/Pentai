@@ -75,7 +75,7 @@ const ButtingBorad = () => {
 
   const handleBulletinSearchData = async () => {
     try {
-      const res = await getApi(API_ENDPOINT.bulletin_search + `?pageNo=${1}`)
+      const res = await getApi(API_ENDPOINT.bulletin_search)
       console.log('res =>', res.status)
       if (res.status == 200) {
         setSearchData(res.data)
@@ -143,7 +143,7 @@ const ButtingBorad = () => {
           isAdminOnly: false,
           annonymousBoard: false,
         })
-        enqueueSnackbar(`It has been saved`, { variant: 'success' })
+        enqueueSnackbar(`Bulletin Boards Added Successfully`, { variant: 'success' })
         setVisible(false)
         setId()
         handleBulletinSearchData()
@@ -448,7 +448,9 @@ const ButtingBorad = () => {
                                     type="number"
                                     className="h-25 w-25 "
                                     id="inputPassword2"
-                                    placeholder="0"
+                                    min={1}
+                                    max={999}
+                                    placeholder="1~999"
                                     value={pointsData?.pointsPerPost}
                                     disabled={!pointsData?.pointsPerPostenabled}
                                     onChange={(e) =>
@@ -457,6 +459,7 @@ const ButtingBorad = () => {
                                         pointsPerPost: e.target.value,
                                       }))
                                     }
+                                    onKeyDown={(e) => e.preventDefault()}
                                   />{' '}
                                   <span>Points</span>
                                 </div>
@@ -472,6 +475,8 @@ const ButtingBorad = () => {
                                   />
                                   <CFormInput
                                     type="number"
+                                    max={999}
+                                    min={1}
                                     className="h-25 w-25 me-2"
                                     id="inputPassword2"
                                     placeholder="1~999"
@@ -483,6 +488,7 @@ const ButtingBorad = () => {
                                         pointsPerComment: e.target.value,
                                       }))
                                     }
+                                    onKeyDown={(e) => e.preventDefault()}
                                   />{' '}
                                   <span>Points</span>
                                 </div>
@@ -508,7 +514,7 @@ const ButtingBorad = () => {
                       color="dark"
                       onClick={savePointsHandler}
                     >
-                      Update
+                      Save
                     </CButton>
                   </div>
                 </div>

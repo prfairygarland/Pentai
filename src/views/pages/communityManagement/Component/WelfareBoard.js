@@ -292,7 +292,7 @@ const WelfareBoard = () => {
                                   }}
                                 />
                                 <span className="txt-byte-information">
-                                  {addBoardData.name.length} / 20 byte
+                                  {addBoardData.name.length} / 24 byte
                                 </span>
                               </div>
                             </div>

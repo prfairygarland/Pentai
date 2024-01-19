@@ -324,14 +324,17 @@ const ClubBoardListing = () => {
     setCurrentPage(0)
     setFilterApplied(0)
     setFilterData({
-      department: 'title',
+      department: '',
       searchstring: '',
       startdate: '',
       enddate: '',
-      clubStatus: '',
       classification: '',
       reported: '',
+      postType: '',
+      clubStatus: 'Active',
     })
+    setStartDate('')
+    setEndDate('')
     // }
   }, [])
 
@@ -679,6 +682,7 @@ const ClubBoardListing = () => {
                         { label: 'Host', value: 'host' },
                       ]}
                       onChange={handleDepartmentChange}
+                      value={filterData.department}
                     />
                     <CFormInput
                       type="text"
@@ -779,6 +783,7 @@ const ClubBoardListing = () => {
                         { label: 'Title', value: 'title' },
                       ]}
                       onChange={handleDepartmentChange}
+                      value={filterData.department}
                     />
                     <CFormInput
                       type="text"

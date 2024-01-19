@@ -30,6 +30,7 @@ export let API_ENDPOINT = {
   update_board_usage_setting: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/UpdateUsageStatus",
   get_prohabited_words: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/getProhibitedWords",
   add_prohabited_words: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/addProhibitedWords",
+  delete_all_prohabited_words: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/deleteProhibitedWords",
 
   get_club_registration_periods: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/getClubRegistrationPeriods",
   get_search_club_registration_periods: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/searchClubRegistrationPeriod",
