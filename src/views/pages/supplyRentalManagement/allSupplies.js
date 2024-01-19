@@ -659,24 +659,33 @@ const AllSupplies = () => {
         </CModal>
 
         {getModal === 'addSupplyType' &&
-
-          <AddSupplyType setModal={setState} getMod={getState} Modal={setModal} getId={ids} removeIds={setIds} getVal={setIcon} />
+          
+            <AddSupplyType Modal={setModal} getId={ids} removeIds={setIds} />
+         
         }
 
         {getModal === 'addCategory' &&
-          <AddCategory setModal={setState} getMod={getState} Modal={setModal} getMainCatId={suppyId} getCatId={catIds} removeCatIds={setCatIds} getVal={setIcon} />
+          
+            <AddCategory setModal={setState} getMod={getState} Modal={setModal} getMainCatId={suppyId} getCatId={catIds} removeCatIds={setCatIds} />
+          
         }
 
         {getModal === 'addSubCategory' &&
-          <AddSubCategory setModal={setState} getMod={getState} Modal={setModal} getMainSubCatId={catId} getSubCatId={subCatIds} removeSubCatIds={setSubCatIds} getVal={setIcon} setCat={setCatIcon} />
+        
+            <AddSubCategory setModal={setState} getMod={getState} Modal={setModal} getMainSubCatId={catId} getSubCatId={subCatIds} removeSubCatIds={setSubCatIds} />
+         
         }
 
         {getModal === 'addModal' &&
-          <AddModel setModal={setState} getMod={getState} Modal={setModal} getMainModalId={modalId} getModalId={subModalIds} removeModalIds={setModalIds} getVal={setIcon} setCat={setCatIcon} setModalI={setSubCatIcon} />
+        
+            <AddModel setModal={setState} getMod={getState} Modal={setModal} getMainModalId={modalId} getModalId={subModalIds} removeModalIds={setModalIds} />
+         
         }
 
         {getModal === 'addItem' &&
-          <AddItem setModal={setState} getMod={getState} Modal={setModal} modalName={itemName} supplyID={mainID} setMainIds={setMainID} getVal={setIcon} setCat={setCatIcon} setModalI={setSubCatIcon} getItemId={subItemIds} removeItemIds={setItemIds} getCatId={categoryId} setCatId={setCategoryId} getSubCatId={subCategoryId} setSubCatId={setSubCategoryId} getModId={getModalId} setModId={setGetModalId} />
+       
+            <AddItem setModal={setState} getMod={getState} modalName={itemName} supplyID={mainID} />
+          
         }
 
 
