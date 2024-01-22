@@ -15,7 +15,7 @@ import { API_ENDPOINT } from 'src/utils/config'
 import { enqueueSnackbar } from 'notistack'
 import Loader from 'src/components/common/Loader'
 
-const ButtingBorad = () => {
+const BulletinBoard = () => {
   const [addBulletinBoard, setAddBulletinBoard] = useState(false)
   const [addBoardData, setAddBoardData] = useState({
     name: '',
@@ -280,7 +280,7 @@ const ButtingBorad = () => {
                 {searchData.length > 0 && (
                   <ul className="p-2">
                     {filteredData.map((item) => (
-                      <li className="p-2" key={item.id} onClick={() => handleItemClick(item)}>
+                      <li className="p-2" key={item.id} onClick={() => handleItemClick(item)} draggable={true}>
                         <strong> {item.name}</strong>
                       </li>
                     ))}
@@ -582,4 +582,4 @@ const ButtingBorad = () => {
   )
 }
 
-export default ButtingBorad
+export default BulletinBoard
