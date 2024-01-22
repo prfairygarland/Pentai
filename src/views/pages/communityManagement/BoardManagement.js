@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import UsageSetting from './Component/UsageSetting';
 import WelfareBoard from './Component/WelfareBoard';
-import ButtingBorad from './Component/ButtingBoard';
+import BulletinBoard from './Component/BulletinBoard';
 import ClubBoard from './Component/ClubBoard';
 
 const BoardManagement = () => {
@@ -74,7 +74,7 @@ const BoardManagement = () => {
                             </div>
                         </div>
                         {currentTab === 'General settings' && <UsageSetting />}
-                        {currentTab === 'Bulletin board' &&  <ButtingBorad />}
+                        {currentTab === 'Bulletin board' &&  <BulletinBoard />}
                         {currentTab === 'Club board' && <ClubBoard />}
                         {currentTab === 'Welfare board' && <WelfareBoard />}
                     </div>

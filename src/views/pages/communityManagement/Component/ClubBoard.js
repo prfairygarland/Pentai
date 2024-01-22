@@ -14,12 +14,15 @@ import React, { useEffect, useMemo, useState } from 'react'
 import './boardManagement.scss'
 import ReactTable from 'src/components/common/ReactTable'
 import { ALL_CONSTANTS, API_ENDPOINT } from 'src/utils/config'
-import { getApi, postApi } from 'src/utils/Api'
+import { deleteApi, getApi, postApi, putApi } from 'src/utils/Api'
 import ReactPaginate from 'react-paginate'
 import { paginationItemPerPageOptions } from 'src/utils/constant'
 import DatePicker from 'react-date-picker'
 import { enqueueSnackbar } from 'notistack'
 import ConfirmationModal from 'src/utils/ConfirmationModal';
+import CIcon from '@coreui/icons-react'
+import * as icon from '@coreui/icons'
+
 
 const ClubBoard = () => {
     
@@ -54,6 +57,7 @@ const ClubBoard = () => {
 
 
     const [addModifyClubBannerModal, setAddModifyClubBannerModal] = useState(false)
+    const [bannerUpdateId, setBannerUpdateId] = useState('')
     const [bannerTitle, setBannerTitle] = useState('')
     const [bannerStartDate, setBannerStartDate] = useState('')
     const [bannerStartHours, setBannerStartHours] = useState('00')
@@ -291,7 +295,6 @@ const ClubBoard = () => {
         let url = `${API_ENDPOINT.get_club_history}?clubId=${clubId}`
         const response = await getApi(url)
         if (response.status === 200) {
-          console.log(response)
           setClubHistoryData(response.getClubHistory)
         }
       } catch (error) {
@@ -397,8 +400,8 @@ const ClubBoard = () => {
       } else if(bannerStartHours === '00' && bannerStartMins === '00') {
         enqueueSnackbar('Please select start time', { variant: 'error' })
         return false
-      } else if(new Date() > new Date(bannerStartDate + 'T' + bannerStartHours + ':' + bannerStartMins)) {
-        enqueueSnackbar('Start time can not be earlier than current time', { variant: 'error' })
+      } else if(!bannerUpdateId && new Date() > new Date(bannerStartDate + 'T' + bannerStartHours + ':' + bannerStartMins)) {
+        enqueueSnackbar('Start time cannot be earlier than current time', { variant: 'error' })
         return false
       } else if(bannerEndDate === '') {
         enqueueSnackbar('Please select end date', { variant: 'error' })
@@ -406,8 +409,8 @@ const ClubBoard = () => {
       } else if(bannerEndHours === '00' && bannerEndMins === '00') {
         enqueueSnackbar('Please select end time', { variant: 'error' })
         return false
-      } else if(new Date(bannerStartDate + 'T' + bannerStartHours + ':' + bannerStartMins) > new Date(bannerEndDate + 'T' + bannerEndHours + ':' + bannerEndMins)) {
-        enqueueSnackbar('End time can not be earlier than start time', { variant: 'error' })
+      } else if(!bannerUpdateId && new Date(bannerStartDate + 'T' + bannerStartHours + ':' + bannerStartMins) > new Date(bannerEndDate + 'T' + bannerEndHours + ':' + bannerEndMins)) {
+        enqueueSnackbar('End time cannot be earlier than start time', { variant: 'error' })
         return false
       } else if(uploadedBannerImage === '') {
         enqueueSnackbar('Please upload a banner image', { variant: 'error' })
@@ -450,12 +453,21 @@ const ClubBoard = () => {
         if(imageType === 'popUpImage') {
           formData.append('popUpImage', popupImage)
         }
-        const res = await postApi(API_ENDPOINT.create_club_banner, formData)
-        console.log(res)
+        let res = ''
+        if(bannerUpdateId) {
+          formData.append('id', bannerUpdateId)
+          res = await putApi(API_ENDPOINT.update_club_banner, formData)
+        } else {
+          res = await postApi(API_ENDPOINT.create_club_banner, formData)
+        }
         if(res.status === 200) {
           if(res?.data?.status === 409) {
             enqueueSnackbar(res?.data?.msg, { variant: 'error' })
+          } else if(res?.data?.status !== 200) {
+              enqueueSnackbar(res?.data?.error, { variant: 'error' })
           } else {
+            bannerUpdateId ? 
+            enqueueSnackbar('Club Banner Updated Successfully', { variant: 'success' }) :
             enqueueSnackbar('Club Banner Added Successfully', { variant: 'success' })
           }
           getClubBanners()            
@@ -499,32 +511,50 @@ const ClubBoard = () => {
     setBannerEndMins(e.target.value.split(':')[1])
   }
 
-    const getClubBanners = async () => {
-      try {
-        let url = `${API_ENDPOINT.get_club_banners}?offset=${currentPageClubBanner+1}&limit=${itemsPerPageClubBanner}`
-        const res = await getApi(url)
-        if (res.status === 200) {
-          setClubBannerData(res.data)
-          setTotalclubBannerDataCount(res.totalCount)
-          setTotalPagesClubBanner(Math.ceil(res.totalCount / Number(itemsPerPageClubBanner)))
-        }
-      } catch (error) {
-        console.log(error)
+  const getClubBanners = async () => {
+    try {
+      let url = `${API_ENDPOINT.get_club_banners}?offset=${currentPageClubBanner+1}&limit=${itemsPerPageClubBanner}`
+      const res = await getApi(url)
+      if (res.status === 200) {
+        setClubBannerData(res.data)
+        setTotalclubBannerDataCount(res.totalCount)
+        setTotalPagesClubBanner(Math.ceil(res.totalCount / Number(itemsPerPageClubBanner)))
       }
+    } catch (error) {
+      console.log(error)
     }
+  }
 
-    async function urlToBlob(url) {
-      const response = await fetch(url)
-      const blob = await response.blob()
-      return blob
-    }
+  const confirmDeleteBannerHandler = (isOpen, id) => {
+    setModalProps({
+      isModalOpen: isOpen,
+      title: 'Confirmation',
+      content: 'Are you sure to delete banner?',
+      cancelBtn: 'No',
+      cancelBtnHandler: cancelConfirmation,
+      successBtn: 'Yes',
+      successBtnHandler: () => deleteBannerHandler(id),
+      modalCloseHandler: confirmDeleteBannerHandler,
+    })
+  }
   
-    const urlToFiles = async (url) => {
-      console.log(url)
-        const blob = await urlToBlob(ALL_CONSTANTS.BASE_URL + url)
-        const fileName = url
-        return new File([blob], fileName, { type: blob.type })
+  const deleteBannerHandler = async (id) => {
+    try {
+      let url = `${API_ENDPOINT.delete_club_banner}?id=${id}`
+      const res = await deleteApi(url)
+      if (res?.data?.status === 200) {
+        getClubBanners()
+        enqueueSnackbar('Banner Deleted Successfully', { variant: 'success' })
+      } else {
+        enqueueSnackbar('Something went wrong, please try later!', { variant: 'success' })
+      }
+    } catch (error) {
+      console.log(error)
     }
+    setModalProps({
+      isModalOpen: false
+    })
+  }
 
   const clubBannerDataColumns = useMemo(
     () => [
@@ -553,7 +583,7 @@ const ClubBoard = () => {
         Header: <p className="text-center">Title</p>,
         accessor: 'firstDeadline',
         Cell: ({ row }) => (
-          <p role="button" className="text-center">
+          <p role="button" className="text-center" onClick={() => editClubBannerHandler(row.original.id)}>
             {row.original.title}
           </p>
         ),
@@ -562,7 +592,7 @@ const ClubBoard = () => {
         Header: <p className="text-center">Posting Period</p>,
         accessor: 'recPeriod',
         Cell: ({ row }) => (
-          <p role="button" className="text-center">
+          <p className="text-center">
             {new Date(row.original.startDateTime).toLocaleString()} -{' '}
             {new Date(row.original.endDateTime).toLocaleString()}
           </p>
@@ -572,7 +602,7 @@ const ClubBoard = () => {
         Header: <p className="text-center">Status</p>,
         accessor: 'finalDeadline',
         Cell: ({ row }) => (
-          <p role="button" className="text-center">
+          <p className="text-center">
             {row.original.status}
           </p>
         ),
@@ -581,7 +611,7 @@ const ClubBoard = () => {
         Header: <p className="text-center">Type</p>,
         accessor: 'minPart',
         Cell: ({ row }) => (
-          <p role="button" className="text-center">
+          <p className="text-center">
             {row.original.type}
           </p>
         ),
@@ -590,8 +620,13 @@ const ClubBoard = () => {
         Header: <p className="text-center">Action</p>,
         accessor: 'maxLimit',
         Cell: ({ row }) => (
-          <p role="button" className="text-center">
-            Delete
+          <p className="text-center">
+            <CIcon
+              icon={icon.cilTrash}
+              size="s"
+              style={{ cursor: 'pointer' }}
+              onClick={() => confirmDeleteBannerHandler(true, row.original.id)}
+            />
           </p>
         ),
       },
@@ -621,20 +656,91 @@ const ClubBoard = () => {
     }
   }
 
-    const addNewClubBannerHandler = () => {
-      setBannerTitle('')
-      setBannerStartDate('')
-      setBannerStartHours('00')
-      setBannerStartMins('00')
-      setBannerEndDate('')
-      setBannerEndHours('00')
-      setBannerEndMins('00')
-      setUploadedBannerImage('')
-      setImageType('bannerImageOnly')
-      setLinkToUrl('')
-      setPopupImage('')
-      setAddModifyClubBannerModal(true)
-    }
+  async function urlToBlob(url) {
+    const response = await fetch(url)
+    const blob = await response.blob()
+    return blob
+  }
+
+  const urlsToFiles = async (url) => {
+    if (!url) return
+      const blob = await urlToBlob(ALL_CONSTANTS.BASE_URL + url)
+      const fileName = url
+      return new File([blob], fileName, { type: blob.type })
+  }
+
+  const editClubBannerHandler = async (id) => {
+    try {
+      let url = `${API_ENDPOINT.get_club_banner_details}?id=${id}`
+      const res = await getApi(url)
+      if (res.status === 200) {
+        setBannerTitle(res?.data?.title)
+
+        const startTime = new Date(res?.data?.startDateTime)
+        let month = '' + (startTime.getMonth() + 1),
+          day = '' + startTime.getDate(),
+          year = startTime.getFullYear()
+        if (month.length < 2) month = '0' + month
+        if (day.length < 2) day = '0' + day
+        setBannerStartDate([year, month, day].join('-'))
+        if (startTime.getHours() + 1 < 10) {
+          setBannerStartHours('0' + startTime.getHours())
+        } else {
+          setBannerStartHours(startTime.getHours())
+        }
+        if (startTime.getMinutes() < 10) {
+          setBannerStartMins('0' + startTime.getMinutes())
+        } else {
+          setBannerStartMins(startTime.getMinutes())
+        }
+
+        const endTime = new Date(res?.data?.endDateTime)
+          month = '' + (endTime.getMonth() + 1)
+          day = '' + endTime.getDate()
+          year = endTime.getFullYear()
+        if (month.length < 2) month = '0' + month
+        if (day.length < 2) day = '0' + day
+        setBannerEndDate([year, month, day].join('-'))
+        if (endTime.getHours() + 1 < 10) {
+          setBannerEndHours('0' + endTime.getHours())
+        } else {
+          setBannerEndHours(endTime.getHours())
+        }
+        if (endTime.getMinutes() < 10) {
+          setBannerEndMins('0' + endTime.getMinutes())
+        } else {
+          setBannerEndMins(endTime.getMinutes())
+        }
+
+        const bannerImage = await urlsToFiles(res?.data?.image)
+        setUploadedBannerImage(bannerImage)
+        setImageType(res?.data?.type)
+        setLinkToUrl(res?.data?.linkUrl)
+        const popUpImage = await urlsToFiles(res?.data?.popUpImage)
+        setPopupImage(popUpImage)
+        setBannerUpdateId(res?.data?.id)
+        setAddModifyClubBannerModal(true)
+      }
+    } catch (error) {
+      console.log(error)
+    }    
+  }
+  
+  const addNewClubBannerHandler = () => {
+    setBannerUpdateId('')
+    setBannerTitle('')
+    setBannerStartDate('')
+    setBannerStartHours('00')
+    setBannerStartMins('00')
+    setBannerEndDate('')
+    setBannerEndHours('00')
+    setBannerEndMins('00')
+    setUploadedBannerImage('')
+    setImageType('bannerImageOnly')
+    setLinkToUrl('')
+    setPopupImage('')
+    setAddModifyClubBannerModal(true)
+  }
 
   const addNewClubPeriodHandler = () => {
     setPeriodId('')
@@ -1360,7 +1466,9 @@ const ClubBoard = () => {
               </div>
               <div className="d-flex justify-content-evenly">
                 <CButton onClick={cancelClubBannerModalHandler}>Cancel</CButton>
-                <CButton onClick={validateClubBannerHandler}>Save</CButton>
+                <CButton onClick={validateClubBannerHandler}>
+                  {bannerUpdateId ? 'Update' : 'Save'}
+                </CButton>
               </div>
             </CModalBody>
           </CModal>

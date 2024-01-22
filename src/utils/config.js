@@ -40,7 +40,10 @@ export let API_ENDPOINT = {
 
   create_club_banner: ALL_CONSTANTS.API_URL + "/admin/community/club/createBanner",
   get_club_banners: ALL_CONSTANTS.API_URL + "/admin/community/club/bannerList",
-
+  update_club_banner: ALL_CONSTANTS.API_URL + "/admin/community/club/updateBanner",
+  delete_club_banner: ALL_CONSTANTS.API_URL + "/admin/community/club/deleteBanner",
+  get_club_banner_details: ALL_CONSTANTS.API_URL + "/admin/community/club/bannerDetail",
+  
 
 
   get_boards: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/boardList",
