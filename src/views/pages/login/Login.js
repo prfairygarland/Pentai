@@ -110,7 +110,7 @@ const Login = () => {
 
                           <div className="form-outline form-white mb-4">
                             <label className="fw-bolder p-1">Password</label>
-                            <Field placeholder='Password' type="password" id="typePasswordX" className="form-control form-control-md" name="password" />
+                            <Field placeholder='Enter your password' type="password" id="typePasswordX" className="form-control form-control-md" name="password" />
                             {errors.password && touched.password ? (<p className='text-danger'>{errors.password}</p>) : null}
                             <div className='mt-2'>
                               <Field type="checkbox" name="remembermecheck" />

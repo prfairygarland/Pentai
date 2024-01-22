@@ -5,7 +5,7 @@ import Loader from 'src/components/common/Loader';
 import { deleteApi, getApi, postApi, putApi } from 'src/utils/Api';
 import { API_ENDPOINT } from 'src/utils/config';
 
-const AddModel = ({ setModal, getMod, Modal, getMainModalId, getModalId, removeModalIds, getVal, setCat, setModalI }) => {
+const AddModel = ({ setModal, getMod, Modal, getMainModalId, getModalId, removeModalIds, getVal, setCat, setSubIcon }) => {
 
 
   const [deleteVisible, setDeleteVisible] = useState(false)
@@ -114,7 +114,7 @@ const AddModel = ({ setModal, getMod, Modal, getMainModalId, getModalId, removeM
           removeModalIds(null)
           getVal(null)
           setCat(null)
-          setModalI(null)
+          setSubIcon(null)
           // Modal('allList')
           setModal(!getMod)
           //
@@ -138,7 +138,7 @@ const AddModel = ({ setModal, getMod, Modal, getMainModalId, getModalId, removeM
         removeModalIds(null)
         getVal(null)
         setCat(null)
-        setModalI(null)
+        setSubIcon(null)
         // Modal('allList')
         setModal(!getMod)
       } catch (error) {
@@ -160,7 +160,7 @@ const AddModel = ({ setModal, getMod, Modal, getMainModalId, getModalId, removeM
         removeModalIds(null)
         getVal(null)
         setCat(null)
-        setModalI(null)
+        setSubIcon(null)
         // Modal('allList')
         setModal(!getMod)
       }

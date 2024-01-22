@@ -19,6 +19,7 @@ import {
   setSidebarUnfolded,
   setSidebar
 } from "../state/SideBar/sideBarAction"
+import { useTranslation } from 'react-i18next'
 
 const AppSidebar = () => {
   const dispatch = useDispatch()
@@ -29,6 +30,10 @@ const AppSidebar = () => {
   useEffect(() => {
     setNavitems(localStorage.getItem('roleWisePermission') ? JSON.parse(localStorage.getItem('roleWisePermission')) : JSON.parse(sessionStorage.getItem('roleWisePermission')))
   }, [])
+
+  const { t, i18n } = useTranslation();
+  const translationObject = i18n.getDataByLanguage(i18n.language);
+
 
   return (
     <CSidebar
@@ -41,11 +46,11 @@ const AppSidebar = () => {
     >
       <CSidebarBrand className="d-none d-md-flex">
         {/* <CIcon className="sidebar-brand-full" icon={logoNegative} height={35} /> */}
-        <h4 className="sidebar-brand-full ">PTK APP Admin</h4>
-        <h4 className="sidebar-brand-narrow">PTK APP Admin</h4>
+        <h4 className="sidebar-brand-full ">{translationObject.translation.Sidebar.PTK_APP_Admin}</h4>
+        <h4 className="sidebar-brand-narrow">{translationObject.translation.Sidebar.PTK_APP_Admin}</h4>
         {/* <CIcon className="sidebar-brand-narrow" icon={sygnet} height={35} /> */}
       </CSidebarBrand>
-      <h5 className="sidebar-brand-cat mt-3 text-center">Category Menu</h5>
+      <h5 className="sidebar-brand-cat mt-3 text-center">{translationObject.translation.Sidebar.Category_Menu}</h5>
       <CSidebarNav>
         {/* <h4 className="sidebar-brand-narrow">PTK APP Admin</h4> */}
         <SimpleBar>

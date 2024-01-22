@@ -13,6 +13,7 @@ import * as XLSX from 'xlsx';
 import moment from 'moment'
 import Loader from 'src/components/common/Loader'
 import { enqueueSnackbar } from 'notistack'
+import { useTranslation } from 'react-i18next'
 
 
 
@@ -56,15 +57,21 @@ const UserList = () => {
   const [totalImportPages, setTotalImportPages] = useState(0)
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const { t, i18n } = useTranslation();
+  const translationObject = i18n.getDataByLanguage(i18n.language);
 
 
-  const statusDropdownValues = [{ id: 2, Name: 'All' }, { id: 1, Name: 'Active' }, { id: 0, Name: 'Inactive' }];
-  const textDropdownValues = [{ id: 1, Name: 'Employee No', type: 'employeeNo' }, { id: 2, Name: 'Korean Name', type: 'koreanName' }, { id: 3, Name: 'English Name', type: 'englishName' }, { id: 4, Name: 'E-mail', type: 'email' }];
+  const statusDropdownValues = [{ id: 2, Name: translationObject.translation.Userlist.All }, { id: 1, Name: translationObject.translation.Userlist.Active }, {
+    id: 0, Name: translationObject.translation.Userlist.Inactive
+  }];
+  const textDropdownValues = [{ id: 1, Name: translationObject.translation.Userlist.Employee_No, type: 'employeeNo' }, { id: 2, Name: translationObject.translation.Userlist.Korean_Name, type: 'koreanName' }, { id: 3, Name: translationObject.translation.Userlist.English_Name, type: 'englishName' }, { id: 4, Name: translationObject.translation.Userlist.E_mail, type: 'email' }];
   const perPageValue = [5, 10, 20, 30]
+
+  console.log('nnfn =>', translationObject.translation.Userlist.Employee_No)
 
   const columns = useMemo(() => [
     {
-      Header: 'No',
+      Header: translationObject?.translation?.Userlist?.No,
       accessor: 'Id',
       Cell: ({ row }) => {
         return currentPage * itemsPerPage + (row.index + 1)
@@ -72,55 +79,55 @@ const UserList = () => {
 
     },
     {
-      Header: 'Employee No.',
+      Header: translationObject?.translation?.Userlist?.Employee_No,
       accessor: 'employeeCode'
     },
     {
-      Header: 'Name',
+      Header: translationObject?.translation?.Userlist?.Name,
       accessor: 'koreanName'
     },
     {
-      Header: 'English Name',
+      Header: translationObject?.translation?.Userlist?.English_Name,
       accessor: 'englishName',
       // Cell: ({ row }) => <Link to={`/UserDetails/${row.original.id}`}>{row.original.englishName}</Link>
       Cell: ({ row }) => <p role='button' onClick={() => viewDetailsHandler(row.original.id)} className='text-center'>{row.original.englishName}</p>
 
     },
     {
-      Header: 'E-mail',
+      Header: translationObject?.translation?.Userlist?.E_mail,
       accessor: 'Email'
     },
     {
-      Header: 'Job Title',
+      Header: translationObject?.translation?.Userlist?.Job_Title,
       accessor: 'jobTitle'
     },
     {
-      Header: 'Company',
+      Header: translationObject?.translation?.Userlist?.Company,
       accessor: 'companiesName'
     },
     {
-      Header: 'Division',
+      Header: translationObject?.translation?.Userlist?.Division,
       accessor: 'divisionName'
     },
     {
-      Header: 'Group',
+      Header: translationObject?.translation?.Userlist?.Group,
       accessor: 'groupName'
     },
     {
-      Header: 'Team',
+      Header: translationObject?.translation?.Userlist?.Team,
       accessor: 'TeamName'
     },
     {
-      Header: 'Status',
+      Header: translationObject?.translation?.Userlist?.Status,
       accessor: 'Status',
       Cell: ({ row }) => <p>{row.original.Status == 1 ? 'Active' : 'Inactive'}</p>
     },
 
-  ], [currentPage, itemsPerPage])
+  ], [currentPage, itemsPerPage, t])
 
   const importHistoryColumns = useMemo(() => [
     {
-      Header: 'No',
+      Header: translationObject?.translation?.Userlist?.Employee_No,
       accessor: 'Id',
       Cell: ({ row }) => {
         return (currentImportHistoryPage - 1) * itemsPerPage + (row.index + 1)
@@ -128,22 +135,22 @@ const UserList = () => {
 
     },
     {
-      Header: 'File Name',
+      Header: translationObject?.translation?.Userlist?.File_Name,
       accessor: 'filename'
     },
     {
-      Header: 'Imported on',
+      Header: translationObject?.translation?.Userlist?.Imported_on,
       accessor: 'importDate',
       Cell: ({ row }) => <p>{row.original.importDate ? moment(row.original.importDate).format('YYYY-MM-DD HH:mm:ss') : '-'}</p>
 
     },
     {
-      Header: 'Imported by',
+      Header: translationObject?.translation?.Userlist?.Importe_by,
       accessor: 'adminUsername',
       Cell: ({ row }) => <p>{row.original.adminUsername ? row.original.adminUsername : '-'}</p>
     },
     {
-      Header: 'Total Records',
+      Header: translationObject?.translation?.Userlist?.Total_Records,
       accessor: 'importedUsersCount'
     },
     // {
@@ -152,7 +159,7 @@ const UserList = () => {
 
     // }
 
-  ], [currentImportHistoryPage, itemsPerPage])
+  ], [currentImportHistoryPage, itemsPerPage, t])
 
   const viewDetailsHandler = (id) => {
     navigate("./UserDetails", {
@@ -355,6 +362,8 @@ const UserList = () => {
         setUserListData(res.data)
         setTotalUser(res.totalCount)
         setTotalPages(Math.ceil(res.totalCount / Number(itemsPerPage)));
+      } else {
+        setIsLoading(false)
       }
 
     } catch (error) {
@@ -600,10 +609,10 @@ const UserList = () => {
       <div className='container bg-light p-3 mb-3'>
         <div className='d-flex mb-3'>
           <div className='me-5'>
-            <label className='me-3'>Status</label>
+              <label className='me-3'>{translationObject.translation.Userlist.Status}</label>
             <CDropdown className='dropDownbackground drpBtn'>
               <CDropdownToggle color="white" >
-                {statusSelectedValue.Name ? statusSelectedValue.Name : 'Active'}
+                  {statusSelectedValue.Name ? statusSelectedValue.Name : translationObject.translation.Userlist.Active}
               </CDropdownToggle>
               <CDropdownMenu>
                 {statusDropdownValues.map((option, index) => (
