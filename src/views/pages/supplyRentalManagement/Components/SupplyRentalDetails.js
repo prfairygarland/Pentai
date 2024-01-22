@@ -72,7 +72,6 @@ const SupplyRentalDetails = ({ endModal, RentalStatusData, setRentalStatusData, 
                       </div>
 
                       <div className='formWrpInpt'>
-                        { }
                         <CImage alt='NA' rounded src={RentalStatusData?.image} width={150} height={150} />
                       </div>
                     </div>

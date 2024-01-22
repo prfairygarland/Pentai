@@ -4,11 +4,10 @@ import React, { useEffect, useRef, useState } from 'react'
 import DatePicker from 'react-date-picker';
 import Loader from 'src/components/common/Loader';
 import { deleteApi, getApi, postApi, putApi } from 'src/utils/Api';
-import { API_ENDPOINT } from 'src/utils/config';
+import { ALL_CONSTANTS, API_ENDPOINT } from 'src/utils/config';
 
 
-const AddItem = ({ getVal, setCat, setModalI, setModal, getMod, modalName, supplyID, setMainIds, getItemId, removeItemIds, getCatId, setCatId, getSubCatId, setSubCatId, getModId, setModId }) => {
-
+const AddItem = ({ getVal, setCat, setSubIcon, setModalIcon, setModal, getMod, modalName, supplyID, setMainIds, getItemId, removeItemIds, getCatId, setCatId, getSubCatId, setSubCatId, getModId, setModId }) => {
 
 
   const [deleteVisible, setDeleteVisible] = useState(false)
@@ -111,8 +110,8 @@ const AddItem = ({ getVal, setCat, setModalI, setModal, getMod, modalName, suppl
         setModal(!getMod)
         getVal(null)
         setCat(null)
-        setModalI(null)
-
+        setSubIcon(null)
+        setModalIcon(null)
 
       }
     } catch (error) {
@@ -203,7 +202,11 @@ const AddItem = ({ getVal, setCat, setModalI, setModal, getMod, modalName, suppl
 
 
       if (response?.status === 200) {
-        setShowSelectedImage('https://ptkapi.experiencecommerce.com' + response.data.image)
+        // setShowSelectedImage('https://ptkapi.experiencecommerce.com' + response.data.image)
+        setShowSelectedImage(response.data.image)
+        // setShowSelectedImage(ALL_CONSTANTS.BASE_URL + response.data.image)
+
+
         setAddItemData({
           name: response.data.modelName,
           itemNumber: response.data.itemNumber,
@@ -369,8 +372,8 @@ const AddItem = ({ getVal, setCat, setModalI, setModal, getMod, modalName, suppl
           setModal(!getMod)
           getVal(null)
           setCat(null)
-          setModalI(null)
-
+          setSubIcon(null)
+          setModalIcon(null)
         } else {
           enqueueSnackbar(`${res?.data?.msg}`, { variant: 'error' })
           setIsLoading(false)
@@ -409,7 +412,8 @@ const AddItem = ({ getVal, setCat, setModalI, setModal, getMod, modalName, suppl
         setModal(!getMod)
         getVal(null)
         setCat(null)
-        setModalI(null)
+        setSubIcon(null)
+        setModalIcon(null)
       } catch (error) {
         setIsLoading(false)
         console.log(error)
@@ -678,9 +682,7 @@ const AddItem = ({ getVal, setCat, setModalI, setModal, getMod, modalName, suppl
           <CModalTitle id="StaticBackdropExampleLabel">Delete</CModalTitle>
         </CModalHeader>
         <CModalBody>
-          <p>Are you sure you want to delete this category?
-            <br />
-            All categories and items belonging will be deleted.</p>
+          <p>Are you sure you want to delete this item?</p>
         </CModalBody>
         <CModalFooter>
           <CButton color="primary" onClick={() => deleteSupplyType()}>Delete</CButton>

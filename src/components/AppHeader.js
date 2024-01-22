@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { NavLink,useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
+import { useTranslation } from 'react-i18next';
 import {
   CContainer,
   CHeader,
@@ -37,9 +38,12 @@ const AppHeader = () => {
   const dispatch = useDispatch()
   const sidebarShow = useSelector((state) => state.sideBarState.sidebarShow)
   const [visible, setVisible] = useState(false)
-
+  // const { i18n } = useTranslation();
   const navigate = useNavigate();
+  const { t, i18n } = useTranslation();
+  const translationObject = i18n.getDataByLanguage(i18n.language);
 
+  // console.log('Translation Object:', t('Header', { Change_Password: 'Change Password' }));
 
   const logOut = async () => {
     if (sessionStorage.getItem('sessionToken') == null) {
@@ -63,6 +67,14 @@ const AppHeader = () => {
     }
   }
 
+
+  const changeLanguage = (lng) => {
+    i18n.changeLanguage(lng);
+  };
+
+
+
+
   return (
     <CHeader position="sticky" className="mb-4">
       <CContainer fluid>
@@ -78,12 +90,14 @@ const AppHeader = () => {
         <CHeaderNav className="ms-3">
           <CNavItem>
             <CNavLink to='/changepassword' component={NavLink}>
-              <p>Change Password</p>
+              {/* <p>Change Password</p> */}
+              <p>{translationObject.translation.Header.Change_Password}</p>
             </CNavLink>
           </CNavItem>
           <CNavItem>
             <CNavLink role="button" onClick={() => setVisible(!visible)}>
-              <p>Logout</p>
+              {/* <p>Logout</p> */}
+              <p>{translationObject.translation.Header.Logout}</p>
             </CNavLink>
             <CModal
               backdrop="static"
@@ -92,22 +106,25 @@ const AppHeader = () => {
               aria-labelledby="StaticBackdropExampleLabel"
             >
               <CModalHeader>
-                <CModalTitle id="StaticBackdropExampleLabel">Logout</CModalTitle>
+                <CModalTitle id="StaticBackdropExampleLabel">{translationObject.translation.Header.Logout}</CModalTitle>
               </CModalHeader>
-              <CModalBody>Are you sure! you want to logout </CModalBody>
+              {/* <CModalBody>Are you sure! you want to logout </CModalBody> */}
+              <CModalBody>{translationObject.translation.Header.Logout_Popup}</CModalBody>
               <CModalFooter>
                 <CButton color="secondary" onClick={() => setVisible(false)}>
-                  Cancel
+                  {/* Cancel */}
+                  {translationObject.translation.Header.Cancel}
                 </CButton>
-                <CButton onClick={() => logOut()} color="primary">Logout</CButton>
+                <CButton onClick={() => logOut()} color="primary">{translationObject.translation.Header.Logout}</CButton>
               </CModalFooter>
             </CModal>
 
           </CNavItem>
           <CDropdown component="li" className="ms-3" variant="nav-item">
-            <CDropdownToggle>English</CDropdownToggle>
-            <CDropdownMenu>
-              <CDropdownItem href="#">Koren</CDropdownItem>
+            <CDropdownToggle>{i18n.language == 'en' ? 'English' : 'Korean'}</CDropdownToggle>
+            <CDropdownMenu role='button'>
+              <CDropdownItem onClick={() => changeLanguage('en')}>English</CDropdownItem>
+              <CDropdownItem onClick={() => changeLanguage('ko')}>Korean</CDropdownItem>
             </CDropdownMenu>
           </CDropdown>
           {/* <AppHeaderDropdown /> */}

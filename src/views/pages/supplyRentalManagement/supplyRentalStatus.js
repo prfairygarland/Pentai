@@ -841,7 +841,6 @@ const SupplyRentalStatus = () => {
 
 
           </CModalHeader>
-          <CModalBody>
           {popUp === 'userDetails' ?
             <SupplyRentalUserDetals userInfoData={userInfoData} type={'supply'} />
             : ''}
@@ -891,7 +890,6 @@ const SupplyRentalStatus = () => {
 
               : ''
           }
-          </CModalBody>
         </CModal >
       </main>
 

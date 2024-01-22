@@ -245,16 +245,12 @@ const AddCategory = ({ setModal, getMod, Modal, getMainCatId, getCatId, removeCa
         <CButton onClick={() => saveCategory('cancle')} style={{ marginRight: '2%', background: '#ccc', border: 'none' }}>Cancel</CButton>
         <CButton onClick={() => saveCategory('save')}>Save</CButton>
       </div>
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '5%', gap: 10 }}>
-        <CButton onClick={() => saveCategory('cancle')} style={{ marginRight: '2%', background: '#ccc', border: 'none' }}>Cancel</CButton>
-        <CButton onClick={() => saveCategory('save')}>Save</CButton>
-      </div>
       <CModal
-      backdrop="static"
-      visible={deleteVisible}
-      onClose={() => setDeleteVisible(false)}
-      aria-labelledby="StaticBackdropExampleLabel"
-    >
+        backdrop="static"
+        visible={deleteVisible}
+        onClose={() => setDeleteVisible(false)}
+        aria-labelledby="StaticBackdropExampleLabel"
+      >
         <CModalHeader>
           <CModalTitle id="StaticBackdropExampleLabel">Delete</CModalTitle>
         </CModalHeader>
@@ -270,7 +266,7 @@ const AddCategory = ({ setModal, getMod, Modal, getMainCatId, getCatId, removeCa
           </CButton>
         </CModalFooter>
       </CModal>
-    </div>
+    </div >
   )
 }
 
