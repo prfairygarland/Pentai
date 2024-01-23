@@ -3,6 +3,8 @@ import UsageSetting from './Component/UsageSetting';
 import WelfareBoard from './Component/WelfareBoard';
 import BulletinBoard from './Component/BulletinBoard';
 import ClubBoard from './Component/ClubBoard';
+import { useTranslation } from 'react-i18next';
+
 
 const BoardManagement = () => {
 
@@ -11,6 +13,9 @@ const BoardManagement = () => {
     const setTab = (tab) => {
         setCurrentTab(tab);
     };
+
+    const { i18n } = useTranslation();
+    const translationObject = i18n.getDataByLanguage(i18n.language);  
 
     return (
         <>
@@ -33,7 +38,7 @@ const BoardManagement = () => {
                                     aria-selected='true'
                                     onClick={() => setTab('General settings')}
                                 >
-                                    General settings
+                                    {translationObject?.translation?.communityBoardManagement?.generalSettings}
                                 </button>
                                 <button
                                     className={`primary-btn ${currentTab == 'Bulletin board' && 'active'}`}
@@ -45,7 +50,7 @@ const BoardManagement = () => {
                                     aria-selected='false'
                                     onClick={() => setTab('Bulletin board')}
                                 >
-                                    Bulletin board
+                                    {translationObject?.translation?.communityBoardManagement?.bulletinBoard}
                                 </button>
                                 <button
                                     className={`primary-btn ${currentTab == 'Club board' && 'active'}`}
@@ -57,7 +62,7 @@ const BoardManagement = () => {
                                     aria-selected='false'
                                     onClick={() => setTab('Club board')}
                                 >
-                                    Club board
+                                    {translationObject?.translation?.communityBoardManagement?.clubBoard}
                                 </button>
                                 <button
                                     className={`primary-btn ${currentTab == 'Welfare board' && 'active'}`}
@@ -69,7 +74,7 @@ const BoardManagement = () => {
                                     aria-selected='false'
                                     onClick={() => setTab('Welfare board')}
                                 >
-                                    Welfare board
+                                    {translationObject?.translation?.communityBoardManagement?.welfareBoard}
                                 </button>
                             </div>
                         </div>

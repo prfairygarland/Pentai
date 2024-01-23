@@ -14,6 +14,7 @@ import { getApi, postApi, putApi } from 'src/utils/Api'
 import { API_ENDPOINT } from 'src/utils/config'
 import { enqueueSnackbar } from 'notistack'
 import Loader from 'src/components/common/Loader'
+import { useTranslation } from 'react-i18next';
 
 const BulletinBoard = () => {
   const [addBulletinBoard, setAddBulletinBoard] = useState(false)
@@ -33,11 +34,13 @@ const BulletinBoard = () => {
   const [getId, setId] = useState()
   const [isLoading, setIsLoading] = useState(false)
 
+  const { i18n } = useTranslation();
+  const translationObject = i18n.getDataByLanguage(i18n.language);  
+
   const handleSearchChange = (event) => {
     const term = event.target.value.toLowerCase()
     setSearchTerm(term)
 
-    // Filter data based on the search term
     const filtered = searchData.filter((item) =>
       Object.values(item).some(
         (value) => typeof value === 'string' && value.toLowerCase().includes(term),
@@ -76,7 +79,6 @@ const BulletinBoard = () => {
   const handleBulletinSearchData = async () => {
     try {
       const res = await getApi(API_ENDPOINT.bulletin_search)
-      console.log('res =>', res.status)
       if (res.status == 200) {
         setSearchData(res.data)
         setFilteredData(res.data)
@@ -89,7 +91,6 @@ const BulletinBoard = () => {
   const handlePointsData = async () => {
     try {
       const res = await getApi(API_ENDPOINT.get_points_settings)
-      console.log('res =>', res.status)
       if (res?.status === 200) {
         setPointsData(res.data)
       } else {
@@ -102,7 +103,6 @@ const BulletinBoard = () => {
 
   const handleItemClick = (clickedItem) => {
     // Handle the click on a specific filtered data item
-    console.log('Clicked Item:', clickedItem)
     setAddBulletinBoard(true)
     setId(clickedItem.id)
     addBoardData.name = clickedItem.name
@@ -114,7 +114,7 @@ const BulletinBoard = () => {
 
   const saveBoard = async () => {
     if (addBoardData.name === '') {
-      enqueueSnackbar('Please enter name', { variant: 'error' })
+      enqueueSnackbar(translationObject?.translation?.communityBoardManagement?.pleaseEnterName, { variant: 'error' })
       return false
     }
     setIsLoading(true)
@@ -135,7 +135,6 @@ const BulletinBoard = () => {
         res = await postApi(API_ENDPOINT.add_bulletin_board, data)
       }
 
-      console.log('responce =>', res)
       if (res.status === 200) {
         setAddBoardData({
           name: '',
@@ -143,7 +142,7 @@ const BulletinBoard = () => {
           isAdminOnly: false,
           annonymousBoard: false,
         })
-        enqueueSnackbar(`Bulletin Boards Added Successfully`, { variant: 'success' })
+        enqueueSnackbar(translationObject?.translation?.communityBoardManagement?.bulletingBoardAddedSuccessfully, { variant: 'success' })
         setVisible(false)
         setId()
         handleBulletinSearchData()
@@ -173,11 +172,9 @@ const BulletinBoard = () => {
   }
 
   const handleBoardDelete = async () => {
-    console.log('get id =>', getId)
     setIsLoading(true)
     try {
       const res = await postApi(API_ENDPOINT.delete_bulletin_board, { boardId: getId })
-      console.log('responce =>', res)
       if (res.status === 200) {
         setAddBoardData({
           name: '',
@@ -185,7 +182,7 @@ const BulletinBoard = () => {
           isAdminOnly: false,
           annonymousBoard: false,
         })
-        enqueueSnackbar(`Delete successfully`, { variant: 'success' })
+        enqueueSnackbar(translationObject?.translation?.communityBoardManagement?.deletedSuccessfully, { variant: 'success' })
         setDeleteVisible(false)
         setId()
         handleBulletinSearchData()
@@ -206,7 +203,7 @@ const BulletinBoard = () => {
 
   const validate = async () => {
     if (addBoardData.name === '') {
-      enqueueSnackbar('Please enter name', { variant: 'error' })
+      enqueueSnackbar(translationObject?.translation?.communityBoardManagement?.pleaseEnterName, { variant: 'error' })
       return false
     } else {
       setVisible(!visible)
@@ -237,8 +234,7 @@ const BulletinBoard = () => {
 
   const savePointsHandler = async () => {
     try {
-      let res = await putApi(API_ENDPOINT.update_points_settings, pointsData)
-      console.log(res)
+      await putApi(API_ENDPOINT.update_points_settings, pointsData)
     } catch (error) {
       console.log()
     }
@@ -256,7 +252,7 @@ const BulletinBoard = () => {
                 className=" text-white btn-black"
                 onClick={() => setBulletinBoard()}
               >
-                Add
+                {translationObject?.translation?.communityBoardManagement?.add}
               </CButton>
               {getId && (
                 <CButton
@@ -264,7 +260,7 @@ const BulletinBoard = () => {
                   className=" text-white btn-black"
                   onClick={() => setDeleteVisible(true)}
                 >
-                  Delete
+                  {translationObject?.translation?.communityBoardManagement?.delete}
                 </CButton>
               )}
             </div>
@@ -288,9 +284,6 @@ const BulletinBoard = () => {
                 )}
               </CCol>
             </div>
-            {/* <div className='d-flex justify-content-center'>
-            dragable list here
-          </div> */}
           </div>
           {addBulletinBoard == true ? (
             <div className="w-75 p-4">
@@ -302,7 +295,7 @@ const BulletinBoard = () => {
                         <div className="formWraper">
                           <div className="form-outline form-white d-flex">
                             <div className="formWrpLabel" style={{ minWidth: '170px' }}>
-                              <label className="fw-bolder ">Usage status</label>
+                              <label className="fw-bolder ">{translationObject?.translation?.communityBoardManagement?.usageStatus}</label>
                             </div>
                             <div className="formWrpInpt">
                               <div className="d-flex formradiogroup mb-2 gap-3">
@@ -334,7 +327,7 @@ const BulletinBoard = () => {
 
                           <div className="form-outline form-white  d-flex ">
                             <div className="formWrpLabel" style={{ minWidth: '170px' }}>
-                              <label className="fw-bolder ">Permission to write</label>
+                              <label className="fw-bolder ">{translationObject?.translation?.communityBoardManagement?.permissionToWrite}</label>
                             </div>
                             <div className="formWrpInpt">
                               <CFormCheck
@@ -349,7 +342,7 @@ const BulletinBoard = () => {
 
                           <div className="form-outline form-white  d-flex ">
                             <div className="formWrpLabel" style={{ minWidth: '170px' }}>
-                              <label className="fw-bolder ">Anonymous Board</label>
+                              <label className="fw-bolder ">{translationObject?.translation?.communityBoardManagement?.anonymousBoard}</label>
                             </div>
                             <div className="formWrpInpt">
                               <div className="d-flex formradiogroup mb-2 gap-3">
@@ -381,7 +374,7 @@ const BulletinBoard = () => {
 
                           <div className="form-outline form-white  d-flex ">
                             <div className="formWrpLabel" style={{ minWidth: '170px' }}>
-                              <label className="fw-bolder ">Board Name</label>
+                              <label className="fw-bolder ">{translationObject?.translation?.communityBoardManagement?.boardName}</label>
                             </div>
                             <div className="formWrpInpt">
                               <div className="d-flex formradiogroup mb-2 gap-3">
@@ -396,25 +389,11 @@ const BulletinBoard = () => {
                                   }}
                                 />
                                 <span className="txt-byte-information">
-                                  {addBoardData.name.length} / 20 byte
+                                  {addBoardData.name.length} / {translationObject?.translation?.communityBoardManagement?.twentyBytes}
                                 </span>
                               </div>
                             </div>
                           </div>
-
-                          {/* <div className="form-outline form-white  d-flex ">
-                            <div className='formWrpLabel' style={{ minWidth: '170px' }}>
-                              <label className="fw-bolder ">Edit order</label>
-                            </div>
-                            <div className='formWrpInpt'>
-                              <div className='d-flex formradiogroup mb-2 gap-3' >
-                                <CButton>Up</CButton>
-                                <CButton>Down</CButton>
-                                <CButton>Top</CButton>
-                                <CButton>Bottom</CButton>
-                              </div>
-                            </div>
-                          </div> */}
                         </div>
                       </div>
                     </div>
@@ -432,7 +411,7 @@ const BulletinBoard = () => {
                         <div className="formWraper">
                           <div className="form-outline form-white d-flex">
                             <div className="formWrpLabel" style={{ minWidth: '140px' }}>
-                              <label className="fw-bolder ">Point settings</label>
+                              <label className="fw-bolder ">{translationObject?.translation?.communityBoardManagement?.pointSettings}</label>
                             </div>
                             <div>
                               <div className="formWrpInpt">
@@ -440,7 +419,7 @@ const BulletinBoard = () => {
                                   <CFormCheck
                                     id="flexCheckDefault"
                                     className="text-center"
-                                    label="Points per post"
+                                    label={translationObject?.translation?.communityBoardManagement?.pointsPerPost}
                                     checked={pointsData?.pointsPerPostenabled}
                                     onChange={handlePointsPerPostCheckbox}
                                   />
@@ -461,7 +440,7 @@ const BulletinBoard = () => {
                                     }
                                     onKeyDown={(e) => e.preventDefault()}
                                   />{' '}
-                                  <span>Points</span>
+                                  <span>{translationObject?.translation?.communityBoardManagement?.points}</span>
                                 </div>
                               </div>
                               <div className="formWrpInpt">
@@ -469,7 +448,7 @@ const BulletinBoard = () => {
                                   <CFormCheck
                                     id="flexCheckDefault"
                                     className="text-center"
-                                    label="Points per comment"
+                                    label={translationObject?.translation?.communityBoardManagement?.pointsPerComment}
                                     checked={pointsData?.pointsPerCommentenabled}
                                     onChange={handlePointsPerCommentCheckbox}
                                   />
@@ -490,19 +469,16 @@ const BulletinBoard = () => {
                                     }
                                     onKeyDown={(e) => e.preventDefault()}
                                   />{' '}
-                                  <span>Points</span>
+                                  <span>{translationObject?.translation?.communityBoardManagement?.points}</span>
                                 </div>
                               </div>
                             </div>
                           </div>
                           <div className="prohabitinfo mt-2 p-3">
-                            <p>※ Guide for setting points​</p>
-                            <p>1. Points are only applied to bulletin board.​</p>
-                            <p>2. If enabled, users will get set points per post, comment.​</p>
-                            <p>
-                              3. If users delete their own post, comment they got points from, the
-                              points will be retrieved.
-                            </p>
+                            <p>※ {translationObject?.translation?.communityBoardManagement?.guideForSettingPoints}​</p>
+                            <p>{translationObject?.translation?.communityBoardManagement?.guideForSettingPointsPointOne}​</p>
+                            <p>{translationObject?.translation?.communityBoardManagement?.guideForSettingPointsPointTwo}​</p>
+                            <p>{translationObject?.translation?.communityBoardManagement?.guideForSettingPointsPointThree}</p>
                           </div>
                         </div>
                       </div>
@@ -514,7 +490,7 @@ const BulletinBoard = () => {
                       color="dark"
                       onClick={savePointsHandler}
                     >
-                      Save
+                      {translationObject?.translation?.communityBoardManagement?.save}
                     </CButton>
                   </div>
                 </div>
@@ -526,7 +502,7 @@ const BulletinBoard = () => {
         {addBulletinBoard && (
           <div className="save-cancel-btn-container">
             <CButton className="btn save-cancel-btn" color="dark" onClick={() => validate()}>
-              Save
+            {translationObject?.translation?.communityBoardManagement?.save}
             </CButton>
           </div>
         )}
@@ -538,17 +514,17 @@ const BulletinBoard = () => {
           aria-labelledby="StaticBackdropExampleLabel"
         >
           <CModalHeader>
-            <CModalTitle id="StaticBackdropExampleLabel">Saved the settings.</CModalTitle>
+            <CModalTitle id="StaticBackdropExampleLabel">{translationObject?.translation?.communityBoardManagement?.savedTheSettings}</CModalTitle>
           </CModalHeader>
           <CModalBody>
-            <p>Are you sure to save?</p>
+            <p>{translationObject?.translation?.communityBoardManagement?.areYouSureToSave}</p>
           </CModalBody>
           <CModalFooter>
             <CButton color="secondary" onClick={() => setVisible(false)}>
-              Close
+            {translationObject?.translation?.communityBoardManagement?.close}
             </CButton>
             <CButton onClick={() => saveBoard()} color="primary">
-              Save
+            {translationObject?.translation?.communityBoardManagement?.save}
             </CButton>
           </CModalFooter>
         </CModal>
@@ -560,20 +536,17 @@ const BulletinBoard = () => {
           aria-labelledby="StaticBackdropExampleLabel"
         >
           <CModalHeader>
-            <CModalTitle id="StaticBackdropExampleLabel">Delete board.</CModalTitle>
+            <CModalTitle id="StaticBackdropExampleLabel">{translationObject?.translation?.communityBoardManagement?.deleteBoard}</CModalTitle>
           </CModalHeader>
           <CModalBody>
-            <p>
-              All posts within the board will be deleted and all data will be lost. Are you sure you
-              want to delete the board?
-            </p>
+            <p>{translationObject?.translation?.communityBoardManagement?.deleteAllPostConfirmationStatement}</p>
           </CModalBody>
           <CModalFooter>
             <CButton color="secondary" onClick={() => setDeleteVisible(false)}>
-              Close
+            {translationObject?.translation?.communityBoardManagement?.close}
             </CButton>
             <CButton onClick={() => handleBoardDelete()} color="primary">
-              Delete
+            {translationObject?.translation?.communityBoardManagement?.delete}
             </CButton>
           </CModalFooter>
         </CModal>
