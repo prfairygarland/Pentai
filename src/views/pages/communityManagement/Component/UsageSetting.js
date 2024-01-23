@@ -4,6 +4,7 @@ import { getApi, postApi, putApi } from 'src/utils/Api'
 import { API_ENDPOINT } from 'src/utils/config'
 import { enqueueSnackbar } from 'notistack'
 import ConfirmationModal from 'src/utils/ConfirmationModal'
+import { useTranslation } from 'react-i18next';
 
 const UsageSetting = (props) => {
   const [radioGroupValue, setRadioGroupValue] = useState({})
@@ -15,6 +16,9 @@ const UsageSetting = (props) => {
     getUsageStatus()
     getProhabitedWords()
   }, [])
+
+  const { i18n } = useTranslation();
+  const translationObject = i18n.getDataByLanguage(i18n.language);  
 
   const handleRadioCheck = (event) => {
     const value = event.target.value
@@ -34,7 +38,6 @@ const UsageSetting = (props) => {
   const getUsageStatus = async () => {
     try {
       const res = await getApi(API_ENDPOINT.get_board_usage_setting)
-      console.log('getapi usage status')
       if (res.status === 200) {
         setRadioGroupValue(res.data)
       }
@@ -52,19 +55,18 @@ const UsageSetting = (props) => {
       let url = `${API_ENDPOINT.update_board_usage_setting}`
       const res = await putApi(url, body)
       if (res?.status === 200) {
-        enqueueSnackbar(`Updated Successfully - `, { variant: 'success' })
+        enqueueSnackbar(translationObject?.translation?.communityBoardManagement?.updatedSuccessfully, { variant: 'success' })
       } else {
-        enqueueSnackbar(`Work in progress - `, { variant: 'error' })
+        enqueueSnackbar(translationObject?.translation?.communityBoardManagement?.somethingWentWrong, { variant: 'error' })
       }
     } catch (error) {
-      enqueueSnackbar(`Something went wrong! `, { variant: 'error' })
+      enqueueSnackbar(translationObject?.translation?.communityBoardManagement?.somethingWentWrong, { variant: 'error' })
     }
   }
 
   const getProhabitedWords = async () => {
     try {
       const res = await getApi(API_ENDPOINT.get_prohabited_words)
-      console.log('getapi prohabited Words', res)
       if (res.status === 200) {
         setProhabitedWords(
           res.data.map(function (item) {
@@ -84,7 +86,6 @@ const UsageSetting = (props) => {
   }
 
   const removeAllWords = async () => {
-    // setProhabitedWords([])
     const body = {
       deleteAll: true,
       id: '1',
@@ -93,12 +94,12 @@ const UsageSetting = (props) => {
       let url = `${API_ENDPOINT.delete_all_prohabited_words}`
       const res = await putApi(url, body)
       if (res?.status === 200) {
-        enqueueSnackbar(`Deleted All Prohibited Words Successfully`, { variant: 'success' })
+        enqueueSnackbar(translationObject?.translation?.communityBoardManagement?.deleteAllProhibitedWordsSuccessfully, { variant: 'success' })
       } else {
-        enqueueSnackbar(`Something went wrong! `, { variant: 'error' })
+        enqueueSnackbar(translationObject?.translation?.communityBoardManagement?.somethingWentWrong, { variant: 'error' })
       }
     } catch (error) {
-      enqueueSnackbar(`Something went wrong! `, { variant: 'error' })
+      enqueueSnackbar(translationObject?.translation?.communityBoardManagement?.somethingWentWrong, { variant: 'error' })
     }
     setModalProps({
       isModalOpen: false
@@ -116,7 +117,7 @@ const UsageSetting = (props) => {
     setModalProps({
       isModalOpen: isOpen,
       title: 'Confirmation',
-      content: 'Are you sure you want to delete all prohibited words?',
+      content: translationObject?.translation?.communityBoardManagement?.areYouSureYouWantToDeleteAllProhibitedWords,
       cancelBtn: 'No',
       cancelBtnHandler: cancelRemoveAllWords,
       successBtn: 'Yes',
@@ -127,7 +128,7 @@ const UsageSetting = (props) => {
 
   const addProhabitedWord = () => {
     if (addInputValue.trim() === '') {
-      enqueueSnackbar(`Please add prohibited word`, { variant: 'error' })
+      enqueueSnackbar(translationObject?.translation?.communityBoardManagement?.pleaseAddProhibitedWord, { variant: 'error' })
       return false
     }
     const filterdWord = [...prohabitedWords, addInputValue]
@@ -144,12 +145,12 @@ const UsageSetting = (props) => {
       let url = `${API_ENDPOINT.add_prohabited_words}`
       const res = await postApi(url, body)
       if (res?.status === 200) {
-        enqueueSnackbar(`Updated Successfully`, { variant: 'success' })
+        enqueueSnackbar(translationObject?.translation?.communityBoardManagement?.updatedSuccessfully, { variant: 'success' })
       } else {
-        enqueueSnackbar(`Something went wrong! `, { variant: 'error' })
+        enqueueSnackbar(translationObject?.translation?.communityBoardManagement?.somethingWentWrong, { variant: 'error' })
       }
     } catch (error) {
-      enqueueSnackbar(`Something went wrong! `, { variant: 'error' })
+      enqueueSnackbar(translationObject?.translation?.communityBoardManagement?.somethingWentWrong, { variant: 'error' })
     }
     setModalProps({
       isModalOpen: false
@@ -166,7 +167,7 @@ const UsageSetting = (props) => {
     setModalProps({
       isModalOpen: isOpen,
       title: 'Confirmation',
-      content: 'Are you sure you want to save all prohibited words?',
+      content: translationObject?.translation?.communityBoardManagement?.areYouSureYouWantToSaveAllProhibitedWords,
       cancelBtn: 'No',
       cancelBtnHandler: cancelSaveAllWords,
       successBtn: 'Yes',
@@ -185,7 +186,7 @@ const UsageSetting = (props) => {
       <div className="formWraper mt-3">
         <div className="form-outline form-white  d-flex ">
           <div className="formWrpLabel">
-            <label className="fw-bolder ">Usage status</label>
+            <label className="fw-bolder ">{translationObject?.translation?.communityBoardManagement?.usageStatus}</label>
           </div>
           <div className="formWrpInpt">
             {
@@ -199,7 +200,7 @@ const UsageSetting = (props) => {
                 }
               >
                 <label className="radiolabel" htmlFor="Bulletin board">
-                  Bulletin board​
+                {translationObject?.translation?.communityBoardManagement?.bulletinBoard}
                 </label>
                 <CFormCheck
                   type="radio"
@@ -208,7 +209,7 @@ const UsageSetting = (props) => {
                   checked={radioGroupValue.BulletinBoard?.status === 1}
                   onChange={handleRadioCheck}
                   value="1"
-                  label="Grant"
+                  label={translationObject?.translation?.communityBoardManagement?.grant}
                 />
                 <CFormCheck
                   type="radio"
@@ -217,7 +218,7 @@ const UsageSetting = (props) => {
                   checked={radioGroupValue.BulletinBoard?.status === 0}
                   onChange={handleRadioCheck}
                   value="0"
-                  label="Deny"
+                  label={translationObject?.translation?.communityBoardManagement?.deny}
                 />
               </div>
             }
@@ -231,7 +232,7 @@ const UsageSetting = (props) => {
               }
             >
               <label className="radiolabel" htmlFor="Club board">
-                Club board​
+              {translationObject?.translation?.communityBoardManagement?.clubBoard}
               </label>
               <CFormCheck
                 type="radio"
@@ -240,8 +241,8 @@ const UsageSetting = (props) => {
                 checked={radioGroupValue.ClubBoard?.status === 1}
                 onChange={handleRadioCheck}
                 value="1"
-                label="Grant"
-              />
+                label={translationObject?.translation?.communityBoardManagement?.grant}
+                />
               <CFormCheck
                 type="radio"
                 name="ClubBoard"
@@ -249,8 +250,8 @@ const UsageSetting = (props) => {
                 checked={radioGroupValue.ClubBoard?.status === 0}
                 onChange={handleRadioCheck}
                 value="0"
-                label="Deny"
-              />
+                label={translationObject?.translation?.communityBoardManagement?.deny}
+                />
             </div>
             <div
               className="d-flex formradiogroup mb-2 gap-2"
@@ -262,7 +263,7 @@ const UsageSetting = (props) => {
               }
             >
               <label className="radiolabel" htmlFor="Welfare board​">
-                Welfare board​
+              {translationObject?.translation?.communityBoardManagement?.welfareBoard}
               </label>
               <CFormCheck
                 type="radio"
@@ -271,8 +272,8 @@ const UsageSetting = (props) => {
                 checked={radioGroupValue.WelfareBoard?.status === 1}
                 onChange={handleRadioCheck}
                 value="1"
-                label="Grant"
-              />
+                label={translationObject?.translation?.communityBoardManagement?.grant}
+                />
               <CFormCheck
                 type="radio"
                 name="WelfareBoard"
@@ -280,8 +281,8 @@ const UsageSetting = (props) => {
                 checked={radioGroupValue.WelfareBoard?.status === 0}
                 onChange={handleRadioCheck}
                 value="0"
-                label="Deny"
-              />
+                label={translationObject?.translation?.communityBoardManagement?.deny}
+                />
             </div>
           </div>
         </div>
@@ -294,24 +295,23 @@ const UsageSetting = (props) => {
             className="mb-3 btn-dark mb-3 text-white bg-dark"
             onClick={handleUpdateStatus}
           >
-            Save Status
+            {translationObject?.translation?.communityBoardManagement?.saveStatus}
           </CButton>
         </CCol>
       </div>
       <div className="formWraper mt-3">
         <div className="form-outline form-white  d-flex ">
           <div className="formWrpLabel">
-            <label className="fw-bolder ">Prohibited Words</label>
+            <label className="fw-bolder ">{translationObject?.translation?.communityBoardManagement?.prohibitedWords}</label>
           </div>
           <div className="formWrpInpt">
             <div className="prohabitinfo">
-              <p>※ Guide for setting prohibited words on Community.</p>
+              <p>※ {translationObject?.translation?.communityBoardManagement?.guideForSettingProhibitedWords}</p>
               <p>
-                1. If prohibited words are set, the corresponding prohibited words are equally
-                applied to all boards and sub-boards in community.
+                1. {translationObject?.translation?.communityBoardManagement?.guideForSettingProhibitedWordsPointOne}
               </p>
               <p>
-                2. Prohibited words cannot be included in the board/club name, post, or comment.
+                2. {translationObject?.translation?.communityBoardManagement?.guideForSettingProhibitedWordsPointTwo}
               </p>
             </div>
             <div className="d-flex w-100 mt-4">
@@ -320,13 +320,13 @@ const UsageSetting = (props) => {
                   type="text"
                   id="inputPassword2"
                   onChange={(e) => setAddInputValue(e.target.value)}
-                  placeholder="Please enter prohibited words"
+                  placeholder={translationObject?.translation?.communityBoardManagement?.pleaseEnterProhibitedWords}
                   value={addInputValue}
                 />
               </CCol>
               <CCol xs="auto">
                 <CButton type="submit" onClick={addProhabitedWord} className="mb-3 btn-dark">
-                  Add
+                  {translationObject?.translation?.communityBoardManagement?.add}
                 </CButton>
               </CCol>
             </div>
@@ -338,23 +338,16 @@ const UsageSetting = (props) => {
                       <div className="prohibitword m-2" key={index}>
                         <p>{word}&nbsp;&nbsp;&nbsp;</p>
                         <button onClick={() => handleRemoveWord(index)}>
-                          {/* <p style={{ lineHeight: '0.5' }}>x</p> */}
                           <i className='icon-close'></i>
                         </button>
                       </div>
                     ))}
-                  {/* <div className='prohibitword m-2'>
-                                        <span>Test123<button>x</button></span>
-                                    </div>
-                                    <div className='prohibitword m-2'>
-                                        <span>Test-1234 <button>x</button></span>
-                                    </div> */}
                 </div>
               </div>
               <div className="d-flex justify-content-end mt-2">
                 <CCol xs="auto">
                   <CButton type="submit" onClick={confirmationDeleteAllHandler} className="mb-3 btn-dark">
-                    Delete All
+                    {translationObject?.translation?.communityBoardManagement?.deleteAll}
                   </CButton>
                 </CCol>
               </div>
@@ -366,7 +359,7 @@ const UsageSetting = (props) => {
       <div className="d-flex justify-content-center">
         <CCol xs="auto">
           <CButton type="submit" className="mb-3 btn-dark" onClick={confirmationSaveAllHandler}>
-            Save Prohibited Words
+          {translationObject?.translation?.communityBoardManagement?.saveProhibitedWords}
           </CButton>
         </CCol>
       </div>

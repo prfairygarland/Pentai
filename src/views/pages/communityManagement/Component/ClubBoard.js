@@ -22,62 +22,66 @@ import { enqueueSnackbar } from 'notistack'
 import ConfirmationModal from 'src/utils/ConfirmationModal';
 import CIcon from '@coreui/icons-react'
 import * as icon from '@coreui/icons'
+import { useTranslation } from 'react-i18next';
 
 
 const ClubBoard = () => {
     
-    const [modalProps, setModalProps] = useState({})
+  const [modalProps, setModalProps] = useState({})
 
-    const [showClubPeriod, setShowClubPeriod] = useState(false)
-    const [showClubBanner, setShowClubBanner] = useState(false)
-    const [clubActivityListPopup, setClubActivityListPopup] = useState(false)
-    const [totalPages, setTotalPages] = useState(0)
-    const [clubPeriodData, setClubPeriodData] = useState({})
-    const [totalclubPeriodDataCount, setTotalclubPeriodDataCount] = useState(0)
-    const [currentPage, setCurrentPage] = useState(0)
-    const [itemsPerPage, setItemsPerPage] = useState(5)
-    const [viewActivityRegistrationId, setViewActivityRegistrationId] = useState('')
-    const [addModifyClubPeriodModal, setAddModifyClubPeriodModal] = useState(false)
-    const [currentPageOfClubActivity, setCurrentPageOfClubActivity] = useState(0)
-    const [itemsPerPageOfClubActivity, setItemsPerPageOfClubActivity] = useState(5)
-    const [totalPagesOfClubActivity, setTotalPagesOfClubActivity] = useState(0)
+  const [showClubPeriod, setShowClubPeriod] = useState(false)
+  const [showClubBanner, setShowClubBanner] = useState(false)
+  const [clubActivityListPopup, setClubActivityListPopup] = useState(false)
+  const [totalPages, setTotalPages] = useState(0)
+  const [clubPeriodData, setClubPeriodData] = useState({})
+  const [totalclubPeriodDataCount, setTotalclubPeriodDataCount] = useState(0)
+  const [currentPage, setCurrentPage] = useState(0)
+  const [itemsPerPage, setItemsPerPage] = useState(5)
+  const [viewActivityRegistrationId, setViewActivityRegistrationId] = useState('')
+  const [addModifyClubPeriodModal, setAddModifyClubPeriodModal] = useState(false)
+  const [currentPageOfClubActivity, setCurrentPageOfClubActivity] = useState(0)
+  const [itemsPerPageOfClubActivity, setItemsPerPageOfClubActivity] = useState(5)
+  const [totalPagesOfClubActivity, setTotalPagesOfClubActivity] = useState(0)
 
-    const [periodId, setPeriodId] = useState('')
-    const [clubTitle, setClubTitle] = useState('')
-    const [registrationStart, setRegistrationStart] = useState('')
-    const [registrationEnd, setRegistrationEnd] = useState('')
-    const [recruitmentStart, setRecruitmentStart] = useState('')
-    const [recruitmentEnd, setRecruitmentEnd] = useState('')
-    const [minParticipants, setMinParticipants] = useState(1)
-    const [maxParticipantsPerGroup, setMaxParticipantsPerGroup] = useState(10)
-    const [searchTxt, setSearchTxt] = useState('')
-    const [clubActivityListData, setClubActivityListData] = useState({})
-    const [clubHistoryData, setClubHistoryData] = useState([])
-    const [clubHistoryInfoPopup, setClubHistoryInfoPopup] = useState(false)
-
-
-    const [addModifyClubBannerModal, setAddModifyClubBannerModal] = useState(false)
-    const [bannerUpdateId, setBannerUpdateId] = useState('')
-    const [bannerTitle, setBannerTitle] = useState('')
-    const [bannerStartDate, setBannerStartDate] = useState('')
-    const [bannerStartHours, setBannerStartHours] = useState('00')
-    const [bannerStartMins, setBannerStartMins] = useState('00')
-    const [bannerEndDate, setBannerEndDate] = useState('')
-    const [bannerEndHours, setBannerEndHours] = useState('00')
-    const [bannerEndMins, setBannerEndMins] = useState('00')
-    const [uploadedBannerImage, setUploadedBannerImage] = useState('')
-    const [imageType, setImageType] = useState('bannerImageOnly')
-    const [linkToUrl, setLinkToUrl] = useState('')
-    const [popupImage, setPopupImage] = useState('')
-    const [clubBannerData, setClubBannerData] = useState({})
-    const [totalclubBannerDataCount, setTotalclubBannerDataCount] = useState(0)
-    const [currentPageClubBanner, setCurrentPageClubBanner] = useState(0)
-    const [itemsPerPageClubBanner, setItemsPerPageClubBanner] = useState(5)
-    const [totalPagesClubBanner, setTotalPagesClubBanner] = useState(0)
+  const [periodId, setPeriodId] = useState('')
+  const [clubTitle, setClubTitle] = useState('')
+  const [registrationStart, setRegistrationStart] = useState('')
+  const [registrationEnd, setRegistrationEnd] = useState('')
+  const [recruitmentStart, setRecruitmentStart] = useState('')
+  const [recruitmentEnd, setRecruitmentEnd] = useState('')
+  const [minParticipants, setMinParticipants] = useState(1)
+  const [maxParticipantsPerGroup, setMaxParticipantsPerGroup] = useState(10)
+  const [searchTxt, setSearchTxt] = useState('')
+  const [clubActivityListData, setClubActivityListData] = useState({})
+  const [clubHistoryData, setClubHistoryData] = useState([])
+  const [clubHistoryInfoPopup, setClubHistoryInfoPopup] = useState(false)
 
 
+  const [addModifyClubBannerModal, setAddModifyClubBannerModal] = useState(false)
+  const [bannerUpdateId, setBannerUpdateId] = useState('')
+  const [bannerTitle, setBannerTitle] = useState('')
+  const [bannerStartDate, setBannerStartDate] = useState('')
+  const [bannerStartHours, setBannerStartHours] = useState('00')
+  const [bannerStartMins, setBannerStartMins] = useState('00')
+  const [bannerEndDate, setBannerEndDate] = useState('')
+  const [bannerEndHours, setBannerEndHours] = useState('00')
+  const [bannerEndMins, setBannerEndMins] = useState('00')
+  const [uploadedBannerImage, setUploadedBannerImage] = useState('')
+  const [imageType, setImageType] = useState('bannerImageOnly')
+  const [linkToUrl, setLinkToUrl] = useState('')
+  const [popupImage, setPopupImage] = useState('')
+  const [clubBannerData, setClubBannerData] = useState({})
+  const [totalclubBannerDataCount, setTotalclubBannerDataCount] = useState(0)
+  const [currentPageClubBanner, setCurrentPageClubBanner] = useState(0)
+  const [itemsPerPageClubBanner, setItemsPerPageClubBanner] = useState(5)
+  const [totalPagesClubBanner, setTotalPagesClubBanner] = useState(0)
 
 
+
+  const { i18n } = useTranslation();
+  const translationObject = i18n.getDataByLanguage(i18n.language);
+  const multiLangObj = translationObject?.translation?.communityBoardManagement
+  
   const getClubRegistrationPeriodsBySearch = async (id) => {
     if (searchTxt.trim() === '') {
       getClubRegistrationPeriods()
@@ -139,14 +143,14 @@ const ClubBoard = () => {
   const clubPeriodDataColumns = useMemo(
     () => [
       {
-        Header: <p className="text-center">No</p>,
+        Header: <p className="text-center">{multiLangObj?.headerNo}</p>,
         accessor: 'number',
         Cell: ({ row }) => {
           return currentPage * itemsPerPage + (row.index + 1)
         },
       },
       {
-        Header: <p className="text-center">Title</p>,
+        Header: <p className="text-center">{multiLangObj?.headerTitle}</p>,
         accessor: 'PostTypes',
         Cell: ({ row }) => (
           <p
@@ -170,7 +174,7 @@ const ClubBoard = () => {
         ),
       },
       {
-        Header: <p className="text-center">Registration Period</p>,
+        Header: <p className="text-center">{multiLangObj?.headerRegistrationPeriod}</p>,
         accessor: 'regPeriod',
         Cell: ({ row }) => (
           <p role="button" className="text-center">
@@ -180,7 +184,7 @@ const ClubBoard = () => {
         ),
       },
       {
-        Header: <p className="text-center">1st Deadline</p>,
+        Header: <p className="text-center">{multiLangObj?.firstDeadline}</p>,
         accessor: 'firstDeadline',
         Cell: ({ row }) => (
           <p role="button" className="text-center">
@@ -189,7 +193,7 @@ const ClubBoard = () => {
         ),
       },
       {
-        Header: <p className="text-center">Recruitment Period</p>,
+        Header: <p className="text-center">{multiLangObj?.headerRecruitmentPeriod}</p>,
         accessor: 'recPeriod',
         Cell: ({ row }) => (
           <p role="button" className="text-center">
@@ -199,7 +203,7 @@ const ClubBoard = () => {
         ),
       },
       {
-        Header: <p className="text-center">Final Deadline</p>,
+        Header: <p className="text-center">{multiLangObj?.headerFinalDeadline}</p>,
         accessor: 'finalDeadline',
         Cell: ({ row }) => (
           <p role="button" className="text-center">
@@ -208,7 +212,7 @@ const ClubBoard = () => {
         ),
       },
       {
-        Header: <p className="text-center">Min. participant limit</p>,
+        Header: <p className="text-center">{multiLangObj?.headerMinPartiLimit}</p>,
         accessor: 'minPart',
         Cell: ({ row }) => (
           <p role="button" className="text-center">
@@ -217,7 +221,7 @@ const ClubBoard = () => {
         ),
       },
       {
-        Header: <p className="text-center">Max. same group limit</p>,
+        Header: <p className="text-center">{multiLangObj?.headerMaxSameGrpLimit}</p>,
         accessor: 'maxLimit',
         Cell: ({ row }) => (
           <p role="button" className="text-center">
@@ -226,7 +230,7 @@ const ClubBoard = () => {
         ),
       },
       {
-        Header: <p className="text-center">No. Club Activities</p>,
+        Header: <p className="text-center">{multiLangObj?.headerNoOdClubActs}</p>,
         accessor: 'clubAct',
         Cell: ({ row }) => (
           <p role="button" className="text-center">
@@ -235,7 +239,7 @@ const ClubBoard = () => {
         ),
       },
       {
-        Header: <p className="text-center">Total No. of Participants</p>,
+        Header: <p className="text-center">{multiLangObj?.headerTotalNoOfPart}</p>,
         accessor: 'totNoOfPart',
         Cell: ({ row }) => (
           <p role="button" className="text-center">
@@ -244,7 +248,7 @@ const ClubBoard = () => {
         ),
       },
       {
-        Header: <p className="text-center">Club activity list</p>,
+        Header: <p className="text-center">{multiLangObj?.headerClubActList}</p>,
         accessor: 'clubActList',
         Cell: ({ row }) => (
           <p
@@ -263,19 +267,19 @@ const ClubBoard = () => {
     const clubHistoryDataColumns = useMemo(
       () => [
         {
-          Header: <p className="text-center">No</p>,
+          Header: <p className="text-center">{multiLangObj?.headerNo}</p>,
           accessor: 'number',
           Cell: ({ row }) => {
             return <p className="text-center">{row.index + 1}</p>
           },
         },
         {
-          Header: <p className="text-center">Classification</p>,
+          Header: <p className="text-center">{multiLangObj?.classification}</p>,
           accessor: 'classification',
           Cell: ({ row }) => <p className="text-center">{row.original.classification} </p>,
         },
         {
-          Header: <p className="text-center">Date</p>,
+          Header: <p className="text-center">{multiLangObj?.date}</p>,
           accessor: 'date',
           Cell: ({ row }) => (
             <p className="text-center">{new Date(row.original.date).toLocaleString()} </p>
@@ -304,37 +308,34 @@ const ClubBoard = () => {
   const clubActivityListColumns = useMemo(
     () => [
       {
-        Header: <p className="text-center">No</p>,
+        Header: <p className="text-center">{multiLangObj?.headerNo}</p>,
         accessor: 'number',
-        // Cell: ({ row }) => {
-        //   return <p className="text-center">{row.index + 1}</p>
-        // },
         Cell: ({ row }) => {
           return currentPageOfClubActivity * itemsPerPageOfClubActivity + (row.index + 1)
         },
       },
       {
-        Header: <p className="text-center">Club</p>,
+        Header: <p className="text-center">{multiLangObj?.club}</p>,
         accessor: 'club',
         Cell: ({ row }) => <p className="text-center">{row.original.clubName} </p>,
       },
       {
-        Header: <p className="text-center">Activity</p>,
+        Header: <p className="text-center">{multiLangObj?.activity}</p>,
         accessor: 'activity',
         Cell: ({ row }) => <p className="text-center">{row.original.activity} </p>,
       },
       {
-        Header: <p className="text-center">Host</p>,
+        Header: <p className="text-center">{multiLangObj?.host}</p>,
         accessor: 'host',
         Cell: ({ row }) => <p className="text-center">{row.original.host} </p>,
       },
       {
-        Header: <p className="text-center">No. of Participants</p>,
+        Header: <p className="text-center">{multiLangObj?.noOfPart}</p>,
         accessor: 'noOfParticipants',
         Cell: ({ row }) => <p className="text-center">{row.original.participants} </p>,
       },
       {
-        Header: <p className="text-center">History</p>,
+        Header: <p className="text-center">{multiLangObj?.history}</p>,
         accessor: 'history',
         Cell: ({ row }) => (
           <p
@@ -380,8 +381,8 @@ const ClubBoard = () => {
     const cancelClubBannerModalHandler = (isOpen) => {
       setModalProps({
         isModalOpen: isOpen,
-        title: 'Confirmation',
-        content: 'Are you sure you want to close?',
+        title: `${multiLangObj?.confirmation}`,
+        content: `${multiLangObj?.areYouSureToClose}`,
         cancelBtn: 'No',
         cancelBtnHandler: cancelConfirmation,
         successBtn: 'Yes',
@@ -392,34 +393,34 @@ const ClubBoard = () => {
     
     const validateClubBannerHandler = () => {
       if(bannerTitle.trim() === '') {
-        enqueueSnackbar('Please enter title', { variant: 'error' })
+        enqueueSnackbar(multiLangObj?.pleaseEnterTitle, { variant: 'error' })
         return false
       } else if(bannerStartDate === '') {
-        enqueueSnackbar('Please select start date', { variant: 'error' })
+        enqueueSnackbar(multiLangObj?.pleaseSelectStartDate, { variant: 'error' })
         return false
       } else if(bannerStartHours === '00' && bannerStartMins === '00') {
-        enqueueSnackbar('Please select start time', { variant: 'error' })
+        enqueueSnackbar(multiLangObj?.pleaseSelectStartTime, { variant: 'error' })
         return false
       } else if(!bannerUpdateId && new Date() > new Date(bannerStartDate + 'T' + bannerStartHours + ':' + bannerStartMins)) {
-        enqueueSnackbar('Start time cannot be earlier than current time', { variant: 'error' })
+        enqueueSnackbar(multiLangObj?.startTimeCannotEarlierThanCurrent, { variant: 'error' })
         return false
       } else if(bannerEndDate === '') {
-        enqueueSnackbar('Please select end date', { variant: 'error' })
+        enqueueSnackbar(multiLangObj?.pleaseSelectEndDate, { variant: 'error' })
         return false
       } else if(bannerEndHours === '00' && bannerEndMins === '00') {
-        enqueueSnackbar('Please select end time', { variant: 'error' })
+        enqueueSnackbar(multiLangObj?.pleaseSelectEndTime, { variant: 'error' })
         return false
       } else if(!bannerUpdateId && new Date(bannerStartDate + 'T' + bannerStartHours + ':' + bannerStartMins) > new Date(bannerEndDate + 'T' + bannerEndHours + ':' + bannerEndMins)) {
-        enqueueSnackbar('End time cannot be earlier than start time', { variant: 'error' })
+        enqueueSnackbar(multiLangObj?.endTimeCannotEarlierThanStart, { variant: 'error' })
         return false
       } else if(uploadedBannerImage === '') {
-        enqueueSnackbar('Please upload a banner image', { variant: 'error' })
+        enqueueSnackbar(multiLangObj?.pleaseUploadBannerImage, { variant: 'error' })
         return false
       } else if(imageType === 'linkTo' && linkToUrl === '') {
-        enqueueSnackbar('Please enter URL for Link to post', { variant: 'error' })
+        enqueueSnackbar(multiLangObj?.pleaseEnterURLForLinkToPost, { variant: 'error' })
         return false
       } else if(imageType === 'popUpImage' && popupImage === '') {
-        enqueueSnackbar('Please add pop-up image for banner', { variant: 'error' })
+        enqueueSnackbar(multiLangObj?.pleaseAddPopupImageForBanner, { variant: 'error' })
         return false
       } else {
         confirmationSaveClubBannerModalHandler(true)
@@ -429,8 +430,8 @@ const ClubBoard = () => {
     const confirmationSaveClubBannerModalHandler = (isOpen) => {
       setModalProps({
         isModalOpen: isOpen,
-        title: 'Confirmation',
-        content: 'Are you sure you want to save?',
+        title: multiLangObj?.confirmation,
+        content: multiLangObj?.areYouSureToClose,
         cancelBtn: 'No',
         cancelBtnHandler: cancelConfirmation,
         successBtn: 'Yes',
@@ -467,8 +468,8 @@ const ClubBoard = () => {
               enqueueSnackbar(res?.data?.error, { variant: 'error' })
           } else {
             bannerUpdateId ? 
-            enqueueSnackbar('Club Banner Updated Successfully', { variant: 'success' }) :
-            enqueueSnackbar('Club Banner Added Successfully', { variant: 'success' })
+            enqueueSnackbar(multiLangObj?.clubBannerUpdatedSuccessfully, { variant: 'success' }) :
+            enqueueSnackbar(multiLangObj?.clubBannerSavedSuccessfully, { variant: 'success' })
           }
           getClubBanners()            
         }
@@ -528,8 +529,8 @@ const ClubBoard = () => {
   const confirmDeleteBannerHandler = (isOpen, id) => {
     setModalProps({
       isModalOpen: isOpen,
-      title: 'Confirmation',
-      content: 'Are you sure to delete banner?',
+      title: multiLangObj?.confirmation,
+      content: multiLangObj?.areYouSureToDeleteBanner,
       cancelBtn: 'No',
       cancelBtnHandler: cancelConfirmation,
       successBtn: 'Yes',
@@ -544,9 +545,9 @@ const ClubBoard = () => {
       const res = await deleteApi(url)
       if (res?.data?.status === 200) {
         getClubBanners()
-        enqueueSnackbar('Banner Deleted Successfully', { variant: 'success' })
+        enqueueSnackbar(multiLangObj?.bannerDeletedSuccessfully, { variant: 'success' })
       } else {
-        enqueueSnackbar('Something went wrong, please try later!', { variant: 'success' })
+        enqueueSnackbar(multiLangObj?.somethingWentWrong, { variant: 'success' })
       }
     } catch (error) {
       console.log(error)
@@ -559,14 +560,14 @@ const ClubBoard = () => {
   const clubBannerDataColumns = useMemo(
     () => [
       {
-        Header: <p className="text-center">No</p>,
+        Header: <p className="text-center">{multiLangObj?.headerNo}</p>,
         accessor: 'number',
         Cell: ({ row }) => {
           return currentPageClubBanner * itemsPerPageClubBanner + (row.index + 1)
         },
       },
       {
-        Header: <p className="text-center">Thumbnail Image</p>,
+        Header: <p className="text-center">{multiLangObj?.thumbnailImg}</p>,
         accessor: 'regPeriod',
         Cell: ({ row }) => (
           <div style={{ width: '150px', height: '100px' }}>
@@ -580,7 +581,7 @@ const ClubBoard = () => {
         ),
       },
       {
-        Header: <p className="text-center">Title</p>,
+        Header: <p className="text-center">{multiLangObj?.headerTitle}</p>,
         accessor: 'firstDeadline',
         Cell: ({ row }) => (
           <p role="button" className="text-center" onClick={() => editClubBannerHandler(row.original.id)}>
@@ -589,7 +590,7 @@ const ClubBoard = () => {
         ),
       },
       {
-        Header: <p className="text-center">Posting Period</p>,
+        Header: <p className="text-center">{multiLangObj?.postingPeriod}</p>,
         accessor: 'recPeriod',
         Cell: ({ row }) => (
           <p className="text-center">
@@ -599,7 +600,7 @@ const ClubBoard = () => {
         ),
       },
       {
-        Header: <p className="text-center">Status</p>,
+        Header: <p className="text-center">{multiLangObj?.status}</p>,
         accessor: 'finalDeadline',
         Cell: ({ row }) => (
           <p className="text-center">
@@ -608,7 +609,7 @@ const ClubBoard = () => {
         ),
       },
       {
-        Header: <p className="text-center">Type</p>,
+        Header: <p className="text-center">{multiLangObj?.type}</p>,
         accessor: 'minPart',
         Cell: ({ row }) => (
           <p className="text-center">
@@ -617,7 +618,7 @@ const ClubBoard = () => {
         ),
       },
       {
-        Header: <p className="text-center">Action</p>,
+        Header: <p className="text-center">{multiLangObj?.action}</p>,
         accessor: 'maxLimit',
         Cell: ({ row }) => (
           <p className="text-center">
@@ -774,9 +775,9 @@ const ClubBoard = () => {
 
       if (res.status === 200) {
         if (periodId) {
-          enqueueSnackbar('Club  Period/Qualification Updated Successfully', { variant: 'success' })
+          enqueueSnackbar(multiLangObj?.clubPQUpdatedSuccessfully, { variant: 'success' })
         } else {
-          enqueueSnackbar('Club  Period/Qualification Registered Successfully', {
+          enqueueSnackbar(multiLangObj?.clubPQUpdatedSuccessfully, {
             variant: 'success',
           })
         }
@@ -809,19 +810,19 @@ const ClubBoard = () => {
 
     const validateClubPeriodHandler = () => {
       if(clubTitle.trim() === '') {
-        enqueueSnackbar('Please enter title', { variant: 'error' })
+        enqueueSnackbar(multiLangObj?.pleaseEnterTitle, { variant: 'error' })
         return false
       } else if(registrationStart === '') {
-        enqueueSnackbar('Please select registration start date', { variant: 'error' })
+        enqueueSnackbar(multiLangObj?.pleaseSelectRegistrationStartDate, { variant: 'error' })
         return false
       } else if(registrationEnd === '') {
-        enqueueSnackbar('Please select registration end date', { variant: 'error' })
+        enqueueSnackbar(multiLangObj?.pleaseSelectRegistrationStartDate, { variant: 'error' })
         return false
       } else if(recruitmentStart === '') {
-        enqueueSnackbar('Please select recruitment start date', { variant: 'error' })
+        enqueueSnackbar(multiLangObj?.pleaseSelectRecruitmentStartDate, { variant: 'error' })
         return false
       } else if(recruitmentEnd === '') {
-        enqueueSnackbar('Please select recruitment end date', { variant: 'error' })
+        enqueueSnackbar(multiLangObj?.pleaseSelectRecruitmentStartDate, { variant: 'error' })
         return false
       } else {
         confirmationSaveModalHandler(true)
@@ -831,8 +832,8 @@ const ClubBoard = () => {
     const confirmationSaveModalHandler = (isOpen) => {
       setModalProps({
         isModalOpen: isOpen,
-        title: 'Confirmation',
-        content: 'Are you sure you want to save?',
+        title: multiLangObj?.confirmation,
+        content: multiLangObj?.areYouSureToSave,
         cancelBtn: 'No',
         cancelBtnHandler: cancelConfirmation,
         successBtn: 'Yes',
@@ -844,8 +845,8 @@ const ClubBoard = () => {
     const confirmationCloseModalHandler = (isOpen) => {
       setModalProps({
         isModalOpen: isOpen,
-        title: 'Confirmation',
-        content: 'Are you sure you want to close?',
+        title: multiLangObj?.confirmation,
+        content: multiLangObj?.areYouSureToClose,
         cancelBtn: 'No',
         cancelBtnHandler: cancelConfirmation,
         successBtn: 'Yes',
@@ -918,7 +919,7 @@ const ClubBoard = () => {
     <div>
       <ConfirmationModal modalProps={modalProps} />
       <div className='toggleContainer'>
-        <div>Club Period/Qualification</div>
+        <div>{multiLangObj?.clubPeriodQualification}</div>
         <div>
           <CFormSwitch
             id="club_period_qualification"
@@ -944,7 +945,7 @@ const ClubBoard = () => {
               type="button"
               onClick={getClubRegistrationPeriodsBySearch}
             >
-              Search
+              {multiLangObj?.search}
             </CButton>
           </CForm>
           <CForm className="d-flex justify-content-end mt-2">
@@ -954,11 +955,11 @@ const ClubBoard = () => {
               type="button"
               onClick={addNewClubPeriodHandler}
             >
-              Add
+              {multiLangObj?.add}
             </CButton>
           </CForm>
           {totalclubPeriodDataCount > 0 && (
-            <p style={{ margin: 0 }}>Total&nbsp;:&nbsp; {totalclubPeriodDataCount}</p>
+            <p style={{ margin: 0 }}>{multiLangObj?.total}&nbsp;:&nbsp; {totalclubPeriodDataCount}</p>
           )}
           <ReactTable
             columns={clubPeriodDataColumns}
@@ -973,8 +974,8 @@ const ClubBoard = () => {
                   <ReactPaginate
                     breakLabel={'...'}
                     marginPagesDisplayed={1}
-                    previousLabel={<button>Previous</button>}
-                    nextLabel={<button>Next</button>}
+                    previousLabel={<button>{multiLangObj?.previous}</button>}
+                    nextLabel={<button>{multiLangObj?.next}</button>}
                     pageCount={totalPages}
                     onPageChange={handlePageChange}
                     forcePage={currentPage}
@@ -986,7 +987,7 @@ const ClubBoard = () => {
             )}
             {clubPeriodData?.length > 0 && (
               <div className="d-flex align-items-center gap-2 mt-2">
-                <label>Show</label>
+                <label>{multiLangObj?.show}</label>
                 <CFormSelect
                   className=""
                   aria-label=""
@@ -996,7 +997,7 @@ const ClubBoard = () => {
                     setCurrentPage(0)
                   }}
                 />
-                <label>Lists</label>
+                <label>{multiLangObj?.lists}</label>
               </div>
             )}
           </div>
@@ -1015,7 +1016,7 @@ const ClubBoard = () => {
                 setClubActivityListPopup(false)
               }}
             >
-              <CModalTitle className="p-1">Club Activity List</CModalTitle>
+              <CModalTitle className="p-1">{multiLangObj?.clubActivityList}</CModalTitle>
             </CModalHeader>
             <CModalBody>
               {clubActivityListData.length > 0 && (
@@ -1035,8 +1036,8 @@ const ClubBoard = () => {
                       <ReactPaginate
                         breakLabel={'...'}
                         marginPagesDisplayed={1}
-                        previousLabel={<button>Previous</button>}
-                        nextLabel={<button>Next</button>}
+                        previousLabel={<button>{multiLangObj?.previous}</button>}
+                        nextLabel={<button>{multiLangObj?.next}</button>}
                         pageCount={totalPagesOfClubActivity}
                         onPageChange={handlePageChangeOfClubActivity}
                         forcePage={currentPageOfClubActivity}
@@ -1048,7 +1049,7 @@ const ClubBoard = () => {
                 )}
                 {clubActivityListData?.length > 0 && (
                   <div className="d-flex align-items-center gap-2 mt-2">
-                    <label>Show</label>
+                    <label>{multiLangObj?.show}</label>
                     <CFormSelect
                       className=""
                       aria-label=""
@@ -1058,11 +1059,11 @@ const ClubBoard = () => {
                         setCurrentPageOfClubActivity(0)
                       }}
                     />
-                    <label>Lists</label>
+                    <label>{multiLangObj?.lists}</label>
                   </div>
                 )}
               </div>
-              {clubActivityListData.length === 0 && <>No Data Available</>}
+              {clubActivityListData.length === 0 && <>{multiLangObj?.noDataAvailable}</>}
             </CModalBody>
           </CModal>
 
@@ -1081,7 +1082,7 @@ const ClubBoard = () => {
                 setAddModifyClubPeriodModal(false)
               }}
             >
-              <CModalTitle className="p-1">Club Period/Qualification Registration</CModalTitle>
+              <CModalTitle className="p-1">{multiLangObj?.clubPeriodQualificationRegistration}</CModalTitle>
             </CModalHeader>
             <CModalBody>
               <CFormInput
@@ -1095,10 +1096,10 @@ const ClubBoard = () => {
                 }}
               />
               <div className="deadline-container mt-2">
-                <h5>Club Period Setting</h5>
+                <h5>{multiLangObj?.clubPeriodSetting}</h5>
               </div>
               <div className="deadline-container">
-                <div className="deadline-label">Registration Period</div>
+                <div className="deadline-label">{multiLangObj?.registrationPeriod}</div>
               </div>
               <div className="d-flex gap-3  mb-2">
                 <div>
@@ -1114,12 +1115,12 @@ const ClubBoard = () => {
                   />
                 </div>
                 <div>
-                  <div>1st Deadline</div>
-                  <div>YYYY.MM.DD</div>
+                  <div>{multiLangObj?.firstDeadline}</div>
+                  <div>{multiLangObj?.yyyyMmDd}</div>
                 </div>
               </div>
               <div className="deadline-container">
-                <div className="deadline-label">Recruitment Period</div>
+                <div className="deadline-label">{multiLangObj?.recruitmentPeriod}</div>
               </div>
               <div className="d-flex gap-3 mb-2">
                 <div>
@@ -1135,30 +1136,30 @@ const ClubBoard = () => {
                   />
                 </div>
                 <div>
-                  <div>last Deadline</div>
-                  <div>YYYY.MM.DD</div>
+                  <div>{multiLangObj?.lastDeadline}</div>
+                  <div>{multiLangObj?.yyyyMmDd}</div>
                 </div>
               </div>
               <div className="deadline-container">
-                <h5>No. of Participants Setting</h5>
+                <h5>{multiLangObj?.noOfPartSettings}</h5>
               </div>
               <div className="deadline-container">
-                <div className="deadline-label w-50">Min. participant limit</div>
+                <div className="deadline-label w-50">{multiLangObj?.headerMinPartiLimit}</div>
 
                 <div className="d-flex gap-3 align-items-center">
-                  <div className="">Over</div>
+                  <div className="">{multiLangObj?.over}</div>
                   <CFormSelect
                     options={[
-                      { label: '1', value: '1' },
-                      { label: '2', value: '2' },
-                      { label: '3', value: '3' },
-                      { label: '4', value: '4' },
-                      { label: '5', value: '5' },
-                      { label: '6', value: '6' },
-                      { label: '7', value: '7' },
-                      { label: '8', value: '8' },
-                      { label: '9', value: '9' },
-                      { label: '10', value: '10' },
+                      { label: multiLangObj?.numberOne, value: '1' },
+                      { label: multiLangObj?.numberTwo, value: '2' },
+                      { label: multiLangObj?.numberThree, value: '3' },
+                      { label: multiLangObj?.numberFour, value: '4' },
+                      { label: multiLangObj?.numberFive, value: '5' },
+                      { label: multiLangObj?.numberSix, value: '6' },
+                      { label: multiLangObj?.numberSeven, value: '7' },
+                      { label: multiLangObj?.numberEight, value: '8' },
+                      { label: multiLangObj?.numberNine, value: '9' },
+                      { label: multiLangObj?.numberTen, value: '10' },
                     ]}
                     value={minParticipants}
                     onChange={(e) => setMinParticipants(e.target.value)}
@@ -1166,23 +1167,23 @@ const ClubBoard = () => {
                 </div>
               </div>
               <div className="deadline-container">
-                <div className="deadline-label w-50">Max. same group limit</div>
+                <div className="deadline-label w-50">{multiLangObj?.headerMaxSameGrpLimit}</div>
 
                 <div className="d-flex gap-3 align-items-center">
-                  <span style={{ whitespace: 'nowrap' }}>No More Than</span>
+                  <span style={{ whitespace: 'nowrap' }}>{multiLangObj?.noMoreThan}</span>
                   <CFormSelect
                     className="w-50"
                     options={[
-                      { label: '10', value: '10' },
-                      { label: '20', value: '20' },
-                      { label: '30', value: '30' },
-                      { label: '40', value: '40' },
-                      { label: '50', value: '50' },
-                      { label: '60', value: '60' },
-                      { label: '70', value: '70' },
-                      { label: '80', value: '80' },
-                      { label: '90', value: '90' },
-                      { label: '100', value: '100' },
+                      { label: multiLangObj?.numberTen, value: '10' },
+                      { label: multiLangObj?.numberTwenty, value: '20' },
+                      { label: multiLangObj?.numberThirty, value: '30' },
+                      { label: multiLangObj?.numberForty, value: '40' },
+                      { label: multiLangObj?.numberFifty, value: '50' },
+                      { label: multiLangObj?.numberSixty, value: '60' },
+                      { label: multiLangObj?.numberSeventy, value: '70' },
+                      { label: multiLangObj?.numberEighty, value: '80' },
+                      { label: multiLangObj?.numberNinety, value: '90' },
+                      { label: multiLangObj?.numberHundred, value: '100' },
                     ]}
                     value={maxParticipantsPerGroup}
                     onChange={(e) => setMaxParticipantsPerGroup(e.target.value)}
@@ -1192,20 +1193,20 @@ const ClubBoard = () => {
               </div>
               {(recruitmentStart === '' || new Date() <= new Date(recruitmentStart)) && 
                 <div className="d-flex justify-content-evenly">
-                  <CButton onClick={confirmationCloseModalHandler}>Cancel</CButton>
-                  <CButton onClick={validateClubPeriodHandler}>{periodId ? 'Update' : 'Save'}</CButton>
+                  <CButton onClick={confirmationCloseModalHandler}>{multiLangObj?.cancel}</CButton>
+                  <CButton onClick={validateClubPeriodHandler}>{periodId ? multiLangObj?.update : multiLangObj?.save}</CButton>
                 </div>
               }
               {(new Date() > new Date(recruitmentStart)) && 
                 <div className="d-flex justify-content-evenly">
-                  <CButton onClick={confirmationCloseModalHandler}>Close</CButton>
+                  <CButton onClick={confirmationCloseModalHandler}>{multiLangObj?.close}</CButton>
                 </div>
               }
             </CModalBody>
         </CModal>
       </div>)}
       <div className='toggleContainer'>
-        <div>Club Banner</div>
+        <div>{multiLangObj?.clubBanner}</div>
         <div>
           <CFormSwitch
             id="club_banner"
@@ -1224,11 +1225,11 @@ const ClubBoard = () => {
               type="button"
               onClick={addNewClubBannerHandler}
             >
-              Add
+              {multiLangObj?.add}
             </CButton>
           </CForm>
           {totalclubBannerDataCount > 0 && (
-            <p style={{ margin: 0 }}>Total&nbsp;:&nbsp; {totalclubBannerDataCount}</p>
+            <p style={{ margin: 0 }}>{multiLangObj?.total}&nbsp;:&nbsp; {totalclubBannerDataCount}</p>
           )}
           <ReactTable
             columns={clubBannerDataColumns}
@@ -1243,8 +1244,8 @@ const ClubBoard = () => {
                   <ReactPaginate
                     breakLabel={'...'}
                     marginPagesDisplayed={1}
-                    previousLabel={<button>Previous</button>}
-                    nextLabel={<button>Next</button>}
+                    previousLabel={<button>{multiLangObj?.previous}</button>}
+                    nextLabel={<button>{multiLangObj?.next}</button>}
                     pageCount={totalPagesClubBanner}
                     onPageChange={handlePageChangeClubBanner}
                     forcePage={currentPageClubBanner}
@@ -1256,7 +1257,7 @@ const ClubBoard = () => {
             )}
             {clubPeriodData?.length > 0 && (
               <div className="d-flex align-items-center gap-2 mt-2">
-                <label>Show</label>
+                <label>{multiLangObj?.show}</label>
                 <CFormSelect
                   className=""
                   aria-label=""
@@ -1266,7 +1267,7 @@ const ClubBoard = () => {
                     setCurrentPageClubBanner(0)
                   }}
                 />
-                <label>Lists</label>
+                <label>{multiLangObj?.lists}</label>
               </div>
             )}
           </div>
@@ -1286,7 +1287,7 @@ const ClubBoard = () => {
                 setAddModifyClubBannerModal(false)
               }}
             >
-              <CModalTitle className="p-1">Banner Registration</CModalTitle>
+              <CModalTitle className="p-1">{multiLangObj?.bannerRegistration}</CModalTitle>
             </CModalHeader>
             <CModalBody>
               <div className="card-body">
@@ -1294,14 +1295,14 @@ const ClubBoard = () => {
                   <div className="form-outline form-white  d-flex ">
                     <div className="formWrpLabel">
                       <label className="fw-bolder ">
-                        Banner Title <span className="mandatory-red-asterisk">*</span>
+                        {multiLangObj?.bannerTitle} <span className="mandatory-red-asterisk">*</span>
                       </label>
                     </div>
                     <div className="formWrpInpt">
                       <div className="d-flex formradiogroup mb-2 gap-3">
                         <CFormInput
                           type="text"
-                          placeholder="Enter Title Here"
+                          placeholder={multiLangObj?.enterTitleHere}
                           name="title"
                           value={bannerTitle}
                           onChange={(e) => {
@@ -1313,7 +1314,7 @@ const ClubBoard = () => {
                   </div>
                   <div className="form-outline form-white  d-flex ">
                     <div className="formWrpLabel">
-                      <label className="fw-bolder ">Posting Period</label>
+                      <label className="fw-bolder ">{multiLangObj?.postingPeriod}</label>
                     </div>
                     <div className="upload-image-main-container">
                       <div className="upload-img-btn-and-info">
@@ -1355,13 +1356,13 @@ const ClubBoard = () => {
                   </div>
                   <div className="form-outline form-white  d-flex ">
                     <div className="formWrpLabel">
-                      <label className="fw-bolder ">Upload Image</label>
+                      <label className="fw-bolder ">{multiLangObj?.uploadImage}</label>
                     </div>
                     <div className="upload-image-main-container">
                       <div className="upload-img-btn-and-info">
                         <div className="upload-container-btn">
                           <label className="label-btn" color="dark" htmlFor="imageFiles">
-                            Upload
+                            {multiLangObj?.upload}
                             <input
                               type="file"
                               name="imageFiles"
@@ -1384,7 +1385,7 @@ const ClubBoard = () => {
                   </div>
                   <div className="form-outline form-white  d-flex ">
                     <div className="formWrpLabel">
-                      <label className="fw-bolder ">Banner Type</label>
+                      <label className="fw-bolder ">{multiLangObj?.bannerType}</label>
                     </div>
                     <div className="upload-image-main-container">
                       <div className="push-notification-container gap-3">
@@ -1397,7 +1398,7 @@ const ClubBoard = () => {
                             setLinkToUrl('')
                             setPopupImage('')
                           }}
-                          label="Banner Image Only"
+                          label={multiLangObj?.bannerImageOnly}
                           value={true}
                         />
                       </div>
@@ -1410,12 +1411,12 @@ const ClubBoard = () => {
                             setImageType('linkTo')
                             setPopupImage('')
                           }}
-                          label="Link To"
+                          label={multiLangObj?.linkTo}
                           value={false}
                         />
                         <CFormInput
                           type="text"
-                          placeholder="Enter URL"
+                          placeholder={multiLangObj?.enterUrl}
                           name="title"
                           value={linkToUrl}
                           disabled={imageType !== 'linkTo'}
@@ -1433,7 +1434,7 @@ const ClubBoard = () => {
                             setImageType('popUpImage')
                             setLinkToUrl('')
                           }}
-                          label="Pop-up Image"
+                          label={multiLangObj?.popupImage}
                           value={false}
                         />
                         <label
@@ -1442,7 +1443,7 @@ const ClubBoard = () => {
                           htmlFor="popupImg"
                           style={{ display: `${imageType === 'popUpImage' ? '' : 'none'}` }}
                         >
-                          Upload
+                          {multiLangObj?.upload}
                           <input
                             type="file"
                             name="popupImg"
@@ -1465,9 +1466,9 @@ const ClubBoard = () => {
                 </div>
               </div>
               <div className="d-flex justify-content-evenly">
-                <CButton onClick={cancelClubBannerModalHandler}>Cancel</CButton>
+                <CButton onClick={cancelClubBannerModalHandler}>{multiLangObj?.cancel}</CButton>
                 <CButton onClick={validateClubBannerHandler}>
-                  {bannerUpdateId ? 'Update' : 'Save'}
+                  {bannerUpdateId ? multiLangObj?.update : multiLangObj?.save}
                 </CButton>
               </div>
             </CModalBody>
@@ -1489,7 +1490,7 @@ const ClubBoard = () => {
               setClubHistoryInfoPopup(false)
             }}
           >
-            <CModalTitle className="p-1">Club History</CModalTitle>
+            <CModalTitle className="p-1">{multiLangObj?.clubHistory}</CModalTitle>
           </CModalHeader>
           <CModalBody>
             <ReactTable

@@ -14,6 +14,7 @@ import { getApi, postApi, putApi } from 'src/utils/Api'
 import { API_ENDPOINT } from 'src/utils/config'
 import { enqueueSnackbar } from 'notistack'
 import Loader from 'src/components/common/Loader'
+import { useTranslation } from 'react-i18next';
 
 const WelfareBoard = () => {
   const [addWelfareBoard, setAddWelfareBoard] = useState(false)
@@ -31,6 +32,9 @@ const WelfareBoard = () => {
   const [deleteVisible, setDeleteVisible] = useState(false)
   const [getId, setId] = useState()
   const [isLoading, setIsLoading] = useState(false)
+
+  const { i18n } = useTranslation();
+  const translationObject = i18n.getDataByLanguage(i18n.language); 
 
   const handleSearchChange = (event) => {
     const term = event.target.value.toLowerCase()
@@ -66,8 +70,7 @@ const WelfareBoard = () => {
   const handleWelfareSearchData = async () => {
     try {
       const res = await getApi(API_ENDPOINT.welfare_search + `?pageNo=${1}`)
-      console.log('res =>', res.status)
-      if (res.status == 200) {
+                if (res.status == 200) {
         setSearchData(res.data)
         setFilteredData(res.data)
       }
@@ -77,8 +80,6 @@ const WelfareBoard = () => {
   }
 
   const handleItemClick = (clickedItem) => {
-    // Handle the click on a specific filtered data item
-    console.log('Clicked Item:', clickedItem)
     setAddWelfareBoard(true)
     setId(clickedItem.id)
     addBoardData.name = clickedItem.name
@@ -90,7 +91,7 @@ const WelfareBoard = () => {
 
   const saveBoard = async () => {
     if (addBoardData.name === '') {
-      enqueueSnackbar('Please enter name', { variant: 'error' })
+      enqueueSnackbar(translationObject?.translation?.communityBoardManagement?.pleaseEnterName, { variant: 'error' })
       return false
     }
     setIsLoading(true)
@@ -109,7 +110,6 @@ const WelfareBoard = () => {
         res = await postApi(API_ENDPOINT.add_welfare_board, data)
       }
 
-      console.log('responce =>', res)
       if (res.status === 200) {
         setAddBoardData({
           name: '',
@@ -117,7 +117,7 @@ const WelfareBoard = () => {
           isAdminOnly: false,
           annonymousBoard: false,
         })
-        enqueueSnackbar(`It has been saved`, { variant: 'success' })
+        enqueueSnackbar(translationObject?.translation?.communityBoardManagement?.itHasBeenSaved, { variant: 'success' })
         setVisible(false)
         setId()
         handleWelfareSearchData()
@@ -147,11 +147,9 @@ const WelfareBoard = () => {
   }
 
   const handleBoardDelete = async () => {
-    console.log('get id =>', getId)
     setIsLoading(true)
     try {
       const res = await postApi(API_ENDPOINT.delete_welfare_board, { welfareId: getId })
-      console.log('responce =>', res)
       if (res.status === 200) {
         setAddBoardData({
           name: '',
@@ -159,7 +157,7 @@ const WelfareBoard = () => {
           isAdminOnly: false,
           annonymousBoard: false,
         })
-        enqueueSnackbar(`Delete successfully`, { variant: 'success' })
+        enqueueSnackbar(translationObject?.translation?.communityBoardManagement?.deletedSuccessfully, { variant: 'success' })
         setDeleteVisible(false)
         setId()
         handleWelfareSearchData()
@@ -180,7 +178,7 @@ const WelfareBoard = () => {
 
   const validate = async () => {
     if (addBoardData.name === '') {
-      enqueueSnackbar('Please enter name', { variant: 'error' })
+      enqueueSnackbar(translationObject?.translation?.communityBoardManagement?.pleaseEnterName, { variant: 'error' })
       return false
     } else {
       setVisible(!visible)
@@ -199,7 +197,7 @@ const WelfareBoard = () => {
                 className=" text-white btn-black"
                 onClick={() => setWelfareBoard()}
               >
-                Add
+                {translationObject?.translation?.communityBoardManagement?.add}
               </CButton>
               {getId && (
                 <CButton
@@ -207,7 +205,7 @@ const WelfareBoard = () => {
                   className=" text-white btn-black"
                   onClick={() => setDeleteVisible(true)}
                 >
-                  Delete
+                  {translationObject?.translation?.communityBoardManagement?.delete}
                 </CButton>
               )}
             </div>
@@ -231,9 +229,6 @@ const WelfareBoard = () => {
                 )}
               </CCol>
             </div>
-            {/* <div className='d-flex justify-content-center'>
-            dragable list here
-          </div> */}
           </div>
           {addWelfareBoard === true ? (
             <div className="w-75 p-4">
@@ -245,7 +240,7 @@ const WelfareBoard = () => {
                         <div className="formWraper">
                           <div className="form-outline form-white d-flex">
                             <div className="formWrpLabel" style={{ minWidth: '170px' }}>
-                              <label className="fw-bolder ">Usage status</label>
+                              <label className="fw-bolder ">{translationObject?.translation?.communityBoardManagement?.usageStatus}</label>
                             </div>
                             <div className="formWrpInpt">
                               <div className="d-flex formradiogroup mb-2 gap-3">
@@ -277,7 +272,7 @@ const WelfareBoard = () => {
 
                           <div className="form-outline form-white  d-flex ">
                             <div className="formWrpLabel" style={{ minWidth: '170px' }}>
-                              <label className="fw-bolder ">Board Name</label>
+                              <label className="fw-bolder ">{translationObject?.translation?.communityBoardManagement?.boardName}</label>
                             </div>
                             <div className="formWrpInpt">
                               <div className="d-flex formradiogroup mb-2 gap-3">
@@ -292,25 +287,11 @@ const WelfareBoard = () => {
                                   }}
                                 />
                                 <span className="txt-byte-information">
-                                  {addBoardData.name.length} / 24 byte
+                                  {addBoardData.name.length} / {translationObject?.translation?.communityBoardManagement?.twentyFourBytes}
                                 </span>
                               </div>
                             </div>
                           </div>
-
-                          {/* <div className="form-outline form-white  d-flex ">
-                            <div className='formWrpLabel' style={{ minWidth: '170px' }}>
-                              <label className="fw-bolder ">Edit order</label>
-                            </div>
-                            <div className='formWrpInpt'>
-                              <div className='d-flex formradiogroup mb-2 gap-3' >
-                                <CButton>Up</CButton>
-                                <CButton>Down</CButton>
-                                <CButton>Top</CButton>
-                                <CButton>Bottom</CButton>
-                              </div>
-                            </div>
-                          </div> */}
                         </div>
                       </div>
                     </div>
@@ -326,7 +307,7 @@ const WelfareBoard = () => {
         {addWelfareBoard && (
           <div className="save-cancel-btn-container">
             <CButton className="btn save-cancel-btn" color="dark" onClick={() => validate()}>
-              Save
+            {translationObject?.translation?.communityBoardManagement?.save}
             </CButton>
           </div>
         )}
@@ -338,17 +319,17 @@ const WelfareBoard = () => {
           aria-labelledby="StaticBackdropExampleLabel"
         >
           <CModalHeader>
-            <CModalTitle id="StaticBackdropExampleLabel">Saved the settings.</CModalTitle>
+            <CModalTitle id="StaticBackdropExampleLabel">{translationObject?.translation?.communityBoardManagement?.saveTheSettings}</CModalTitle>
           </CModalHeader>
           <CModalBody>
-            <p>Are you sure to save?</p>
+            <p>{translationObject?.translation?.communityBoardManagement?.areYouSureToSave}</p>
           </CModalBody>
           <CModalFooter>
             <CButton color="secondary" onClick={() => setVisible(false)}>
-              Close
+            {translationObject?.translation?.communityBoardManagement?.close}
             </CButton>
             <CButton onClick={() => saveBoard()} color="primary">
-              Save
+            {translationObject?.translation?.communityBoardManagement?.save}
             </CButton>
           </CModalFooter>
         </CModal>
@@ -360,20 +341,17 @@ const WelfareBoard = () => {
           aria-labelledby="StaticBackdropExampleLabel"
         >
           <CModalHeader>
-            <CModalTitle id="StaticBackdropExampleLabel">Delete board.</CModalTitle>
+            <CModalTitle id="StaticBackdropExampleLabel">{translationObject?.translation?.communityBoardManagement?.deleteBoard}</CModalTitle>
           </CModalHeader>
           <CModalBody>
-            <p>
-              All posts within this category will be deleted and all data will be lost. Are you sure
-              you want to delete the board?
-            </p>
+            <p>{translationObject?.translation?.communityBoardManagement?.deleteAllPostConfirmationStatement}</p>
           </CModalBody>
           <CModalFooter>
             <CButton color="secondary" onClick={() => setDeleteVisible(false)}>
-              Close
+            {translationObject?.translation?.communityBoardManagement?.close}
             </CButton>
             <CButton onClick={() => handleBoardDelete()} color="primary">
-              Delete
+            {translationObject?.translation?.communityBoardManagement?.delete}
             </CButton>
           </CModalFooter>
         </CModal>
