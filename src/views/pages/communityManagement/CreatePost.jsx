@@ -16,6 +16,7 @@ import RecruitManagement from './RecruitManagement'
 import PollManagement from './PollManagement'
 import ConfirmationModal from 'src/utils/ConfirmationModal'
 import { ALL_CONSTANTS } from 'src/utils/config'
+import { useTranslation } from 'react-i18next'
 
 const CreatePost = () => {
   const location = useLocation()
@@ -36,18 +37,22 @@ const CreatePost = () => {
     isPushNotification: false,
   })
 
+  const { i18n } = useTranslation()
+  const translationObject = i18n.getDataByLanguage(i18n.language)
+  const multiLangObj = translationObject?.translation?.communityBulletinAndWelfare
+
   //====================================common code starts here====================================//
   const uploadImagesHandler = (e) => {
     const files = uploadedImages ? [...uploadedImages] : []
     const eventFiles = e.target.files
     if (eventFiles.length + files.length > 10) {
-      enqueueSnackbar(` Upto 10 images can be uploaded`, { variant: 'error' })
+      enqueueSnackbar(multiLangObj?.uptoTenImagesUpload, { variant: 'error' })
       e.target.value = null
       return
     }
     Array.from(e.target.files).forEach((file) => {
       if (files.length === 10) {
-        return //only first 10 files will be uploaded
+        return
       }
       files.push(file)
     })
@@ -69,8 +74,8 @@ const CreatePost = () => {
   const confirmationDeleteImgModalHandler = (isOpen, imgFileIndex = 0) => {
     setModalProps({
       isModalOpen: isOpen,
-      title: 'Confirmation',
-      content: 'Are you sure you  want to delete image?',
+      title: multiLangObj?.confirmation,
+      content: multiLangObj?.areYouSureToDeleteImage,
       cancelBtn: 'No',
       cancelBtnHandler: cancelConfirmation,
       successBtn: 'Yes',
@@ -83,13 +88,13 @@ const CreatePost = () => {
     const files = uploadedFiles ? [...uploadedFiles] : []
     const eventFiles = e.target.files
     if (eventFiles.length + files.length > 10) {
-      enqueueSnackbar(` Upto 10 files can be uploaded`, { variant: 'error' })
+      enqueueSnackbar(multiLangObj?.uptoTenFilesUpload, { variant: 'error' })
       e.target.value = null
       return
     }
     Array.from(e.target.files).forEach((file) => {
       if (files.length === 10) {
-        return //only first 10 files will be uploaded
+        return
       }
       files.push(file)
     })
@@ -111,8 +116,8 @@ const CreatePost = () => {
   const confirmationDeleteFileModalHandler = (isOpen, fileIndex = 0) => {
     setModalProps({
       isModalOpen: isOpen,
-      title: 'Confirmation',
-      content: 'Are you sure you  want to delete file?',
+      title: multiLangObj?.confirmation,
+      content: multiLangObj?.areYouSureToDeleteFile,
       cancelBtn: 'No',
       cancelBtnHandler: cancelConfirmation,
       successBtn: 'Yes',
@@ -132,11 +137,11 @@ const CreatePost = () => {
 
   const validate = (mode) => {
     if (data.title.trim() === '') {
-      enqueueSnackbar('Please enter title', { variant: 'error' })
+      enqueueSnackbar(multiLangObj?.pleaseEnterTitle, { variant: 'error' })
       return false
     }
     if (data.content.trim() === '') {
-      enqueueSnackbar('Please enter content', { variant: 'error' })
+      enqueueSnackbar(multiLangObj?.pleaseEnterContent, { variant: 'error' })
       return false
     }
     if (mode === 'save') {
@@ -214,8 +219,8 @@ const CreatePost = () => {
   const confirmationModalHandler = (isOpen) => {
     setModalProps({
       isModalOpen: isOpen,
-      title: 'Confirmation',
-      content: 'Are you sure to save post?',
+      title: multiLangObj?.confirmation,
+      content: multiLangObj?.areYouSureToSavePost,
       cancelBtn: 'No',
       cancelBtnHandler: cancelConfirmation,
       successBtn: 'Yes',
@@ -286,7 +291,7 @@ const CreatePost = () => {
         }
         navigate(redirectTo, {
           state: {
-            enqueueSnackbarMsg: 'Post Created Successfully And Redirected to Listing Page',
+            enqueueSnackbarMsg: multiLangObj?.postCreatedSuccessRedirectToList,
             variant: 'success',
           },
         })
@@ -304,8 +309,8 @@ const CreatePost = () => {
   const confirmationUpdateModalHandler = (isOpen) => {
     setModalProps({
       isModalOpen: isOpen,
-      title: 'Confirmation',
-      content: 'Are you sure to update post?',
+      title: multiLangObj?.confirmation,
+      content: multiLangObj?.data,
       cancelBtn: 'No',
       cancelBtnHandler: cancelConfirmation,
       successBtn: 'Yes',
@@ -451,7 +456,7 @@ const CreatePost = () => {
         }
         navigate(redirectTo, {
           state: {
-            enqueueSnackbarMsg: 'Post Updated Successfully And Redirected to Listing Page',
+            enqueueSnackbarMsg: multiLangObj?.postCreatedSuccessRedirectToList,
             variant: 'success',
           },
         })
@@ -480,10 +485,14 @@ const CreatePost = () => {
         pollModifyData={pollData}
       />
       <main>
-        <h4>{location?.state?.boardID && location?.state?.postId ? 'Update' : 'Create'} a Post</h4>
+        <h4>
+          {location?.state?.boardID && location?.state?.postId
+            ? multiLangObj?.updatePost
+            : multiLangObj?.createPost}
+        </h4>
         <div className="card p-2 mb-2 mt-4">
           <div className="dropdown-container">
-            <label className="me-3">Board</label>
+            <label className="me-3">{multiLangObj?.board}</label>
             <CFormSelect
               size="sm"
               name="boardId"
@@ -508,28 +517,30 @@ const CreatePost = () => {
               <div className="form-outline form-white  d-flex ">
                 <div className="formWrpLabel">
                   <label className="fw-bolder ">
-                    Title <span className="mandatory-red-asterisk">*</span>
+                    {multiLangObj?.title} <span className="mandatory-red-asterisk">*</span>
                   </label>
                 </div>
                 <div className="formWrpInpt">
                   <div className="d-flex formradiogroup mb-2 gap-3">
                     <CFormInput
                       type="text"
-                      placeholder="Enter Title Here"
+                      placeholder={multiLangObj?.enterTitleHere}
                       name="title"
                       value={data.title}
                       onChange={(e) => {
                         handleInputChange(e)
                       }}
                     />
-                    <span className="txt-byte-information">{data.title.length} / 120 byte</span>
+                    <span className="txt-byte-information">
+                      {data.title.length} / {multiLangObj?.oneHundredTwentyBytes}
+                    </span>
                   </div>
                 </div>
               </div>
               <div className="form-outline form-white  d-flex ">
                 <div className="formWrpLabel">
                   <label className="fw-bolder ">
-                    Content <span className="mandatory-red-asterisk">*</span>
+                    {multiLangObj?.content} <span className="mandatory-red-asterisk">*</span>
                   </label>
                 </div>
                 <div className="formWrpInpt">
@@ -537,7 +548,7 @@ const CreatePost = () => {
                     <CFormTextarea
                       id="exampleFormControlTextarea1"
                       rows={3}
-                      placeholder="Enter your content here"
+                      placeholder={multiLangObj?.enterContentHere}
                       name="content"
                       value={data.content}
                       onChange={(e) => handleInputChange(e)}
@@ -553,33 +564,40 @@ const CreatePost = () => {
                         {recruitData.recruitmentDeadline.getMinutes()}
                       </p>
                       <p>
-                        Status :{' '}
+                        {multiLangObj?.status} :{' '}
                         {recruitData?.recruitmentStatus
                           ? recruitData?.recruitmentStatus
                           : 'Not Open'}
                       </p>
-                      <p>No. of Participants : {recruitData.recruitmentMaxParticipants}</p>
                       <p>
-                        Raffle : {recruitData.recruitmentAllowRaffle ? 'Yes' : 'No'} /{' '}
-                        {recruitData.recruitmentRaffleMaxWinners}
+                        {multiLangObj?.noOfPart} : {recruitData.recruitmentMaxParticipants}
+                      </p>
+                      <p>
+                        {multiLangObj?.raffle} : {recruitData.recruitmentAllowRaffle ? 'Yes' : 'No'}
+                        / {recruitData.recruitmentRaffleMaxWinners}
                       </p>
                       {recruitData?.recruitmentStatus !== 'closed' && (
                         <CButton className="btn mt-3" color="dark" onClick={() => modifyRecruit()}>
-                          Modify
+                          {multiLangObj?.modify}
                         </CButton>
                       )}
                       {!location?.state?.postId && (
                         <CButton className="delete-btn" onClick={() => setRecruitData({})}>
-                          Delete
+                          {multiLangObj?.delete}
                         </CButton>
                       )}
                     </div>
                   )}
                   {pollData?.pollEndTimestamp && (
                     <div>
-                      <p>Status : Not Open</p>
-                      <p>Anonymous : None</p>
-                      <p>Select : {pollData.pollMaxSelections === 1 ? 'Single' : 'Multi'}</p>
+                      <p>{multiLangObj?.statusNotOpen}</p>
+                      <p>{multiLangObj?.anonymousNone}</p>
+                      <p>
+                        {multiLangObj?.select} :{' '}
+                        {pollData.pollMaxSelections === 1
+                          ? multiLangObj?.single
+                          : multiLangObj?.multi}
+                      </p>
                       <h3>Poll : {pollData.pollTitle}</h3>
                       <div style={{ fontWeight: 800 }}>
                         {pollData?.pollEndTimestamp.getFullYear()}-
@@ -593,17 +611,17 @@ const CreatePost = () => {
                           {pollData?.pollDisplayOptions &&
                             pollData?.pollDisplayOptions.map((opt, index) => (
                               <li key={index}>
-                                Option {index + 1} : {opt?.title ? opt?.title : opt}
+                                {multiLangObj?.option} {index + 1} : {opt?.title ? opt?.title : opt}
                               </li>
                             ))}
                         </ul>
                       </div>
                       <CButton className="btn" color="dark" onClick={() => modifyPoll()}>
-                        Modify
+                        {multiLangObj?.modify}
                       </CButton>
                       {!location?.state?.postId && (
                         <CButton className="delete-btn" onClick={() => setPollData({})}>
-                          Delete
+                          {multiLangObj?.delete}
                         </CButton>
                       )}
                     </div>
@@ -612,13 +630,13 @@ const CreatePost = () => {
               </div>
               <div className="form-outline form-white  d-flex ">
                 <div className="formWrpLabel">
-                  <label className="fw-bolder ">Upload Image</label>
+                  <label className="fw-bolder ">{multiLangObj?.uploadImage}</label>
                 </div>
                 <div className="upload-image-main-container">
                   <div className="upload-img-btn-and-info">
                     <div className="upload-container-btn">
                       <label className="label-btn" color="dark" htmlFor="imageFiles">
-                        Upload
+                        {multiLangObj?.upload}
                         <input
                           type="file"
                           name="imageFiles"
@@ -631,15 +649,12 @@ const CreatePost = () => {
                       </label>
                     </div>
                     <div className="upload-container-guidance">
-                      <p className="upload-instruction"># Upto 10 images can be uploaded</p>
-                      <p className="upload-instruction">
-                        # The first image is registered as a representative image [thumbnail] in the
-                        order of upload
-                      </p>
+                      <p className="upload-instruction"># {multiLangObj?.uptoTenImagesUpload}</p>
+                      <p className="upload-instruction"># {multiLangObj?.firstImageAsThumbnail}</p>
                       <div className="file-information">
                         <ul>
-                          <li>Maximum File Size : 00</li>
-                          <li>File type : JPG</li>
+                          <li>{multiLangObj?.maxFileSize}</li>
+                          <li>{multiLangObj?.fileType}</li>
                         </ul>
                       </div>
                     </div>
@@ -668,7 +683,7 @@ const CreatePost = () => {
               </div>
               <div className="form-outline form-white  d-flex ">
                 <div className="formWrpLabel">
-                  <label className="fw-bolder ">Upload File</label>
+                  <label className="fw-bolder ">{multiLangObj?.uploadFile}</label>
                 </div>
                 <div className="upload-file-main-container">
                   <div className="upload-img-btn-and-info">
@@ -682,7 +697,7 @@ const CreatePost = () => {
                         color="dark"
                         htmlFor="files"
                       >
-                        Upload
+                        {multiLangObj?.upload}
                         <input
                           type="file"
                           name="files"
@@ -696,11 +711,11 @@ const CreatePost = () => {
                       </label>
                     </div>
                     <div className="upload-container-guidance">
-                      <p className="upload-instruction"># Upto 10 files can be uploaded</p>
+                      <p className="upload-instruction"># {multiLangObj?.uptoTenFilesUpload}</p>
                       <div className="file-information">
                         <ul>
-                          <li>Maximum File Size : 00</li>
-                          <li>File type : PDF, xlsx, doc...</li>
+                          <li>{multiLangObj?.maxFileSize}</li>
+                          <li>{multiLangObj?.fileType}</li>
                         </ul>
                       </div>
                     </div>
@@ -724,7 +739,7 @@ const CreatePost = () => {
               </div>
               <div className="form-outline form-white  d-flex ">
                 <div className="formWrpLabel">
-                  <label className="fw-bolder ">Add</label>
+                  <label className="fw-bolder ">{multiLangObj?.add}</label>
                 </div>
                 <div className="recruit-poll-container">
                   <div
@@ -736,7 +751,7 @@ const CreatePost = () => {
                     onClick={() => recruitHandler(true)}
                   >
                     <div>+</div>
-                    <div>Recruit</div>
+                    <div>{multiLangObj?.recruit}</div>
                   </div>
                   <div
                     className={
@@ -747,14 +762,14 @@ const CreatePost = () => {
                     onClick={() => pollHandler(true)}
                   >
                     <div>+</div>
-                    <div>Poll</div>
+                    <div>{multiLangObj?.poll}</div>
                   </div>
                 </div>
               </div>
               <div className="d-flex col-md-12">
                 <div className="form-outline form-white d-flex col-md-6">
                   <div className="formWrpLabel">
-                    <label className="fw-bolder ">Push Notification</label>
+                    <label className="fw-bolder ">{multiLangObj?.pushNotification}</label>
                   </div>
                   <div className="push-notification-container gap-3">
                     <CFormCheck
@@ -779,7 +794,7 @@ const CreatePost = () => {
                 </div>
                 <div className="form-outline form-white d-flex col-md-6">
                   <div className="formWrpLabel">
-                    <label className="fw-bolder ">Add As Notice</label>
+                    <label className="fw-bolder ">{multiLangObj?.addAsNotice}</label>
                   </div>
                   <div className="add-as-notice-container gap-3">
                     <CFormCheck
@@ -806,7 +821,7 @@ const CreatePost = () => {
         </div>
         <div className="save-cancel-btn-container">
           <CButton className="btn save-cancel-btn" color="dark" onClick={cancelPostHandler}>
-            Cancel
+            {multiLangObj?.cancel}
           </CButton>
           {location?.state?.postId && (
             <CButton
@@ -814,12 +829,12 @@ const CreatePost = () => {
               color="dark"
               onClick={() => validate('update')}
             >
-              Update
+              {multiLangObj?.update}
             </CButton>
           )}
           {!location?.state?.postId && (
             <CButton className="btn save-cancel-btn" color="dark" onClick={() => validate('save')}>
-              Save
+              {multiLangObj?.save}
             </CButton>
           )}
         </div>

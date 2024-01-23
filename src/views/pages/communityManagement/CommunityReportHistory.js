@@ -7,6 +7,8 @@ import Loader from 'src/components/common/Loader'
 import ReactTable from 'src/components/common/ReactTable'
 import { getApi } from 'src/utils/Api'
 import { API_ENDPOINT } from 'src/utils/config'
+import { useTranslation } from 'react-i18next'
+
 
 const CommunityReportHistory = () => {
 
@@ -19,48 +21,51 @@ const CommunityReportHistory = () => {
   const [currentCommentReportListPage, setCurrentCommentReportListPage] = useState(1)
   const [isLoading, setIsLoading] = useState(false);
   const location = useLocation()
+  const { i18n } = useTranslation()
+  const translationObject = i18n.getDataByLanguage(i18n.language)
+  const multiLangObj = translationObject?.translation?.communityBulletinAndWelfare
 
 
   const communityReportHistoryColumns = useMemo(() => [
     {
-      Header: 'No',
+      Header: multiLangObj?.no,
       accessor: 'id',
       Cell: ({ row }) => {
         return (currentPostReportListPage - 1) * 5 + (row.index + 1)
       }
     },
     {
-      Header: 'Writer Username',
+      Header: multiLangObj?.writerUsername,
       accessor: 'authUserName',
       Cell: ({ row }) => <p>{row.original.authUserName != null ? row.original.authUserName : '-'}</p>
     },
     {
-      Header: 'Full name',
+      Header: multiLangObj?.fullName,
       // accessor: 'authUserName'
       Cell: ({ row }) => <p>{row.original.authUserName != null ? row.original.authUserName : '-'}</p>
     },
     {
-      Header: 'History Classification',
+      Header: multiLangObj?.historyClassification,
       accessor: 'approvalStatus',
     },
     {
-      Header: 'Reporter Username',
+      Header: multiLangObj?.reporterUsername,
       accessor: 'reportedUserName',
       Cell: ({ row }) => <p>{row.original.reportedUserName != null ? row.original.reportedUserName : '-'}</p>
     },
     {
-      Header: 'Admin Username',
+      Header: multiLangObj?.adminUsername,
       accessor: 'adminUserName',
       Cell: ({ row }) => <p>{row.original.adminUserName != null ? row.original.adminUserName : '-'}</p>
     },
     {
-      Header: 'Reason',
+      Header: multiLangObj?.reason,
       accessor: 'textReasons',
       Cell: ({ row }) => <p >{row.original.textReasons != null ? row.original.textReasons : row.original.title}</p>
 
     },
     {
-      Header: 'Date',
+      Header: multiLangObj?.date,
       accessor: 'reportedAt',
       Cell: ({ row }) => <p>{row.original.reportedAt ? moment(row.original.reportedAt).format('YYYY-MM-DD HH:mm:ss') : (row.original.approveOn ? moment(row.original.approveOn).format('YYYY-MM-DD HH:mm:ss') : '-')}</p>
     }
@@ -69,46 +74,46 @@ const CommunityReportHistory = () => {
 
   const communityCommentReportHistoryColumns = useMemo(() => [
     {
-      Header: 'No',
+      Header: multiLangObj?.no,
       accessor: 'id',
       // Cell: ({ row }) => {
       //   return (currentPostReportListPage - 1) * itemsPerPage + (row.index + 1)
       // }
     },
     {
-      Header: 'Writer Username',
+      Header: multiLangObj.writerUsername,
       accessor: 'authUserName',
       Cell: ({ row }) => <p>{row.original.authUserName != null ? row.original.authUserName : '-'}</p>
     },
     {
-      Header: 'Full name',
+      Header: multiLangObj?.fullName,
       // accessor: 'authUserName'
       Cell: ({ row }) => <p>{row.original.authUserName != null ? row.original.authUserName : '-'}</p>
 
     },
     {
-      Header: 'History Classification',
+      Header: multiLangObj?.historyClassification,
       accessor: 'approvalStatus',
       Cell: ({ row }) => <p>{row.original.approvalStatus != null ? row.original.approvalStatus : '-'}</p>
     },
     {
-      Header: 'Reporter Username',
+      Header: multiLangObj?.reportedUserName,
       accessor: 'reportedUserName',
       Cell: ({ row }) => <p>{row.original.reportedUserName != null ? row.original.reportedUserName : '-'}</p>
     },
     {
-      Header: 'Admin Username',
+      Header: multiLangObj?.adminUsername,
       // accessor: 'reportedUserName',
       Cell: ({ row }) => <p>{row.original.adminUserName != null ? row.original.adminUserName : '-'}</p>
     },
     {
-      Header: 'Reason',
+      Header: multiLangObj?.reason,
       accessor: 'textReasons',
       Cell: ({ row }) => <p >{row.original.textReasons != null ? row.original.textReasons : row.original.title}</p>
 
     },
     {
-      Header: 'Date',
+      Header: multiLangObj?.date,
       accessor: 'reportedAt',
       Cell: ({ row }) => <p>{row.original.approveOn ? moment(row.original.approveOn).format('YYYY-MM-DD HH:mm:ss') : (row.original.reportedAt ? moment(row.original.reportedAt).format('YYYY-MM-DD HH:mm:ss') : (row.original.AdminCommentDeletedOn ? moment(row.original.AdminCommentDeletedOn).format('YYYY-MM-DD HH:mm:ss') : ('-')))}</p>
     }
@@ -187,7 +192,7 @@ const CommunityReportHistory = () => {
     <>
       {isLoading && <Loader />}
       <div>
-        <h1>Post & Comments Report History Details</h1>
+        <h1>{multiLangObj?.postCommentReportHistory}</h1>
         <div className='mt-4'>
           <h4 className='p-2'>Post</h4>
           <ReactTable showCheckbox={false} columns={communityReportHistoryColumns} data={getPostReportListData} totalCount={10} onSelectionChange={handleSelectionChange} />
@@ -196,8 +201,8 @@ const CommunityReportHistory = () => {
               <ReactPaginate
                 breakLabel={'...'}
                 marginPagesDisplayed={1}
-                previousLabel={<button>Previous</button>}
-                nextLabel={<button>Next</button>}
+                previousLabel={<button>{multiLangObj?.previous}</button>}
+                nextLabel={<button>{multiLangObj?.next}</button>}
                 pageCount={postReportListTotalCount}
                 onPageChange={handlePostReportListPageChange}
                 forcePage={currentPostReportListPage - 1}
@@ -208,15 +213,15 @@ const CommunityReportHistory = () => {
           </div>
         </div>
         <div className='mt-4'>
-          <h4 className='p-2'>Comment</h4>
+          <h4 className='p-2'>{multiLangObj?.comments}</h4>
           <ReactTable showCheckbox={false} columns={communityCommentReportHistoryColumns} data={getReportCommentListData} totalCount={10} onSelectionChange={handleSelectionChange} />
           <div className='userlist-pagination'>
             <div className='userlist-pagination dataTables_paginate'>
               <ReactPaginate
                 breakLabel={'...'}
                 marginPagesDisplayed={1}
-                previousLabel={<button>Previous</button>}
-                nextLabel={<button>Next</button>}
+                previousLabel={<button>{multiLangObj?.previous}</button>}
+                nextLabel={<button>{multiLangObj?.next}</button>}
                 pageCount={commentReportListTotalCount}
                 onPageChange={handleCommentReportListPageChange}
                 forcePage={currentCommentReportListPage - 1}
@@ -227,7 +232,7 @@ const CommunityReportHistory = () => {
           </div>
         </div>
         <div className='d-flex justify-content-end mt-2 mb-4'>
-          <NavLink to='/BulletinBoard'> <CButton>Back</CButton></NavLink>
+          <NavLink to='/BulletinBoard'> <CButton>{multiLangObj?.back}</CButton></NavLink>
         </div>
       </div>
     </>

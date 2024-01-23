@@ -135,7 +135,7 @@ const PollManagement = ({ isPollOpen, setModal, pollModifyData = '', changePollD
     if (pollModifyData?.pollEnabled) {
       currentDateTime = new Date(pollModifyData?.pollEndTimestamp)
       setPollTitle(pollModifyData?.pollTitle)
-      setOptions(pollModifyData?.pollDisplayOptions.map((opt) => opt.title))
+      setOptions(pollModifyData?.pollDisplayOptions.map((opt) => (opt?.title ? opt?.title : opt)))
       setIsNoOfParticipationChecked(pollModifyData?.pollMaxSelections > 1 ? true : false)
       setNoOfParticipants(pollModifyData?.pollMaxSelections)
       setIsAllowSecretVotingChecked(pollModifyData?.pollAllowSecretVoting)

@@ -26,6 +26,7 @@ import Loader from 'src/components/common/Loader'
 import { enqueueSnackbar } from 'notistack'
 import CIcon from '@coreui/icons-react'
 import { cilCircle, cilDescription, cilFile, cilImage } from '@coreui/icons'
+import { useTranslation } from 'react-i18next'
 
 const WelfareBoardPostListing = () => {
   const [boardSelectOptions, setBoardSelectOptions] = useState([{ label: 'All', value: '' }])
@@ -55,6 +56,10 @@ const WelfareBoardPostListing = () => {
   const [userInfoData, setUserInfoData] = useState({})
   const [startDate, setStartDate] = useState('')
   const [endDate, setEndDate] = useState('')
+
+  const { i18n } = useTranslation()
+  const translationObject = i18n.getDataByLanguage(i18n.language)
+  const multiLangObj = translationObject?.translation?.communityBulletinAndWelfare
 
   const createPostHandler = () => {
     navigate('./createPost', {
@@ -286,7 +291,7 @@ const WelfareBoardPostListing = () => {
     }
 
     if (filterData.searchstring.trim().length === 1) {
-      enqueueSnackbar('Please enter at least 2 characters.!', { variant: 'error' })
+      enqueueSnackbar(multiLangObj?.pleaseEnterAtleastTwoChars, { variant: 'error' })
       return
     }
 
@@ -356,7 +361,7 @@ const WelfareBoardPostListing = () => {
         },
       })
     } else {
-      enqueueSnackbar('Not allowed to change!', { variant: 'error' })
+      enqueueSnackbar(multiLangObj?.notAllowedToChange, { variant: 'error' })
     }
   }
 
@@ -376,14 +381,14 @@ const WelfareBoardPostListing = () => {
   const columns = useMemo(
     () => [
       {
-        Header: 'No',
+        Header: multiLangObj?.no,
         accessor: '',
         Cell: ({ row }) => {
           return currentPage * itemsPerPage + (row.index + 1)
         },
       },
       {
-        Header: 'Type',
+        Header: multiLangObj?.type,
         accessor: 'PostTypes',
         Cell: ({ row }) => (
           <p className="text-center">{`${
@@ -392,7 +397,7 @@ const WelfareBoardPostListing = () => {
         ),
       },
       {
-        Header: 'Classification',
+        Header: multiLangObj?.classification,
         accessor: 'postStatuses',
         Cell: ({ row }) => (
           <p className="text-center">{`${
@@ -408,7 +413,7 @@ const WelfareBoardPostListing = () => {
       //   ),
       // },
       {
-        Header: 'Title',
+        Header: multiLangObj?.title,
         accessor: 'PostTitle',
         Cell: ({ row }) => (
           <div className="d-flex gap-1">
@@ -442,7 +447,7 @@ const WelfareBoardPostListing = () => {
         ),
       },
       {
-        Header: 'Writter',
+        Header: multiLangObj?.writter,
         accessor: 'englishname',
         Cell: ({ row }) => (
           <Link
@@ -455,33 +460,33 @@ const WelfareBoardPostListing = () => {
         ),
       },
       {
-        Header: 'Date',
+        Header: multiLangObj?.date,
         accessor: 'createdAt',
         Cell: ({ row }) => <p>{moment(row.original.createdAt).format('YYYY-MM-DD HH:mm:ss')} </p>,
       },
       {
-        Header: 'Likes',
+        Header: multiLangObj?.likes,
         accessor: 'likes',
         Cell: ({ row }) => (
           <p className="text-center">{`${row.original.likes ? row.original.likes : 0}`}</p>
         ),
       },
       {
-        Header: 'Comments',
+        Header: multiLangObj?.comments,
         accessor: 'comments',
         Cell: ({ row }) => (
           <p className="text-center">{`${row.original.comments ? row.original.comments : 0}`}</p>
         ),
       },
       {
-        Header: 'Views',
+        Header: multiLangObj?.views,
         accessor: 'views',
         Cell: ({ row }) => (
           <p className="text-center">{`${row.original.views ? row.original.views : 0}`}</p>
         ),
       },
       {
-        Header: 'No of Reported Comments',
+        Header: multiLangObj?.noOfReportedComments,
         accessor: 'reportsCommentsCount',
         Cell: ({ row }) => (
           <p className="text-center">
@@ -490,14 +495,14 @@ const WelfareBoardPostListing = () => {
         ),
       },
       {
-        Header: 'History',
+        Header: multiLangObj?.history,
         Cell: ({ row }) => (
           <p
             role="button"
             onClick={() => viewPostHistoryHandler(row.original.postId)}
             className="text-center"
           >
-            View
+            {multiLangObj?.view}
           </p>
         ),
       },
@@ -509,7 +514,7 @@ const WelfareBoardPostListing = () => {
             className="text-dark text-center"
             style={{ curser: 'pointer' }}
           >
-            Edit
+            {multiLangObj?.edit}
           </Link>
         ),
       },
@@ -531,13 +536,13 @@ const WelfareBoardPostListing = () => {
       <main>
         <div>
           <div className="d-flex justify-content-between align-items-center">
-            <p>Welfare Board Management</p>
-            <CButton onClick={createPostHandler}>Create a post</CButton>
+            <p>{multiLangObj?.welfareBoardMgmt}</p>
+            <CButton onClick={createPostHandler}>{multiLangObj?.createPost}</CButton>
           </div>
           <div className="d-flex p-3 h-100 w-100 bg-light rounded mt-2">
             <div className="d-flex align-items-center w-25 ms-2 align-items-center">
               <p className="fw-medium me-3" style={{ 'white-space': 'nowrap' }}>
-                Category
+                {multiLangObj?.category}
               </p>
               <CFormSelect
                 className="mb-2"
@@ -547,20 +552,20 @@ const WelfareBoardPostListing = () => {
               />
             </div>
             <div className="d-flex align-items-center  ms-2 align-items-center">
-              <p className="fw-medium me-1">Usage status :</p>
+              <p className="fw-medium me-1">{multiLangObj?.usageStatus} :</p>
               <p>{boardDetails?.usageStatus ? boardDetails?.usageStatus : 'None'}</p>
             </div>
           </div>
           <div className="d-flex p-4  flex-column bg-light rounded mt-3">
             <div className="d-flex align-items-center w-100">
               <div className="d-flex align-items-center me-5">
-                <label className="me-3 fw-medium">Search</label>
+                <label className="me-3 fw-medium">{multiLangObj?.search}</label>
                 <CFormSelect
                   className="w-50 me-2"
                   aria-label="Default select example"
                   options={[
-                    { label: 'Title', value: 'title' },
-                    { label: 'Writter', value: 'writter' },
+                    { label: multiLangObj?.title, value: 'title' },
+                    { label: multiLangObj?.writter, value: 'writter' },
                   ]}
                   onChange={handleDepartmentChange}
                 />
@@ -572,7 +577,7 @@ const WelfareBoardPostListing = () => {
                 />
               </div>
               <div className="d-flex align-items-center">
-                <label className="me-3 fw-medium">Date</label>
+                <label className="me-3 fw-medium">{multiLangObj?.date}</label>
                 <div className="d-flex p-2 gap-3">
                   <DatePicker value={startDate} onChange={handleStartDate} />
                   <DatePicker value={endDate} onChange={handleEndDate} />
@@ -582,7 +587,7 @@ const WelfareBoardPostListing = () => {
             <div className="d-flex align-items-center w-100 mt-4">
               <div className="d-flex align-items-center me-5 ">
                 <label className="fw-medium me-3 " style={{ 'white-space': 'nowrap' }}>
-                  Post Type
+                  {multiLangObj?.date}
                 </label>
                 <CFormSelect
                   className="me-2"
@@ -614,12 +619,16 @@ const WelfareBoardPostListing = () => {
               </div>
             </div>
             <div className="d-flex gap-3 mt-3">
-              <CButton onClick={handleSearchfilter}>Search</CButton>
-              <CButton onClick={resetFilter}>Reset</CButton>
+              <CButton onClick={handleSearchfilter}>{multiLangObj?.search}</CButton>
+              <CButton onClick={resetFilter}>{multiLangObj?.reset}</CButton>
             </div>
           </div>
           <div className="d-flex flex-column mt-3 p-3">
-            {totalDataCount > 0 && <p style={{ margin: 0 }}>Total&nbsp;:&nbsp; {totalDataCount}</p>}
+            {totalDataCount > 0 && (
+              <p style={{ margin: 0 }}>
+                {multiLangObj?.total}&nbsp;:&nbsp; {totalDataCount}
+              </p>
+            )}
             <ReactTable
               columns={columns}
               data={postData}
@@ -633,8 +642,8 @@ const WelfareBoardPostListing = () => {
                     <ReactPaginate
                       breakLabel={'...'}
                       marginPagesDisplayed={1}
-                      previousLabel={<button>Previous</button>}
-                      nextLabel={<button>Next</button>}
+                      previousLabel={<button>{multiLangObj?.previous}</button>}
+                      nextLabel={<button>{multiLangObj?.next}</button>}
                       pageCount={totalPages}
                       onPageChange={handlePageChange}
                       forcePage={currentPage}
@@ -646,7 +655,7 @@ const WelfareBoardPostListing = () => {
               )}
               {postData.length > 0 && (
                 <div className="d-flex align-items-center gap-2 mt-2">
-                  <label>Show</label>
+                  <label>{multiLangObj?.show}</label>
                   <CFormSelect
                     className=""
                     aria-label=""
@@ -656,7 +665,7 @@ const WelfareBoardPostListing = () => {
                       setCurrentPage(0)
                     }}
                   />
-                  <label>Lists</label>
+                  <label>{multiLangObj?.lists}</label>
                 </div>
               )}
             </div>
@@ -680,13 +689,20 @@ const WelfareBoardPostListing = () => {
               setUserInfoData({})
             }}
           >
-            <CModalTitle className="p-1">User Information</CModalTitle>
+            <CModalTitle className="p-1">{multiLangObj?.userInfo}</CModalTitle>
           </CModalHeader>
           <CModalBody>
             <div className="">
-              <p>Username : {userInfoData.englishName ? userInfoData.englishName : '-'}</p>
-              <p>Group/Team : {userInfoData.teamName ? userInfoData.teamName : '-'} </p>
-              <p>E-mail address : {userInfoData.email ? userInfoData.email : '-'}</p>
+              <p>
+                {multiLangObj?.userName} :{' '}
+                {userInfoData.englishName ? userInfoData.englishName : '-'}
+              </p>
+              <p>
+                {multiLangObj?.grpTeam} : {userInfoData.teamName ? userInfoData.teamName : '-'}{' '}
+              </p>
+              <p>
+                {multiLangObj?.emailAdd} : {userInfoData.email ? userInfoData.email : '-'}
+              </p>
             </div>
           </CModalBody>
         </CModal>
