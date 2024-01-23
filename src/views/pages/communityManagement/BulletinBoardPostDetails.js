@@ -35,6 +35,8 @@ import {
 } from 'src/utils/Api'
 import { ALL_CONSTANTS, API_ENDPOINT } from 'src/utils/config'
 import * as moment from 'moment'
+import { useTranslation } from 'react-i18next';
+
 
 const getUserData = JSON.parse(
   localStorage.getItem('userdata')
@@ -84,6 +86,10 @@ const BulletinBoardPostDetails = () => {
     useState(0)
   const [cancleVisible, setCancleVisible] = useState(false)
 
+  const { i18n } = useTranslation();
+  const translationObject = i18n.getDataByLanguage(i18n.language);
+  const multiLangObj = translationObject?.translation?.communityBulletinAndWelfare
+
   console.log('poldbdhd', pollParticipantOptionDataList)
 
   const navigate = useNavigate()
@@ -103,19 +109,19 @@ const BulletinBoardPostDetails = () => {
   const reportHistoryColumns = useMemo(
     () => [
       {
-        Header: 'No',
+        Header: multiLangObj?.no,
         accessor: 'id',
       },
       {
-        Header: 'Reporter username',
+        Header: multiLangObj?.reporterUsername,
         accessor: 'EnglishName',
       },
       {
-        Header: 'Reason',
+        Header: multiLangObj?.reason,
         accessor: 'reasonTitle',
       },
       {
-        Header: 'Reported time',
+        Header: multiLangObj?.reportedTime,
         accessor: 'commentReportedAt',
         Cell: ({ row }) => (
           <p>
@@ -689,19 +695,19 @@ const BulletinBoardPostDetails = () => {
         <div className="container bg-light p-3 mb-3">
           <div className="d-flex mb-3 gap-5">
             <div className="d-flex gap-3 align-items-center">
-              <h6>Bulletin Board</h6>
+              <h6>{multiLangObj?.bulletinBoard}</h6>
               <p>{bulletinBoardPostDetail[0]?.boardName}</p>
             </div>
             <div className="d-flex gap-3 align-items-center">
-              <h6>Classification</h6>
+              <h6>{multiLangObj?.classification}</h6>
               <p>{bulletinBoardPostDetail[0]?.status}</p>
             </div>
             <div className="d-flex gap-3 align-items-center">
-              <h6>Reported Post</h6>
+              <h6>{multiLangObj?.reportedPost}</h6>
               <p>{bulletinBoardPostDetail[0]?.isReported == 0 ? 'N' : 'Y'}</p>
             </div>
             <div className="d-flex gap-3 align-items-center">
-              <h6>Type</h6>
+              <h6>{multiLangObj?.type}</h6>
               <p>{bulletinBoardPostDetail[0]?.type}</p>
             </div>
           </div>
@@ -710,7 +716,7 @@ const BulletinBoardPostDetails = () => {
           <div>
             <CAccordion alwaysOpen activeItemKey={1}>
               <CAccordionItem itemKey={1}>
-                <CAccordionHeader>Post</CAccordionHeader>
+                <CAccordionHeader>{multiLangObj?.post}</CAccordionHeader>
                 <CAccordionBody>
                   <section className="d-flex flex-row align-items-center">
                     <div className="container">
@@ -722,7 +728,7 @@ const BulletinBoardPostDetails = () => {
                                 <div className="d-flex col-md-12">
                                   <div className="form-outline form-white d-flex col-md-6">
                                     <div className="formWrpLabel">
-                                      <label className="fw-bolder ">Date</label>
+                                      <label className="fw-bolder ">{multiLangObj?.date}</label>
                                     </div>
                                     <div className="formWrpInpt">
                                       {bulletinBoardPostDetail[0]?.createdAt?.split('T')[0]}
@@ -730,7 +736,7 @@ const BulletinBoardPostDetails = () => {
                                   </div>
                                   <div className="form-outline form-white  d-flex  col-md-6">
                                     <div className="formWrpLabel">
-                                      <label className="fw-bolder ">Views</label>
+                                      <label className="fw-bolder ">{multiLangObj?.views}</label>
                                     </div>
                                     <div className="formWrpInpt">
                                       {bulletinBoardPostDetail[0]?.views}
@@ -740,7 +746,7 @@ const BulletinBoardPostDetails = () => {
 
                                 <div className="form-outline form-white d-flex ">
                                   <div className="formWrpLabel">
-                                    <label className="fw-bolder ">Writer</label>
+                                    <label className="fw-bolder ">{multiLangObj?.writer}</label>
                                   </div>
                                   <div className="formWrpInpt">
                                     {bulletinBoardPostDetail[0]?.authorEnglishName
@@ -751,7 +757,7 @@ const BulletinBoardPostDetails = () => {
 
                                 <div className="form-outline form-white d-flex ">
                                   <div className="formWrpLabel">
-                                    <label className="fw-bolder ">Title*</label>
+                                    <label className="fw-bolder ">{multiLangObj?.title}*</label>
                                   </div>
                                   <div className="formWrpInpt">
                                     {bulletinBoardPostDetail[0]?.title}
@@ -760,7 +766,7 @@ const BulletinBoardPostDetails = () => {
 
                                 <div className="form-outline form-white d-flex ">
                                   <div className="formWrpLabel">
-                                    <label className="fw-bolder ">Content*</label>
+                                    <label className="fw-bolder ">{multiLangObj?.content}*</label>
                                   </div>
                                   <div className="formWrpInpt">
                                     {bulletinBoardPostDetail[0]?.content}
@@ -769,18 +775,18 @@ const BulletinBoardPostDetails = () => {
                                       bulletinBoardPostDetail[0]?.type == 'raffle') && (
                                       <div className="container p-3 mb-3 mt-4">
                                         <div className="d-flex gap-2">
-                                          <p>Date:</p>
+                                          <p>{multiLangObj?.date}:</p>
                                           <p>
                                             {bulletinBoardPostDetail[0]?.createdAt?.split('T')[0]}
                                           </p>
                                         </div>
                                         <div className="d-flex flex-column gap-2 mt-3">
                                           <div className="d-flex gap-2">
-                                            <p>Status:</p>
+                                            <p>{multiLangObj?.status}:</p>
                                             <p>{bulletinBoardPostDetail[0]?.status}</p>
                                           </div>
                                           <div className="d-flex gap-2">
-                                            <p>No. of Participants :</p>
+                                            <p>{multiLangObj?.noOfPart} :</p>
                                             <p>
                                               {bulletinBoardPostDetail[0]?.type == 'poll'
                                                 ? bulletinBoardPostDetail[0]?.pollParticipants
@@ -792,7 +798,7 @@ const BulletinBoardPostDetails = () => {
                                             </p>
                                           </div>
                                           <div className="d-flex gap-2">
-                                            <p>Raffel</p>
+                                            <p>{multiLangObj?.raffle}</p>
                                             <p>
                                               {bulletinBoardPostDetail[0]?.recruitAllowRaffle == 0
                                                 ? 'No'
@@ -807,12 +813,12 @@ const BulletinBoardPostDetails = () => {
                                       <div className="container p-3 mb-3 mt-4">
                                         <div className="d-flex gap-2 mt-3">
                                           <div className="d-flex gap-2">
-                                            <p>Status:</p>
+                                            <p>{multiLangObj?.status}:</p>
                                             <p>{bulletinBoardPostDetail[0]?.status}</p>
                                           </div>
 
                                           <div className="d-flex gap-2">
-                                            <p>Anonymous</p>
+                                            <p>{multiLangObj?.anonymous}</p>
                                             <p>
                                               {bulletinBoardPostDetail[0]?.annonymousBoard == 0
                                                 ? 'No'
@@ -821,7 +827,7 @@ const BulletinBoardPostDetails = () => {
                                           </div>
 
                                           <div className="d-flex gap-2">
-                                            <p>Select</p>
+                                            <p>{multiLangObj?.select}</p>
                                             <p>
                                               {bulletinBoardPostDetail[0]?.annonymousBoard == 0
                                                 ? 'Single'
@@ -835,7 +841,7 @@ const BulletinBoardPostDetails = () => {
                                           </div>
                                           <div>
                                             <div className="d-flex gap-2">
-                                              <p>Date:</p>
+                                              <p>{multiLangObj?.date}:</p>
                                               <p>
                                                 {
                                                   bulletinBoardPostDetail[0]?.pollCreatedAt?.split(
@@ -853,7 +859,7 @@ const BulletinBoardPostDetails = () => {
                                                   ? bulletinBoardPostDetail[0]
                                                       ?.recruitmentParticipants
                                                   : 0}{' '}
-                                                Participants
+                                                {multiLangObj?.participants}
                                               </p>
                                             </div>
                                           </div>
@@ -881,7 +887,7 @@ const BulletinBoardPostDetails = () => {
 
                                 <div className="form-outline form-white d-flex ">
                                   <div className="formWrpLabel">
-                                    <label className="fw-bolder ">Upload image</label>
+                                    <label className="fw-bolder ">{multiLangObj?.uploadImage}</label>
                                   </div>
                                   <div className="formWrpInpt d-flex uploadImgWrap uploadImgDetail" style={{padding:20}}>
                                     {bulletinBoardPostDetail[0]?.images?.map((imageUrl, index) => (
@@ -901,7 +907,7 @@ const BulletinBoardPostDetails = () => {
                                 <div className="d-flex">
                                   <div className="form-outline form-white  d-flex ">
                                     <div className="formWrpLabel">
-                                      <label className="fw-bolder ">Push Notification</label>
+                                      <label className="fw-bolder ">{multiLangObj?.pushNotification}</label>
                                     </div>
                                     <div className="formWrpInpt">
                                       <div className="d-flex formradiogroup mb-2 gap-3">
@@ -929,7 +935,7 @@ const BulletinBoardPostDetails = () => {
 
                                   <div className="form-outline form-white  d-flex ">
                                     <div className="formWrpLabel">
-                                      <label className="fw-bolder ">Add as Notice</label>
+                                      <label className="fw-bolder ">{multiLangObj?.addAsNotice}</label>
                                     </div>
                                     <div className="formWrpInpt">
                                       <div
@@ -974,7 +980,7 @@ const BulletinBoardPostDetails = () => {
                       getDeleteReason()
                     }}
                   >
-                    Delete
+                    {multiLangObj?.delete}
                   </button>
                   <CModal
                     backdrop="static"
@@ -986,7 +992,7 @@ const BulletinBoardPostDetails = () => {
                     aria-labelledby="StaticBackdropExampleLabel"
                   >
                     <CModalHeader>
-                      <CModalTitle id="StaticBackdropExampleLabel">Reason for deletion</CModalTitle>
+                      <CModalTitle id="StaticBackdropExampleLabel">{multiLangObj?.reasonForDeletion}</CModalTitle>
                     </CModalHeader>
                     <CModalBody>
                       <div className="mb-3">
@@ -996,7 +1002,7 @@ const BulletinBoardPostDetails = () => {
                           onChange={handleSelectChange}
                         >
                           <option value="" disabled>
-                            Please select a reason for deletion of the post.
+                            {multiLangObj?.pleaseSelectPostDeleteReason}
                           </option>
                           {deleteReason?.map((option, index) => (
                             <option key={index} value={option?.id}>
@@ -1016,7 +1022,7 @@ const BulletinBoardPostDetails = () => {
                           ></CFormTextarea>
                           <div className="mt-2">
                             <span className="txt-byte-information">
-                              {otherDeleteInput.length} / 500 byte
+                              {otherDeleteInput.length} / {multiLangObj?.fiveHundredBytes}
                             </span>
                           </div>
                         </div>
@@ -1030,14 +1036,14 @@ const BulletinBoardPostDetails = () => {
                           clearDeleteModuleValues()
                         }}
                       >
-                        Cancel
+                        {multiLangObj?.cancel}
                       </CButton>
                       <CButton
                         color="primary"
                         disabled={selectedDeleteReason == ''}
                         onClick={() => setDeletePostConfirm(true)}
                       >
-                        Confirm
+                        {multiLangObj?.confirm}
                       </CButton>
                     </CModalFooter>
                   </CModal>
@@ -1046,17 +1052,17 @@ const BulletinBoardPostDetails = () => {
                   {bulletinBoardPostDetail[0]?.isReported == 1
                     &&
                     <button className='btn btn-danger' onClick={() => setCancleVisible(true)}>
-                      Cancel Report
+                      {multiLangObj?.cancelReport}
                     </button>
                   }
                 </div>
                 <div className="d-flex gap-2">
                   {getUserData.id == bulletinBoardPostDetail[0]?.authorId &&
                     bulletinBoardPostDetail[0]?.status != 'cancelled' && (
-                      <CButton className="btn btn-primary">Modify</CButton>
+                      <CButton className="btn btn-primary">{multiLangObj?.modify}</CButton>
                     )}
                   <NavLink to="/BulletinBoard">
-                    <CButton className="btn btn-primary">Back</CButton>
+                    <CButton className="btn btn-primary">{multiLangObj?.back}</CButton>
                   </NavLink>
                 </div>
               </div>
@@ -1067,7 +1073,7 @@ const BulletinBoardPostDetails = () => {
           <div>
             <CAccordion alwaysOpen activeItemKey={1}>
               <CAccordionItem>
-                <CAccordionHeader>Likes &nbsp; {postLikeListDataTotalCount}</CAccordionHeader>
+                <CAccordionHeader>{multiLangObj?.likes} &nbsp; {postLikeListDataTotalCount}</CAccordionHeader>
                 <CAccordionBody>
                   {postLikeListData?.map((item, index) => (
                     <div className="participantList" key={index}>
@@ -1094,13 +1100,13 @@ const BulletinBoardPostDetails = () => {
                           color="primary"
                           onClick={() => getPostLikeList(likeCurrentPage + 1)}
                         >
-                          See More
+                          {multiLangObj?.seeMore}
                         </CButton>
                       </div>
                     )}
                   {postLikeListData.length == 0 && (
                     <div className="text-center mt-3">
-                      <h5>No data Available</h5>
+                      <h5>{multiLangObj?.noDataAvailable}</h5>
                     </div>
                   )}
                 </CAccordionBody>
@@ -1115,31 +1121,31 @@ const BulletinBoardPostDetails = () => {
               <CAccordion alwaysOpen activeItemKey={1}>
                 <CAccordionItem>
                   <CAccordionHeader>
-                    Comments &nbsp; {commentsData[0]?.currentCommentCount}
+                    {multiLangObj?.comments} &nbsp; {commentsData[0]?.currentCommentCount}
                   </CAccordionHeader>
                   <CAccordionBody>
                     <div>
                       <div className="container d-flex justify-content-center gap-5">
                         <div>
-                          <p>Current Comments</p>
+                          <p>{multiLangObj?.currentComments}</p>
                           <a onClick={() => setCommentTab('currentComments')} role="button">
                             {commentsData[0]?.currentCommentCount}
                           </a>
                         </div>
                         <div>
-                          <p>Deleted by Admin</p>
+                          <p>{multiLangObj?.deletedByAdmin}</p>
                           <a onClick={() => setCommentTab('deletedByAdmin')} role="button">
                             {commentsData[0]?.deletedByAdmin}
                           </a>
                         </div>
                         <div>
-                          <p>Deleted by Writer</p>
+                          <p>{multiLangObj?.deletedByWriter}</p>
                           <a onClick={() => setCommentTab('deletedByWriter')} role="button">
                             {commentsData[0]?.deletedByUserId}
                           </a>
                         </div>
                         <div>
-                          <p>Reported</p>
+                          <p>{multiLangObj?.reported}</p>
                           <p onClick={() => setCommentTab('commentReported')} role="button">
                             {commentsData[0]?.commentsReported}
                           </p>
@@ -1163,10 +1169,10 @@ const BulletinBoardPostDetails = () => {
                                 handlePostComment()
                               }}
                             >
-                              Post
+                              {multiLangObj?.post}
                             </CButton>
                             <span className="txt-byte-information">
-                              {commentInput.length} / 1000 byte
+                              {commentInput.length} / {multiLangObj?.thousandBytes}
                             </span>
                           </div>
                         </CForm>
@@ -1190,7 +1196,7 @@ const BulletinBoardPostDetails = () => {
                                       role="button"
                                     >
                                       {' '}
-                                      Report Cancel &nbsp; | &nbsp;{' '}
+                                      {multiLangObj?.reportCancel} &nbsp; | &nbsp;{' '}
                                     </a>
                                   )}
                                   {commentcurrentTab == 'currentComments' &&
@@ -1201,7 +1207,7 @@ const BulletinBoardPostDetails = () => {
                                         }}
                                       >
                                         {' '}
-                                        Modify &nbsp; | &nbsp;{' '}
+                                        {multiLangObj?.modify} &nbsp; | &nbsp;{' '}
                                       </a>
                                     )}
                                   <CModal
@@ -1212,24 +1218,24 @@ const BulletinBoardPostDetails = () => {
                                   >
                                     <CModalHeader onClose={() => setReportCancelvisible(false)}>
                                       <CModalTitle id="LiveDemoExampleLabel">
-                                        Report Cancel
+                                        {multiLangObj?.reportCancel}
                                       </CModalTitle>
                                     </CModalHeader>
                                     <CModalBody>
-                                      <p>Are you sure !</p>
+                                      <p>{multiLangObj?.areYouSure}</p>
                                     </CModalBody>
                                     <CModalFooter>
                                       <CButton
                                         color="secondary"
                                         onClick={() => setReportCancelvisible(false)}
                                       >
-                                        Close
+                                        {multiLangObj?.close}
                                       </CButton>
                                       <CButton
                                         color="primary"
                                         onClick={() => handleReportCancle(item?.id, item?.userId)}
                                       >
-                                        Report Cancel
+                                        {multiLangObj?.reportCancel}
                                       </CButton>
                                     </CModalFooter>
                                   </CModal>
@@ -1239,7 +1245,7 @@ const BulletinBoardPostDetails = () => {
                                     }}
                                     role="button"
                                   >
-                                    Delete
+                                    {multiLangObj?.delete}
                                   </a>
                                 </div>
                               )}
@@ -1255,7 +1261,7 @@ const BulletinBoardPostDetails = () => {
                                   getReportHistoryData(item?.id)
                                 }}
                               >
-                                View Report History
+                                {multiLangObj?.viewReportHist}
                               </a>
                             </div>
                           )}
@@ -1275,7 +1281,7 @@ const BulletinBoardPostDetails = () => {
                         >
                           <CModalHeader>
                             <CModalTitle id="StaticBackdropExampleLabel">
-                              Report history
+                              {multiLangObj?.reportHistory}
                             </CModalTitle>
                           </CModalHeader>
                           <CModalBody>
@@ -1304,7 +1310,7 @@ const BulletinBoardPostDetails = () => {
                         >
                           <CModalHeader>
                             <CModalTitle id="StaticBackdropExampleLabel">
-                              Reason for deletion
+                              {multiLangObj?.reasonForDeletion}
                             </CModalTitle>
                           </CModalHeader>
                           <CModalBody>
@@ -1315,7 +1321,7 @@ const BulletinBoardPostDetails = () => {
                                 onChange={handleSelectChange}
                               >
                                 <option value="" disabled>
-                                  Please select a reason for deletion of the post.
+                                  {multiLangObj?.pleaseSelectPostDeleteReason}
                                 </option>
                                 {deleteReason?.map((option, index) => (
                                   <option key={index} value={option?.id}>
@@ -1335,7 +1341,7 @@ const BulletinBoardPostDetails = () => {
                                 ></CFormTextarea>
                                 <div className="mt-2">
                                   <span className="txt-byte-information">
-                                    {otherDeleteInput.length} / 500 byte
+                                    {otherDeleteInput.length} / {multiLangObj?.fiveHundredBytes}
                                   </span>
                                 </div>
                               </div>
@@ -1350,14 +1356,14 @@ const BulletinBoardPostDetails = () => {
                                 setGetIdAnduserId({ type: '', ids: null, userIds: null })
                               }}
                             >
-                              Cancel
+                              {multiLangObj?.cancel}
                             </CButton>
                             <CButton
                               color="primary"
                               disabled={selectedDeleteReason == ''}
                               onClick={() => handleDeleteAll()}
                             >
-                              Confirm
+                              {multiLangObj?.confirm}
                             </CButton>
                           </CModalFooter>
                         </CModal>
@@ -1369,14 +1375,14 @@ const BulletinBoardPostDetails = () => {
                           color="primary"
                           onClick={() => getPostCommentList(commentCurrentPage + 1)}
                         >
-                          See More
+                          {multiLangObj?.seeMore}
                         </CButton>
                       </div>
                     )}
 
                     {postCommentListData.length == 0 && (
                       <div className="text-center mt-3">
-                        <h5>No data Available</h5>
+                        <h5>{multiLangObj?.noDataAvailable}</h5>
                       </div>
                     )}
                   </CAccordionBody>
@@ -1391,34 +1397,9 @@ const BulletinBoardPostDetails = () => {
               <CAccordion alwaysOpen activeItemKey={1}>
                 <CAccordionItem>
                   <CAccordionHeader>
-                    Participants &nbsp; {postPollParticipantDetail[0]?.totalParticipantCounts}
+                    {multiLangObj?.participants} &nbsp; {postPollParticipantDetail[0]?.totalParticipantCounts}
                   </CAccordionHeader>
                   <CAccordionBody>
-                    {/* {postPollParticipantDetail?.map((item, index) => (
-                      <div key={index}>
-                        <div className='container'>
-                          <div>
-                            <h4>{item?.title} &nbsp; {item?.totalParticipantCount} </h4>
-                          </div>
-                          {item?.participants?.map((items, index) => (
-                            <div className='p-3 col-md-12' key={index}>
-                              <div className='d-flex gap-4'>
-                                {items?.url ?
-                                  <CImage style={{ width: '5%' }} rounded crossorigin="anonymous" src={'https://ptkapi.experiencecommerce.com' + items?.url} /> : <CIcon icon={cilUser} size="lg" />
-                                }
-                                <p>{items?.englishName}</p>
-                              </div>
-                            </div>
-                          ))}
-
-                          {item?.participants.length == 0 &&
-                            <div className="text-center mt-3">
-                              <h5>No data Available</h5>
-                            </div>
-                          }
-                        </div>
-                      </div>
-                    ))} */}
                     <CAccordion>
                       {pollParticipantOptionData.map((item, index) => (
                         <CAccordionItem key={index}>
@@ -1452,7 +1433,7 @@ const BulletinBoardPostDetails = () => {
                             </div>
                             {pollParticipantOptionDataList.length == 0 && (
                               <div className="text-center mt-3">
-                                <h5>No data Available</h5>
+                                <h5>{multiLangObj?.noDataAvailable}</h5>
                               </div>
                             )}
                             {pollParticipantOptionDataList.length >= 5 &&
@@ -1468,7 +1449,7 @@ const BulletinBoardPostDetails = () => {
                                       )
                                     }
                                   >
-                                    See More
+                                    {multiLangObj?.seeMore}
                                   </CButton>
                                 </div>
                               )}
@@ -1488,53 +1469,10 @@ const BulletinBoardPostDetails = () => {
                       recuritmentParticipantData(recuritmentParticipantCurrentPage + 1)
                     }
                   >
-                    See More
+                    {multiLangObj?.seeMore}
                   </CButton>
                 </div>
               )}
-              {/* <CAccordion>
-                {pollParticipantOptionData.map((item, index) => (
-                  <CAccordionItem key={index}>
-                    <CAccordionHeader onClick={() => { handlePollParticipantOptionData(item.pollOptionId, 1) }}>{item.pollTitle}</CAccordionHeader>
-                    <CAccordionBody>
-                      <div>
-                        {pollParticipantOptionDataList.length > 0 && pollParticipantOptionDataList?.map((value, no) => (
-                          <div className='p-3 col-md-12' key={no}>
-                            <div className='d-flex gap-4'>
-                              {value?.url ?
-                                <CImage style={{ width: '5%' }} rounded crossorigin="anonymous" src={'https://ptkapi.experiencecommerce.com' + value?.url} /> : <CIcon icon={cilUser} size="lg" />
-                              }
-                              <p>{value?.englishaName}</p>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                      {pollParticipantOptionDataList.length == 0 &&
-                        <div className="text-center mt-3">
-                          <h5>No data Available</h5>
-                        </div>
-                      }
-                      {(pollParticipantOptionDataList.length >= 5 && totalPollParticipantOptionDataCount != pollParticipantOptionDataList.length) &&
-                        <div className="text-center mt-3">
-                          <CButton color="primary" onClick={() => handlePollParticipantOptionData(item.pollOptionId, pollParticipantOptionDataCurrentPage + 1)}>
-                            See More
-                          </CButton>
-                        </div>
-                      }
-                    </CAccordionBody>
-
-
-
-
-                  </CAccordionItem>
-                ))}
-              </CAccordion> */}
-
-              {/* {postRecuritParticipantDetail.length == 0 &&
-                <div className="text-center mt-3">
-                  <h5>No data Available</h5>
-                </div>
-              } */}
             </div>
           </div>
         )}
@@ -1546,7 +1484,7 @@ const BulletinBoardPostDetails = () => {
                 <CAccordionItem>
                   <div>
                     <CAccordionHeader>
-                      Participants {recuritmentParticipantDataCount} &nbsp;&nbsp;&nbsp;
+                      {multiLangObj?.participants} {recuritmentParticipantDataCount} &nbsp;&nbsp;&nbsp;
                       {bulletinBoardPostDetail[0]?.type == 'raffle' &&
                         getUserData.id == bulletinBoardPostDetail[0]?.authorId &&
                         bulletinBoardPostDetail[0].isConfirmed == 1 &&
@@ -1555,7 +1493,7 @@ const BulletinBoardPostDetails = () => {
                             className="btn btn-primary"
                             onClick={() => setDrawWinnersvisible(!drawWinnersvisible)}
                           >
-                            Draw Winners
+                            {multiLangObj?.drawWinner}
                           </CButton>
                         )}
                       &nbsp;&nbsp;&nbsp;
@@ -1568,7 +1506,7 @@ const BulletinBoardPostDetails = () => {
                             className="btn btn-primary"
                             onClick={() => handleConfirmParticipantCheck()}
                           >
-                            Confirm
+                            {multiLangObj?.confirm}
                           </CButton>
                         )}
                     </CAccordionHeader>
@@ -1579,12 +1517,12 @@ const BulletinBoardPostDetails = () => {
                       aria-labelledby="StaticBackdropExampleLabel"
                     >
                       <CModalHeader>
-                        <CModalTitle id="StaticBackdropExampleLabel">Post</CModalTitle>
+                        <CModalTitle id="StaticBackdropExampleLabel">{multiLangObj?.post}</CModalTitle>
                       </CModalHeader>
-                      <CModalBody>Are you sure you want to draw winners?</CModalBody>
+                      <CModalBody>{multiLangObj?.areYouSureToDrawWinner}</CModalBody>
                       <CModalFooter>
                         <CButton color="secondary" onClick={() => setDrawWinnersvisible(false)}>
-                          Cancel
+                          {multiLangObj?.cancel}
                         </CButton>
                         <CButton
                           color="primary"
@@ -1593,7 +1531,7 @@ const BulletinBoardPostDetails = () => {
                             setDrawWinnersvisible(false)
                           }}
                         >
-                          Confirm
+                          {multiLangObj?.confirm}
                         </CButton>
                       </CModalFooter>
                     </CModal>
@@ -1630,7 +1568,7 @@ const BulletinBoardPostDetails = () => {
                                 )
                               }}
                             >
-                              Delete user
+                              {multiLangObj?.deleteUser}
                             </CButton>
                           </div>
                         )}
@@ -1650,14 +1588,14 @@ const BulletinBoardPostDetails = () => {
                               )
                             }
                           >
-                            See More
+                            {multiLangObj?.seeMore}
                           </CButton>
                         </div>
                       )}
 
                     {postRecuritParticipantDetail.length == 0 && (
                       <div className="text-center mt-3">
-                        <h5>No data Available</h5>
+                        <h5>{multiLangObj?.noDataAvailable}</h5>
                       </div>
                     )}
 
@@ -1675,7 +1613,7 @@ const BulletinBoardPostDetails = () => {
                       >
                         <CModalHeader>
                           <CModalTitle id="StaticBackdropExampleLabel">
-                            Reason for deletion
+                            {multiLangObj?.reasonForDeletion}
                           </CModalTitle>
                         </CModalHeader>
                         <CModalBody>
@@ -1686,7 +1624,7 @@ const BulletinBoardPostDetails = () => {
                               onChange={handleSelectChange}
                             >
                               <option value="" disabled>
-                                Please select a reason for deletion of the post.
+                                {multiLangObj?.pleaseSelectPostDeleteReason}
                               </option>
                               {deleteReason?.map((option, index) => (
                                 <option key={index} value={option?.id}>
@@ -1699,8 +1637,8 @@ const BulletinBoardPostDetails = () => {
                             <div>
                               <CFormTextarea
                                 id="floatingTextarea"
-                                floatingLabel="Enter the report details."
-                                placeholder="Leave a comment here"
+                                floatingLabel={multiLangObj?.enterReportDetails}
+                                placeholder={multiLangObj?.leaveCommentHere}
                                 onChange={handleDeleteReasonInputChange}
                               ></CFormTextarea>
                             </div>
@@ -1715,14 +1653,14 @@ const BulletinBoardPostDetails = () => {
                               setGetIdAnduserId({ type: '', ids: null, userIds: null })
                             }}
                           >
-                            Cancel
+                            {multiLangObj?.cancel}
                           </CButton>
                           <CButton
                             color="primary"
                             disabled={selectedDeleteReason == ''}
                             onClick={() => handleDeleteAll()}
                           >
-                            Confirm
+                            {multiLangObj?.confirm}
                           </CButton>
                         </CModalFooter>
                       </CModal>
@@ -1739,7 +1677,7 @@ const BulletinBoardPostDetails = () => {
             <div>
               <CAccordion alwaysOpen activeItemKey={1}>
                 <CAccordionItem>
-                  <CAccordionHeader>Winner {winnerDataTotalCount}</CAccordionHeader>
+                  <CAccordionHeader>{multiLangObj?.winner} {winnerDataTotalCount}</CAccordionHeader>
                   <CAccordionBody>
                     {winnerListData?.map((item, index) => (
                       <div className="participantList" key={index}>
@@ -1775,13 +1713,13 @@ const BulletinBoardPostDetails = () => {
                               )
                             }
                           >
-                            See More
+                            {multiLangObj?.seeMore}
                           </CButton>
                         </div>
                       )}
                     {winnerListData?.length == 0 && (
                       <div className="text-center mt-3">
-                        <h5>No data Available</h5>
+                        <h5>{multiLangObj?.noDataAvailable}</h5>
                       </div>
                     )}
                   </CAccordionBody>
@@ -1802,10 +1740,10 @@ const BulletinBoardPostDetails = () => {
             aria-labelledby="StaticBackdropExampleLabel"
           >
             <CModalHeader>
-              <CModalTitle id="StaticBackdropExampleLabel">Not enough participants</CModalTitle>
+              <CModalTitle id="StaticBackdropExampleLabel">{multiLangObj?.notEnoughParticipants}</CModalTitle>
             </CModalHeader>
             <CModalBody>
-              <p>There are not enough participants. Please select one of the options below.</p>
+              <p>{multiLangObj?.thereAreNoEnoughPartPleaseSelectOne}</p>
               <div className="mt-3">
                 <CFormCheck
                   type="checkbox"
@@ -1840,7 +1778,7 @@ const BulletinBoardPostDetails = () => {
                 onClick={() => handleEnoughParticiapantValues()}
                 color="primary"
               >
-                Ok
+                {multiLangObj?.ok}
               </CButton>
             </CModalFooter>
           </CModal>
@@ -1857,11 +1795,11 @@ const BulletinBoardPostDetails = () => {
               <CModalTitle id="LiveDemoExampleLabel">Delete Post</CModalTitle>
             </CModalHeader>
             <CModalBody>
-              <p>Are you sure you want to delete this post?</p>
+              <p>{multiLangObj?.areYouSureToDeletePost}</p>
             </CModalBody>
             <CModalFooter>
               <CButton color="secondary" onClick={() => setDeletePostConfirm(false)}>
-                Close
+                {multiLangObj?.cancel}
               </CButton>
               <CButton
                 color="primary"
@@ -1869,7 +1807,7 @@ const BulletinBoardPostDetails = () => {
                   handlePostDelete()
                 }}
               >
-                Delete
+                {multiLangObj?.delete}
               </CButton>
             </CModalFooter>
           </CModal>
@@ -1882,16 +1820,16 @@ const BulletinBoardPostDetails = () => {
           aria-labelledby="LiveDemoExampleLabel"
         >
           <CModalHeader onClose={() => setCancleVisible(false)}>
-            <CModalTitle id="LiveDemoExampleLabel">Confirm report cancellation</CModalTitle>
+            <CModalTitle id="LiveDemoExampleLabel">{multiLangObj?.confirmReportCancellation}</CModalTitle>
           </CModalHeader>
           <CModalBody>
-            <p>Are you sure you want to cancel the report?</p>
+            <p>{multiLangObj?.areYouSureToCancelReport}</p>
           </CModalBody>
           <CModalFooter>
             <CButton color="secondary" onClick={() => setCancleVisible(false)}>
-              Close
+              {multiLangObj?.close}
             </CButton>
-            <CButton color="primary" onClick={() => handleCancleReport()}>Confirm</CButton>
+            <CButton color="primary" onClick={() => handleCancleReport()}>{multiLangObj?.confirm}</CButton>
           </CModalFooter>
         </CModal>
       </div>
