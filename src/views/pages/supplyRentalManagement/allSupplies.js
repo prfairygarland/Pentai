@@ -213,6 +213,7 @@ const AllSupplies = () => {
         // setUserInfoPopup(true)
       } else if (response?.status === 404) {
         setCategoryData(response?.data)
+        setIcon(null)
       }
     } catch (error) {
       console.log(error)
@@ -230,6 +231,7 @@ const AllSupplies = () => {
         // setUserInfoPopup(true)
       } else if (response?.status === 404) {
         setSubCategoryData(response?.data)
+        setCatIcon(null)
       }
     } catch (error) {
       console.log(error)
@@ -247,6 +249,7 @@ const AllSupplies = () => {
         // setUserInfoPopup(true)
       } else if (response?.status === 404) {
         setModelData(response?.data)
+        setSubCatIcon(null)
       }
     } catch (error) {
       console.log(error)
@@ -265,6 +268,7 @@ const AllSupplies = () => {
         // setUserInfoPopup(true)
       } else if (response?.status === 404) {
         setItemData(response?.data)
+        setModIcon(null)
       }
     } catch (error) {
       console.log(error)

@@ -18,6 +18,8 @@ import BookCuration from './views/pages/BookRentalManagement/BookCuration'
 import BookRentalBanner from './views/pages/BookRentalManagement/BookRentalBanner'
 import SupplyRentalStatus from './views/pages/supplyRentalManagement/supplyRentalStatus'
 import AllSupplies from './views/pages/supplyRentalManagement/allSupplies'
+import LiveManagement from './views/pages/LiveManagement/LiveManagement'
+import LiveRegistration from './views/pages/LiveManagement/Component/LiveRegistration'
 
 const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
 
@@ -60,6 +62,10 @@ const routes = [
   { path: '/SupplyRentalStatus', name: 'Supply Rental Status', element: SupplyRentalStatus },
   { path: '/AllSupplies', name: 'All Supplies', element: AllSupplies },
 
+
+  //{ Live Management}
+  { path: '/LiveManagement', name: 'Live Management', element: LiveManagement },
+  { path: '/LiveManagement/LiveRegistration', name: 'Live Registration', element: LiveRegistration },
 
 
 ]

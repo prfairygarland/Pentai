@@ -894,7 +894,7 @@ const BulletinBoardPostDetails = () => {
                                       <div className="thubmnail-img-container" key={index}>
                                         <CImage
                                           alt="NA"
-                                          
+
                                           crossorigin="anonymous"
                                           src={ALL_CONSTANTS.API_URL + imageUrl.url}
                                           fluid
@@ -1171,9 +1171,9 @@ const BulletinBoardPostDetails = () => {
                             >
                               {multiLangObj?.post}
                             </CButton>
-                            <span className="txt-byte-information">
-                              {commentInput.length} / {multiLangObj?.thousandBytes}
-                            </span>
+                            {/* <span className="txt-byte-information">
+                              {commentInput.length} / 1000 byte
+                            </span> */}
                           </div>
                         </CForm>
                       </div>
@@ -1461,7 +1461,7 @@ const BulletinBoardPostDetails = () => {
                 </CAccordionItem>
               </CAccordion>
 
-              {postPollParticipantDetail.length >= 5 && (
+              {/* {postPollParticipantDetail.length >= 5 && (
                 <div className="text-center mt-3">
                   <CButton
                     color="primary"
@@ -1472,7 +1472,50 @@ const BulletinBoardPostDetails = () => {
                     {multiLangObj?.seeMore}
                   </CButton>
                 </div>
-              )}
+              )} */}
+              {/* <CAccordion>
+                {pollParticipantOptionData.map((item, index) => (
+                  <CAccordionItem key={index}>
+                    <CAccordionHeader onClick={() => { handlePollParticipantOptionData(item.pollOptionId, 1) }}>{item.pollTitle}</CAccordionHeader>
+                    <CAccordionBody>
+                      <div>
+                        {pollParticipantOptionDataList.length > 0 && pollParticipantOptionDataList?.map((value, no) => (
+                          <div className='p-3 col-md-12' key={no}>
+                            <div className='d-flex gap-4'>
+                              {value?.url ?
+                                <CImage style={{ width: '5%' }} rounded crossorigin="anonymous" src={'https://ptkapi.experiencecommerce.com' + value?.url} /> : <CIcon icon={cilUser} size="lg" />
+                              }
+                              <p>{value?.englishaName}</p>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                      {pollParticipantOptionDataList.length == 0 &&
+                        <div className="text-center mt-3">
+                          <h5>No data Available</h5>
+                        </div>
+                      }
+                      {(pollParticipantOptionDataList.length >= 5 && totalPollParticipantOptionDataCount != pollParticipantOptionDataList.length) &&
+                        <div className="text-center mt-3">
+                          <CButton color="primary" onClick={() => handlePollParticipantOptionData(item.pollOptionId, pollParticipantOptionDataCurrentPage + 1)}>
+                            See More
+                          </CButton>
+                        </div>
+                      }
+                    </CAccordionBody>
+
+
+
+
+                  </CAccordionItem>
+                ))}
+              </CAccordion> */}
+
+              {/* {postRecuritParticipantDetail.length == 0 &&
+                <div className="text-center mt-3">
+                  <h5>No data Available</h5>
+                </div>
+              } */}
             </div>
           </div>
         )}

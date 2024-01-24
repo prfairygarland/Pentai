@@ -6,8 +6,8 @@ export let ALL_CONSTANTS = {
   // API_URL: "http://192.168.10.46:3000/",    // API URL staging
   // API_URL: "http://192.168.10.46:3000/",    // API URL staging
 
-    // IS_PRODUCTION: true,
-    // BASE_URL: "",       // API URL Live
+  // IS_PRODUCTION: true,
+  // BASE_URL: "",       // API URL Live
   // API_URL: "",    // API URL Live
 
   // IS_PRODUCTION: false,
@@ -32,10 +32,10 @@ export let API_ENDPOINT = {
   get_boards: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/boardList",
   get_bulletinboard_posts: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/bulletinBoardManagement",
   get_boarddata_byID: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/getBoardId",
-  get_postuserdetail : ALL_CONSTANTS.API_URL + "/api/adminPanel/community/userDetailsBulletin",
+  get_postuserdetail: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/userDetailsBulletin",
   get_board_list: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/boardList",
   create_post_bulletin: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/createPostBulletin",
-  
+
   create_post_welfare: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/createPostWelfare",
 
   update_post_bulletin: ALL_CONSTANTS.API_URL + "/api/adminPanel/community/updateBulletin",
@@ -78,34 +78,34 @@ export let API_ENDPOINT = {
   delete_book: ALL_CONSTANTS.API_URL + "/admin/bookRental/deleteBook",
   book_listexport: ALL_CONSTANTS.API_URL + "/admin/bookRental/export",
   searchGoogleBook: ALL_CONSTANTS.API_URL + "/admin/bookRental/searchGoogleBook",
-  categoryList : ALL_CONSTANTS.API_URL + "/admin/bookRental/categoryList",
+  categoryList: ALL_CONSTANTS.API_URL + "/admin/bookRental/categoryList",
   subCategoryList: ALL_CONSTANTS.API_URL + "/admin/bookRental/subCategoryList",
   createBook: ALL_CONSTANTS.API_URL + "/admin/bookRental/createBook",
   uploadImages: ALL_CONSTANTS.API_URL + "/admin/bookRental/imageUpload",
   create_genre: ALL_CONSTANTS.API_URL + "/admin/bookRental/genreCreate",
-  All_Bookexport : ALL_CONSTANTS.API_URL + "/admin/bookRental/allBookExport",
-  bookexport_RentalHistory : ALL_CONSTANTS.API_URL + "/admin/bookRental/historyExport",
+  All_Bookexport: ALL_CONSTANTS.API_URL + "/admin/bookRental/allBookExport",
+  bookexport_RentalHistory: ALL_CONSTANTS.API_URL + "/admin/bookRental/historyExport",
   get_GenreDetails: ALL_CONSTANTS.API_URL + "/admin/bookRental/getGenreDetail",
   update_Genre: ALL_CONSTANTS.API_URL + "/admin/bookRental/updateGenre",
   getAll_genreList: ALL_CONSTANTS.API_URL + "/admin/bookRental/genre/list",
   get_bookListByGenre: ALL_CONSTANTS.API_URL + "/admin/bookRental/getBookList",
   get_ALLBooksDetails: ALL_CONSTANTS.API_URL + "/admin/bookRental/allBookDetail",
   get_bookListItem: ALL_CONSTANTS.API_URL + "/admin/bookRental/bookItemList",
-  get_bookDetailItem : ALL_CONSTANTS.API_URL + "/admin/bookRental/bookItemDetail",
+  get_bookDetailItem: ALL_CONSTANTS.API_URL + "/admin/bookRental/bookItemDetail",
   update_bookListItem: ALL_CONSTANTS.API_URL + "/admin/bookRental/updateBookItem",
   create_bookListItem: ALL_CONSTANTS.API_URL + "/admin/bookRental/createBookItem",
   delete_bookItem: ALL_CONSTANTS.API_URL + "/admin/bookRental/deleteBookItem",
-  Edit_book : ALL_CONSTANTS.API_URL + "/admin/bookRental/updateBook",
+  Edit_book: ALL_CONSTANTS.API_URL + "/admin/bookRental/updateBook",
   VisibilityHide: ALL_CONSTANTS.API_URL + "/admin/bookRental/visibilityHideShow",
-  delete_genre : ALL_CONSTANTS.API_URL + "/admin/bookRental/deleteGenre",
+  delete_genre: ALL_CONSTANTS.API_URL + "/admin/bookRental/deleteGenre",
   create_categories: ALL_CONSTANTS.API_URL + "/admin/bookRental/createCategories",
-  delete_category : ALL_CONSTANTS.API_URL + "/admin/bookRental/deleteCategory",
-  get_libraryList : ALL_CONSTANTS.API_URL + "/admin/bookRental/libraryList",
+  delete_category: ALL_CONSTANTS.API_URL + "/admin/bookRental/deleteCategory",
+  get_libraryList: ALL_CONSTANTS.API_URL + "/admin/bookRental/libraryList",
   get_libraryDetails: ALL_CONSTANTS.API_URL + "/admin/bookRental/libraryDetail",
   update_libraries: ALL_CONSTANTS.API_URL + "/admin/bookRental/updateLibraries",
   getbook_bySubCategory: ALL_CONSTANTS.API_URL + "/admin/bookRental/bookListByCategory",
   create_subCategories: ALL_CONSTANTS.API_URL + "/admin/bookRental/createSubCategories",
-  delete_subCategories : ALL_CONSTANTS.API_URL + "/admin/bookRental/deleteSubCategory",
+  delete_subCategories: ALL_CONSTANTS.API_URL + "/admin/bookRental/deleteSubCategory",
   get_subCategoryDetails: ALL_CONSTANTS.API_URL + "/admin/bookRental/subCategoryDetail",
   update_Subcategory: ALL_CONSTANTS.API_URL + "/admin/bookRental/updateSubCategory",
   get_categoryDetails: ALL_CONSTANTS.API_URL + "/admin/bookRental/categoryDetail",
@@ -116,9 +116,9 @@ export let API_ENDPOINT = {
   delete_banner: ALL_CONSTANTS.API_URL + "/admin/bookRental/deleteBanner",
   create_banner: ALL_CONSTANTS.API_URL + "/admin/bookRental/createBanner",
   update_banner: ALL_CONSTANTS.API_URL + "/admin/bookRental/updateBannerCategory",
-  update_bannerCategory : ALL_CONSTANTS.API_URL + "/admin/bookRental/updateBannerCategory"
+  update_bannerCategory: ALL_CONSTANTS.API_URL + "/admin/bookRental/updateBannerCategory"
 
-  
+
 
 
 

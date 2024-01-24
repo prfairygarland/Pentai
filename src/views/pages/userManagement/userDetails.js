@@ -6,6 +6,7 @@ import ReactTable from 'src/components/common/ReactTable';
 import { getBookRental, getOprationClub, getSupplyRental, getUserDetail } from 'src/utils/Api';
 import { ALL_CONSTANTS } from 'src/utils/config';
 import * as moment from 'moment';
+import { useTranslation } from 'react-i18next';
 
 const UserDetails = () => {
 
@@ -33,38 +34,41 @@ const UserDetails = () => {
   const [currentOperationClubPage, setCurrentOperationClubPage] = useState(1)
   const [totalOperationClubPages, setTotalOperationClubPages] = useState(0)
   const location = useLocation()
+  const { t, i18n } = useTranslation();
+  const translationObject = i18n.getDataByLanguage(i18n.language);
+  const multiLang = translationObject?.translation?.UserDetails
 
 
   const suppliesRentalColumns = useMemo(() => [
     {
-      Header: 'No',
+      Header: multiLang?.No,
       accessor: 'Id',
       Cell: ({ row }) => {
         return (currentSuppliesRentalPage - 1) * itemsPerPage + (row.index + 1)
       }
     },
     {
-      Header: 'Category',
+      Header: multiLang?.Category,
       accessor: 'CategoryName'
     },
     {
-      Header: 'Item',
+      Header: multiLang?.Item,
       accessor: 'itemName'
     },
     {
-      Header: 'Rental Date',
+      Header: multiLang?.Rental_Date,
       accessor: '',
       Cell: ({ row }) => <p>{row.original.RentalDate ? moment(row.original.RentalDate).format('YYYY-MM-DD') : '-'}</p>
 
     },
     {
-      Header: 'Return Date',
+      Header: multiLang?.Return_Date,
       accessor: 'returnDate',
       Cell: ({ row }) => <p>{row.original.returnDate ? moment(row.original.returnDate).format('YYYY-MM-DD') : '-'}</p>
 
     },
     {
-      Header: 'Status',
+      Header: multiLang?.Status,
       accessor: 'status'
     }
 
@@ -72,36 +76,36 @@ const UserDetails = () => {
 
   const bookRentalColumns = useMemo(() => [
     {
-      Header: 'No',
+      Header: multiLang?.No,
       accessor: 'Id',
       Cell: ({ row }) => {
         return (currentBookRentalPage - 1) * itemsPerPage + (row.index + 1)
       }
     },
     {
-      Header: 'Genre',
+      Header: multiLang?.Genre,
       accessor: 'genre'
     },
     {
-      Header: 'Book Title',
+      Header: multiLang?.Book_Title,
       accessor: 'bookTitle'
     },
     {
-      Header: 'Author',
+      Header: multiLang?.Author,
       accessor: 'author',
     },
     {
-      Header: 'Rental Date',
+      Header: multiLang?.Rental_Date,
       accessor: 'rentalDate',
       Cell: ({ row }) => <p>{moment(row.original.rentalDate).format('YYYY-MM-DD')}</p>
     },
     {
-      Header: 'Return Date',
+      Header: multiLang?.Return_Date,
       accessor: 'returnDate',
       Cell: ({ row }) => <p>{row.original.returnDate ? moment(row.original.returnDate).format('YYYY-MM-DD') : '-'}</p>
     },
     {
-      Header: 'Status',
+      Header: multiLang?.Status,
       accessor: 'status'
     }
 
@@ -110,18 +114,18 @@ const UserDetails = () => {
 
   const operationClubColumns = useMemo(() => [
     {
-      Header: 'No',
+      Header: multiLang?.No,
       accessor: 'Id',
       Cell: ({ row }) => {
         return (currentOperationClubPage - 1) * itemsPerPage + (row.index + 1)
       }
     },
     {
-      Header: 'Club Name',
+      Header: multiLang?.Club_Name,
       accessor: 'clubName'
     },
     {
-      Header: 'Created Date',
+      Header: multiLang?.Created_Date,
       accessor: 'CreatedAt',
       Cell: ({ row }) => <p>{row.original.CreatedAt ? moment(row.original.CreatedAt).format('YYYY-MM-DD') : '-'}</p>
 
@@ -242,7 +246,7 @@ const UserDetails = () => {
                     <div className='formWraper'>
                       <div className="form-outline form-white  d-flex ">
                         <div className='formWrpLabel'>
-                          <label className="fw-bolder ">Profile Image</label>
+                          <label className="fw-bolder ">{multiLang?.Profile_Image}</label>
                         </div>
                         <div className='formWrpInpt'>
                           {userDetails[0]?.imageUrl != null ?
@@ -254,7 +258,7 @@ const UserDetails = () => {
 
                       <div className="form-outline form-white  d-flex ">
                         <div className='formWrpLabel'>
-                          <label className="fw-bolder ">Employee No.</label>
+                          <label className="fw-bolder ">{multiLang?.Employee_No}</label>
                         </div>
                         <div className='formWrpInpt'>{userDetails[0]?.employeeCode ? userDetails[0]?.employeeCode : ''}</div>
                       </div>
@@ -262,14 +266,14 @@ const UserDetails = () => {
                       <div className='d-flex col-md-12'>
                         <div className="form-outline form-white d-flex col-md-6">
                           <div className='formWrpLabel'>
-                            <label className="fw-bolder ">Name</label>
+                            <label className="fw-bolder ">{multiLang?.Name}</label>
                           </div>
                           <div className='formWrpInpt'>{userDetails[0]?.korenName ? userDetails[0]?.korenName : 'NA'}
                           </div>
                         </div>
                         <div className="form-outline form-white  d-flex  col-md-6">
                           <div className='formWrpLabel'>
-                            <label className="fw-bolder ">English Name</label>
+                            <label className="fw-bolder ">{multiLang?.English_Name}</label>
                           </div>
                           <div className='formWrpInpt'>{userDetails[0]?.englishName ? userDetails[0]?.englishName : 'NA'}
                           </div>
@@ -279,14 +283,14 @@ const UserDetails = () => {
                       <div className='d-flex col-md-12'>
                         <div className="form-outline form-white d-flex col-md-6">
                           <div className='formWrpLabel'>
-                            <label className="fw-bolder ">E-mail</label>
+                            <label className="fw-bolder ">{multiLang?.E_mail}</label>
                           </div>
                           <div className='formWrpInpt'>{userDetails[0]?.email ? userDetails[0]?.email : 'NA'}
                           </div>
                         </div>
                         <div className="form-outline form-white  d-flex  col-md-6">
                           <div className='formWrpLabel'>
-                            <label className="fw-bolder ">Mobile</label>
+                            <label className="fw-bolder ">{multiLang?.Mobile}</label>
                           </div>
                           <div className='formWrpInpt'>{userDetails[0]?.mobile ? userDetails[0]?.mobile : 'NA'}
                           </div>
@@ -295,7 +299,7 @@ const UserDetails = () => {
 
                       <div className="form-outline form-white  d-flex ">
                         <div className='formWrpLabel'>
-                          <label className="fw-bolder ">Job Title</label>
+                          <label className="fw-bolder ">{multiLang?.Job_Title}</label>
                         </div>
                         <div className='formWrpInpt'>{userDetails[0]?.jobTitle ? userDetails[0]?.jobTitle : 'NA'}
                         </div>
@@ -304,14 +308,14 @@ const UserDetails = () => {
                       <div className='d-flex col-md-12'>
                         <div className="form-outline form-white d-flex col-md-6">
                           <div className='formWrpLabel'>
-                            <label className="fw-bolder ">Company</label>
+                            <label className="fw-bolder ">{multiLang?.Company}</label>
                           </div>
                           <div className='formWrpInpt'>{userDetails[0]?.companyName ? userDetails[0]?.companyName : 'NA'}
                           </div>
                         </div>
                         <div className="form-outline form-white  d-flex  col-md-6">
                           <div className='formWrpLabel'>
-                            <label className="fw-bolder ">Division</label>
+                            <label className="fw-bolder ">{multiLang?.Division}</label>
                           </div>
                           <div className='formWrpInpt'>
                             {userDetails[0]?.divisionName ? userDetails[0]?.divisionName : 'NA'}
@@ -322,7 +326,7 @@ const UserDetails = () => {
                       <div className='d-flex col-md-12'>
                         <div className="form-outline form-white d-flex col-md-6">
                           <div className='formWrpLabel'>
-                            <label className="fw-bolder ">Group</label>
+                            <label className="fw-bolder ">{multiLang?.Group}</label>
                           </div>
                           <div className='formWrpInpt'>
                             {userDetails[0]?.groupName ? userDetails[0]?.groupName : 'NA'}
@@ -330,7 +334,7 @@ const UserDetails = () => {
                         </div>
                         <div className="form-outline form-white  d-flex  col-md-6">
                           <div className='formWrpLabel'>
-                            <label className="fw-bolder ">Team</label>
+                            <label className="fw-bolder ">{multiLang?.Team}</label>
                           </div>
                           <div className='formWrpInpt'>
                             {userDetails[0]?.teamName ? userDetails[0]?.teamName : 'NA'}
@@ -340,14 +344,14 @@ const UserDetails = () => {
 
                       <div className="form-outline form-white d-flex ">
                         <div className='formWrpLabel'>
-                          <label className="fw-bolder ">Status</label>
+                          <label className="fw-bolder ">{multiLang?.Status}</label>
                         </div>
                         <div className='formWrpInpt'>{userDetails[0]?.status == 1 ? 'Active' : 'Inactive'}
                         </div>
                       </div>
                       <div className="form-outline form-white d-flex ">
                         <div className='formWrpLabel'>
-                          <label className="fw-bolder ">Last Access
+                          <label className="fw-bolder ">{multiLang?.Last_Access}
                           </label>
                         </div>
                         <div className='formWrpInpt'>
@@ -355,107 +359,120 @@ const UserDetails = () => {
                         </div>
                       </div>
 
-                      <div className="form-outline form-white d-flex ">
-                        <div className='formWrpLabel'>
-                          <label className="fw-bolder ">Rental Info.
-                          </label>
+                      <div className='d-flex col-md-12'>
+                        <div className="form-outline form-white d-flex col-md-6">
+                          <div className="form-outline form-white d-flex ">
+                            <div className='formWrpLabel'>
+                              <label className="fw-bolder ">{multiLang?.Rental_Info}
+                              </label>
+                            </div>
+                            <div className='formWrpInpt d-flex gap-5'>
+                              <div className='d-flex gap-2'>
+                                <p>{multiLang?.Supplies_Rental}: </p>
+                                <p >
+                                  {userDetails[0]?.supplyCount == 0 ? 0 : <Link onClick={() => { setSuppliesRentalVisible(!suppliesRentalVisible); getSupplyRentallistData(1) }}>{userDetails[0]?.supplyCount}</Link>}
+                                </p>
+                                <CModal
+                                  backdrop="static"
+                                  alignment="center"
+                                  size='lg'
+                                  visible={suppliesRentalVisible}
+                                  onClose={() => setSuppliesRentalVisible(false)}
+                                  aria-labelledby="LiveDemoExampleLabel">
+                                  <CModalHeader onClose={() => setSuppliesRentalVisible(false)}>
+                                    <CModalTitle>{multiLang?.Supplies_Rental_Status}</CModalTitle>
+                                  </CModalHeader>
+                                  <CModalBody>
+                                    <p className='mb-2'>{multiLang?.Total}: {totalSupply}</p>
+                                    <div className='userdetailPopTable'>
+                                      <ReactTable showCheckbox={false} columns={suppliesRentalColumns} data={supplyRentalData} totalCount={5} onSelectionChange={handleSelectionChange} /></div>
+                                    <div className='userlist-pagination dataTables_paginate'>
+                                      <ReactPaginate
+                                        breakLabel={'...'}
+                                        marginPagesDisplayed={1}
+                                        previousLabel={<button>{multiLang?.Previous}</button>}
+                                        nextLabel={<button>{multiLang?.Next}</button>}
+                                        pageCount={totalSuppliesRentalPages}
+                                        onPageChange={handleSupplyPageChange}
+                                        forcePage={currentSuppliesRentalPage - 1}
+                                        renderOnZeroPageCount={null}
+                                        pageRangeDisplayed={1}
+                                      />
+                                    </div>
+                                  </CModalBody>
+                                  <CModalFooter>
+                                    <CButton className='btn btn-black' onClick={() => setSuppliesRentalVisible(false)}>
+                                      {multiLang?.Close}
+                                    </CButton>
+                                  </CModalFooter>
+                                </CModal>
+                              </div>
+                              <div className='d-flex gap-2'>
+                                <p>{multiLang?.Book_Rental}: </p>
+                                <p>
+                                  {
+                                    userDetails[0]?.bookCount == 0 ? 0 :
+                                      <Link onClick={() => { setBookRentalVisible(!bookRentalVisible); getBookRentallistData(1) }}>{userDetails[0]?.bookCount}</Link>
+                                  }
+                                </p>
+                                <CModal
+                                  backdrop="static"
+                                  alignment="center"
+                                  size='lg'
+                                  visible={bookRentalVisible}
+                                  onClose={() => setBookRentalVisible(false)}
+                                  aria-labelledby="LiveDemoExampleLabel">
+                                  <CModalHeader onClose={() => setBookRentalVisible(false)}>
+                                    <CModalTitle>{multiLang?.Book_Rental_Status}</CModalTitle>
+                                  </CModalHeader>
+                                  <CModalBody>
+                                    <p className='mb-2'>{multiLang?.Total}: {totalBookSupply}</p>
+                                    <div className='userdetailPopTable'>
+                                      <ReactTable showCheckbox={false} columns={bookRentalColumns} data={bookRentalData} totalCount={5} onSelectionChange={handleSelectionChange} />
+                                    </div>
+                                    <div className='userlist-pagination dataTables_paginate'>
+                                      <ReactPaginate
+                                        breakLabel={'...'}
+                                        marginPagesDisplayed={1}
+                                        previousLabel={<button>{multiLang?.Previous}</button>}
+                                        nextLabel={<button>{multiLang?.Next}</button>}
+                                        pageCount={totalBookRentalPages}
+                                        onPageChange={handleBookPageChange}
+                                        forcePage={currentBookRentalPage - 1}
+                                        renderOnZeroPageCount={null}
+                                        pageRangeDisplayed={1}
+                                      />
+                                    </div>
+                                  </CModalBody>
+                                  <CModalFooter>
+                                    <CButton className='btn btn-black' onClick={() => setBookRentalVisible(false)}>
+                                      {multiLang?.Close}
+                                    </CButton>
+                                  </CModalFooter>
+                                </CModal>
+                              </div>
+                            </div>
+                          </div>
                         </div>
-                        <div className='formWrpInpt d-flex gap-5'>
-                          <div className='d-flex gap-2'>
-                            <p>Supplies Rental: </p>
-                            <p >
-                              {userDetails[0]?.supplyCount == 0 ? 0 : <Link onClick={() => { setSuppliesRentalVisible(!suppliesRentalVisible); getSupplyRentallistData(1) }}>{userDetails[0]?.supplyCount}</Link>}
-                            </p>
-                            <CModal
-                              backdrop="static"
-                              alignment="center"
-                              size='lg'
-                              visible={suppliesRentalVisible}
-                              onClose={() => setSuppliesRentalVisible(false)}
-                              aria-labelledby="LiveDemoExampleLabel">
-                              <CModalHeader onClose={() => setSuppliesRentalVisible(false)}>
-                                <CModalTitle>Supplies Rental Status</CModalTitle>
-                              </CModalHeader>
-                              <CModalBody>
-                                <p className='mb-2'>Total: {totalSupply}</p>
-                                <div className='userdetailPopTable'>
-                                <ReactTable showCheckbox={false} columns={suppliesRentalColumns} data={supplyRentalData} totalCount={5} onSelectionChange={handleSelectionChange} /></div>
-                                <div className='userlist-pagination dataTables_paginate'>
-                                  <ReactPaginate
-                                    breakLabel={'...'}
-                                    marginPagesDisplayed={1}
-                                    previousLabel={<button>Previous</button>}
-                                    nextLabel={<button>Next</button>}
-                                    pageCount={totalSuppliesRentalPages}
-                                    onPageChange={handleSupplyPageChange}
-                                    forcePage={currentSuppliesRentalPage - 1}
-                                    renderOnZeroPageCount={null}
-                                    pageRangeDisplayed={1}
-                                  />
-                                </div>
-                              </CModalBody>
-                              <CModalFooter>
-                                <CButton className='btn btn-black' onClick={() => setSuppliesRentalVisible(false)}>
-                                  Close
-                                </CButton>
-                              </CModalFooter>
-                            </CModal>
+                        <div className="form-outline form-white  d-flex  col-md-6">
+                          <div className='formWrpLabel'>
+                            <div className='d-flex gap-2'>
+                              <label>{multiLang?.Point_info} </label>
+                            </div>
                           </div>
-                          <div className='d-flex gap-2'>
-                            <p>Book Rental: </p>
-                            <p>
-                              {
-                                userDetails[0]?.bookCount == 0 ? 0 :
-                                  <Link onClick={() => { setBookRentalVisible(!bookRentalVisible); getBookRentallistData(1) }}>{userDetails[0]?.bookCount}</Link>
-                              }
-                            </p>
-                            <CModal
-                              backdrop="static"
-                              alignment="center"
-                              size='lg'
-                              visible={bookRentalVisible}
-                              onClose={() => setBookRentalVisible(false)}
-                              aria-labelledby="LiveDemoExampleLabel">
-                              <CModalHeader onClose={() => setBookRentalVisible(false)}>
-                                <CModalTitle>Book Rental Status</CModalTitle>
-                              </CModalHeader>
-                              <CModalBody>
-                                <p className='mb-2'>Total: {totalBookSupply}</p>
-                                <div className='userdetailPopTable'>
-                                <ReactTable showCheckbox={false} columns={bookRentalColumns} data={bookRentalData} totalCount={5} onSelectionChange={handleSelectionChange} />
-                                </div>
-                                <div className='userlist-pagination dataTables_paginate'>
-                                  <ReactPaginate
-                                    breakLabel={'...'}
-                                    marginPagesDisplayed={1}
-                                    previousLabel={<button>Previous</button>}
-                                    nextLabel={<button>Next</button>}
-                                    pageCount={totalBookRentalPages}
-                                    onPageChange={handleBookPageChange}
-                                    forcePage={currentBookRentalPage - 1}
-                                    renderOnZeroPageCount={null}
-                                    pageRangeDisplayed={1}
-                                  />
-                                </div>
-                              </CModalBody>
-                              <CModalFooter>
-                                <CButton className='btn btn-black' onClick={() => setBookRentalVisible(false)}>
-                                  Close
-                                </CButton>
-                              </CModalFooter>
-                            </CModal>
-                          </div>
+
                         </div>
                       </div>
 
+
                       <div className="form-outline form-white d-flex ">
                         <div className='formWrpLabel'>
-                          <label className="fw-bolder ">Club Info.
+                          <label className="fw-bolder ">{multiLang?.Club_Info}
                           </label>
                         </div>
                         <div className='formWrpInpt'>
                           <div className='d-flex gap-2'>
-                            <p>Operation Club: </p>
+                            <p>{multiLang?.Operation_Club}: </p>
 
                             <p >
                               {
@@ -471,10 +488,10 @@ const UserDetails = () => {
                               onClose={() => setOperationClubVisible(false)}
                               aria-labelledby="LiveDemoExampleLabel">
                               <CModalHeader onClose={() => setOperationClubVisible(false)}>
-                                <CModalTitle>Operation Club Status</CModalTitle>
+                                <CModalTitle>{multiLang?.Operation_Club_Status}</CModalTitle>
                               </CModalHeader>
                               <CModalBody>
-                                <p  className='mb-2'>Total: {totalOprationClub}</p>
+                                <p className='mb-2'>{multiLang?.Total}: {totalOprationClub}</p>
                               <div className='userdetailPopTable'>
                                <ReactTable className='d-flex ' showCheckbox={false} columns={operationClubColumns} data={oprationClubData} totalCount={5} onSelectionChange={handleSelectionChange} />
                                </div>
@@ -483,8 +500,8 @@ const UserDetails = () => {
                                   <ReactPaginate
                                     breakLabel={'...'}
                                     marginPagesDisplayed={1}
-                                    previousLabel={<button>Previous</button>}
-                                    nextLabel={<button>Next</button>}
+                                    previousLabel={<button>{multiLang?.Previous}</button>}
+                                    nextLabel={<button>{multiLang?.Next}</button>}
                                     pageCount={totalOperationClubPages}
                                     onPageChange={handleOprationClubPageChange}
                                     forcePage={currentOperationClubPage - 1}
@@ -495,7 +512,7 @@ const UserDetails = () => {
                               </CModalBody>
                               <CModalFooter>
                                 <CButton className='btn btn-black' onClick={() => setOperationClubVisible(false)}>
-                                  Close
+                                  {multiLang?.Close}
                                 </CButton>
                               </CModalFooter>
                             </CModal>
@@ -504,7 +521,7 @@ const UserDetails = () => {
                       </div>
                       <div className='px-4 mt-4 d-flex justify-content-center mb-3'>
                         <Link to={"/User"}>
-                          <button className="btn btn-primary btn-md">List</button>
+                          <button className="btn btn-primary btn-md">{multiLang?.List}</button>
                         </Link>
                       </div>
                     </div>

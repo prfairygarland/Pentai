@@ -26,7 +26,7 @@ import { useTranslation } from 'react-i18next';
 
 
 const ClubBoard = () => {
-    
+
   const [modalProps, setModalProps] = useState({})
 
   const [showClubPeriod, setShowClubPeriod] = useState(false)
@@ -81,7 +81,7 @@ const ClubBoard = () => {
   const { i18n } = useTranslation();
   const translationObject = i18n.getDataByLanguage(i18n.language);
   const multiLangObj = translationObject?.translation?.communityBoardManagement
-  
+
   const getClubRegistrationPeriodsBySearch = async (id) => {
     if (searchTxt.trim() === '') {
       getClubRegistrationPeriods()
@@ -288,7 +288,7 @@ const ClubBoard = () => {
       ],
       [],
     )
-    
+
     const clubViewHandler = (clubId) => {
       getClubHistoryData(clubId)
       setClubHistoryInfoPopup(true)
@@ -390,7 +390,7 @@ const ClubBoard = () => {
         modalCloseHandler: cancelClubBannerModalHandler,
       })
     }
-    
+
     const validateClubBannerHandler = () => {
       if(bannerTitle.trim() === '') {
         enqueueSnackbar(multiLangObj?.pleaseEnterTitle, { variant: 'error' })
@@ -467,11 +467,11 @@ const ClubBoard = () => {
           } else if(res?.data?.status !== 200) {
               enqueueSnackbar(res?.data?.error, { variant: 'error' })
           } else {
-            bannerUpdateId ? 
+            bannerUpdateId ?
             enqueueSnackbar(multiLangObj?.clubBannerUpdatedSuccessfully, { variant: 'success' }) :
             enqueueSnackbar(multiLangObj?.clubBannerSavedSuccessfully, { variant: 'success' })
           }
-          getClubBanners()            
+          getClubBanners()
         }
       } catch (error) {
         console.log(error)
@@ -538,7 +538,7 @@ const ClubBoard = () => {
       modalCloseHandler: confirmDeleteBannerHandler,
     })
   }
-  
+
   const deleteBannerHandler = async (id) => {
     try {
       let url = `${API_ENDPOINT.delete_club_banner}?id=${id}`
@@ -724,9 +724,9 @@ const ClubBoard = () => {
       }
     } catch (error) {
       console.log(error)
-    }    
+    }
   }
-  
+
   const addNewClubBannerHandler = () => {
     setBannerUpdateId('')
     setBannerTitle('')
@@ -1191,13 +1191,13 @@ const ClubBoard = () => {
                   <span>%</span>
                 </div>
               </div>
-              {(recruitmentStart === '' || new Date() <= new Date(recruitmentStart)) && 
+              {(recruitmentStart === '' || new Date() <= new Date(recruitmentStart)) &&
                 <div className="d-flex justify-content-evenly">
                   <CButton onClick={confirmationCloseModalHandler}>{multiLangObj?.cancel}</CButton>
                   <CButton onClick={validateClubPeriodHandler}>{periodId ? multiLangObj?.update : multiLangObj?.save}</CButton>
                 </div>
               }
-              {(new Date() > new Date(recruitmentStart)) && 
+              {(new Date() > new Date(recruitmentStart)) &&
                 <div className="d-flex justify-content-evenly">
                   <CButton onClick={confirmationCloseModalHandler}>{multiLangObj?.close}</CButton>
                 </div>
