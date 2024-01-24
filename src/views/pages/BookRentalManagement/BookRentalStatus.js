@@ -42,6 +42,9 @@ const BookRentalStatus = () => {
     const [HistotalPages, setHisTotalPages] = useState(0)
     const [filterData, setFilterData] = useState(initialData)
     const [selectedRows, setSelectedRows] = useState([]);
+    const [selectedId, setSelectedId] = useState(null)
+    const [HisCurrentPage, setHistCurrentPage] = useState(0)
+    const [bookRentalId, setBookRentalId] = useState(null)
 
 
 
@@ -72,8 +75,9 @@ const BookRentalStatus = () => {
     }
 
     const handleShowRentalHistory = async (BookRentalId, id) => {
-        let url = API_ENDPOINT.get_rentalhistory + `?bookRentalId=${BookRentalId}&limit=${itemsPerPage}&offset=${currentPage + 1}`
-       
+        setBookRentalId(BookRentalId)
+        let url = API_ENDPOINT.get_rentalhistory + `?bookRentalId=${BookRentalId}&limit=${itemsPerPage}&offset=${HisCurrentPage + 1}`
+            setSelectedId(BookRentalId)
         try {
             const response = await getApi(url)
             if (response?.status === 200) {
@@ -88,61 +92,61 @@ const BookRentalStatus = () => {
     }
 
 
-        const columns = useMemo(() => [
-            {
-                Header: 'Book Genre',
-                accessor: '',
-                Cell: ({ row }) => <p>{`${row.original.genreBane}`}</p>
-            },
-            {
-                Header: 'Book Title',
-                accessor: 'title',
-                Cell: ({ row }) => <p>{`${row.original.title.charAt(0).toUpperCase() + row.original.title.slice(1)}`}</p>
-            },
-            {
-                Header: 'Author',
-                accessor: 'author',
-                Cell: ({ row }) => <p>{`${row.original.author.charAt(0).toUpperCase() + row.original.author.slice(1)}`}</p>
+            const columns = useMemo(() => [
+                {
+                    Header: 'Book Genre',
+                    accessor: '',
+                    Cell: ({ row }) => <p>{`${row.original.genreBane}`}</p>
+                },
+                {
+                    Header: 'Book Title',
+                    accessor: 'title',
+                    Cell: ({ row }) => <p>{`${row.original.title.charAt(0).toUpperCase() + row.original.title.slice(1)}`}</p>
+                },
+                {
+                    Header: 'Author',
+                    accessor: 'author',
+                    Cell: ({ row }) => <p>{`${row.original.author.charAt(0).toUpperCase() + row.original.author.slice(1)}`}</p>
 
-            },
-            {
-                Header: 'ISBN',
-                accessor: 'SIBNCode',
-                Cell: ({ row }) => <p>{row.original.SIBNCode}</p>
-            },
-            {
-                Header: 'Rental Status',
-                accessor: 'status',
-                Cell: ({ row }) => <p>{row.original.status}</p>,
+                },
+                {
+                    Header: 'ISBN',
+                    accessor: 'SIBNCode',
+                    Cell: ({ row }) => <p>{row.original.SIBNCode}</p>
+                },
+                {
+                    Header: 'Rental Status',
+                    accessor: 'status',
+                    Cell: ({ row }) => <p>{row.original.status}</p>,
 
-            },
-            {
-                Header: 'User Name',
-                accessor: 'userName',
-                // Cell: ({ row }) => <p>{moment(row.original.createdAt).format("YYYY-MM-DD HH:mm:ss")} </p>,
-                Cell: ({ row }) => <Link onClick={() => { handleShowUserInfo(row.original.userId); setPopUp('userDetails') }} style={{ cursor: 'pointer' }}>{row.original.userName} </Link>,
-            },
-            {
-                Header: 'Rental Duration',
-                accessor: 'duration',
-                Cell: ({ row }) => <>
-                    <p>{moment(row.original.startDateTime).format("YYYY-MM-DD HH:mm:ss")} </p>
-                    <p>{moment(row.original.endDateTime).format("YYYY-MM-DD HH:mm:ss")} </p>
-                </>,
+                },
+                {
+                    Header: 'User Name',
+                    accessor: 'userName',
+                    // Cell: ({ row }) => <p>{moment(row.original.createdAt).format("YYYY-MM-DD HH:mm:ss")} </p>,
+                    Cell: ({ row }) => <Link onClick={() => { handleShowUserInfo(row.original.userId); setPopUp('userDetails') }} style={{ cursor: 'pointer' }}>{row.original.userName} </Link>,
+                },
+                {
+                    Header: 'Rental Duration',
+                    accessor: 'duration',
+                    Cell: ({ row }) => <>
+                        <p>{moment(row.original.startDateTime).format("YYYY-MM-DD HH:mm:ss")} </p>
+                        <p>{moment(row.original.endDateTime).format("YYYY-MM-DD HH:mm:ss")} </p>
+                    </>,
 
-            },
-            {
-                Header: 'Rental Details',
-                accessor: 'details',
-                Cell: ({ row }) => <button onClick={() => { setUserInfoPopup(true); setPopUp('RentalD'); handleShowRentalDetails(row.original.id) }} className='mx-3 px-3 py-2 rounded border-1'>View</button>
-            },
-            {
-                Header: 'Rental History',
-                accessor: 'history',
-                Cell: ({ row }) => <button onClick={() => { setUserInfoPopup(true); setPopUp('RenatlH'); handleShowRentalHistory(row.original?.BookRentalId, row.original?.id) }} className='mx-3 px-3 py-2 rounded border-1'>View</button>
+                },
+                {
+                    Header: 'Rental Details',
+                    accessor: 'details',
+                    Cell: ({ row }) => <button onClick={() => { setUserInfoPopup(true); setPopUp('RentalD'); handleShowRentalDetails(row.original.id) }} className='mx-3 px-3 py-2 rounded border-1'>View</button>
+                },
+                {
+                    Header: 'Rental History',
+                    accessor: 'history',
+                    Cell: ({ row }) => <button onClick={() => { setUserInfoPopup(true); setPopUp('RenatlH'); handleShowRentalHistory(row.original?.BookRentalId, row.original?.id) }} className='mx-3 px-3 py-2 rounded border-1'>View</button>
 
-            },
-        ], [])
+                },
+            ], [])
 
     useEffect(() => {
         const getBookGenreData = async () => {
@@ -189,7 +193,6 @@ const BookRentalStatus = () => {
         }
     }
 
-    console.log('bookList', bookList)
 
     const getUserListExport = async () => {
         let url = `${API_ENDPOINT.book_listexport}?offset=${currentPage + 1}&limit=${itemsPerPage}`;
@@ -230,9 +233,8 @@ const BookRentalStatus = () => {
 
     useEffect(() => {
         getData()
-    }, [filterData.rentalStatus, filterData.bookGenre, filterData.startDate, filterData.endDate])
+    }, [filterData.rentalStatus, filterData.bookGenre, filterData.startDate, filterData.endDate, itemsPerPage, currentPage])
 
-    console.log('book', genre)
 
     const handleSearch = (e) => {
         const value = e.target.value
@@ -245,18 +247,21 @@ const BookRentalStatus = () => {
     }
 
     const handleStartDate = (event) => {
-        const value = moment(event).format("YYYY-MM-DD")
-         console.log('val', value)
-        setFilterData((prev) => {
-            return {
-                ...prev,
-                startDate: value
-            }
-        })
+        const value = event
+        setStartDate(value)
+         if(value){
+             setFilterData((prev) => {
+                 return {
+                     ...prev,
+                     startDate: value
+                 }
+             })
+         }
     }
 
     const handleEndDate = (event) => {
-        const value = moment(event).format("YYYY-MM-DD")
+        const value = event
+        setEndDate(value)
         setFilterData((prev) => {
             return {
                 ...prev,
@@ -334,14 +339,14 @@ const BookRentalStatus = () => {
                     />
                 </div>
                 <div className='d-flex p-2 gap-3'>
-                    <DatePicker value={filterData.startDate} onChange={handleStartDate} />
-                    <DatePicker value={filterData.endDate} onChange={handleEndDate} />
+                    <DatePicker value={startDate} onChange={handleStartDate} />
+                    <DatePicker value={endDate} onChange={handleEndDate} />
                 </div>
             </div>
             <div>
                 <ReactTable columns={columns} data={bookList} showCheckbox={false} onSelectionChange={handleSelectionChange} />
             </div>
-            <div className='d-flex w-100 justify-content-center gap-3 mb-4'>
+            <div className='d-flex w-100 justify-content-center gap-3'>
                 {bookList.length > 0 &&
                     <div className='userlist-pagination'>
                         <div className='userlist-pagination dataTables_paginate'>
@@ -381,6 +386,7 @@ const BookRentalStatus = () => {
                 size='lg'
                 onClose={() => {
                     setUserInfoPopup(false)
+                    setHistCurrentPage(0)
                     // setUserInfoData({})
                 }}
                 backdrop="static"
@@ -400,7 +406,7 @@ const BookRentalStatus = () => {
                 }
                 {
                     popUp === 'RenatlH' ?
-                        <RentalHistory RentalHistoryData={RentalHistoryData} RentalStatusData={RentalStatusData} totalCount={totalCount} HistotalPages={HistotalPages} /> : ''
+                        <RentalHistory bookRentalId={bookRentalId}  itemsPerPage={itemsPerPage} selectedId={selectedId} setHistCurrentPage={setHistCurrentPage} HisCurrentPage={HisCurrentPage} handleShowRentalHistory={handleShowRentalHistory} RentalHistoryData={RentalHistoryData} RentalStatusData={RentalStatusData} totalCount={totalCount} HistotalPages={HistotalPages} /> : ''
                 }
             </CModal >
         </div >
