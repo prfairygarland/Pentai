@@ -33,6 +33,8 @@ const AppSidebar = () => {
 
   const { t, i18n } = useTranslation();
   const translationObject = i18n.getDataByLanguage(i18n.language);
+  const multiLang = translationObject?.translation?.Sidebar
+
 
 
   return (
@@ -41,16 +43,16 @@ const AppSidebar = () => {
       unfoldable={unfoldable}
       visible={sidebarShow}
       onVisibleChange={(visible) => {
-        dispatch(setSidebar(visible ))
+        dispatch(setSidebar(visible))
       }}
     >
       <CSidebarBrand className="d-none d-md-flex">
         {/* <CIcon className="sidebar-brand-full" icon={logoNegative} height={35} /> */}
-        <h4 className="sidebar-brand-full ">{translationObject.translation.Sidebar.PTK_APP_Admin}</h4>
-        <h4 className="sidebar-brand-narrow">{translationObject.translation.Sidebar.PTK_APP_Admin}</h4>
+        <h4 className="sidebar-brand-full ">{multiLang?.PTK_APP_Admin}</h4>
+        <h4 className="sidebar-brand-narrow">{multiLang?.PTK_APP_Admin}</h4>
         {/* <CIcon className="sidebar-brand-narrow" icon={sygnet} height={35} /> */}
       </CSidebarBrand>
-      <h5 className="sidebar-brand-cat mt-3 text-center">{translationObject.translation.Sidebar.Category_Menu}</h5>
+      <h5 className="sidebar-brand-cat mt-3 text-center">{multiLang?.Category_Menu}</h5>
       <CSidebarNav>
         {/* <h4 className="sidebar-brand-narrow">PTK APP Admin</h4> */}
         <SimpleBar>

@@ -24,12 +24,17 @@ import { changePassWordApi, postApi } from 'src/utils/Api'
 import { useState, useEffect, useCallback } from 'react'
 import { API_ENDPOINT } from 'src/utils/config'
 import Loader from 'src/components/common/Loader'
+import { useTranslation } from 'react-i18next'
 
 
 
 const ChangePassword = () => {
 
   const navigate = useNavigate();
+  const { t, i18n } = useTranslation();
+  const translationObject = i18n.getDataByLanguage(i18n.language);
+  const multiLang = translationObject?.translation?.ChangePassword
+
 
   const vars = {
     '--my-css-var': 10,
@@ -102,49 +107,43 @@ const ChangePassword = () => {
                           <div className='formWraper'>
                             <div className="form-outline form-white  d-flex ">
                               <div className='formWrpLabel'>
-                                <label className="fw-bolder ">Current Password</label>
+                                <label className="fw-bolder ">{multiLang?.Current_Password}</label>
                               </div>
                               <div className='formWrpInpt'>
-                                <Field placeholder='current password' type="password" id="typePasswordX" className="form-control form-control-md" name="currentPassword" />
+                                <Field placeholder={multiLang?.Current_Password} type="password" id="typePasswordX" className="form-control form-control-md" name="currentPassword" />
                                 {errors.currentPassword && touched.currentPassword ? (<p className='text-danger'>{errors.currentPassword}</p>) : null}
                               </div>
                             </div>
 
                             <div className="form-outline form-white  d-flex ">
                               <div className='formWrpLabel'>
-                                <label className="fw-bolder ">New Password</label>
+                                <label className="fw-bolder ">{multiLang?.New_Password}</label>
                                 <CTooltip style={vars}
-                                  content="- For two combinations of uppercase, lowercase, number, and special characters: at least 10 digits
-
-                                            - For three combinations of uppercase, lowercase, number, and special characters: at least 8 digits
-
-                                            - The same character or number cannot be repeated more than 4 digits.
-
-                                            - Cannot use more than four consecutive characters or numbers repeatedly."
+                                  content={multiLang?.Password_info}
                                   placement="bottom"
                                 >
                                   <CIcon icon={cilInfo} size="lg" />
                                 </CTooltip>
                               </div>
                               <div className='formWrpInpt'>
-                                <Field placeholder='new password' type="password" id="typePasswordX" className="form-control form-control-md" name="newPassword" />
+                                <Field placeholder={multiLang?.New_Password} type="password" id="typePasswordX" className="form-control form-control-md" name="newPassword" />
                                 {errors.newPassword && touched.newPassword ? (<p className='text-danger'>{errors.newPassword}</p>) : null}
                               </div>
                             </div>
 
                             <div className="form-outline form-white  d-flex">
                               <div className='formWrpLabel'>
-                                <label className="fw-bolder ">Confirm new paswword</label>
+                                <label className="fw-bolder ">{multiLang?.Confirm_New_Password}</label>
                               </div>
                               <div className='formWrpInpt'>
-                                <Field placeholder='confirm new password' type="password" id="typePasswordX" className="form-control form-control-md" name="confirmPassword" />
+                                <Field placeholder={multiLang?.Confirm_New_Password} type="password" id="typePasswordX" className="form-control form-control-md" name="confirmPassword" />
                                 {errors.confirmPassword && touched.confirmPassword ? (<p className='text-danger'>{errors.confirmPassword}</p>) : null}
                               </div>
                             </div>
                           </div>
                           {showError && <p className='text-danger text-center'>{showError}</p>}
                           <div className='px-4 mt-4 d-flex justify-content-center'>
-                            <button className="btn btn-primary btn-md  " type="submit" disabled={!isValid || !dirty}>Save</button>
+                            <button className="btn btn-primary btn-md  " type="submit" disabled={!isValid || !dirty}>{multiLang?.Save}</button>
                           </div>
                         </Form>
                       )}
