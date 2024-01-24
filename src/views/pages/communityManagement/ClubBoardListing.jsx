@@ -26,6 +26,7 @@ import {
 } from 'src/utils/constant'
 import Loader from 'src/components/common/Loader'
 import CIcon from '@coreui/icons-react'
+import { useTranslation } from 'react-i18next'
 
 const ClubBoardListing = () => {
   const initialFilter = {
@@ -53,10 +54,13 @@ const ClubBoardListing = () => {
   const [startDate, setStartDate] = useState('')
   const [endDate, setEndDate] = useState('')
   const [selectedBoard, setSelectedBoard] = useState('club')
+  const { i18n } = useTranslation()
+  const translationObject = i18n.getDataByLanguage(i18n.language)
+  const multiLangObj = translationObject?.translation?.communityClubManagement
 
   const boardTypes = [
-    { label: 'Club', value: 'club' },
-    { label: 'Post', value: 'post' },
+    { label: multiLangObj?.club, value: 'club' },
+    { label: multiLangObj?.post, value: 'post' },
   ]
   const navigate = useNavigate()
 
@@ -383,14 +387,14 @@ const ClubBoardListing = () => {
   const postDatacolumns = useMemo(
     () => [
       {
-        Header: <p className="text-center">No</p>,
+        Header: <p className="text-center">{multiLangObj?.no}</p>,
         accessor: 'number',
         Cell: ({ row }) => {
           return currentPage * itemsPerPage + (row.index + 1)
         },
       },
       {
-        Header: <p className="text-center">Post Type</p>,
+        Header: <p className="text-center">{multiLangObj?.postType}</p>,
         accessor: 'PostTypes',
         Cell: ({ row }) => (
           <p className="text-center">{`${
@@ -399,7 +403,7 @@ const ClubBoardListing = () => {
         ),
       },
       {
-        Header: <p className="text-center">Classification</p>,
+        Header: <p className="text-center">{multiLangObj?.classification}</p>,
         accessor: 'postStatuses',
         Cell: ({ row }) => (
           <p className="text-center">{`${
@@ -408,19 +412,19 @@ const ClubBoardListing = () => {
         ),
       },
       {
-        Header: <p className="text-center">Reported Post</p>,
+        Header: <p className="text-center">{multiLangObj?.reportedPost}</p>,
         accessor: 'reportedPost',
         Cell: ({ row }) => (
           <p className="text-center">{`${row.original.reportsPostCount ? 'Y' : 'N'}`}</p>
         ),
       },
       {
-        Header: <p className="text-center">Club</p>,
+        Header: <p className="text-center">{multiLangObj?.club}</p>,
         accessor: 'club',
         Cell: ({ row }) => <p className="text-center">{`${row.original.ClubName}`}</p>,
       },
       {
-        Header: <p className="text-center">Title</p>,
+        Header: <p className="text-center">{multiLangObj?.title}</p>,
         accessor: 'PostTitle',
         Cell: ({ row }) => (
           <div className="d-flex gap-1">
@@ -447,7 +451,7 @@ const ClubBoardListing = () => {
         ),
       },
       {
-        Header: <p className="text-center">Host</p>,
+        Header: <p className="text-center">{multiLangObj?.host}</p>,
         accessor: 'englishname',
         Cell: ({ row }) => (
           <p
@@ -459,33 +463,33 @@ const ClubBoardListing = () => {
         ),
       },
       {
-        Header: <p className="text-center">Date</p>,
+        Header: <p className="text-center">{multiLangObj?.date}</p>,
         accessor: 'createdAt',
         Cell: ({ row }) => <p>{moment(row.original.createdAt).format('YYYY-MM-DD HH:mm:ss')} </p>,
       },
       {
-        Header: <p className="text-center">Likes</p>,
+        Header: <p className="text-center">{multiLangObj?.likes}</p>,
         accessor: 'likes',
         Cell: ({ row }) => (
           <p className="text-center">{`${row.original.likes ? row.original.likes : 0}`}</p>
         ),
       },
       {
-        Header: <p className="text-center">Comments</p>,
+        Header: <p className="text-center">{multiLangObj?.comments}</p>,
         accessor: 'comments',
         Cell: ({ row }) => (
           <p className="text-center">{`${row.original.comments ? row.original.comments : 0}`}</p>
         ),
       },
       {
-        Header: <p className="text-center">Views</p>,
+        Header: <p className="text-center">{multiLangObj?.views}</p>,
         accessor: 'views',
         Cell: ({ row }) => (
           <p className="text-center">{`${row.original.views ? row.original.views : 0}`}</p>
         ),
       },
       {
-        Header: <p className="text-center">No of Reported Comments</p>,
+        Header: <p className="text-center">{multiLangObj?.noOfReportedComments}</p>,
         accessor: 'reportsCommentsCount',
         Cell: ({ row }) => (
           <p className="text-center">
@@ -494,7 +498,7 @@ const ClubBoardListing = () => {
         ),
       },
       {
-        Header: <p className="text-center">History</p>,
+        Header: <p className="text-center">{multiLangObj?.history}</p>,
         accessor: 'history',
         Cell: ({ row }) => (
           <p
@@ -502,7 +506,7 @@ const ClubBoardListing = () => {
             onClick={() => viewPostHistoryHandler(row.original.postId)}
             className="text-center"
           >
-            View
+            {multiLangObj?.view}
           </p>
         ),
       },
@@ -513,19 +517,19 @@ const ClubBoardListing = () => {
   const clubDatacolumns = useMemo(
     () => [
       {
-        Header: <p className="text-center">No</p>,
+        Header: <p className="text-center">{multiLangObj?.no}</p>,
         accessor: 'number',
         Cell: ({ row }) => {
           return <p className="text-center">{currentPage * itemsPerPage + (row.index + 1)}</p>
         },
       },
       {
-        Header: <p className="text-center">Club Status</p>,
+        Header: <p className="text-center">{multiLangObj?.clubStatus}</p>,
         accessor: 'clubStatus',
         Cell: ({ row }) => <p className="text-center">{row.original.clubStatus} </p>,
       },
       {
-        Header: <p className="text-center">Club</p>,
+        Header: <p className="text-center">{multiLangObj?.club}</p>,
         accessor: 'clubName',
         Cell: ({ row }) => (
           <p
@@ -543,7 +547,7 @@ const ClubBoardListing = () => {
         ),
       },
       {
-        Header: <p className="text-center">Host</p>,
+        Header: <p className="text-center">{multiLangObj?.host}</p>,
         accessor: 'host',
         Cell: ({ row }) => (
           <p
@@ -555,7 +559,7 @@ const ClubBoardListing = () => {
         ),
       },
       {
-        Header: <p className="text-center">Hide / Show</p>,
+        Header: <p className="text-center">{multiLangObj?.hideShow}</p>,
         accessor: 'hideShow',
         Cell: ({ row }) =>
           row.original.isClubDisplay ? (
@@ -579,7 +583,7 @@ const ClubBoardListing = () => {
           ),
       },
       {
-        Header: <p className="text-center">History</p>,
+        Header: <p className="text-center">{multiLangObj?.history}</p>,
         accessor: 'views',
         Cell: ({ row }) => (
           <p className="text-center">
@@ -588,7 +592,7 @@ const ClubBoardListing = () => {
               className="text-dark text-center"
               style={{ cursor: 'pointer' }}
             >
-              View
+              {multiLangObj?.view}
             </Link>
           </p>
         ),
@@ -600,19 +604,19 @@ const ClubBoardListing = () => {
   const clubHistoryDataColumns = useMemo(
     () => [
       {
-        Header: <p className="text-center">No</p>,
+        Header: <p className="text-center">{multiLangObj?.no}</p>,
         accessor: 'number',
         Cell: ({ row }) => {
           return <p className="text-center">{row.index + 1}</p>
         },
       },
       {
-        Header: <p className="text-center">Classification</p>,
+        Header: <p className="text-center">{multiLangObj?.classification}</p>,
         accessor: 'classification',
         Cell: ({ row }) => <p className="text-center">{row.original.classification} </p>,
       },
       {
-        Header: <p className="text-center">Date</p>,
+        Header: <p className="text-center">{multiLangObj?.date}</p>,
         accessor: 'date',
         Cell: ({ row }) => (
           <p className="text-center">{new Date(row.original.date).toLocaleString()} </p>
@@ -642,12 +646,12 @@ const ClubBoardListing = () => {
       <main>
         <div>
           <div className="d-flex justify-content-between align-items-center">
-            <p>Club Board Management</p>
+            <p>{multiLangObj?.clubBoardManagement}</p>
           </div>
           <div className="d-flex p-3 h-100 w-100 bg-light rounded mt-2">
             <div className="d-flex align-items-center w-25 ms-2 align-items-center">
               <p className="fw-medium me-3" style={{ 'white-space': 'nowrap' }}>
-                Board
+                {multiLangObj?.board}
               </p>
               <CFormSelect
                 size="sm"
@@ -673,13 +677,13 @@ const ClubBoardListing = () => {
               <div className="d-flex p-4  flex-column bg-light rounded mt-3">
                 <div className="d-flex align-items-center w-100">
                   <div className="d-flex align-items-center me-5">
-                    <label className="me-3 fw-medium">Search</label>
+                    <label className="me-3 fw-medium">{multiLangObj?.search}</label>
                     <CFormSelect
                       className="w-50 me-2"
                       aria-label="Default select example"
                       options={[
-                        { label: 'Club', value: 'club' },
-                        { label: 'Host', value: 'host' },
+                        { label: multiLangObj?.club, value: 'club' },
+                        { label: multiLangObj?.host, value: 'host' },
                       ]}
                       onChange={handleDepartmentChange}
                       value={filterData.department}
@@ -702,7 +706,7 @@ const ClubBoardListing = () => {
                 <div className="d-flex align-items-center w-100 mt-4">
                   <div className="d-flex align-items-center me-5 ">
                     <label className="fw-medium me-3 " style={{ 'white-space': 'nowrap' }}>
-                      Club Status
+                      {multiLangObj?.clubStatus}
                     </label>
                     <CFormSelect
                       className="me-2"
@@ -714,16 +718,18 @@ const ClubBoardListing = () => {
                   </div>
                 </div>
                 <div className="d-flex gap-3 mt-3">
-                  <CButton onClick={handleSearchfilter}>Search</CButton>
-                  <CButton onClick={resetFilter}>Reset</CButton>
+                  <CButton onClick={handleSearchfilter}>{multiLangObj?.search}</CButton>
+                  <CButton onClick={resetFilter}>{multiLangObj?.reset}</CButton>
                 </div>
               </div>
               <div className="d-flex flex-column mt-3 p-3">
                 <div className="d-flex justify-content-end gap-3 mt-3">
-                  <CButton onClick={deleteHandler}>Delete</CButton>
+                  <CButton onClick={deleteHandler}>{multiLangObj?.delete}</CButton>
                 </div>
                 {totalDataCount > 0 && (
-                  <p style={{ margin: 0 }}>Total&nbsp;:&nbsp; {totalDataCount}</p>
+                  <p style={{ margin: 0 }}>
+                    {multiLangObj?.total}&nbsp;:&nbsp; {totalDataCount}
+                  </p>
                 )}
                 <ReactTable
                   columns={clubDatacolumns}
@@ -738,8 +744,8 @@ const ClubBoardListing = () => {
                         <ReactPaginate
                           breakLabel={'...'}
                           marginPagesDisplayed={1}
-                          previousLabel={<button>Previous</button>}
-                          nextLabel={<button>Next</button>}
+                          previousLabel={<button>{multiLangObj?.previous}</button>}
+                          nextLabel={<button>{multiLangObj?.next}</button>}
                           pageCount={totalPages}
                           onPageChange={handlePageChange}
                           forcePage={currentPage}
@@ -751,7 +757,7 @@ const ClubBoardListing = () => {
                   )}
                   {clubData.length > 0 && (
                     <div className="d-flex align-items-center gap-2 mt-2">
-                      <label>Show</label>
+                      <label>{multiLangObj?.show}</label>
                       <CFormSelect
                         className=""
                         aria-label=""
@@ -761,7 +767,7 @@ const ClubBoardListing = () => {
                           setCurrentPage(0)
                         }}
                       />
-                      <label>Lists</label>
+                      <label>{multiLangObj?.lists}</label>
                     </div>
                   )}
                 </div>
@@ -773,14 +779,14 @@ const ClubBoardListing = () => {
               <div className="d-flex p-4  flex-column bg-light rounded mt-3">
                 <div className="d-flex align-items-center w-100">
                   <div className="d-flex align-items-center me-5">
-                    <label className="me-3 fw-medium">Search</label>
+                    <label className="me-3 fw-medium">{multiLangObj?.search}</label>
                     <CFormSelect
                       className="w-50 me-2"
                       aria-label="Default select example"
                       options={[
-                        { label: 'Club', value: 'club' },
-                        { label: 'Host', value: 'host' },
-                        { label: 'Title', value: 'title' },
+                        { label: multiLangObj?.club, value: 'club' },
+                        { label: multiLangObj?.host, value: 'host' },
+                        { label: multiLangObj?.title, value: 'title' },
                       ]}
                       onChange={handleDepartmentChange}
                       value={filterData.department}
@@ -793,7 +799,7 @@ const ClubBoardListing = () => {
                     />
                   </div>
                   <div className="d-flex align-items-center">
-                    <label className="me-3 fw-medium">Date</label>
+                    <label className="me-3 fw-medium">{multiLangObj?.date}</label>
                     <div className="d-flex p-2 gap-3">
                       <DatePicker value={startDate} onChange={handleStartDate} />
                       <DatePicker value={endDate} onChange={handleEndDate} />
@@ -803,7 +809,7 @@ const ClubBoardListing = () => {
                 <div className="d-flex align-items-center w-100 mt-4">
                   <div className="d-flex align-items-center me-5 ">
                     <label className="fw-medium me-3 " style={{ 'white-space': 'nowrap' }}>
-                      Post Type
+                      {multiLangObj?.postType}
                     </label>
                     <CFormSelect
                       className="me-2"
@@ -815,7 +821,7 @@ const ClubBoardListing = () => {
                   </div>
                   <div className="d-flex align-items-center me-5 ">
                     <label className="fw-medium me-3 " style={{ 'white-space': 'nowrap' }}>
-                      Classification
+                      {multiLangObj?.classification}
                     </label>
                     <CFormSelect
                       className="me-2"
@@ -831,7 +837,7 @@ const ClubBoardListing = () => {
                   </div>
                   <div className="d-flex align-items-center me-5 ">
                     <label className="fw-medium me-3 " style={{ 'white-space': 'nowrap' }}>
-                      Reported
+                      {multiLangObj?.reported}
                     </label>
                     <CFormSelect
                       className="me-2"
@@ -843,13 +849,15 @@ const ClubBoardListing = () => {
                   </div>
                 </div>
                 <div className="d-flex gap-3 mt-3">
-                  <CButton onClick={handleSearchfilter}>Search</CButton>
-                  <CButton onClick={resetFilter}>Reset</CButton>
+                  <CButton onClick={handleSearchfilter}>{multiLangObj?.search}</CButton>
+                  <CButton onClick={resetFilter}>{multiLangObj?.reset}</CButton>
                 </div>
               </div>
               <div className="d-flex flex-column mt-3 p-3">
                 {totalDataCount > 0 && (
-                  <p style={{ margin: 0 }}>Total&nbsp;:&nbsp; {totalDataCount}</p>
+                  <p style={{ margin: 0 }}>
+                    {multiLangObj?.total}&nbsp;:&nbsp; {totalDataCount}
+                  </p>
                 )}
                 <ReactTable
                   columns={postDatacolumns}
@@ -864,8 +872,8 @@ const ClubBoardListing = () => {
                         <ReactPaginate
                           breakLabel={'...'}
                           marginPagesDisplayed={1}
-                          previousLabel={<button>Previous</button>}
-                          nextLabel={<button>Next</button>}
+                          previousLabel={<button>{multiLangObj?.previous}</button>}
+                          nextLabel={<button>{multiLangObj?.next}</button>}
                           pageCount={totalPages}
                           onPageChange={handlePageChange}
                           forcePage={currentPage}
@@ -877,7 +885,7 @@ const ClubBoardListing = () => {
                   )}
                   {postData.length > 0 && (
                     <div className="d-flex align-items-center gap-2 mt-2">
-                      <label>Show</label>
+                      <label>{multiLangObj?.show}</label>
                       <CFormSelect
                         className=""
                         aria-label=""
@@ -887,7 +895,7 @@ const ClubBoardListing = () => {
                           setCurrentPage(0)
                         }}
                       />
-                      <label>Lists</label>
+                      <label>{multiLangObj?.lists}</label>
                     </div>
                   )}
                 </div>
@@ -913,7 +921,7 @@ const ClubBoardListing = () => {
               setUserInfoData({})
             }}
           >
-            <CModalTitle className="p-1">Club History</CModalTitle>
+            <CModalTitle className="p-1">{multiLangObj?.clubHistory}</CModalTitle>
           </CModalHeader>
           <CModalBody>
             <ReactTable
