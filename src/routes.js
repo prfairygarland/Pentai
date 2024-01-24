@@ -12,8 +12,10 @@ import WelfareBoardPostListing from './views/pages/communityManagement/WelfareBo
 import ClubBoardListing from './views/pages/communityManagement/ClubBoardListing'
 import ClubDetails from './views/pages/communityManagement/ClubDetails'
 import CommunityReportHistory from './views/pages/communityManagement/CommunityReportHistory'
-
 import BookRentalStatus from './views/pages/BookRentalManagement/BookRentalStatus'
+import AllBook from './views/pages/BookRentalManagement/AllBook'
+import BookCuration from './views/pages/BookRentalManagement/BookCuration'
+import BookRentalBanner from './views/pages/BookRentalManagement/BookRentalBanner'
 import SupplyRentalStatus from './views/pages/supplyRentalManagement/supplyRentalStatus'
 import AllSupplies from './views/pages/supplyRentalManagement/allSupplies'
 
@@ -50,11 +52,15 @@ const routes = [
 
   //{ Book Rental Management}
   { path: '/BookRentalStatus', name: 'Book Rental Status', element: BookRentalStatus },
+  { path: '/AllBooks', name: 'All Books', element: AllBook },
+  { path: '/BookCuration', name: 'Book Curation', element: BookCuration },
+  { path: '/BookBanner', name: 'Book Rental Banner', element: BookRentalBanner },
 
-
-  //{ Supply Rental Management}
+  // { Supply Rental Management}
   { path: '/SupplyRentalStatus', name: 'Supply Rental Status', element: SupplyRentalStatus },
   { path: '/AllSupplies', name: 'All Supplies', element: AllSupplies },
+
+
 
 ]
 

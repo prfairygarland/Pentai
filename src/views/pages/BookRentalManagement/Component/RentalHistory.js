@@ -1,11 +1,52 @@
+import { CButton } from '@coreui/react'
 import moment from 'moment/moment'
-import React, { useCallback, useMemo, useState } from 'react'
+import { enqueueSnackbar } from 'notistack'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import ReactPaginate from 'react-paginate'
 import ReactTable from 'src/components/common/ReactTable'
+import { getApi, getUserListExportData } from 'src/utils/Api'
+import { API_ENDPOINT } from 'src/utils/config'
 
-const RentalHistory = ({ RentalHistoryData, RentalStatusData, totalCount, HistotalPages }) => {
-    
-    const [currentPage, setCurrentPage] = useState(0)
+const RentalHistory = ({ bookRentalId, setHistCurrentPage, HisCurrentPage, selectedId, handleShowRentalHistory, RentalHistoryData, RentalStatusData, totalCount, HistotalPages }) => {
+
+    // const [currentPage, setCurrentPage] = useState(0)
+
+    useEffect(() => {
+        handleShowRentalHistory(selectedId)
+        console.log('render')
+    }, [HisCurrentPage])
+
+    console.log('page', HisCurrentPage)
+    console.log('id', bookRentalId)
+
+    const historyExportData = async () => {
+        try {
+            let url = API_ENDPOINT.bookexport_RentalHistory + `?bookRentalId=${bookRentalId}`
+
+            console.log('url check =>', url);
+
+            const res = await getApi(url)
+            console.log('res =>', res);
+
+            if (res.filePath) {
+                const downloadLink = res.filePath;
+                const link = document.createElement('a');
+                link.href = 'https://ptkapi.experiencecommerce.com/' + downloadLink;
+                link.setAttribute('download', `exported_data_${new Date().getTime()}.xlsx`);
+
+                link.click();
+                enqueueSnackbar('Data export successfull', { variant: 'success', autoHideDuration: 3000, })
+
+            } else {
+                enqueueSnackbar('Something went wrong', { variant: 'error', autoHideDuration: 3000, })
+                console.log('No data found');
+            }
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
 
 
     const columns = useMemo(() => [
@@ -39,7 +80,8 @@ const RentalHistory = ({ RentalHistoryData, RentalStatusData, totalCount, Histot
     ])
 
     const handlePageChange = (selectedPage) => {
-        setCurrentPage(selectedPage.selected)
+        setHistCurrentPage(selectedPage.selected)
+        // setCurrentPageH(selectedId.selected)
     }
 
     const handleSelectionChange = useCallback((selectedRowsIds) => {
@@ -69,7 +111,7 @@ const RentalHistory = ({ RentalHistoryData, RentalStatusData, totalCount, Histot
                 </div>
                 <div className='d-flex justify-content-between py-md-3 '>
                     <p style={{ fontSize: 'medium' }}>Total: {totalCount > 0 ? totalCount : '-'}</p>
-                    <button className='mx-3 px-3 py-2 rounded border-1'>Export</button>
+                    <CButton onClick={historyExportData} className='mx-3 px-3 py-2 rounded border-1'>Export</CButton>
                 </div>
             </div>
             <ReactTable columns={columns} data={RentalHistoryData} showCheckbox={false} onSelectionChange={handleSelectionChange} />
@@ -82,7 +124,7 @@ const RentalHistory = ({ RentalHistoryData, RentalStatusData, totalCount, Histot
                         nextLabel={<button>Next</button>}
                         pageCount={HistotalPages}
                         onPageChange={handlePageChange}
-                        forcePage={currentPage}
+                        forcePage={HisCurrentPage}
                         // renderOnZeroPageCount={null}
                         pageRangeDisplayed={4}
                     />
