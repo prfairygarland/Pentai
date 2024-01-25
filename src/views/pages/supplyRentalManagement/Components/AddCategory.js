@@ -51,7 +51,7 @@ const AddCategory = ({ setModal, getMod, Modal, getMainCatId, getCatId, removeCa
 
   const deleteCategory = async () => {
     try {
-      let url = API_ENDPOINT.delete_category
+      let url = API_ENDPOINT.supply_delete_category
       const response = await deleteApi(url, `?id=${getCatId}`)
 
       if (response?.status === 200) {
