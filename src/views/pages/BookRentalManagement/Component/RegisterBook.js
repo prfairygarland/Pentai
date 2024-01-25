@@ -6,7 +6,7 @@ import { imageUrl } from '../BookRentalStatus';
 import { useCallback } from 'react';
 import { enqueueSnackbar } from 'notistack';
 
-const RegisterBook = ({ setDeleted, searchBooks, setBook, setSearchBooks, setCategories }) => {
+const RegisterBook = ({ setDeleted, setBook, searchBookDetail, setSearchBookDetail, searchBooks, genreId,  setFilteredData, setSearchBooks, setCategories }) => {
     const [RegisteredData, setRegisteredData] = useState({
         bookgenre: '',
         ISBN: '',
@@ -14,8 +14,14 @@ const RegisterBook = ({ setDeleted, searchBooks, setBook, setSearchBooks, setCat
         Author: '',
         categoryID: '',
         subCategoryID: '',
-        description: ''
+        description: '',
+        image:null
     })
+
+    console.log('genreid', searchBookDetail)
+
+    console.log('details', RegisteredData)
+
     const [image, setImage] = useState(null);
     const inputRef = useRef(null)
     const [genre, setGenre] = useState();
@@ -24,22 +30,38 @@ const RegisterBook = ({ setDeleted, searchBooks, setBook, setSearchBooks, setCat
     const [postImage, setPostImage] = useState(null)
     const [filterBook, setFilterBook] = useState()
 
-    const FilterBookData = () => {
-        searchBooks?.map((item) => {
-            setFilterBook({
-                genreId: RegisteredData.bookgenre,
-                categoryId: RegisteredData.categoryID,
-                subCategoryId: RegisteredData.subCategoryID,
-                title: item?.title,
-                author: item?.authors ? item?.authors[0] : '',
-                SIBNCode: item?.industryIdentifiers ? item?.industryIdentifiers[0].identifier.replace('/[^0-9]/g', '') : '',
-                description: item?.description,
-                image: item?.imageLinks ? item?.imageLinks.thumbnail : '',
-                availabilityCount: 5,
-                address: 'PTK 17s'
+
+
+    useEffect(() => {
+        if(searchBookDetail.length > 0){
+            searchBookDetail?.map((item) => {
+                setRegisteredData({
+                    bookgenre: RegisteredData.bookgenre,
+                    categoryID: RegisteredData.categoryID,
+                    subCategoryID: RegisteredData.subCategoryID,
+                    title: item?.title,
+                    Author: item?.authors ? item?.authors[0] : '',
+                    ISBN: item?.industryIdentifiers ? item?.industryIdentifiers[0].identifier.replace('/[^0-9]/g', '') : '',
+                    description: item?.description ? item.description : '',
+                    image: item?.imageLinks ? item?.imageLinks.thumbnail : '',
+                    // availabilityCount: 5,
+                    // address: 'PTK 17s'
+                })
             })
-        })
-    }
+        }
+        else{
+            setRegisteredData({
+                bookgenre: '',
+                ISBN: '',
+                title: '',
+                Author: '',
+                categoryID: '',
+                subCategoryID: '',
+                description: ''
+            })
+        }
+    }, [searchBookDetail])
+    
 
 
     const hanldleGenreSelect = (e) => {
@@ -142,6 +164,8 @@ const RegisterBook = ({ setDeleted, searchBooks, setBook, setSearchBooks, setCat
         }
     }
 
+    console.log('reg', RegisteredData)
+
 
     useEffect(() => {
         const getBookGenreData = async () => {
@@ -155,14 +179,16 @@ const RegisterBook = ({ setDeleted, searchBooks, setBook, setSearchBooks, setCat
                 setRegisteredData((prev) => {
                     return {
                         ...prev,
-                        bookgenre: data[0].value.toString()
+                        bookgenre: genreId.toString()
                     }
                 })
             }
         }
         getBookGenreData()
-        FilterBookData()
-    }, [])
+        // FilterBookData()
+    }, [genreId])
+
+    console.log(genre)
 
     useEffect(() => {
         subCategoryList()
@@ -170,10 +196,18 @@ const RegisterBook = ({ setDeleted, searchBooks, setBook, setSearchBooks, setCat
 
     const handleCancel = () => {
         setCategories('AllBooks')
+        setBook('search')
+        setDeleted((prev) => prev + 1)
+        setFilteredData({
+            title: '',
+            bookGenre: '',
+            itemStatus: '',
+            visibility: '',
+            status: ''
+        })
         setSearchBooks([])
+        setSearchBookDetail([])
     }
-
-
 
     useEffect(() => {
         const BookCategoryList = async () => {
@@ -185,6 +219,12 @@ const RegisterBook = ({ setDeleted, searchBooks, setBook, setSearchBooks, setCat
                 })
 
                 setCategory(categorydata)
+                setRegisteredData((prev) => {
+                    return {
+                        ...prev,
+                        categoryID: categorydata[0]?.value?.toString()
+                    }
+                })
 
             }
         }
@@ -211,37 +251,40 @@ const RegisterBook = ({ setDeleted, searchBooks, setBook, setSearchBooks, setCat
 
 
     const PostData = async () => {
-        let Imgurl = filterBook?.image?.toString().replace('http:', 'https:')
+        let Imgurl = RegisteredData?.image?.toString().replace('http:', 'https:')
         const url = `${API_ENDPOINT.createBook}`
         try {
             const body = {
                 genreId: RegisteredData.bookgenre,
                 categoryId: RegisteredData.categoryID,
                 // subCategoryId: RegisteredData.subCategory ? RegisteredData.subCategory : '',
-                title: filterBook?.title ? filterBook?.title : RegisteredData.title,
-                author: filterBook?.author ? filterBook?.author : RegisteredData.Author,
-                SIBNCode: filterBook?.SIBNCode ? filterBook?.SIBNCode : RegisteredData.ISBN,
-                description: filterBook?.description ? filterBook?.description : RegisteredData.description,
-                image: filterBook?.image ? Imgurl : imageUrl + postImage,
-                // availabilityCount: 6,
-                // address: 'PTK 16F'
-
+                title: RegisteredData.title,
+                author: RegisteredData.Author,
+                SIBNCode: RegisteredData.ISBN,
+                description: RegisteredData.description,
+                image: RegisteredData?.image ? Imgurl : imageUrl + postImage,
             }
 
             if (RegisteredData.subCategoryID != '') {
                 body['subCategoryId'] = RegisteredData.subCategoryID
             }
+            else {
+                const res = await postApi(url, body)
+                console.log('body', body)
+                if (res?.data?.status === 200) {
+                    enqueueSnackbar("Book created successfully", { variant: "success" })
+                    console.log('sucessfully updated')
+                    setCategories('AllBooks')
+                    setSearchBooks([])
+                    setDeleted((prev) => prev + 1)
+                    setBook('search')
 
-            const res = await postApi(url, body)
-            console.log('body', body)
-            if (res.status === 200) {
-                enqueueSnackbar("Book created successfully", { variant: "success" })
-                console.log('sucessfully updated')
-                setCategories('AllBooks')
-                setSearchBooks([])
-                setDeleted((prev) => prev + 1)
-
+                }
+                else{
+                    enqueueSnackbar("Failed to create book", { variant: "error" })
+                }
             }
+
         } catch (error) {
             console.log(error)
         }
@@ -262,7 +305,7 @@ const RegisterBook = ({ setDeleted, searchBooks, setBook, setSearchBooks, setCat
                         <td>
                             <div>
                                 <div style={{ width: '180px', overflow: 'hidden', marginBottom: '5%' }} >
-                                    {(filterBook?.image || image) ? <img src={image ? image : filterBook?.image} style={{ height: '100%', width: '100%' }} /> : <img alt='' src='https://www.beelights.gr/assets/images/empty-image.png' style={{ height: '100%', width: '100%' }} />}
+                                    {(RegisteredData?.image || image) ? <img src={image ? image : RegisteredData?.image} style={{ height: '100%', width: '100%' }} /> : <img alt='' src='https://www.beelights.gr/assets/images/empty-image.png' style={{ height: '100%', width: '100%' }} />}
                                     <input style={{ display: 'none' }} type="file" name="upload" accept=".png, .jpg, .jpeg, .gif" ref={inputRef} onChange={handleUpload} />
                                 </div>
                                 <button style={{ background: '#4f5d73', height: '40px', width: '80px', cursor: 'pointer', borderRadius: 8, color: 'white' }} onClick={handleImageChange}>Upload</button>
@@ -282,6 +325,7 @@ const RegisterBook = ({ setDeleted, searchBooks, setBook, setSearchBooks, setCat
                                             <CFormSelect
                                                 options={genre}
                                                 onChange={hanldleGenreSelect}
+                                                value={RegisteredData.bookgenre}
                                             />
                                         </div>
                                     </td>
@@ -311,19 +355,19 @@ const RegisterBook = ({ setDeleted, searchBooks, setBook, setSearchBooks, setCat
                                 <tr>
                                     <td>ISBN</td>
                                     <td>
-                                        <input style={{ border: '1px solid #ccc', width: '98%', margin: 5 }} value={RegisteredData.ISBN ? RegisteredData.ISBN : filterBook?.SIBNCode} onChange={hanldleChangeISBN} />
+                                        <input style={{ border: '1px solid #ccc', width: '98%', margin: 5 }} value={RegisteredData.ISBN} onChange={hanldleChangeISBN} />
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>Book Title</td>
                                     <td>
-                                        <input style={{ border: '1px solid #ccc', width: '98%', margin: 5 }} value={RegisteredData.title ? RegisteredData.title : filterBook?.title} onChange={hanldleChangeTitle} />
+                                        <input style={{ border: '1px solid #ccc', width: '98%', margin: 5 }} value={RegisteredData.title} onChange={hanldleChangeTitle} />
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>Author </td>
                                     <td>
-                                        <input style={{ border: '1px solid #ccc', width: '98%', margin: 5 }} value={RegisteredData.Author ? RegisteredData.Author : filterBook?.author} onChange={hanldleChangeAuthor} />
+                                        <input style={{ border: '1px solid #ccc', width: '98%', margin: 5 }} value={RegisteredData.Author} onChange={hanldleChangeAuthor} />
                                     </td>
                                 </tr>
                                 <tr>

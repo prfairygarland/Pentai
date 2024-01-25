@@ -5,8 +5,9 @@ import DatePicker from 'react-date-picker'
 import Loader from 'src/components/common/Loader'
 import { deleteApi, getApi, postApi, putApi } from 'src/utils/Api'
 import { API_ENDPOINT } from 'src/utils/config'
+import { imageUrl } from '../BookRentalStatus'
 
-const BooksDetail = ({ bookId,genreId, setFilteredData, setDeleted, deleteSingleBook, bookDisplay, setCategories }) => {
+const BooksDetail = ({ bookId,genreId, setFilteredData, setDeleted, bookDisplay, setCategories }) => {
 
     const [bookData, setBookData] = useState({
         bookgenre: '',
@@ -15,7 +16,7 @@ const BooksDetail = ({ bookId,genreId, setFilteredData, setDeleted, deleteSingle
         author: '',
         image: null,
         bookdesr: '',
-        visibility: false,
+        visibility: true,
         AssociatedItem: null
     })
     const [genre, setGenre] = useState([])
@@ -24,28 +25,30 @@ const BooksDetail = ({ bookId,genreId, setFilteredData, setDeleted, deleteSingle
     const [postImage, setPostImage] = useState(null)
     const inputRef = useRef(null)
     const [image, setImage] = useState(null);
-    console.log('boodis',bookDisplay)
+    console.log('genreId',genreId)
+    console.log('bookId',bookId)
+
+    console.log(bookDisplay)
+
+    console.log('bookData', bookData)
+
+    console.log('img', bookData.image)
+
     useEffect(() => {
-        // console.log('test2',genre,genre.filter((ele)=>ele.label === 'Tech')[0].value)
         setBookData({
-            bookgenre: genre?.filter((ele)=>ele.label === bookDisplay.genreName)[0]?.value.toString(),
+            bookgenre: genre?.filter((ele)=>ele?.label === bookDisplay?.genreName)[0]?.value?.toString(),
             title: bookDisplay.title,
             ISBN: bookDisplay.SIBNCode,
             author: bookDisplay.author,
             image: bookDisplay.image,
             bookdesr: bookDisplay.description,
-            visibility: bookDisplay.visibility === 'visibilty' ? true : false,
-            AssociatedItem: bookDisplay.AssociatedItem ? bookDisplay.AssociatedItem : 0,
+            visibility: bookDisplay.visibility === 'visible' ? true : false ,
+            AssociatedItem: bookDisplay.associatedItem ? bookDisplay.associatedItem : 0,
             AvailabilityCount: bookDisplay.availabilityCount,
 
         })
 
-        return (() => {
-            setImage(null)
-        })
-
-    }, [bookDisplay])
-    console.log(bookData)
+    }, [bookDisplay, bookId])
 
     useEffect(() => {
         const getBookGenreData = async () => {
@@ -61,9 +64,7 @@ const BooksDetail = ({ bookId,genreId, setFilteredData, setDeleted, deleteSingle
         getBookGenreData()
     }, [])
 
-    console.log('genre',genre)
     const handleChange = (e) => {
-        console.log('ee.atdh',typeof e.target.value)
         setBookData((prev) => {
             return {
                 ...prev,
@@ -75,6 +76,25 @@ const BooksDetail = ({ bookId,genreId, setFilteredData, setDeleted, deleteSingle
     // useEffect(() => {
     // getBookList()  
     // }, [deleted])
+
+
+    const deleteSingleBook = async () => {
+        const url = `${API_ENDPOINT.delete_book}?id=`
+        try {
+            const res = await deleteApi(url, bookId)
+            if (res?.data?.status === 200) {
+                enqueueSnackbar('book deleted sucessfully', { variant : 'success'})
+                setDeleted((prev) => prev + 1)
+                 setCategories('AllBooks')
+                setdeleteVisible(false)
+            }
+            else{
+                enqueueSnackbar('failed to delete book', { variant : 'error'})
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
 
 
@@ -89,6 +109,8 @@ const BooksDetail = ({ bookId,genreId, setFilteredData, setDeleted, deleteSingle
             SIBNCode: bookData?.ISBN,
             description: bookData?.bookdesr,
             image: image ? image : bookData?.image,
+            visibility: bookData?.visibility === true ? 'visible' : 'hide',
+            associatedItem: bookData.AssociatedItem ? bookData.AssociatedItem : 0
             // availabilityCount: bookDisplay.availabilityCount ? bookDisplay.availabilityCount : '',
             // address: bookDisplay.address ? bookDisplay.address : ''
         }
@@ -113,13 +135,15 @@ const BooksDetail = ({ bookId,genreId, setFilteredData, setDeleted, deleteSingle
         if (e.target.files[0].type === 'image/png' || e.target.files[0].type === 'image/jpg' || e.target.files[0].type === 'image/jpeg' || e.target.files[0].type === 'image/gif') {
             setImage(URL.createObjectURL(e.target.files[0]))
             const formData = new FormData()
-            formData.append('images', e.target.files[0])
+            formData.append('images', e?.target?.files[0])
             let url = API_ENDPOINT.uploadImages
             const res = await postApi(url, formData)
-            setPostImage(res?.data?.processedImageUrls[0]?.imageUrl)
+             setPostImage(res?.data?.processedImageUrls[0]?.imageUrl)
         }
 
     }
+
+    console.log('image', image)
 
     const handleIsbnChange = (e) => {
         setBookData((prev) => {
@@ -275,7 +299,7 @@ const BooksDetail = ({ bookId,genreId, setFilteredData, setDeleted, deleteSingle
                                 </div>
                                 <div className="formWrpInpt d-flex">
                                     <div style={{ width: '180px', overflow: 'hidden', marginBottom: '5%' }} >
-                                        {bookData.image !== null ? <img alt='' src={image ? image : bookData.image} style={{ height: '100%', width: '100%' }} /> : <img alt='' src='https://www.beelights.gr/assets/images/empty-image.png' style={{ height: '100%', width: '100%' }} />}
+                                        {bookData?.image !== null ? <img alt='' src={ image ? image : bookData?.image } style={{ height: '100%', width: '100%' }} /> : <img alt='' src='https://www.beelights.gr/assets/images/empty-image.png' style={{ height: '100%', width: '100%' }} />}
                                         <input style={{ display: 'none' }} type="file" name="upload" accept=".png, .jpg, .jpeg" ref={inputRef} onChange={handleUpload} />
                                     </div>
                                     <div className='ms-4'>
@@ -319,16 +343,16 @@ const BooksDetail = ({ bookId,genreId, setFilteredData, setDeleted, deleteSingle
                                         </div>
                                         <div className="push-notification-container gap-3">
                                             <CFormCheck type="radio" name="visibility" id="exampleRadios1" label="Visible"
-                                                defaultChecked={!bookData.visibility}
-                                                // onClick={() => setAddItemData((prev) => ({ ...prev, visibility: true }))}
-                                                // value={true}
+                                                defaultChecked={bookData.visibility}
+                                                onClick={() => setBookData((prev) => ({ ...prev, visibility: true }))}
+                                                value={true}
                                                 // checked={bookData.visibility}
-                                                value={bookData.visibility}
+                                                // value={bookData.visibility}
                                             />
                                             <CFormCheck type="radio" name="visibility" id="exampleRadios2" label="Hide"
-                                                defaultChecked={bookData.visibility}
-                                                // onClick={() => setAddItemData((prev) => ({ ...prev, visibility: false }))}
-                                                value={bookData.visibility}
+                                                defaultChecked={!bookData.visibility}
+                                                onClick={() => setBookData((prev) => ({ ...prev, visibility: false }))}
+                                                value={false}
                                             //  checked={bookData.visibility}
                                             />
                                         </div>

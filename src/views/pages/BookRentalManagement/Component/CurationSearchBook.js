@@ -3,7 +3,7 @@ import React, { useEffect } from 'react'
 import ReactTable from 'src/components/common/ReactTable'
 import { API_ENDPOINT } from 'src/utils/config'
 
-const CurationSearchBook = ({searchBooks, SearchBookList, searchBookFilter, setCurationBook, setSearchBookFilter}) => {
+const CurationSearchBook = ({ searchBooks, setSearchBookTitle, SearchBookList, searchBookFilter, setCurationBook, setSearchBookFilter }) => {
 
     const data = [
         { title: 'history', ISBN: 86578587, Author: 'Don Norman' },
@@ -22,13 +22,13 @@ const CurationSearchBook = ({searchBooks, SearchBookList, searchBookFilter, setC
         })
     }
 
-    const PostData = () => {
+    const PostData = (title) => {
         setCurationBook('CurationRegister')
         setSearchBookFilter({
-            title:''
+            title: ''
         })
 
-
+        setSearchBookTitle(title)
     }
 
     console.log('curSearch', searchBooks)
@@ -41,18 +41,18 @@ const CurationSearchBook = ({searchBooks, SearchBookList, searchBookFilter, setC
             </div>
             <div>
 
-                {
-                    searchBooks?.map((item, i) => (
-                        <table border="1" className="table table-bordered" key={i}>
-                            <thead>
-                                <tr>
-                                    <th>Book Cover Image</th>
-                                    <th>Book Information</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
+                <table border="1" className="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Book Cover Image</th>
+                            <th>Book Information</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {
+                            searchBooks?.map((item, i) => (
+                                <tr key={i}>
                                     <td> <img src={item?.imageLinks?.thumbnail} /></td>
                                     <td>
                                         <table className="table table-bordered">
@@ -70,13 +70,13 @@ const CurationSearchBook = ({searchBooks, SearchBookList, searchBookFilter, setC
                                             </tr>
                                         </table>
                                     </td>
-                                    <td><CButton onClick={PostData}>Add</CButton></td>
+                                    <td><CButton onClick={() => PostData(item.title)}>Add</CButton></td>
                                 </tr>
 
-                            </tbody>
-                        </table>
-                    ))
-                }
+                            ))
+                        }
+                    </tbody>
+                </table>
 
             </div>
         </div >

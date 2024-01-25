@@ -6,7 +6,7 @@ import { imageUrl } from '../BookRentalStatus';
 import { useCallback } from 'react';
 import { enqueueSnackbar } from 'notistack';
 
-const CurationRegisterBook = ({setDeleted, searchBooks, setCurationBook, setSearchBooks }) => {
+const CurationRegisterBook = ({setDeleted, setCurationSearchBookDetail, searchCurationBookDetail, setCategories, searchBooks, setCurationBook, setSearchBooks }) => {
     const [RegisteredData, setRegisteredData] = useState({
         bookgenre: '',
         ISBN: '',
@@ -14,7 +14,8 @@ const CurationRegisterBook = ({setDeleted, searchBooks, setCurationBook, setSear
         Author: '',
         categoryID: '',
         subCategoryID: '',
-        description: ''
+        description: '',
+        image:null
     })
     const [image, setImage] = useState(null);
     const inputRef = useRef(null)
@@ -24,24 +25,40 @@ const CurationRegisterBook = ({setDeleted, searchBooks, setCurationBook, setSear
     const [postImage, setPostImage] = useState(null)
     const [filterBook, setFilterBook] = useState()
 
-    const FilterBookData = () => {
-        searchBooks.map((item) => {
-            setFilterBook({
-                genreId: RegisteredData.bookgenre,
-                categoryId: RegisteredData.categoryID,
-                subCategoryId: RegisteredData.subCategoryID,
-                title: item?.title,
-                author: item?.authors ? item?.authors[0] : '',
-                SIBNCode: item?.industryIdentifiers ? item?.industryIdentifiers[0].identifier.replace('/[^0-9]/g', '') : '',
-                description: item?.description,
-                image: item?.imageLinks ? item?.imageLinks.thumbnail : '',
-                availabilityCount: 5,
-                address: 'PTK 17s'
-            })
-        })
-    }
+    console.log('s', searchCurationBookDetail)
 
-    console.log('cat', genre)
+
+        useEffect(() => {
+            if(searchCurationBookDetail.length > 0){
+                searchCurationBookDetail?.map((item) => {
+                    setRegisteredData({
+                        bookgenre: RegisteredData.bookgenre,
+                        categoryID: RegisteredData.categoryID,
+                        subCategoryID: RegisteredData.subCategoryID,
+                        title: item?.title,
+                        Author: item?.authors ? item?.authors[0] : '',
+                        ISBN: item?.industryIdentifiers ? item?.industryIdentifiers[0].identifier.replace('/[^0-9]/g', '') : '',
+                        description: item?.description ? item.description : '',
+                        image: item?.imageLinks ? item?.imageLinks.thumbnail : '',
+                        // availabilityCount: 5,
+                        // address: 'PTK 17s'
+                    })
+                })
+            }
+            else{
+                setRegisteredData({
+                    bookgenre: '',
+                    ISBN: '',
+                    title: '',
+                    Author: '',
+                    categoryID: '',
+                    subCategoryID: '',
+                    description: '',
+                    image:null
+                })
+            }
+        }, [searchCurationBookDetail])
+
 
     const hanldleGenreSelect = (e) => {
         const value = e.target.value
@@ -162,9 +179,8 @@ const CurationRegisterBook = ({setDeleted, searchBooks, setCurationBook, setSear
             }
         }
         getBookGenreData()
-        FilterBookData()
 
-        console.log('hello')
+        // console.log('hello')
 
     }, [])
 
@@ -173,8 +189,11 @@ const CurationRegisterBook = ({setDeleted, searchBooks, setCurationBook, setSear
     }, [])
 
     const handleCancel = () =>{
+        setCategories('AllCuration')
         setCurationBook('Curationsearch')
         setSearchBooks([])
+        setSearchBooks([])
+        setCurationSearchBookDetail([])
     }
 
 
@@ -215,7 +234,7 @@ const CurationRegisterBook = ({setDeleted, searchBooks, setCurationBook, setSear
 
 
     const PostData = async () => {
-        let Imgurl = filterBook?.image?.toString().replace('http:', 'https:')
+        let Imgurl = RegisteredData?.image?.toString().replace('http:', 'https:')
         const url = `${API_ENDPOINT.createBook}`
         try {
             const body = {
@@ -226,7 +245,7 @@ const CurationRegisterBook = ({setDeleted, searchBooks, setCurationBook, setSear
                 author: filterBook?.author ? filterBook?.author : RegisteredData.Author,
                 SIBNCode: filterBook?.SIBNCode ? filterBook?.SIBNCode : RegisteredData.ISBN,
                 description: filterBook?.description ? filterBook?.description : RegisteredData.description,
-                image: filterBook?.image ? Imgurl : imageUrl + postImage,
+                image: RegisteredData?.image ? Imgurl : imageUrl + postImage,
                 // availabilityCount: 6,
                 // address: 'PTK 16F'
 
@@ -238,13 +257,19 @@ const CurationRegisterBook = ({setDeleted, searchBooks, setCurationBook, setSear
 
             const res = await postApi(url, body)
             console.log('body', body)
-            if (res.status === 200) {
-                enqueueSnackbar({ variant: 'Book added sucessfully' })
+            if (res?.data?.status === 200) {
+                enqueueSnackbar("book created successfully",{ variant: 'success' })
                 console.log('sucessfully updated')
+                setCategories('AllCuration')
+                setCurationBook('Curationsearch')
+
                 // setBook('search')
                 // setSearchBooks([])
                 setDeleted((prev) => prev + 1)
                 
+            }
+            else{
+                enqueueSnackbar("failed to creat book",{ variant: 'error' })
             }
         } catch (error) {
             console.log(error)
@@ -284,7 +309,7 @@ const CurationRegisterBook = ({setDeleted, searchBooks, setCurationBook, setSear
                         <td>
                             <div>
                                 <div style={{ width: '180px', overflow: 'hidden', marginBottom: '5%' }} >
-                                    {(filterBook?.image || image) ? <img src={image ? image : filterBook?.image} style={{ height: '100%', width: '100%' }} /> : <img alt='' src='https://www.beelights.gr/assets/images/empty-image.png' style={{ height: '100%', width: '100%' }} />}
+                                    {(RegisteredData?.image!==null) ? <img src={image ? image : RegisteredData?.image} style={{ height: '100%', width: '100%' }} /> : <img alt='' src='https://www.beelights.gr/assets/images/empty-image.png' style={{ height: '100%', width: '100%' }} />}
                                     <input style={{ display: 'none' }} type="file" name="upload" accept=".png, .jpg, .jpeg, .gif" ref={inputRef} onChange={handleUpload} />
                                 </div>
                                 <button style={{ background: '#4f5d73', height: '40px', width: '80px', cursor: 'pointer', borderRadius: 8, color: 'white' }} onClick={handleImageChange}>Upload</button>

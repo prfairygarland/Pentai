@@ -138,12 +138,12 @@ const BookRentalStatus = () => {
                 {
                     Header: 'Rental Details',
                     accessor: 'details',
-                    Cell: ({ row }) => <button onClick={() => { setUserInfoPopup(true); setPopUp('RentalD'); handleShowRentalDetails(row.original.id) }} className='mx-3 px-3 py-2 rounded border-1'>View</button>
+                    Cell: ({ row }) => <CButton onClick={() => { setUserInfoPopup(true); setPopUp('RentalD'); handleShowRentalDetails(row.original.id) }} className='mx-3 px-3 py-2 rounded border-1'>View</CButton>
                 },
                 {
                     Header: 'Rental History',
                     accessor: 'history',
-                    Cell: ({ row }) => <button onClick={() => { setUserInfoPopup(true); setPopUp('RenatlH'); handleShowRentalHistory(row.original?.BookRentalId, row.original?.id) }} className='mx-3 px-3 py-2 rounded border-1'>View</button>
+                    Cell: ({ row }) => <CButton onClick={() => { setUserInfoPopup(true); setPopUp('RenatlH'); handleShowRentalHistory(row.original?.BookRentalId, row.original?.id) }} className='mx-3 px-3 py-2 rounded border-1'>View</CButton>
 
                 },
             ], [])
@@ -395,7 +395,7 @@ const BookRentalStatus = () => {
                     setUserInfoPopup(false)
                     // setUserInfoData({})
                 }}>
-                    <CModalTitle className='p-1'>User Information</CModalTitle>
+                    <CModalTitle className='p-1'>{popUp === 'userDetails' ? 'User Information' : '' ||  popUp === 'RentalD' ? 'Rental Details' : '' || popUp === 'RenatlH' ? 'Rental History' : '' }</CModalTitle>
                 </CModalHeader>
                 {popUp === 'userDetails' ?
                     <UserProfile userInfoData={userInfoData} />

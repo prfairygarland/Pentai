@@ -6,7 +6,7 @@ import Loader from 'src/components/common/Loader'
 import { deleteApi, getApi, postApi, putApi } from 'src/utils/Api'
 import { API_ENDPOINT } from 'src/utils/config'
 
-const CurationBookDetails = ({ bookId, setDeleted, categoryID, subCategoryBookID, subCategoryID, getBookByGenre, genreBooks, getBookList, bookDisplay, setCategories }) => {
+const CurationBookDetails = ({ bookId, setDeleted, categoryID, subCategoryBookID, subCategoryID, setStateUpdate, genreBooks, getBookList, bookDisplay, setCategories }) => {
 
     const [bookData, setBookData] = useState({
         bookgenre: '',
@@ -99,9 +99,9 @@ const CurationBookDetails = ({ bookId, setDeleted, categoryID, subCategoryBookID
             const res = await deleteApi(url, subCategoryBookID)
             setdeleteVisible(false)
             if (res?.data?.status === 200) {
-                alert('Book deleted')
                 enqueueSnackbar('book deleted successfully', { variant: 'success' })
-                setDeleted((prev) => prev + 1)
+                setStateUpdate((prev) => prev + 1)
+                setCategories('AllCuration')
             }
             else {
                 enqueueSnackbar('failed to delete book', { variant: 'error' })
@@ -136,6 +136,7 @@ const CurationBookDetails = ({ bookId, setDeleted, categoryID, subCategoryBookID
             const res = await putApi(url, filterbody)
             if (res?.data?.status === 200) {
                 enqueueSnackbar('book updated successfully', {variant:'success'})
+                setCategories('AllCuration')
                 setDeleted((prev) => prev + 1)
             }
             else {
