@@ -347,7 +347,7 @@ export const putApi = async (url, data, header) => {
     return response;
   }
 };
-export const deleteApi = async (url, postIdToDelete, header) => {
+export const deleteApi = async (url, postIdToDelete = '', header) => {
   {
     const CustomHeader = {
       accept: 'text/plain',
