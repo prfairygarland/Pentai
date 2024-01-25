@@ -21,12 +21,17 @@ min-width: 100px;
 .drpBtn button{
   text-align: left;
   border: 1px solid #ccc;
+  padding-right: 17px;
 }
 .drpBtn button::after{
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  right: 5px;
+  content: "\e913";
+    font-family: "icomoon";
+    border: none;
+    font-size: 12px;
+    right: 5px;
 }
 .drpDBtn{
 min-width: 150px;
@@ -34,12 +39,18 @@ min-width: 150px;
 }
 .drpDBtn button{
   text-align: left;
-  border: 1px solid #ccc;
+  border: 1px solid #ccc;    
+  height: 38px;
+  padding-right: 17px;
 }
 .drpDBtn button::after{
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
+  content: "\e913";
+  font-family: "icomoon";
+  border: none;
+  font-size: 12px;
   right: 5px;
 }
 .ptk-table th {
@@ -57,6 +68,7 @@ color: ($white);
     padding: 10px;
     font-size: 14px;
     white-space: nowrap;
+    vertical-align: top;
 
 }
 .ptk-table tbody tr{
@@ -275,4 +287,36 @@ margin-left: 15px;
     }
   }
 }
+.linkToTxt {
+  .form-check-label{
+    white-space: nowrap;
+  }
+}
 
+
+.react-date-picker__wrapper {
+  display: flex;
+  flex-grow: 1;
+  flex-shrink: 0;
+  border: thin solid var(--cui-input-border-color, var(--cui-border-color)) !important;
+  height: 38px;
+  background: #fff;
+  border-radius: 5px;
+}
+.clubTable{
+  table{
+    tr{
+      th{
+        p{
+          text-align: left !important;
+        }
+        &:first-child{
+          width: 30px !important;
+        }
+        &:nth-child(2){
+          width: 50px !important;
+        }
+      }
+    }
+  }
+}

@@ -127,7 +127,7 @@ const UserProfile = ({ userInfoData }) => {
                                             </div>
                                             <div className='d-flex'>
                                                 <div className=''>
-                                                    <div className='formWrpLabel'>
+                                                    <div className='formWrpLabel' style={{maxWidth:'100%'}}>
                                                         <label className="fw-bolder">Supply Rental :{userInfoData.suppliesCount ? userInfoData.suppliesCount : 'NA'} </label>
                                                     </div>
                                                     <div className="border-end px-1">
@@ -143,7 +143,7 @@ const UserProfile = ({ userInfoData }) => {
                                                     </div>
                                                 </div>
                                                 <div className='    '>
-                                                    <div className='formWrpLabel'>
+                                                    <div className='formWrpLabel' style={{maxWidth:'100%'}}>
                                                         <label className="fw-bolder">Book Renatl :{userInfoData.bookRentalCount ? userInfoData.bookRentalCount : 'NA'} </label>
                                                     </div>
                                                     <div className="border-start px-1">

@@ -917,174 +917,142 @@ const ClubBoard = () => {
   }, [currentPageOfClubActivity, itemsPerPageOfClubActivity])
   return (
     <div>
-      <ConfirmationModal modalProps={modalProps} />
       <div className='toggleContainer'>
-        <div>{multiLangObj?.clubPeriodQualification}</div>
-        <div>
-          <CFormSwitch
-            id="club_period_qualification"
-            className="cFormSwitch"
-            onClick={handleShowClubPeriodToggle}
-            defaultChecked={showClubPeriod}
-          />
-        </div>
+        <div>Club Period/Qualification</div>
+        <div><CFormSwitch id="club_period_qualification" className='cFormSwitch' onClick={handleShowClubPeriodToggle} defaultChecked={showClubPeriod}/></div>
       </div>
-      {showClubPeriod && (
-        <div>
-          <CForm className="d-flex">
-            <CFormInput
-              className="me-sm-2"
-              placeholder="Search"
-              size="sm"
-              value={searchTxt}
-              onChange={(e) => setSearchTxt(e.target.value)}
-            />
-            <CButton
-              color="dark"
-              className="my-2 my-sm-0"
-              type="button"
-              onClick={getClubRegistrationPeriodsBySearch}
-            >
-              {multiLangObj?.search}
-            </CButton>
-          </CForm>
-          <CForm className="d-flex justify-content-end mt-2">
-            <CButton
-              color="dark"
-              className="my-2 my-sm-0 ps-3 pe-4"
-              type="button"
-              onClick={addNewClubPeriodHandler}
-            >
-              {multiLangObj?.add}
-            </CButton>
-          </CForm>
-          {totalclubPeriodDataCount > 0 && (
-            <p style={{ margin: 0 }}>{multiLangObj?.total}&nbsp;:&nbsp; {totalclubPeriodDataCount}</p>
-          )}
-          <ReactTable
-            columns={clubPeriodDataColumns}
-            data={clubPeriodData}
-            showCheckbox={false}
-            onSelectionChange={() => {}}
-          />
-          <div className="d-flex w-100 justify-content-center gap-3">
-            {clubPeriodData?.length > 0 && (
-              <div className="userlist-pagination">
-                <div className="userlist-pagination dataTables_paginate">
-                  <ReactPaginate
-                    breakLabel={'...'}
-                    marginPagesDisplayed={1}
-                    previousLabel={<button>{multiLangObj?.previous}</button>}
-                    nextLabel={<button>{multiLangObj?.next}</button>}
-                    pageCount={totalPages}
-                    onPageChange={handlePageChange}
-                    forcePage={currentPage}
-                    renderOnZeroPageCount={null}
-                    pageRangeDisplayed={4}
-                  />
-                </div>
-              </div>
-            )}
-            {clubPeriodData?.length > 0 && (
-              <div className="d-flex align-items-center gap-2 mt-2">
-                <label>{multiLangObj?.show}</label>
-                <CFormSelect
-                  className=""
-                  aria-label=""
-                  options={paginationItemPerPageOptions}
-                  onChange={(event) => {
-                    setItemsPerPage(parseInt(event?.target?.value))
-                    setCurrentPage(0)
-                  }}
+      {showClubPeriod && <div>
+        <CForm className="d-flex">
+          <CFormInput className="me-sm-2" placeholder="Search" size="sm" value={searchTxt} onChange={(e) => setSearchTxt(e.target.value)}/>
+          <CButton color="dark" className="my-2 my-sm-0" type="button" onClick={getClubRegistrationPeriodsBySearch}>
+            Search
+          </CButton>
+        </CForm>
+        <CForm className="d-flex justify-content-end mt-2">
+          <CButton color="dark" className="my-2 my-sm-0 ps-3 pe-4" type="button" onClick={addNewClubPeriodHandler}>
+            Add
+          </CButton>
+        </CForm>
+        {totalclubPeriodDataCount > 0 && <p style={{ margin: 0 }}>Total&nbsp;:&nbsp; {totalclubPeriodDataCount}</p>}
+        <ReactTable
+          columns={clubPeriodDataColumns}
+          data={clubPeriodData}
+          showCheckbox={false}
+          onSelectionChange={() => {}}
+        />
+        <div className="d-flex w-100 justify-content-center gap-3">
+          {clubPeriodData?.length > 0 && (
+            <div className="userlist-pagination">
+              <div className="userlist-pagination dataTables_paginate">
+                <ReactPaginate
+                  breakLabel={'...'}
+                  marginPagesDisplayed={1}
+                  previousLabel={<button>Previous</button>}
+                  nextLabel={<button>Next</button>}
+                  pageCount={totalPagesClubBanner}
+                  onPageChange={handlePageChange}
+                  forcePage={currentPage}
+                  renderOnZeroPageCount={null}
+                  pageRangeDisplayed={4}
                 />
-                <label>{multiLangObj?.lists}</label>
               </div>
-            )}
-          </div>
-          <CModal
-            className="modal-lg"
-            alignment="center"
-            visible={clubActivityListPopup}
+            </div>
+          )}
+          {clubPeriodData?.length > 0 && (
+            <div className="d-flex align-items-center gap-2 mt-2">
+              <label>Show</label>
+              <CFormSelect
+                className=""
+                aria-label=""
+                options={paginationItemPerPageOptions}
+                onChange={(event) => {
+                  setItemsPerPage(parseInt(event?.target?.value))
+                  setCurrentPage(0)
+                }}
+              />
+              <label>Lists</label>
+            </div>
+          )}
+        </div>
+        <CModal className='modal-lg'
+          alignment="center"
+          visible={clubActivityListPopup}
+          onClose={() => {
+            setClubActivityListPopup(false)
+          }}
+          backdrop="static"
+          aria-labelledby="LiveDemoExampleLabel"
+        >
+          <CModalHeader
             onClose={() => {
               setClubActivityListPopup(false)
             }}
-            backdrop="static"
-            aria-labelledby="LiveDemoExampleLabel"
           >
-            <CModalHeader
-              onClose={() => {
-                setClubActivityListPopup(false)
+            <CModalTitle className="p-1">Club Activity List</CModalTitle>
+          </CModalHeader>
+          <CModalBody>
+            {clubActivityListData.length > 0 && <ReactTable
+              columns={clubActivityListColumns}
+              data={clubActivityListData}
+              onSelectionChange={() => {
+                console.log('no action')
               }}
-            >
-              <CModalTitle className="p-1">{multiLangObj?.clubActivityList}</CModalTitle>
-            </CModalHeader>
-            <CModalBody>
-              {clubActivityListData.length > 0 && (
-                <ReactTable
-                  columns={clubActivityListColumns}
-                  data={clubActivityListData}
-                  onSelectionChange={() => {
-                    console.log('no action')
-                  }}
-                  showCheckbox={false}
+              showCheckbox={false}
+            />}
+            <div className="d-flex w-100 justify-content-center gap-3">
+          {clubActivityListData?.length > 0 && (
+            <div className="userlist-pagination">
+              <div className="userlist-pagination dataTables_paginate">
+                <ReactPaginate
+                  breakLabel={'...'}
+                  marginPagesDisplayed={1}
+                  previousLabel={<button>Previous</button>}
+                  nextLabel={<button>Next</button>}
+                  pageCount={totalPagesOfClubActivity}
+                  onPageChange={handlePageChangeOfClubActivity}
+                  forcePage={currentPageOfClubActivity}
+                  renderOnZeroPageCount={null}
+                  pageRangeDisplayed={4}
                 />
-              )}
-              <div className="d-flex w-100 justify-content-center gap-3">
-                {clubActivityListData?.length > 0 && (
-                  <div className="userlist-pagination">
-                    <div className="userlist-pagination dataTables_paginate">
-                      <ReactPaginate
-                        breakLabel={'...'}
-                        marginPagesDisplayed={1}
-                        previousLabel={<button>{multiLangObj?.previous}</button>}
-                        nextLabel={<button>{multiLangObj?.next}</button>}
-                        pageCount={totalPagesOfClubActivity}
-                        onPageChange={handlePageChangeOfClubActivity}
-                        forcePage={currentPageOfClubActivity}
-                        renderOnZeroPageCount={null}
-                        pageRangeDisplayed={4}
-                      />
-                    </div>
-                  </div>
-                )}
-                {clubActivityListData?.length > 0 && (
-                  <div className="d-flex align-items-center gap-2 mt-2">
-                    <label>{multiLangObj?.show}</label>
-                    <CFormSelect
-                      className=""
-                      aria-label=""
-                      options={paginationItemPerPageOptions}
-                      onChange={(event) => {
-                        setItemsPerPageOfClubActivity(parseInt(event?.target?.value))
-                        setCurrentPageOfClubActivity(0)
-                      }}
-                    />
-                    <label>{multiLangObj?.lists}</label>
-                  </div>
-                )}
               </div>
-              {clubActivityListData.length === 0 && <>{multiLangObj?.noDataAvailable}</>}
-            </CModalBody>
-          </CModal>
-
-          <CModal
-            className="modal-md"
-            alignment="center"
-            visible={addModifyClubPeriodModal}
+            </div>
+          )}
+          {clubActivityListData?.length > 0 && (
+            <div className="d-flex align-items-center gap-2 mt-2">
+              <label>Show</label>
+              <CFormSelect
+                className=""
+                aria-label=""
+                options={paginationItemPerPageOptions}
+                onChange={(event) => {
+                  setItemsPerPageOfClubActivity(parseInt(event?.target?.value))
+                  setCurrentPageOfClubActivity(0)
+                }}
+              />
+              <label>Lists</label>
+            </div>
+          )}
+        </div>
+            {clubActivityListData.length === 0 && <>No Data Available</>}
+          </CModalBody>
+        </CModal>
+        <CModal className='modal-lg'
+          alignment="center"
+          visible={addModifyClubPeriodModal}
+          onClose={() => {
+            setAddModifyClubPeriodModal(false)
+          }}
+          backdrop="static"
+          aria-labelledby="LiveDemoExampleLabel"
+        >
+          <CModalHeader
             onClose={() => {
               setAddModifyClubPeriodModal(false)
             }}
-            backdrop="static"
-            aria-labelledby="LiveDemoExampleLabel"
           >
-            <CModalHeader
-              onClose={() => {
-                setAddModifyClubPeriodModal(false)
-              }}
-            >
-              <CModalTitle className="p-1">{multiLangObj?.clubPeriodQualificationRegistration}</CModalTitle>
-            </CModalHeader>
-            <CModalBody>
+            <CModalTitle className="p-1">Club Period/Qualification Registration</CModalTitle>
+          </CModalHeader>
+          <CModalBody>
               <CFormInput
                 type="text"
                 placeholder="Enter Title Here"
@@ -1095,13 +1063,11 @@ const ClubBoard = () => {
                   setClubTitle(e.target.value)
                 }}
               />
-              <div className="deadline-container mt-2">
-                <h5>{multiLangObj?.clubPeriodSetting}</h5>
+              <div className="deadline-container">
+                  <h5>Club Period Setting</h5>
               </div>
               <div className="deadline-container">
-                <div className="deadline-label">{multiLangObj?.registrationPeriod}</div>
-              </div>
-              <div className="d-flex gap-3  mb-2">
+                <div className="deadline-label">Registration Period</div>
                 <div>
                   <DatePicker
                     value={registrationStart}
@@ -1119,11 +1085,9 @@ const ClubBoard = () => {
                   <div>{multiLangObj?.yyyyMmDd}</div>
                 </div>
               </div>
-              <div className="deadline-container">
-                <div className="deadline-label">{multiLangObj?.recruitmentPeriod}</div>
-              </div>
-              <div className="d-flex gap-3 mb-2">
-                <div>
+            <div className="deadline-container">
+              <div className="deadline-label">Recruitment Period</div>
+              <div>
                   <DatePicker
                     value={recruitmentStart}
                     onChange={(event) => handleRecruitStartChange(event)}
@@ -1135,315 +1099,277 @@ const ClubBoard = () => {
                     onChange={(event) => handleRecruitEndChange(event)}
                   />
                 </div>
+              <div>
+                <div>last Deadline</div>
+                <div>YYYY.MM.DD</div>
+              </div>
+            </div>
+              <div className="deadline-container">
+                  <h5>No. of Participants Setting</h5>
+              </div>
+              <div className="deadline-container">
+                <div className="deadline-label">Min. participant limit</div>
+                <div className="">Over</div>
                 <div>
-                  <div>{multiLangObj?.lastDeadline}</div>
-                  <div>{multiLangObj?.yyyyMmDd}</div>
-                </div>
-              </div>
-              <div className="deadline-container">
-                <h5>{multiLangObj?.noOfPartSettings}</h5>
-              </div>
-              <div className="deadline-container">
-                <div className="deadline-label w-50">{multiLangObj?.headerMinPartiLimit}</div>
-
-                <div className="d-flex gap-3 align-items-center">
-                  <div className="">{multiLangObj?.over}</div>
                   <CFormSelect
-                    options={[
-                      { label: multiLangObj?.numberOne, value: '1' },
-                      { label: multiLangObj?.numberTwo, value: '2' },
-                      { label: multiLangObj?.numberThree, value: '3' },
-                      { label: multiLangObj?.numberFour, value: '4' },
-                      { label: multiLangObj?.numberFive, value: '5' },
-                      { label: multiLangObj?.numberSix, value: '6' },
-                      { label: multiLangObj?.numberSeven, value: '7' },
-                      { label: multiLangObj?.numberEight, value: '8' },
-                      { label: multiLangObj?.numberNine, value: '9' },
-                      { label: multiLangObj?.numberTen, value: '10' },
-                    ]}
-                    value={minParticipants}
-                    onChange={(e) => setMinParticipants(e.target.value)}
-                  />
+                        className='mx-4'
+                        options={[
+                            { label: '1', value: '1' },
+                            { label: '2', value: '2' },
+                            { label: '3', value: '3' },
+                            { label: '4', value: '4' },
+                            { label: '5', value: '5' },
+                            { label: '6', value: '6' },
+                            { label: '7', value: '7' },
+                            { label: '8', value: '8' },
+                            { label: '9', value: '9' },
+                            { label: '10', value: '10' },
+                        ]}
+                        value={minParticipants}
+                        onChange={(e) => setMinParticipants(e.target.value)}
+                    />
                 </div>
               </div>
               <div className="deadline-container">
-                <div className="deadline-label w-50">{multiLangObj?.headerMaxSameGrpLimit}</div>
-
-                <div className="d-flex gap-3 align-items-center">
-                  <span style={{ whitespace: 'nowrap' }}>{multiLangObj?.noMoreThan}</span>
+                <div className="deadline-label">Max. same group limit</div>
+                <div>
+                  No More Than
+                </div>
+                <div>
                   <CFormSelect
-                    className="w-50"
-                    options={[
-                      { label: multiLangObj?.numberTen, value: '10' },
-                      { label: multiLangObj?.numberTwenty, value: '20' },
-                      { label: multiLangObj?.numberThirty, value: '30' },
-                      { label: multiLangObj?.numberForty, value: '40' },
-                      { label: multiLangObj?.numberFifty, value: '50' },
-                      { label: multiLangObj?.numberSixty, value: '60' },
-                      { label: multiLangObj?.numberSeventy, value: '70' },
-                      { label: multiLangObj?.numberEighty, value: '80' },
-                      { label: multiLangObj?.numberNinety, value: '90' },
-                      { label: multiLangObj?.numberHundred, value: '100' },
-                    ]}
-                    value={maxParticipantsPerGroup}
-                    onChange={(e) => setMaxParticipantsPerGroup(e.target.value)}
-                  />
-                  <span>%</span>
+                        className='mx-2'
+                        options={[
+                            { label: '10', value: '10' },
+                            { label: '20', value: '20' },
+                            { label: '30', value: '30' },
+                            { label: '40', value: '40' },
+                            { label: '50', value: '50' },
+                            { label: '60', value: '60' },
+                            { label: '70', value: '70' },
+                            { label: '80', value: '80' },
+                            { label: '90', value: '90' },
+                            { label: '100', value: '100' },
+                        ]}
+                        value={maxParticipantsPerGroup}
+                        onChange={(e) => setMaxParticipantsPerGroup(e.target.value)}
+                    />
                 </div>
               </div>
-              {(recruitmentStart === '' || new Date() <= new Date(recruitmentStart)) &&
-                <div className="d-flex justify-content-evenly">
-                  <CButton onClick={confirmationCloseModalHandler}>{multiLangObj?.cancel}</CButton>
-                  <CButton onClick={validateClubPeriodHandler}>{periodId ? multiLangObj?.update : multiLangObj?.save}</CButton>
-                </div>
-              }
-              {(new Date() > new Date(recruitmentStart)) &&
-                <div className="d-flex justify-content-evenly">
-                  <CButton onClick={confirmationCloseModalHandler}>{multiLangObj?.close}</CButton>
-                </div>
-              }
-            </CModalBody>
+              <div className="d-flex justify-content-evenly">
+                <CButton onClick={cancelPeriodModalHandler}>Cancel</CButton>
+                <CButton onClick={validateClubPeriodHandler}>{periodId ? 'Update' : 'Save'}</CButton>
+              </div>
+          </CModalBody>
         </CModal>
-      </div>)}
+      </div>}
       <div className='toggleContainer'>
-        <div>{multiLangObj?.clubBanner}</div>
-        <div>
-          <CFormSwitch
-            id="club_banner"
-            className="cFormSwitch"
-            onClick={handleShowClubBannerToggle}
-            defaultChecked={showClubBanner}
-          />
-        </div>
+        <div>Club Banner</div>
+        <div><CFormSwitch id="club_banner" className="cFormSwitch" onClick={handleShowClubBannerToggle} defaultChecked={showClubBanner}/></div>
       </div>
-      {showClubBanner && (
-        <div>
-          <CForm className="d-flex justify-content-end mt-2">
-            <CButton
-              color="dark"
-              className="my-2 my-sm-0 ps-3 pe-4"
-              type="button"
-              onClick={addNewClubBannerHandler}
-            >
-              {multiLangObj?.add}
-            </CButton>
-          </CForm>
-          {totalclubBannerDataCount > 0 && (
-            <p style={{ margin: 0 }}>{multiLangObj?.total}&nbsp;:&nbsp; {totalclubBannerDataCount}</p>
-          )}
-          <ReactTable
-            columns={clubBannerDataColumns}
-            data={clubBannerData}
-            showCheckbox={false}
-            onSelectionChange={() => {}}
-          />
-          <div className="d-flex w-100 justify-content-center gap-3">
-            {clubBannerData?.length > 0 && (
-              <div className="userlist-pagination">
-                <div className="userlist-pagination dataTables_paginate">
-                  <ReactPaginate
-                    breakLabel={'...'}
-                    marginPagesDisplayed={1}
-                    previousLabel={<button>{multiLangObj?.previous}</button>}
-                    nextLabel={<button>{multiLangObj?.next}</button>}
-                    pageCount={totalPagesClubBanner}
-                    onPageChange={handlePageChangeClubBanner}
-                    forcePage={currentPageClubBanner}
-                    renderOnZeroPageCount={null}
-                    pageRangeDisplayed={4}
-                  />
-                </div>
-              </div>
-            )}
-            {clubPeriodData?.length > 0 && (
-              <div className="d-flex align-items-center gap-2 mt-2">
-                <label>{multiLangObj?.show}</label>
-                <CFormSelect
-                  className=""
-                  aria-label=""
-                  options={paginationItemPerPageOptions}
-                  onChange={(event) => {
-                    setItemsPerPageClubBanner(parseInt(event?.target?.value))
-                    setCurrentPageClubBanner(0)
-                  }}
+      {showClubBanner && <div>
+        <CForm className="d-flex justify-content-end mt-2">
+          <CButton color="dark" className="my-2 my-sm-0 ps-3 pe-4" type="button" onClick={addNewClubBannerHandler}>
+            Add
+          </CButton>
+        </CForm>
+        {totalclubBannerDataCount > 0 && <p style={{ margin: 0 }}>Total&nbsp;:&nbsp; {totalclubBannerDataCount}</p>}
+        <ReactTable
+          columns={clubBannerDataColumns}
+          data={clubBannerData}
+          showCheckbox={false}
+          onSelectionChange={() => {}}
+        />
+        <div className="d-flex w-100 justify-content-center gap-3">
+          {clubBannerData?.length > 0 && (
+            <div className="userlist-pagination">
+              <div className="userlist-pagination dataTables_paginate">
+                <ReactPaginate
+                  breakLabel={'...'}
+                  marginPagesDisplayed={1}
+                  previousLabel={<button>Previous</button>}
+                  nextLabel={<button>Next</button>}
+                  pageCount={totalPagesClubBanner}
+                  onPageChange={handlePageChangeClubBanner}
+                  forcePage={currentPageClubBanner}
+                  renderOnZeroPageCount={null}
+                  pageRangeDisplayed={4}
                 />
-                <label>{multiLangObj?.lists}</label>
               </div>
-            )}
-          </div>
-
-          <CModal
-            className="modal-lg"
-            alignment="center"
-            visible={addModifyClubBannerModal}
+            </div>
+          )}
+          {clubPeriodData?.length > 0 && (
+            <div className="d-flex align-items-center gap-2 mt-2">
+              <label>Show</label>
+              <CFormSelect
+                className=""
+                aria-label=""
+                options={paginationItemPerPageOptions}
+                onChange={(event) => {
+                  setItemsPerPageClubBanner(parseInt(event?.target?.value))
+                  setCurrentPageClubBanner(0)
+                }}
+              />
+              <label>Lists</label>
+            </div>
+          )}
+        </div>
+        
+        <CModal className='modal-lg'
+          alignment="center"
+          visible={addModifyClubBannerModal}
+          onClose={() => {
+            setAddModifyClubBannerModal(false)
+          }}
+          backdrop="static"
+          aria-labelledby="LiveDemoExampleLabel"
+        >
+          <CModalHeader
             onClose={() => {
               setAddModifyClubBannerModal(false)
             }}
-            backdrop="static"
-            aria-labelledby="LiveDemoExampleLabel"
           >
-            <CModalHeader
-              onClose={() => {
-                setAddModifyClubBannerModal(false)
-              }}
-            >
-              <CModalTitle className="p-1">{multiLangObj?.bannerRegistration}</CModalTitle>
-            </CModalHeader>
-            <CModalBody>
-              <div className="card-body">
-                <div className="formWraper">
-                  <div className="form-outline form-white  d-flex ">
-                    <div className="formWrpLabel">
-                      <label className="fw-bolder ">
-                        {multiLangObj?.bannerTitle} <span className="mandatory-red-asterisk">*</span>
-                      </label>
+            <CModalTitle className="p-1">Banner Registration</CModalTitle>
+          </CModalHeader>
+          <CModalBody>              
+            <div className="card-body">
+              <div className="formWraper">
+                <div className="form-outline form-white  d-flex ">
+                  <div className="formWrpLabel">
+                    <label className="fw-bolder ">
+                      Banner Title <span className="mandatory-red-asterisk">*</span>
+                    </label>
+                  </div>
+                  <div className="formWrpInpt">
+                    <div className="d-flex formradiogroup mb-2 gap-3">
+                      <CFormInput
+                        type="text"
+                        placeholder="Enter Title Here"
+                        name="title"
+                        value={bannerTitle}
+                        onChange={(e) => {
+                          setBannerTitle(e.target.value)
+                        }}
+                      />
                     </div>
-                    <div className="formWrpInpt">
-                      <div className="d-flex formradiogroup mb-2 gap-3">
-                        <CFormInput
-                          type="text"
-                          placeholder={multiLangObj?.enterTitleHere}
-                          name="title"
-                          value={bannerTitle}
-                          onChange={(e) => {
-                            setBannerTitle(e.target.value)
-                          }}
+                  </div>
+                </div>
+                <div className="form-outline form-white  d-flex ">
+                  <div className="formWrpLabel">
+                    <label className="fw-bolder ">Posting Period</label>
+                  </div>
+                  <div className="upload-image-main-container">
+                    <div className="upload-img-btn-and-info">
+                      <div>
+                        <DatePicker
+                          value={bannerStartDate}
+                          minDate={new Date()}
+                          onChange={(event) => handleBannerStartDate(event)}
+                        />
+                      </div>
+                      <div>
+                        <input
+                          type="time"
+                          name="time"
+                          id="time"
+                          className="time-picker"
+                          value={`${bannerStartHours}:${bannerStartMins}`}
+                          onChange={(e) => bannerStartTimeHandler(e)}
+                        />
+                      </div>
+                      -&nbsp;&nbsp;
+                      <div>
+                        <DatePicker
+                          value={bannerEndDate}
+                          minDate={new Date()}
+                          onChange={(event) => handleBannerEndDate(event)}
+                        />
+                      </div>
+                      <div>
+                        <input
+                          type="time"
+                          name="time"
+                          id="time"
+                          className="time-picker"
+                          value={`${bannerEndHours}:${bannerEndMins}`}
+                          onChange={(e) => bannerEndTimeHandler(e)}
                         />
                       </div>
                     </div>
                   </div>
-                  <div className="form-outline form-white  d-flex ">
-                    <div className="formWrpLabel">
-                      <label className="fw-bolder ">{multiLangObj?.postingPeriod}</label>
-                    </div>
-                    <div className="upload-image-main-container">
-                      <div className="upload-img-btn-and-info">
-                        <div>
-                          <DatePicker
-                            value={bannerStartDate}
-                              onChange={(event) => handleBannerStartDate(event)}
-                          />
-                        </div>
-                        <div>
-                          <input
-                            type="time"
-                            name="time"
-                            id="time"
-                            className="time-picker"
-                            value={`${bannerStartHours}:${bannerStartMins}`}
-                            onChange={(e) => bannerStartTimeHandler(e)}
-                          />
-                        </div>
-                        -&nbsp;&nbsp;
-                        <div>
-                          <DatePicker
-                            value={bannerEndDate}
-                              onChange={(event) => handleBannerEndDate(event)}
-                          />
-                        </div>
-                        <div>
-                          <input
-                            type="time"
-                            name="time"
-                            id="time"
-                            className="time-picker"
-                            value={`${bannerEndHours}:${bannerEndMins}`}
-                            onChange={(e) => bannerEndTimeHandler(e)}
-                          />
-                        </div>
-                      </div>
-                    </div>
+                </div>
+                <div className="form-outline form-white  d-flex ">
+                  <div className="formWrpLabel">
+                    <label className="fw-bolder ">Upload Image</label>
                   </div>
-                  <div className="form-outline form-white  d-flex ">
-                    <div className="formWrpLabel">
-                      <label className="fw-bolder ">{multiLangObj?.uploadImage}</label>
-                    </div>
-                    <div className="upload-image-main-container">
-                      <div className="upload-img-btn-and-info">
-                        <div className="upload-container-btn">
-                          <label className="label-btn" color="dark" htmlFor="imageFiles">
-                            {multiLangObj?.upload}
-                            <input
-                              type="file"
-                              name="imageFiles"
-                              id="imageFiles"
-                              style={{ display: 'none' }}
-                              accept=".png, .jpg, .jpeg, .gif"
-                              onChange={(e) => setUploadedBannerImage(e.target.files[0])}
-                            />
-                          </label>
-                        </div>
-                        {uploadedBannerImage && (
-                          <div className="upload-images-container uploadImgWrap">
-                            <div className="thubmnail-img-container">
-                              <img src={URL.createObjectURL(uploadedBannerImage)} alt="" />
-                            </div>
+                  <div className="upload-image-main-container">
+                    <div className="upload-img-btn-and-info">
+                      <div className="upload-container-btn">
+                        <label className="label-btn" color="dark" htmlFor="imageFiles">
+                          Upload
+                          <input
+                            type="file"
+                            name="imageFiles"
+                            id="imageFiles"
+                            style={{ display: 'none' }}
+                            accept=".png, .jpg, .jpeg, .gif"
+                            onChange={(e) => setUploadedBannerImage(e.target.files[0])}
+                          />
+                        </label>
+                      </div>
+                      {uploadedBannerImage && <div className="upload-images-container uploadImgWrap">
+                          <div className='thubmnail-img-container'>
+                            <img src={URL.createObjectURL(uploadedBannerImage)} alt="" />
                           </div>
-                        )}
-                      </div>
+                      </div>}
                     </div>
                   </div>
-                  <div className="form-outline form-white  d-flex ">
-                    <div className="formWrpLabel">
-                      <label className="fw-bolder ">{multiLangObj?.bannerType}</label>
-                    </div>
-                    <div className="upload-image-main-container">
-                      <div className="push-notification-container gap-3">
-                        <CFormCheck
-                          type="radio"
-                          name="imageType"
-                          defaultChecked={imageType === 'bannerImageOnly'}
-                          onClick={() => {
-                            setImageType('bannerImageOnly')
-                            setLinkToUrl('')
-                            setPopupImage('')
-                          }}
-                          label={multiLangObj?.bannerImageOnly}
-                          value={true}
-                        />
-                      </div>
-                      <div className="push-notification-container gap-3">
-                        <CFormCheck
-                          type="radio"
-                          name="imageType"
-                          defaultChecked={imageType === 'linkTo'}
-                          onClick={() => {
-                            setImageType('linkTo')
-                            setPopupImage('')
-                          }}
-                          label={multiLangObj?.linkTo}
-                          value={false}
-                        />
-                        <CFormInput
-                          type="text"
-                          placeholder={multiLangObj?.enterUrl}
-                          name="title"
-                          value={linkToUrl}
-                          disabled={imageType !== 'linkTo'}
-                          onChange={(e) => {
-                            setLinkToUrl(e.target.value)
-                          }}
-                        />
-                      </div>
-                      <div className="push-notification-container gap-3">
-                        <CFormCheck
-                          type="radio"
-                          name="imageType"
-                          defaultChecked={imageType === 'popUpImage'}
-                          onClick={() => {
-                            setImageType('popUpImage')
-                            setLinkToUrl('')
-                          }}
-                          label={multiLangObj?.popupImage}
-                          value={false}
-                        />
-                        <label
-                          className="label-btn"
-                          color="dark"
-                          htmlFor="popupImg"
-                          style={{ display: `${imageType === 'popUpImage' ? '' : 'none'}` }}
-                        >
-                          {multiLangObj?.upload}
+                </div>
+                <div className="form-outline form-white  d-flex ">
+                  <div className="formWrpLabel">
+                    <label className="fw-bolder ">Banner Type</label>
+                  </div>
+                  <div className="upload-image-main-container">
+                  <div className="push-notification-container gap-3">
+                    <CFormCheck
+                      type="radio"
+                      name="imageType"
+                      defaultChecked={imageType === 'bannerImageOnly'}
+                      onClick={() => {setImageType('bannerImageOnly'); setLinkToUrl(''); setPopupImage('')}}
+                      label="Banner Image Only"
+                      value={true}
+                    />
+                  </div>
+                  <div className="push-notification-container gap-3">
+                    <CFormCheck
+                      type="radio"
+                      name="imageType"
+                      defaultChecked={imageType === 'linkTo'}
+                      onClick={() => {setImageType('linkTo'); setPopupImage('')}}
+                      label="Link To"
+                      value={false}
+                    />
+                    <CFormInput
+                        type="text"
+                        placeholder="Enter URL"
+                        name="title"
+                        value={linkToUrl}
+                        disabled={imageType !== 'linkTo'}
+                        onChange={(e) => {
+                          setLinkToUrl(e.target.value)
+                        }}
+                      />
+                  </div>
+                  <div className="push-notification-container gap-3">
+                    <CFormCheck
+                      type="radio"
+                      name="imageType"
+                      defaultChecked={imageType === 'popUpImage'}
+                      onClick={() => {setImageType('popUpImage'); setLinkToUrl('')}}
+                      label="Pop-up Image"
+                      value={false}
+                    />
+                    <label className="label-btn" color="dark" htmlFor="popupImg" style={{display: `${imageType === 'popUpImage' ? '' : 'none'}`}}>
+                          Upload
                           <input
                             type="file"
                             name="popupImg"
@@ -1452,57 +1378,24 @@ const ClubBoard = () => {
                             accept=".png, .jpg, .jpeg, .gif"
                             onChange={(e) => setPopupImage(e.target.files[0])}
                           />
-                        </label>
+                    </label>
+                  </div>
+                  {imageType === 'popUpImage' && popupImage && <div className="upload-images-container uploadImgWrap">
+                      <div className='thubmnail-img-container'>
+                        <img src={URL.createObjectURL(popupImage)} alt="" />
                       </div>
-                      {imageType === 'popUpImage' && popupImage && (
-                        <div className="upload-images-container uploadImgWrap">
-                          <div className="thubmnail-img-container">
-                            <img src={URL.createObjectURL(popupImage)} alt="" />
-                          </div>
-                        </div>
-                      )}
-                    </div>
+                  </div>}
                   </div>
                 </div>
               </div>
-              <div className="d-flex justify-content-evenly">
-                <CButton onClick={cancelClubBannerModalHandler}>{multiLangObj?.cancel}</CButton>
-                <CButton onClick={validateClubBannerHandler}>
-                  {bannerUpdateId ? multiLangObj?.update : multiLangObj?.save}
-                </CButton>
-              </div>
-            </CModalBody>
-          </CModal>
-        </div>
-      )}
-      {/* Club History Modal */}
-      <CModal
-          alignment="center"
-          visible={clubHistoryInfoPopup}
-          onClose={() => {
-            setClubHistoryInfoPopup(false)
-          }}
-          backdrop="static"
-          aria-labelledby="LiveDemoExampleLabel"
-        >
-          <CModalHeader
-            onClose={() => {
-              setClubHistoryInfoPopup(false)
-            }}
-          >
-            <CModalTitle className="p-1">{multiLangObj?.clubHistory}</CModalTitle>
-          </CModalHeader>
-          <CModalBody>
-            <ReactTable
-              columns={clubHistoryDataColumns}
-              data={clubHistoryData}
-              onSelectionChange={() => {
-                console.log('no action')
-              }}
-              showCheckbox={false}
-            />
+            </div>
+            <div className="d-flex justify-content-evenly">
+              <CButton onClick={cancelBannerModalHandler}>Cancel</CButton>
+              <CButton onClick={validateClubBannerHandler}>{periodId ? 'Update' : 'Save'}</CButton>
+            </div>
           </CModalBody>
         </CModal>
+      </div>}
     </div>
   )
 }

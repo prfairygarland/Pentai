@@ -620,12 +620,14 @@ const WelfareBoardPostListing = () => {
             </div>
             <div className="d-flex gap-3 mt-3">
               <CButton onClick={handleSearchfilter}>{multiLangObj?.search}</CButton>
-              <CButton onClick={resetFilter}>{multiLangObj?.reset}</CButton>
+              <CButton onClick={resetFilter} className="btn-black">
+                {multiLangObj?.reset}
+              </CButton>
             </div>
           </div>
           <div className="d-flex flex-column mt-3 p-3">
             {totalDataCount > 0 && (
-              <p style={{ margin: 0 }}>
+              <p style={{ margin: 0, marginBottom: 5 }}>
                 {multiLangObj?.total}&nbsp;:&nbsp; {totalDataCount}
               </p>
             )}

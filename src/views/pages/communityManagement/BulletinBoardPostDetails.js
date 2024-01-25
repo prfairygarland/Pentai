@@ -1243,7 +1243,7 @@ const BulletinBoardPostDetails = () => {
                                     onClick={() => {
                                       handleIdAndUserID('commentDelete', item?.id, item?.userId)
                                     }}
-                                    role="button"
+                                    role="button" className='btn btn-black'
                                   >
                                     {multiLangObj?.delete}
                                   </a>

@@ -245,11 +245,11 @@ const BulletinBoard = () => {
       {isLoading && <Loader />}
       <section>
         <div className="d-flex w-100">
-          <div className="w-50">
-            <div className="d-flex justify-content-end p-3 gap-2">
+          <div className="col-md-4">
+            <div className="d-flex justify-content-end pt-3 pb-3 gap-2">
               <CButton
                 type="submit"
-                className=" text-white btn-black"
+                className=" text-white "
                 onClick={() => setBulletinBoard()}
               >
                 {translationObject?.translation?.communityBoardManagement?.add}
@@ -402,7 +402,7 @@ const BulletinBoard = () => {
               </div>
             </div>
           ) : (
-            <div className="p-4">
+            <div className="col-md-8">
               <div>
                 <div className="p-3">
                   <main>
@@ -486,8 +486,8 @@ const BulletinBoard = () => {
                   </main>
                   <div className="save-cancel-btn-container">
                     <CButton
-                      className="btn save-cancel-btn"
-                      color="dark"
+                      className="btn btn-primary mt-3"
+                      
                       onClick={savePointsHandler}
                     >
                       {translationObject?.translation?.communityBoardManagement?.save}
