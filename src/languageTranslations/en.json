@@ -497,5 +497,10 @@
     "clubName": "Club Name",
     "createdDate": "Created Date"
   },
+  "meetingRoomsReservationManagement": {
+    "allReservation": "All Reservation",
+    "myReservation": "My Reservation",
+    "btnBookMeetingRooms": "Book Meeting Rooms"
+  },
   "New": "New"
 }
