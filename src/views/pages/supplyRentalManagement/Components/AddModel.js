@@ -176,9 +176,11 @@ const AddModel = ({ setModal, getMod, Modal, getMainModalId, getModalId, removeM
     <div className='col-md-9'>
       {isLoading && <Loader />}
       <div>
+        {getModalId !== null &&
         <div className='d-flex justify-content-end'>
           <CButton onClick={() => setDeleteVisible(true)}>Delete</CButton>
         </div>
+        }
         <div className="dropdown-container mb-2">
           <h5 className="me-3">Model Name</h5>
         </div>

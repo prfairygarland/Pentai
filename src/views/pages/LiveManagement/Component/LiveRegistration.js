@@ -49,8 +49,8 @@ const LiveRegistration = () => {
 
   const handleTimeInputChange = (e) => {
     // Validate and set the value within the desired range
-    const inputValue = parseInt(e.target.value, 10);
-    const newValue = isNaN(inputValue) ? 10 : Math.max(10, inputValue);
+    const sanitizedValue = e.target.value.replace(/[^0-9]/g, '');
+    const newValue = sanitizedValue
 
     setTimeLimit(newValue);
   };
@@ -386,6 +386,56 @@ const LiveRegistration = () => {
     let value = e.target.value
     value = value.substring(0, 50)
     setShortAnswer(value)
+  }
+
+  const validateQuize = () => {
+    console.log('time limit =>', timeLimit.length);
+    console.log('time selectedRadio =>', selectedRadio);
+    console.log('time answerSelectedRadio =>', answerSelectedRadio);
+    if (quizQuestion.trim() === '') {
+      enqueueSnackbar('Please enter a Question.', { variant: 'error' })
+      return false
+    } else if (selectedRadio === null) {
+      enqueueSnackbar('Please select quiz type', { variant: 'error' })
+      return false
+    } else if (selectedRadio === 'TrueFalse' && answerSelectedRadio === null) {
+      enqueueSnackbar('Please select answer', { variant: 'error' })
+      return false
+    } else if (selectedRadio === 'Image') {
+      if (uploadedImages.length < 1) {
+        enqueueSnackbar('Please select Image', { variant: 'error' })
+        return false
+      }
+      if (uploadedImages.length < 2) {
+        enqueueSnackbar('Please select atleast 2 images', { variant: 'error' })
+        return false
+      }
+    } else if (selectedRadio === 'MultipleChoice') {
+      const hasEmptyField = inputValues.some((input) => !input.value.trim());
+
+      if (hasEmptyField) {
+        enqueueSnackbar(`Add Answer`, { variant: 'error' })
+        return
+      }
+      if (inputValues.length < 2) {
+        enqueueSnackbar('Please add atleast 2 options', { variant: 'error' })
+        return false
+      }
+    } else if (selectedRadio === 'ShortAnswer') {
+      if (shortAnswer === '') {
+        enqueueSnackbar('Please enter a Answer.', { variant: 'error' })
+        return false
+      }
+    } else if (timeLimit.length === 0) {
+      enqueueSnackbar('Please enter a Time limit.', { variant: 'error' })
+
+    } else if (timeLimit.length > 0 && timeLimit[0] === '0') {
+      enqueueSnackbar('First digit cannot be 0. Please enter a valid Time limit.', { variant: 'error' })
+    }
+    // else {
+    //   confirmationSaveClubBannerModalHandler(true)
+    //   // enqueueSnackbar(' uploaded image', { variant: 'success' })
+    // }
   }
 
   return (
@@ -1024,7 +1074,7 @@ const LiveRegistration = () => {
                           <h5>Time limit</h5>
                           <CFormInput
                             className='w-25'
-                            type='number'
+                            type='text'
                             value={timeLimit}
                             onChange={handleTimeInputChange}
                           />
@@ -1112,7 +1162,7 @@ const LiveRegistration = () => {
                     <CButton color="secondary" onClick={() => setVisible(false)}>
                       Close
                     </CButton>
-                    <CButton color="primary">Save</CButton>
+                    <CButton color="primary" onClick={() => validateQuize()}>Save</CButton>
                   </CModalFooter>
                 </CModal>
               </div>

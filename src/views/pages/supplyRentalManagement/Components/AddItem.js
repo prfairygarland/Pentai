@@ -427,9 +427,11 @@ const AddItem = ({ getVal, setCat, setSubIcon, setModalIcon, setModal, getMod, m
     <div className='col-md-9'>
       {isLoading && <Loader />}
       <div className='addItemWrp'>
+        {getItemId !== null &&
         <div className='d-flex justify-content-end'>
           <CButton onClick={() => setDeleteVisible(true)}>Delete</CButton>
         </div>
+        }
         <div className="dropdown-container mb-2">
           <h5 className="me-3">Item Number</h5>
         </div>
