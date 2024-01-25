@@ -21,6 +21,9 @@ import AllSupplies from './views/pages/supplyRentalManagement/allSupplies'
 import LiveManagement from './views/pages/LiveManagement/LiveManagement'
 import LiveRegistration from './views/pages/LiveManagement/Component/LiveRegistration'
 
+import MeetingRoomsReservationStatus from './views/pages/MeetingRoomsResMgmt/MeetingRoomsReservationStatus'
+import AllMeetingRooms from './views/pages/MeetingRoomsResMgmt/AllMeetingRooms'
+
 const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
 
 const routes = [
@@ -67,6 +70,10 @@ const routes = [
   { path: '/LiveManagement', name: 'Live Management', element: LiveManagement },
   { path: '/LiveManagement/LiveRegistration', name: 'Live Registration', element: LiveRegistration },
 
+
+  //Meeting Rooms Reservation Management
+  { path: '/AllMeetingRooms', name: 'All Meeting Rooms', element: AllMeetingRooms },
+  { path: '/MeetingRoomReservationStatus', name: 'Meeting Room Reservation Status', element: MeetingRoomsReservationStatus },
 
 ]
 

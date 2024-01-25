@@ -116,9 +116,14 @@ export let API_ENDPOINT = {
   delete_banner: ALL_CONSTANTS.API_URL + "/admin/bookRental/deleteBanner",
   create_banner: ALL_CONSTANTS.API_URL + "/admin/bookRental/createBanner",
   update_banner: ALL_CONSTANTS.API_URL + "/admin/bookRental/updateBannerCategory",
-  update_bannerCategory: ALL_CONSTANTS.API_URL + "/admin/bookRental/updateBannerCategory"
+  update_bannerCategory: ALL_CONSTANTS.API_URL + "/admin/bookRental/updateBannerCategory",
 
-
+  meeting_lists: ALL_CONSTANTS.API_URL + "/admin/meeting/list",
+  building_lists: ALL_CONSTANTS.API_URL + "/admin/meeting/building/list",
+  floor_lists: ALL_CONSTANTS.API_URL + "/admin/meeting/floor/list",
+  meeting_details: ALL_CONSTANTS.API_URL + "/admin/meeting/meetingDetail",
+  reservation_details: ALL_CONSTANTS.API_URL + "/admin/meeting/reservationDetail",
+  
 
 
 
