@@ -35,15 +35,16 @@ const LiveRegistration = () => {
   // Quiz
   const [visible, setVisible] = useState(false)
   const [quizToggle, setQuizToggle] = useState(false);
+  const [quizQuestion, setQuizQuestion] = useState('')
   const [selectedRadio, setSelectedRadio] = useState(null);
   const [answerSelectedRadio, setAnswerSelectedRadio] = useState(null);
-  const [quizQuestion, setQuizQuestion] = useState('')
   const [rewardPointsToggle, setrewardPointsToggle] = useState(false)
   const [rewardPointsCheckBox, setrewardPointsCheckBox] = useState(true)
   const [uploadedImages, setUploadedImages] = useState([])
   const [inputValues, setInputValues] = useState([{ value: '', answer: true }]);
   const [shortAnswer, setShortAnswer] = useState('')
   const [timeLimit, setTimeLimit] = useState(10)
+  const [mainQuizs, setMainQuizs] = useState([])
 
 
   const handleTimeInputChange = (e) => {
@@ -274,10 +275,6 @@ const LiveRegistration = () => {
     setSelectedRadio(value);
   };
 
-  const handleAnswerRadioChange = (value) => {
-    setSelectedRadio(value);
-  };
-
   const handleQuizeToggle = async () => {
     setQuizToggle((prevState) => !prevState)
     if (quizToggle === false) {
@@ -390,7 +387,6 @@ const LiveRegistration = () => {
     value = value.substring(0, 50)
     setShortAnswer(value)
   }
-
 
   return (
     <div className='mb-5'>

@@ -20,7 +20,6 @@ import SupplyRentalStatus from './views/pages/supplyRentalManagement/supplyRenta
 import AllSupplies from './views/pages/supplyRentalManagement/allSupplies'
 import LiveManagement from './views/pages/LiveManagement/LiveManagement'
 import LiveRegistration from './views/pages/LiveManagement/Component/LiveRegistration'
-
 import MeetingRoomsReservationStatus from './views/pages/MeetingRoomsResMgmt/MeetingRoomsReservationStatus'
 import AllMeetingRooms from './views/pages/MeetingRoomsResMgmt/AllMeetingRooms'
 
