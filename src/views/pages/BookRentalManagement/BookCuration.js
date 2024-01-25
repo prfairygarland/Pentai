@@ -21,6 +21,7 @@ import IndividualCurBook from './Component/IndividualCurBook'
 import CurationSearchBook from './Component/CurationSearchBook'
 import CurationRegisterBook from './Component/CurationRegisterBook'
 import CurationBookDetails from './Component/CurationBookDetails'
+import moment from 'moment/moment'
 
 const initialData = {
     title: '',
@@ -74,6 +75,11 @@ const BookCuration = () => {
     const [library, setLibrary] = useState([
         { id: 1, name: 'Library', subcategories: [] },
     ]);
+    const [searchBookTitle, setSearchBookTitle] = useState('')
+    const [searchCurationBookDetail, setCurationSearchBookDetail] = useState([])
+    const [searchItemPerPage, setItemPerPage] = useState(3)
+    const [currentSearchPage, setSearchCurrentPage] = useState(0)
+    const [totalSearchPage, setSearchtotalPage] = useState(0)
 
 
     //displaying all the curationlists
@@ -120,7 +126,6 @@ const BookCuration = () => {
         else {
             setSubCategory([])
         }
-
     }
 
 
@@ -128,7 +133,7 @@ const BookCuration = () => {
     const SearchBookList = async () => {
         let url = `${API_ENDPOINT.searchGoogleBook}`
         if (searchBookFilter.title) {
-            url = url + `?searchByName=${searchBookFilter.title}&limit=${currentPage + 1}&offset=${totalPages}`
+            url = url + `?searchByName=${searchBookFilter.title}&limit=${searchItemPerPage}&offset=${currentSearchPage + 1}`
         }
 
         try {
@@ -141,6 +146,13 @@ const BookCuration = () => {
         }
 
     }
+
+    useEffect(() => {
+        const data = searchBooks.filter((item) => item?.title === searchBookTitle)
+  
+        setCurationSearchBookDetail(data)
+  
+      }, [searchBookTitle])
 
 
     //hiding or showing the category based on visibility
@@ -194,10 +206,6 @@ const BookCuration = () => {
         }
     }
 
-    useEffect(() => {
-        getBookList()
-    }, [stateupDate])
-
 
     useEffect(() => {
         getBookGenre()
@@ -249,7 +257,7 @@ const BookCuration = () => {
         {
             Header: 'Display period',
             accessor: 'display',
-            Cell: ({ row }) => <p>{row.original.isExpired === 'yes' ? 'No expiration date' : <><p>{row.original.startDateTime}</p><p>{row.original.endDateTime}</p></>}</p>,
+            Cell: ({ row }) => <p>{row.original.isExpired === 'yes' ? 'No expiration date' : <><p>{moment(row.original.startDateTime).format("YYYY-MM-DD HH:mm")}</p><p>{moment(row.original.endDateTime).format("YYYY-MM-DD HH:mm")}</p></>}</p>,
 
         },
 
@@ -444,14 +452,16 @@ const BookCuration = () => {
 
     //get books by genreId
 
-    console.log('categoryId', categoryID)
+    // console.log('categoryId', categoryID)
 
 
     useEffect(() => {
+        getBookList()
         getALLBookgenre()
-        handleAddSubcategory()
-        // handleAddBook(categoryID, subCategoryID)
-    }, [deleted])
+    }, [stateupDate])
+
+
+    console.log('state', stateupDate)
 
     // get singleBook By Id
     const DisplayBook = async (id) => {
@@ -495,7 +505,8 @@ const BookCuration = () => {
 
     return (
         <div style={{ display: 'flex' }}>
-            <CSidebar>
+            <div className='col-md-4'>
+            <CSidebar className='w-100 pe-3'>
                 <CSidebarBrand className=' black-text d-flex justify-content-start p-3' style={{ color: 'black', background: 'none' }}><h5>Category Hierarchy</h5></CSidebarBrand>
                 <div>
                     <CSidebarBrand className=' black-text mb-2' style={{ color: 'black', background: 'none' }}>
@@ -511,17 +522,19 @@ const BookCuration = () => {
                         <CNavItem className='mb-3' key={category.id} >
                             <div className='d-flex w-100'>
                                 <div className='d-flex w-100 flex-column'>
-                                    <div className='d-flex w-100 justify-content-between '>
+                                    <div className='d-flex w-100 justify-content-between align-items-center '>
+                                        <div className='d-flex justify-content-between w-100'>
                                         <div className='d-flex align-items-center gap-1'>
                                             {iconSet !== category.categoryId && <CIcon icon={cilCaretRight} size="sm" onClick={() => { getSubCategoryList(category?.categoryId); handleChangeIcon(category.categoryId); handleGetbookBysubCategory(category.categoryId) }} />}
                                             {iconSet === category.categoryId && <CIcon icon={cilCaretBottom} size="sm" onClick={() => handleChangeIcon(null)} />}
-                                            <p role='button' >{category.categoryName}</p>
+                                            <p onClick={() => {setCategories('Curation');setCategoryID(category.categoryId);getCategoryDetails(category.categoryId)}} role='button' >{category.categoryName}</p>
                                         </div>
-                                        <div>
+                                        <div className='pe-1'>
                                             <p>{category.curationType}</p>
                                         </div>
-                                        <div>
-                                            <CButton onClick={() => {handleSetCategory(category.curationType, null);setCategoryID(category?.categoryId)}} className='btn-sm'>Add sub</CButton>
+                                        </div>
+                                        <div className='flex'>
+                                            <CButton onClick={() => {handleSetCategory(category.curationType, null);setCategoryID(category?.categoryId)}} className=' flex-nowrap' style={{whiteSpace:'nowrap'}} >Add sub</CButton>
                                         </div>
                                     </div>
                                     <div>
@@ -596,15 +609,17 @@ const BookCuration = () => {
                 </CSidebarNav>
 
             </CSidebar>
-
+            </div>
             {/* </div>   */}
             {categories === 'itemNumber' && <ItemNumber Genre={Genre} bookId={bookId} genreBooks={genreBooks} library={library} />}
             {categories === 'Curation' && <CurationForm setCategories={setCategories} categoryID={categoryID} categoryDetails={categoryDetails} curation={curation} setStateUpdate={setStateUpdate} />}
             {/* {categories === 'indvBook' && <IndividualCurBook setStateUpdate={setStateUpdate} />} */}
 
-            {categories === 'curationBookdetails' && <CurationBookDetails setCategories={setCategories} categoryID={categoryID} bookId={bookId} subCategoryID={subCategoryID} subCategoryBookID={subCategoryBookID} bookDisplay={bookDisplay} setStateUpdate={setStateUpdate} />}
-            {categories === 'seriesBook' && <SeriesCategory categoryID={categoryID} subCategoryDetail={subCategoryDetail} subCategoryID={subCategoryID} setStateUpdate={setStateUpdate} />}
-            {categories === 'AllCuration' && <div style={{ padding: 5, minHeight: '100%' }}>
+            {categories === 'curationBookdetails' && <CurationBookDetails setStateUpdate={setStateUpdate} setCategories={setCategories} categoryID={categoryID} bookId={bookId} subCategoryID={subCategoryID} subCategoryBookID={subCategoryBookID} bookDisplay={bookDisplay} />}
+            {categories === 'seriesBook' && <SeriesCategory setCategories={setCategories} categoryID={categoryID} subCategoryDetail={subCategoryDetail} subCategoryID={subCategoryID} setStateUpdate={setStateUpdate} />}
+            {categories === 'AllCuration' && 
+            
+            <div className='col-md-8' style={{ padding: 5, minHeight: '100%' }}>
                 <div>
                     <p style={{ fontSize: 'medium', padding: 5, marginTop: '10%' }}>Total: {AllCurationList?.length}</p>
                 </div>  
@@ -664,8 +679,8 @@ const BookCuration = () => {
                     </div>
                 </div>
                 {categories === 'indvBook' && (<div>
-                    {Curationbook === 'Curationsearch' && <CurationSearchBook setCurationBook={setCurationBook} searchBookFilter={searchBookFilter} setSearchBookFilter={setSearchBookFilter} searchBooks={searchBooks} SearchBookList={SearchBookList} />}
-                    {Curationbook === 'CurationRegister' && <CurationRegisterBook setCurationBook={setCurationBook} setDeleted={setDeleted} setSearchBooks={setSearchBooks} searchBooks={searchBooks} />}
+                    {Curationbook === 'Curationsearch' && <CurationSearchBook setSearchBookTitle={setSearchBookTitle} setCurationBook={setCurationBook} searchBookFilter={searchBookFilter} setSearchBookFilter={setSearchBookFilter} searchBooks={searchBooks} SearchBookList={SearchBookList} />}
+                    {Curationbook === 'CurationRegister' && <CurationRegisterBook setCurationSearchBookDetail={setCurationSearchBookDetail} searchCurationBookDetail={searchCurationBookDetail} setCategories={setCategories} setCurationBook={setCurationBook} setDeleted={setDeleted} setSearchBooks={setSearchBooks} searchBooks={searchBooks} />}
                 </div>)}
 
             </div>}

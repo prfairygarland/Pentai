@@ -1,9 +1,10 @@
 import { CButton } from '@coreui/react'
 import React, { useEffect } from 'react'
+import ReactPaginate from 'react-paginate'
 import ReactTable from 'src/components/common/ReactTable'
 import { API_ENDPOINT } from 'src/utils/config'
 
-const SearchBooks = ({ searchBooks, searchBookFilter, SearchBookList, setSearchBookFilter, setBook }) => {
+const SearchBooks = ({ searchBooks, totalSearchPage, currentSearchPage,setSearchCurrentPage, setSearchBookTitle, searchBookFilter, SearchBookList, setSearchBookFilter, setBook }) => {
 
     const handleChange = (e) => {
         const value = e.target.value
@@ -16,13 +17,18 @@ const SearchBooks = ({ searchBooks, searchBookFilter, SearchBookList, setSearchB
     }
 
 
-    const PostData = () => {
+    const PostData = (title) => {
         setBook('Register')
         setSearchBookFilter({
             title: ''
         })
 
+        setSearchBookTitle(title)
+    }
 
+    const handlePageChange = (selectedPage) => {
+        // setCurrentPage(selectedPage.selected)
+        setSearchCurrentPage(selectedPage)
     }
 
     return (
@@ -33,18 +39,19 @@ const SearchBooks = ({ searchBooks, searchBookFilter, SearchBookList, setSearchB
             </div>
             <div>
 
-                {
-                    searchBooks?.map((item, i) => (
-                        <table border="1" className="table table-bordered" key={i}>
-                            <thead>
-                                <tr>
-                                    <th>Book Cover Image</th>
-                                    <th>Book Information</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
+
+                <table border="1" className="table table-bordered" >
+                    {searchBooks.length > 0 && (<thead>
+                        <tr>
+                            <th>Book Cover Image</th>
+                            <th>Book Information</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>)}
+                    <tbody>
+                        {
+                            searchBooks?.map((item, i) => (
+                                <tr key={i}>
                                     <td> <img src={item?.imageLinks?.thumbnail} />  </td>
                                     <td>
                                         <table className="table table-bordered">
@@ -53,7 +60,7 @@ const SearchBooks = ({ searchBooks, searchBookFilter, SearchBookList, setSearchB
                                                 <td>{item?.industryIdentifiers ? item?.industryIdentifiers[0]?.identifier : 'NA'}</td>
                                             </tr>
                                             <tr>
-                                                <td>Title</td>
+                                                <td>Book Title</td>
                                                 <td>{item?.title ? item?.title : ''}</td>
                                             </tr>
                                             <tr>
@@ -62,34 +69,31 @@ const SearchBooks = ({ searchBooks, searchBookFilter, SearchBookList, setSearchB
                                             </tr>
                                         </table>
                                     </td>
-                                    <td><CButton onClick={PostData}>Add</CButton></td>
+                                    <td><CButton onClick={() => PostData(item?.title)}>Add</CButton></td>
                                 </tr>
+                            ))
+                        }
 
-                            </tbody>
-                        </table>
-                        // <div style={{ display: 'flex', flexDirection: 'row', width: '100%', justifyContent: 'space-between' }} key={i}>
-                        //     <div style={{ width: '25%', border: '1px solid black', paddingLeft:'5%'}}>
-                        //         <div style={{height:'100px', width:'50%', margin:'5%'}}>
-                        //         <img  src={item?.imageLinks?.thumbnail} style={{ width: '100px', height:'100px' }} />
-                        //         </div>
-                        //     </div>
-                        //     <div style={{ display: 'flex', flexDirection: 'row', border: '1px solid black', width: '50%' }}>
-                        //         <div style={{ borderRight: '1px solid black', width: '30%' }}>
-                        //             <p style={{ padding: 8, borderBottom:'1px solid' }}>ISBN</p>
-                        //             <p style={{ padding: 8 , borderBottom:'1px solid' }}>title</p>
-                        //             <p style={{ padding: 5  }}>Author</p>
-                        //         </div>
-                        //         <div style={{width:'100%'}}>
-                        //             <p style={{ padding: 8,  borderBottom:'1px solid' }}>{item?.industryIdentifiers ? item?.industryIdentifiers[0]?.identifier : 'NA' }</p>
-                        //             <p style={{ padding: 8,  borderBottom:'1px solid' }}>{item?.title ? item?.title : ''}</p>
-                        //             <p style={{ padding: 5 }}>{item?.authors ? item?.authors[0] : 'NA'}</p>
-                        //         </div>
-                        //     </div>
-                        //     <div style={{ width: '25%', alignItems: 'center', justifyContent: 'center', border: '1px solid black', paddingLeft:'60px', paddingTop:'30px' }}>
-                        //         <CButton onClick={PostData}>Add</CButton>
-                        //     </div>
-                        // </div>
-                    ))
+                    </tbody>
+                </table>
+                {searchBooks.length > 0 &&
+                    <div className='userlist-pagination'>
+                        <div className='userlist-pagination dataTables_paginate'>
+                            <ReactPaginate
+                                breakLabel={'...'}
+                                marginPagesDisplayed={1}
+                                previousLabel={<button>Previous</button>}
+                                nextLabel={<button>Next</button>}
+                                pageCount={totalSearchPage}
+                                onPageChange={handlePageChange}
+                                forcePage={currentSearchPage}
+                                // renderOnZeroPageCount={null}
+                                pageRangeDisplayed={3}
+                            />
+                        </div>
+
+                    </div>
+
                 }
 
             </div>

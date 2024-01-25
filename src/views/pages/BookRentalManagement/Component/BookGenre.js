@@ -3,7 +3,7 @@ import { CButton, CFormCheck, CFormInput, CFormSelect, CFormTextarea, CModal, CM
 import { API_ENDPOINT } from 'src/utils/config'
 import { deleteApi, getApi, postApi, putApi } from 'src/utils/Api'
 
-const BookGenre = ({ library, setDeleted, getALLBookgenre, setCategories, genreId}) => {
+const BookGenre = ({ library, setDeleted, getALLBookgenre, setFilteredData, setCategories, genreId}) => {
 
     const [data, setData] = useState({
         title: 'New',
@@ -192,6 +192,18 @@ const BookGenre = ({ library, setDeleted, getALLBookgenre, setCategories, genreI
         }
     }
 
+    const handleCancel = () => {
+        setCategories('AllBooks')
+        setDeleted((prev) => prev + 1)
+        setFilteredData({
+            title: '',
+            bookGenre: '',
+            itemStatus: '',
+            visibility: '',
+            status: ''
+        })
+    }
+
     return (
         <div  style={{ width: '100%', borderRadius: '0' }}>
             <div className="card p-2">
@@ -291,7 +303,7 @@ const BookGenre = ({ library, setDeleted, getALLBookgenre, setCategories, genreI
                 </div>
             </div>
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '5%', gap: 10 }}>
-                <CButton onClick={() =>setCategories('AllBooks') } style={{ marginRight: '2%', background: '#ccc', border: 'none' }}>Cancel</CButton>
+                <CButton onClick={handleCancel} style={{ marginRight: '2%', background: '#ccc', border: 'none' }}>Cancel</CButton>
                 <CButton onClick={genreId ? handleUpdateGenre : handleCreateGenre}>Save</CButton>
             </div>
             <CModal

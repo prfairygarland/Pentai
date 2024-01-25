@@ -24,7 +24,7 @@ const RentalStatus = ({ RentalStatusData, setRentalStatusData, setUserInfoPopup 
             }
         })
         setVisible(false)
-        // setUserInfoPopup(false)
+        setUserInfoPopup(false)
     }
 
 

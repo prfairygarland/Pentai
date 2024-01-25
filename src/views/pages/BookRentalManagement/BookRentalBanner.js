@@ -44,6 +44,8 @@ const BookRentalBanner = () => {
 
     }
 
+    console.log('bannerList', bannerList)
+
 
     async function urlToBlob(url) {
         const response = await fetch(url)
@@ -53,7 +55,7 @@ const BookRentalBanner = () => {
 
     const urlsToFiles = async (url) => {
         if (!url) return
-        const blob = await urlToBlob(imageUrl + `/${url}`)
+        const blob = await urlToBlob(imageUrl + url)
         const fileName = url
         return new File([blob], fileName, { type: blob.type })
     }
@@ -62,7 +64,7 @@ const BookRentalBanner = () => {
         let url = `${API_ENDPOINT.get_banner_CategoryDetail}`
 
         const res = await getApi(url)
-        if (res.status === 200) {
+        if (res?.status === 200) {
             setBannerSetting(res.data)
             //   enqueueSnackbar('Banner updated success', { variant: 'success' })
         }
@@ -205,6 +207,7 @@ const BookRentalBanner = () => {
     const saveClubBannerHandler = async () => {
         try {
             const formData = new FormData()
+            formData.append('bannerCategoryId', bannerSetting.id)
             formData.append('title', bannerTitle)
             formData.append('image', uploadedBannerImage)
             formData.append('type', imageType)
@@ -236,8 +239,8 @@ const BookRentalBanner = () => {
                     enqueueSnackbar(res?.data?.error, { variant: 'error' })
                 } else {
                     bannerUpdateId ?
-                        enqueueSnackbar('Club Banner Updated Successfully', { variant: 'success' }) :
-                        enqueueSnackbar('Club Banner Added Successfully', { variant: 'success' })
+                        enqueueSnackbar('Banner Updated Successfully', { variant: 'success' }) :
+                        enqueueSnackbar('Banner Added Successfully', { variant: 'success' })
                 }
                 getBannerList()
             }
@@ -344,6 +347,7 @@ const BookRentalBanner = () => {
             if (res?.data?.status === 200) {
                 getBannerList()
                 enqueueSnackbar('Banner Deleted Successfully', { variant: 'success' })
+                setDeleteVisible(false)
             } else {
                 enqueueSnackbar('Something went wrong, please try later!', { variant: 'success' })
             }
@@ -399,7 +403,7 @@ const BookRentalBanner = () => {
             Header: 'Thumbnail Image',
             accessor: '',
             Cell: ({ row }) =>
-                <img alt="" crossOrigin='anonymous' src={imageUrl + `/${row?.original?.image}`} style={{ width: '100%', height: '100px' }}></img>
+                <img alt="" crossOrigin='anonymous' src={imageUrl + row?.original?.image} style={{ width: '100%', height: '100px' }}></img>
 
         },
         {
@@ -410,7 +414,7 @@ const BookRentalBanner = () => {
         {
             Header: 'Posting Period',
             accessor: '',
-            Cell: ({ row }) => <p>{row.original.isExpired === 'no' ? `${moment(row.original.startDateTime).format("YYYY-MM-DD HH:mm:ss")}~${moment(row.original.endDateTime).format("YYYY-MM-DD HH:mm:ss")}` : 'No expiration date'} </p>,
+            Cell: ({ row }) => <p>{row.original.isExpired === 'no' && (row.original.startDateTime && row.original.endDateTime) ? `${moment(row.original.startDateTime).format("YYYY-MM-DD HH:mm")}~${moment(row.original.endDateTime).format("YYYY-MM-DD HH:mm:ss")}` : 'No expiration date'} </p>,
 
         },
         {
@@ -432,7 +436,7 @@ const BookRentalBanner = () => {
         {
             Header: 'Action',
             accessor: 'button',
-            Cell: ({ row }) => <CButton className='mx-3 rounded border-1' onClick={() => { setDeleteId(row.original.id); setDeleteVisible(true) }}>Delete</CButton>
+            Cell: ({ row }) => <CButton className='mx-3 rounded border-1 btn-black' onClick={() => { setDeleteId(row.original.id); setDeleteVisible(true) }}>Delete</CButton>
 
         },
     ], [])

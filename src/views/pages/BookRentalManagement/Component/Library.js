@@ -4,13 +4,13 @@ import React, { useEffect, useState } from 'react'
 import { putApi } from 'src/utils/Api'
 import { API_ENDPOINT } from 'src/utils/config'
 
-const Library = ({ library, CategoryId, libraryDetails }) => {
+const Library = ({ library, CategoryId, setCategories, libraryDetails }) => {
 
     const [data, setData] = useState({
         title: '',
         code: '',
         AssociiatedItems: '',
-        isVisible: false,
+        isVisible: true,
         rentableDurationWeek:'',
         extendDurationWeek:'',
         pickUpAndReturn:''
@@ -54,6 +54,8 @@ const Library = ({ library, CategoryId, libraryDetails }) => {
        }
     }
 
+    console.log('libr', libraryDetails)
+
     const updateLibrary = async () =>{
         const body = {
          id:libraryDetails.id,
@@ -66,10 +68,10 @@ const Library = ({ library, CategoryId, libraryDetails }) => {
         }
  
         console.log('body', body)
-        const res = await putApi(API_ENDPOINT.update_libraries, libraryDetails.id, body)
+        const res = await putApi(API_ENDPOINT.update_libraries, body)
         if(res.data.status === 200){
             enqueueSnackbar("Library updates successfully", { variant: "success" })
-         console.log('res', res.data)
+            setCategories('AllBooks')
         }
         else{
          console.log('Api fail')
@@ -215,17 +217,17 @@ const Library = ({ library, CategoryId, libraryDetails }) => {
                                     <CFormCheck
                                         type="radio"
                                         name="isVisible"
-                                        // defaultChecked={data.isVisible}
+                                        defaultChecked={data.isVisible}
                                         onChange={() => setData((prev) => ({ ...prev, isVisible: true }))}
                                         label="Yes"
                                         value={true}
-                                        checked={data.isVisible === true}
+                                        // checked={data.isVisible === true}
                                     //   disabled={location?.state?.postId ? true : false}
                                     />
                                     <CFormCheck
                                         type="radio"
                                         name="isVisible"
-                                        // defaultChecked={!data.isVisible}
+                                        defaultChecked={!data.isVisible}
                                         onClick={() => setData((prev) => ({ ...prev, isVisible: false }))}
                                         label="No"
                                         value={false}
@@ -240,7 +242,7 @@ const Library = ({ library, CategoryId, libraryDetails }) => {
                         <div className="form-outline form-white  d-flex ">
                             <div className="formWrpLabel">
                                 <label className="fw-bolder ">
-                                    Point of pick and return
+                                    Point of pick up and return
                                 </label>
                             </div>
                             <div className="formWrpInpt">
@@ -259,7 +261,7 @@ const Library = ({ library, CategoryId, libraryDetails }) => {
                 </div>
             </div>
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '5%', gap: 10 }}>
-                <CButton style={{ marginRight: '2%', background: '#ccc', border: 'none' }}>Cancel</CButton>
+                <CButton onClick={() => setCategories('AllBooks')} style={{ marginRight: '2%', background: '#ccc', border: 'none' }}>Cancel</CButton>
                 <CButton onClick={updateLibrary}>Save</CButton>
             </div>
         </div>
