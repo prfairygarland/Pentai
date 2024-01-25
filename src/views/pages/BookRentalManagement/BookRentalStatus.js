@@ -318,7 +318,7 @@ const BookRentalStatus = () => {
             </div>
             <div className='d-flex justify-content-between align-items-center my-4'>
                 <div className='mx-1 d-flex'>
-                    <input className='px-4 me-3' value={filterData.title} onChange={handleSearch} />
+                    <input className='px-4 me-3 form-control' value={filterData.title} onChange={handleSearch} />
                     <CButton onClick={getData}>Search</CButton>
                 </div>
                 <div className='d-flex me-5 gap-1'>

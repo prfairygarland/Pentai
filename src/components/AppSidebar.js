@@ -11,7 +11,7 @@ import { sygnet } from 'src/assets/brand/sygnet'
 
 import SimpleBar from 'simplebar-react'
 import 'simplebar/dist/simplebar.min.css'
-
+import logo from '../assets/images/ptk-whiteLogo.png'
 
 // sidebar nav config
 import navigation from '../_nav'
@@ -48,8 +48,9 @@ const AppSidebar = () => {
     >
       <CSidebarBrand className="d-none d-md-flex">
         {/* <CIcon className="sidebar-brand-full" icon={logoNegative} height={35} /> */}
-        <h4 className="sidebar-brand-full ">{multiLang?.PTK_APP_Admin}</h4>
-        <h4 className="sidebar-brand-narrow">{multiLang?.PTK_APP_Admin}</h4>
+        {/* <h4 className="sidebar-brand-full ">PTK APP Admin</h4>
+        <h4 className="sidebar-brand-narrow">PTK APP Admin</h4> */}
+        <img src={logo}/>
         {/* <CIcon className="sidebar-brand-narrow" icon={sygnet} height={35} /> */}
       </CSidebarBrand>
       <h5 className="sidebar-brand-cat mt-3 text-center">{multiLang?.Category_Menu}</h5>

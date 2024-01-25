@@ -673,9 +673,9 @@ const UserList = () => {
           </div>
 
         </div>
-        <div className='d-flex justify-content-between align-items-center'>
-          <div className='me-3'>
-            <CDropdown className='dropDownbackground drpDBtn'>
+        <div className='d-flex  align-items-center gap-3 pe-3'>
+          <div className='col-md-2'>
+            <CDropdown className='dropDownbackground drpDBtn w-100'>
               <CDropdownToggle color="white" >
                 {typeSelect.Name ? typeSelect.Name : 'Type'}
               </CDropdownToggle>
@@ -688,7 +688,7 @@ const UserList = () => {
               </CDropdownMenu>
             </CDropdown>
           </div>
-          <div className="navbar navbar-light bg-light w-100">
+          <div className="col-md-10  ">
             <div className="d-flex form-inline w-100">
               <input className="form-control mr-sm-10 me-2" value={searchInput} onChange={handleInputChange} type="search" placeholder="Search" aria-label="Search" />
               <button className="btn btn-primary my-2 my-sm-0" disabled={!typeSelect.id || searchInput == ''} type="submit" onClick={() => { handleInputvalue() }}>Search</button>
@@ -696,7 +696,7 @@ const UserList = () => {
           </div>
         </div>
         <div className='d-flex justify-content-end mt-3'>
-          <CButton className='btn btn-primary' onClick={() => clearAllFilters()}>Clear</CButton>
+          <CButton className='btn btn-black' onClick={() => clearAllFilters()}>Clear</CButton>
         </div>
       </div>
       <div>
@@ -819,7 +819,7 @@ const UserList = () => {
           }
 
           <div>
-            <button className='btn btn-success mb-3' onClick={() => { setImportVisible(!importVisible); getImportHistoryData(1) }}>Import History</button>
+            <button className='btn btn-primary mb-3' onClick={() => { setImportVisible(!importVisible); getImportHistoryData(1) }}>Import History</button>
           </div>
           <div>
             <CModal

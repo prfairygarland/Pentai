@@ -10,10 +10,10 @@ import { cilCursor } from '@coreui/icons'
 
 export const AppSidebarNav = ({ items }) => {
   const location = useLocation()
-  const navLink = (name, icon, badge, url) => {
+  const navLink = (name, menuIcon, badge, url) => {
     return (
       <>
-        {icon && icon}
+        {menuIcon && menuIcon}
         {name && name}
         {badge && (
           <CBadge color={badge.color} className="ms-auto">
@@ -63,14 +63,14 @@ export const AppSidebarNav = ({ items }) => {
 
   }
   const navGroup = (item, index) => {
-    const { menuUrl, menuName, icon, ...rest } = item
+    const { menuUrl, menuName, menuIcon, ...rest } = item
     const Component = CNavGroup
 
     return (
       <Component
         idx={String(index)}
         key={index}
-        toggler={navLink(menuName, <CIcon icon={cilCursor} customClassName="nav-icon" />, menuUrl)}
+        toggler={navLink(menuName, <i className={menuIcon}></i>, menuUrl)}
         visible={location.pathname.startsWith(menuUrl)}
         {...rest}
 

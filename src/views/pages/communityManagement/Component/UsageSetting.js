@@ -292,7 +292,7 @@ const UsageSetting = (props) => {
         <CCol xs="auto">
           <CButton
             type="submit"
-            className="mb-3 btn-dark mb-3 text-white bg-dark"
+            className="mb-3  mb-3 text-white "
             onClick={handleUpdateStatus}
           >
             {translationObject?.translation?.communityBoardManagement?.saveStatus}
@@ -325,7 +325,7 @@ const UsageSetting = (props) => {
                 />
               </CCol>
               <CCol xs="auto">
-                <CButton type="submit" onClick={addProhabitedWord} className="mb-3 btn-dark">
+                <CButton type="submit" onClick={addProhabitedWord} className="mb-3 ">
                   {translationObject?.translation?.communityBoardManagement?.add}
                 </CButton>
               </CCol>
@@ -346,7 +346,7 @@ const UsageSetting = (props) => {
               </div>
               <div className="d-flex justify-content-end mt-2">
                 <CCol xs="auto">
-                  <CButton type="submit" onClick={confirmationDeleteAllHandler} className="mb-3 btn-dark">
+                  <CButton type="submit" onClick={confirmationDeleteAllHandler} className="mb-3 btn-black">
                     {translationObject?.translation?.communityBoardManagement?.deleteAll}
                   </CButton>
                 </CCol>

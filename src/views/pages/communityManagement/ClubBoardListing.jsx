@@ -414,14 +414,12 @@ const ClubBoardListing = () => {
       {
         Header: <p className="text-center">{multiLangObj?.reportedPost}</p>,
         accessor: 'reportedPost',
-        Cell: ({ row }) => (
-          <p className="text-center">{`${row.original.reportsPostCount ? 'Y' : 'N'}`}</p>
-        ),
+        Cell: ({ row }) => <p>{`${row.original.reportsPostCount ? 'Y' : 'N'}`}</p>,
       },
       {
         Header: <p className="text-center">{multiLangObj?.club}</p>,
         accessor: 'club',
-        Cell: ({ row }) => <p className="text-center">{`${row.original.ClubName}`}</p>,
+        Cell: ({ row }) => <p>{`${row.original.ClubName}`}</p>,
       },
       {
         Header: <p className="text-center">{multiLangObj?.title}</p>,
@@ -655,7 +653,6 @@ const ClubBoardListing = () => {
               </p>
               <CFormSelect
                 size="sm"
-                className="mb-2"
                 onChange={(e) => {
                   handleBoardChange(e)
                 }}
@@ -719,24 +716,30 @@ const ClubBoardListing = () => {
                 </div>
                 <div className="d-flex gap-3 mt-3">
                   <CButton onClick={handleSearchfilter}>{multiLangObj?.search}</CButton>
-                  <CButton onClick={resetFilter}>{multiLangObj?.reset}</CButton>
+                  <CButton onClick={resetFilter} className="btn-black">
+                    {multiLangObj?.reset}
+                  </CButton>
                 </div>
               </div>
               <div className="d-flex flex-column mt-3 p-3">
                 <div className="d-flex justify-content-end gap-3 mt-3">
-                  <CButton onClick={deleteHandler}>{multiLangObj?.delete}</CButton>
+                  <CButton onClick={deleteHandler} className="btn-black">
+                    {multiLangObj?.delete}
+                  </CButton>
                 </div>
                 {totalDataCount > 0 && (
                   <p style={{ margin: 0 }}>
                     {multiLangObj?.total}&nbsp;:&nbsp; {totalDataCount}
                   </p>
                 )}
-                <ReactTable
-                  columns={clubDatacolumns}
-                  data={clubData}
-                  showCheckbox={true}
-                  onSelectionChange={handleSelectionChange}
-                />
+                <div className="clubTable">
+                  <ReactTable
+                    columns={clubDatacolumns}
+                    data={clubData}
+                    showCheckbox={true}
+                    onSelectionChange={handleSelectionChange}
+                  />
+                </div>
                 <div className="d-flex w-100 justify-content-center gap-3">
                   {clubData.length > 0 && (
                     <div className="userlist-pagination">
@@ -850,7 +853,9 @@ const ClubBoardListing = () => {
                 </div>
                 <div className="d-flex gap-3 mt-3">
                   <CButton onClick={handleSearchfilter}>{multiLangObj?.search}</CButton>
-                  <CButton onClick={resetFilter}>{multiLangObj?.reset}</CButton>
+                  <CButton onClick={resetFilter} className="btn-black">
+                    {multiLangObj?.reset}
+                  </CButton>
                 </div>
               </div>
               <div className="d-flex flex-column mt-3 p-3">

@@ -190,11 +190,11 @@ const WelfareBoard = () => {
       {isLoading && <Loader />}
       <section>
         <div className="d-flex w-100">
-          <div className="w-50">
-            <div className="d-flex justify-content-end p-3 gap-2">
+          <div className="col-md-4">
+            <div className="d-flex justify-content-end pt-3 pb-3 gap-2">
               <CButton
                 type="submit"
-                className=" text-white btn-black"
+                className=" text-white "
                 onClick={() => setWelfareBoard()}
               >
                 {translationObject?.translation?.communityBoardManagement?.add}
@@ -231,8 +231,8 @@ const WelfareBoard = () => {
             </div>
           </div>
           {addWelfareBoard === true ? (
-            <div className="w-75 p-4">
-              <div>
+            <div className="col-md-8">
+              
                 <div className="w-100 p-3">
                   <main>
                     <div>
@@ -297,7 +297,7 @@ const WelfareBoard = () => {
                     </div>
                   </main>
                 </div>
-              </div>
+            
             </div>
           ) : (
             <></>
