@@ -163,6 +163,8 @@ export let API_ENDPOINT = {
   meeting_details: ALL_CONSTANTS.API_URL + "/admin/meeting/meetingDetail",
   reservation_details: ALL_CONSTANTS.API_URL + "/admin/meeting/reservationDetail",
   get_all_meeting_rooms: ALL_CONSTANTS.API_URL + "/admin/meeting/roomList",
+  create_meeting_floor: ALL_CONSTANTS.API_URL + "/admin/meeting/floor/create",
+  
   
 
   //{ Supply Rental Management}

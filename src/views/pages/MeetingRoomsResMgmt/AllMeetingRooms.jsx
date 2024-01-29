@@ -20,8 +20,10 @@ import { getApi, getUserListExportData } from 'src/utils/Api'
 import { API_ENDPOINT } from 'src/utils/config'
 import { paginationItemPerPageOptions } from 'src/utils/constant'
 import AddBuilding from './AddBuilding'
+import AddFloor from './AddFloor'
 import CIcon from '@coreui/icons-react'
 import { cibZeit } from '@coreui/icons'
+import { useTranslation } from 'react-i18next'
 
 const AllMeetingRooms = () => {
   const initialData = {
@@ -33,7 +35,7 @@ const AllMeetingRooms = () => {
   const [buildingLists, setBuildingLists] = useState([])
   const [floorList, setFloorList] = useState([])
   const [roomList, setRoomList] = useState([])
-  const [allSuppliesData, setAllSuppliesData] = useState([])
+  const [allMeetingData, setAllMeetingData] = useState([])
   const [isLoading, setIsLoading] = useState(false)
   const [currentPage, setCurrentPage] = useState(0)
   const [totalPages, setTotalPages] = useState(0)
@@ -45,7 +47,8 @@ const AllMeetingRooms = () => {
   const [ids, setIds] = useState(null)
   const [sideBarId, setSidebarId] = useState(null)
   const [sideSubBarId, setSideSubbarId] = useState(null)
-  const [catIds, setCatIds] = useState(null)
+  const [buildingId, setBuildingId] = useState(null)
+  const [buildingName, setBuildingName] = useState(null)
   const [subCatIds, setSubCatIds] = useState(null)
   const [subItemIds, setItemIds] = useState(null)
   const [getState, setState] = useState(false)
@@ -53,6 +56,10 @@ const AllMeetingRooms = () => {
   const [iconCatSet, setCatIcon] = useState(null)
   const [iconSubCatSet, setSubCatIcon] = useState(null)
   const [iconModSet, setModIcon] = useState(null)
+
+  const { i18n } = useTranslation()
+  const translationObject = i18n.getDataByLanguage(i18n.language)
+  const multiLangObj = translationObject?.translation?.meetingRoomsReservationManagement
 
   const handleChange = (id) => {
     if (id === null) {
@@ -79,24 +86,24 @@ const AllMeetingRooms = () => {
   useEffect(() => {
     setFloorList([])
     getBuildings()
-    handleAllSupplyRentaldata()
+    handleAllMeetingData()
     setModal('allList')
   }, [getState])
 
   useEffect(() => {
-    handleAllSupplyRentaldata()
+    handleAllMeetingData()
   }, [filterData.itemStatus, filterData.visibility, itemsPerPage, currentPage])
 
   useEffect(() => {
     if (filterData?.search === '') {
-      handleAllSupplyRentaldata()
+      handleAllMeetingData()
     }
   }, [filterData.search])
 
   const columns = useMemo(() => [
     {
-      Header: 'Supply Type',
-      accessor: 'supplyType',
+      Header: multiLangObj?.location,
+      accessor: 'location',
       Cell: ({ row }) => (
         <p className="text-center">{`${
           row.original.supplyType ? row.original.supplyType : '-'
@@ -104,7 +111,7 @@ const AllMeetingRooms = () => {
       ),
     },
     {
-      Header: 'Subcategory',
+      Header: multiLangObj?.floor,
       accessor: 'subCategoryName',
       Cell: ({ row }) => (
         <p className="text-center">{`${
@@ -113,14 +120,14 @@ const AllMeetingRooms = () => {
       ),
     },
     {
-      Header: 'Model Name',
+      Header: multiLangObj?.meetingRoomName,
       accessor: 'modalName',
       Cell: ({ row }) => (
         <p className="text-center">{`${row.original.modalName ? row.original.modalName : '-'}`}</p>
       ),
     },
     {
-      Header: 'Item Number',
+      Header: multiLangObj?.meetingRoomCode,
       accessor: 'itemNumber',
       Cell: ({ row }) => (
         <p className="text-center">{`${
@@ -129,7 +136,7 @@ const AllMeetingRooms = () => {
       ),
     },
     {
-      Header: 'Item Status',
+      Header: multiLangObj?.roomStatus,
       accessor: 'itemStatus',
       Cell: ({ row }) => (
         <p className="text-center">{`${
@@ -202,7 +209,7 @@ const AllMeetingRooms = () => {
 
   const handleSelectionChange = useCallback((selectedRowsIds) => {}, [])
 
-  const handleAllSupplyRentaldata = async () => {
+  const handleAllMeetingData = async () => {
     setIsLoading(true)
     try {
       let url = API_ENDPOINT.get_all_supplies + `?offset=${currentPage + 1}&limit=${itemsPerPage}`
@@ -220,12 +227,12 @@ const AllMeetingRooms = () => {
       const res = await getApi(url)
 
       if (res?.status === 200) {
-        setAllSuppliesData(res?.data)
+        setAllMeetingData(res?.data)
         setTotalCount(res?.totalCount)
         setTotalPages(Math.ceil(res.totalCount / Number(itemsPerPage)))
         setIsLoading(false)
       } else if (res?.status === 404) {
-        setAllSuppliesData(res?.data)
+        setAllMeetingData(res?.data)
         setTotalCount(res?.totalCount)
         setIsLoading(false)
       }
@@ -235,7 +242,7 @@ const AllMeetingRooms = () => {
     }
   }
 
-  const handleAllSupplieRentalStatusChange = (e) => {
+  const handleAllMeetingStatusChange = (e) => {
     const value = e.target.value
     setFilterData((prev) => {
       return {
@@ -316,11 +323,16 @@ const AllMeetingRooms = () => {
       })
       setItemsPerPage(5)
       setCurrentPage(0)
-    } else if (type === 'addSupplyType') {
+    } else if (type === 'addBuilding') {
       if (add === 'add') {
         setIds(null)
       }
-      setModal('addSupplyType')
+      setModal('addBuilding')
+    } else if (type === 'addFloor') {
+      if (add === 'add') {
+        setIds(null)
+      }
+      setModal('addFloor')
     }
   }
 
@@ -346,7 +358,7 @@ const AllMeetingRooms = () => {
               }}
             >
               <p role="button" onClick={() => handleSetModal('allList')}>
-                All Meeting Rooms
+                {multiLangObj?.allMeetingRooms}
               </p>
               <CButton
                 className="text-center btn-sm"
@@ -354,9 +366,9 @@ const AllMeetingRooms = () => {
                   whiteSpace: 'nowrap',
                   textOverflow: 'ellipsis',
                 }}
-                onClick={() => handleSetModal('addSupplyType', 'add')}
+                onClick={() => handleSetModal('addBuilding', 'add')}
               >
-                Add Building
+                {multiLangObj?.addBuilding}
               </CButton>
             </CSidebarBrand>
             <CSidebarNav
@@ -388,7 +400,7 @@ const AllMeetingRooms = () => {
                           )}
                           <p
                             role="button"
-                            onClick={() => (setIds(tab?.id), handleSetModal('addSupplyType'))}
+                            onClick={() => (setIds(tab?.id), handleSetModal('addBuilding'))}
                           >
                             {tab?.name}
                           </p>
@@ -396,11 +408,13 @@ const AllMeetingRooms = () => {
                         <div>
                           <CButton
                             className="btn-sm"
-                            onClick={() => {
-                              handleSetModal('addCategory', 'add')
-                            }}
+                            onClick={() => (
+                              setBuildingId(tab?.id),
+                              setBuildingName(tab?.name),
+                              handleSetModal('addFloor', 'add')
+                            )}
                           >
-                            Add Floor
+                            {multiLangObj?.addFloor}
                           </CButton>
                         </div>
                       </div>
@@ -435,7 +449,10 @@ const AllMeetingRooms = () => {
                                     <p
                                       role="button"
                                       onClick={() => (
-                                        setCatIds(catTab?.id), handleSetModal('addCategory')
+                                        setBuildingId(tab?.id),
+                                        setBuildingName(tab?.name),
+                                        handleSetModal('addFloor', 'add'),
+                                        setBuildingId(catTab?.id)
                                       )}
                                     >
                                       {catTab?.name}
@@ -448,7 +465,7 @@ const AllMeetingRooms = () => {
                                         handleSetModal('addSubCategory', 'add')
                                       }}
                                     >
-                                      Add Room
+                                      {multiLangObj?.addRoom}
                                     </CButton>
                                   </div>
                                 </div>
@@ -491,13 +508,13 @@ const AllMeetingRooms = () => {
           <div className="mb-4 col-md-9">
             <div className="clearfix">
               <CButton className="float-end mx-2 mb-2" onClick={exportData}>
-                Export
+                {multiLangObj?.export}
               </CButton>
             </div>
             <div className="d-flex justify-content-between align-items-center my-4">
               <div className="mx-1 d-flex">
                 <input className="px-4 me-3" value={filterData.search} onChange={handleSearch} />
-                <CButton onClick={handleAllSupplyRentaldata}>Search</CButton>
+                <CButton onClick={handleAllMeetingData}>Search</CButton>
               </div>
               <div className="d-flex me-5 gap-1">
                 <CFormSelect
@@ -515,7 +532,7 @@ const AllMeetingRooms = () => {
                       value: 'Unavailable',
                     },
                   ]}
-                  onChange={handleAllSupplieRentalStatusChange}
+                  onChange={handleAllMeetingStatusChange}
                 />
                 <CFormSelect
                   style={{ width: '170px' }}
@@ -541,11 +558,11 @@ const AllMeetingRooms = () => {
             <ReactTable
               showCheckbox={false}
               columns={columns}
-              data={allSuppliesData}
+              data={allMeetingData}
               totalCount={10}
               onSelectionChange={handleSelectionChange}
             />
-            {allSuppliesData.length > 0 && (
+            {allMeetingData.length > 0 && (
               <div className="d-flex gap-3">
                 <div className="userlist-pagination">
                   <div className="userlist-pagination dataTables_paginate">
@@ -563,7 +580,7 @@ const AllMeetingRooms = () => {
                   </div>
                 </div>
                 <div className="d-flex align-items-center gap-2 mt-2">
-                  <label>Show</label>
+                  <label>{multiLangObj?.show}</label>
                   <CFormSelect
                     className=""
                     aria-label=""
@@ -574,7 +591,7 @@ const AllMeetingRooms = () => {
                       setCurrentPage(0)
                     }}
                   />
-                  <label>Lists</label>
+                  <label>{multiLangObj?.lists}</label>
                 </div>
               </div>
             )}
@@ -587,27 +604,39 @@ const AllMeetingRooms = () => {
           aria-labelledby="StaticBackdropExampleLabel"
         >
           <CModalHeader>
-            <CModalTitle id="StaticBackdropExampleLabel">Delete board.</CModalTitle>
+            <CModalTitle id="StaticBackdropExampleLabel">{multiLangObj?.deleteBoard}</CModalTitle>
           </CModalHeader>
           <CModalBody>
-            <p>Are you sure you want to delete this room?</p>
+            <p>{multiLangObj?.areYouSureToDeleteRoom}</p>
           </CModalBody>
           <CModalFooter>
             <CButton color="secondary" onClick={() => setDeleteVisible(false)}>
-              Delete
+              {multiLangObj?.delete}
             </CButton>
             <CButton color="primary" onClick={() => setDeleteVisible(false)}>
-              Cancel
+              {multiLangObj?.cancel}
             </CButton>
           </CModalFooter>
         </CModal>
 
-        {getModal === 'addSupplyType' && (
+        {getModal === 'addBuilding' && (
           <AddBuilding
             setModal={setState}
             getMod={getState}
             Modal={setModal}
             getId={ids}
+            removeIds={setIds}
+            getVal={setIcon}
+          />
+        )}
+        {getModal === 'addFloor' && (
+          <AddFloor
+            setModal={setState}
+            getMod={getState}
+            Modal={setModal}
+            getId={ids}
+            buildingId={buildingId}
+            buildingName={buildingName}
             removeIds={setIds}
             getVal={setIcon}
           />
