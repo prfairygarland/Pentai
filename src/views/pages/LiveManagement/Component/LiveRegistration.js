@@ -1,10 +1,11 @@
-import { cilCircle, cilHamburgerMenu, cilImage, cilRectangle, cilX } from '@coreui/icons';
+import { cilAudio, cilCircle, cilHamburgerMenu, cilImage, cilRectangle, cilX } from '@coreui/icons';
 import CIcon from '@coreui/icons-react';
-import { CButton, CCard, CCardBody, CCardText, CCardTitle, CFormCheck, CFormInput, CFormSwitch, CFormTextarea, CImage, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CNav, CNavItem, CNavLink } from '@coreui/react';
+import { CButton, CCard, CCardBody, CCardText, CCardTitle, CFormCheck, CFormInput, CFormSelect, CFormSwitch, CFormTextarea, CImage, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CNav, CNavItem, CNavLink } from '@coreui/react';
 import { enqueueSnackbar } from 'notistack';
 import React, { useRef, useState } from 'react'
 import DatePicker from 'react-date-picker';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import Loader from 'src/components/common/Loader'
 import ConfirmationModal from 'src/utils/ConfirmationModal';
 
@@ -14,6 +15,9 @@ const LiveRegistration = () => {
   const { t, i18n } = useTranslation();
   const translationObject = i18n.getDataByLanguage(i18n.language);
   const multiLang = translationObject?.translation
+
+
+  const navigate = useNavigate()
   const [isLoading, setIsLoading] = useState(false)
   const [activeTab, setActiveTab] = useState('');
   const inputRef = useRef(null)
@@ -36,8 +40,8 @@ const LiveRegistration = () => {
   const [visible, setVisible] = useState(false)
   const [quizToggle, setQuizToggle] = useState(false);
   const [quizQuestion, setQuizQuestion] = useState('')
-  const [selectedRadio, setSelectedRadio] = useState(null);
-  const [answerSelectedRadio, setAnswerSelectedRadio] = useState(null);
+  const [selectedRadio, setSelectedRadio] = useState('trueOrFalse');
+  const [answerSelectedRadio, setAnswerSelectedRadio] = useState(true);
   const [rewardPointsToggle, setrewardPointsToggle] = useState(false)
   const [rewardPointsCheckBox, setrewardPointsCheckBox] = useState(true)
   const [uploadedImages, setUploadedImages] = useState([])
@@ -46,13 +50,12 @@ const LiveRegistration = () => {
   const [timeLimit, setTimeLimit] = useState(10)
   const [mainQuizs, setMainQuizs] = useState([])
   const [currentQuizeIndex, setCurrentQuizeIndex] = useState(null)
+  const [rewardPoints, setRewardPoints] = useState(null)
 
 
   const handleTimeInputChange = (e) => {
-    // Validate and set the value within the desired range
     const sanitizedValue = e.target.value.replace(/[^0-9]/g, '');
     const newValue = sanitizedValue
-
     setTimeLimit(newValue);
   };
 
@@ -85,12 +88,12 @@ const LiveRegistration = () => {
       enqueueSnackbar('4 Numbers are required', { variant: 'error' })
       return false
     } else {
-      confirmationSaveClubBannerModalHandler(true)
+      confirmationSaveLiveRegisterModalHandler(true)
       // enqueueSnackbar(' uploaded image', { variant: 'success' })
     }
   }
 
-  const confirmationSaveClubBannerModalHandler = (isOpen) => {
+  const confirmationSaveLiveRegisterModalHandler = (isOpen) => {
     setModalProps({
       isModalOpen: isOpen,
       content: 'Are you sure to save?',
@@ -98,37 +101,50 @@ const LiveRegistration = () => {
       cancelBtnHandler: cancelConfirmation,
       successBtn: 'Ok',
       successBtnHandler: () => saveLiveRegisterHandler(),
-      modalCloseHandler: confirmationSaveClubBannerModalHandler,
+      modalCloseHandler: confirmationSaveLiveRegisterModalHandler,
+    })
+  }
+
+  const confirmationSaveLiveRegistrationModalHandler = (isOpen) => {
+    setModalProps({
+      isModalOpen: isOpen,
+      content: 'Are you sure to save?',
+      cancelBtn: 'Close',
+      cancelBtnHandler: cancelConfirmation,
+      successBtn: 'Ok',
+      successBtnHandler: () => saveQuizRegistration(),
+      modalCloseHandler: confirmationSaveLiveRegistrationModalHandler,
     })
   }
 
   const confirmationCloseModalHandler = (isOpen) => {
     setModalProps({
       isModalOpen: isOpen,
-      title: 'Confirmation',
-      content: 'Are you sure you want to leave this page? If you leave this page, changes you made may not be saved.',
+      title: '',
+      content: multiLang?.LiveManagementRegistrationQuiz?.closePopUpMsg,
       cancelBtn: 'Close',
       cancelBtnHandler: cancelConfirmation,
-      successBtn: 'Ok',
+      successBtn: multiLang?.LiveManagementRegistrationQuiz?.ok,
       successBtnHandler: () => cancelModalHandler(),
       modalCloseHandler: confirmationCloseModalHandler,
     })
   }
 
   const cancelModalHandler = () => {
-    setLiveRegisterTitle('')
-    setLiveRegisterStartDate('')
-    setLiveRegisterStartHours('')
-    setLiveRegisterStartMins('')
-    setLiveRegisterEndDate('')
-    setLiveRegisterEndHours('')
-    setLiveRegisterEndMins('')
-    setDescription('')
-    setSelectedImage('')
-    setParticipateToggle(false)
-    setSecretToggle(false)
-    setPoints(null)
-    setSecret(null)
+    // setLiveRegisterTitle('')
+    // setLiveRegisterStartDate('')
+    // setLiveRegisterStartHours('')
+    // setLiveRegisterStartMins('')
+    // setLiveRegisterEndDate('')
+    // setLiveRegisterEndHours('')
+    // setLiveRegisterEndMins('')
+    // setDescription('')
+    // setSelectedImage('')
+    // setParticipateToggle(false)
+    // setSecretToggle(false)
+    // setPoints(null)
+    // setSecret(null)
+    navigate('/LiveManagement')
     setModalProps({
       isModalOpen: false
     })
@@ -237,6 +253,8 @@ const LiveRegistration = () => {
       if (sanitizedValue.length <= 4) {
         setSecret(sanitizedValue);
       }
+    } else if (type === 'quiz') {
+      setRewardPoints(sanitizedValue)
     }
   };
 
@@ -274,6 +292,23 @@ const LiveRegistration = () => {
 
   const handleRadioChange = (value) => {
     setSelectedRadio(value);
+    if (value === 'trueOrFalse') {
+      setUploadedImages([])
+      setInputValues([{ value: '', answer: true }])
+      setShortAnswer('')
+    } else if (value === 'imageMultipleChoice') {
+      setAnswerSelectedRadio(true)
+      setInputValues([{ value: '', answer: true }])
+      setShortAnswer('')
+    } else if (value === 'multipleChoice') {
+      setAnswerSelectedRadio(true)
+      setUploadedImages([])
+      setShortAnswer('')
+    } else if (value === 'shortAnswer') {
+      setAnswerSelectedRadio(true)
+      setUploadedImages([])
+      setInputValues([{ value: '', answer: true }])
+    }
   };
 
   const handleQuizeToggle = async () => {
@@ -281,7 +316,6 @@ const LiveRegistration = () => {
     if (quizToggle === false) {
     }
   };
-
 
   const handlerewardPointsToggle = async () => {
     setrewardPointsToggle((prevState) => !prevState)
@@ -346,7 +380,6 @@ const LiveRegistration = () => {
     }
     setUploadedImages(arrUploadedImages)
   }
-
 
   const addInputField = () => {
     const hasEmptyField = inputValues.some((input) => !input.value.trim());
@@ -550,11 +583,88 @@ const LiveRegistration = () => {
 
   }
 
+  const validateAllRegistration = async () => {
+    if (quizToggle === true && mainQuizs.length <= 0) {
+      enqueueSnackbar('creating at least one Quiz is required.', { variant: 'error' })
+      return
+    } else if (rewardPointsToggle === true && rewardPoints === null) {
+      setrewardPointsToggle(false)
+    } else {
+      confirmationSaveLiveRegistrationModalHandler(true)
+    }
+  }
+
+  const saveQuizRegistration = async () => {
+    console.log('quizeToggle =>', quizToggle);
+    console.log('mainQuizs =>', mainQuizs)
+    console.log('rewardPointsToggle =>', rewardPointsToggle);
+    console.log('rewardPoints =>', rewardPoints)
+  }
+
+  const navigateToList = async () => {
+    navigate('/LiveManagement')
+  }
+
   return (
     <div className='mb-5'>
       {isLoading && <Loader />}
       <ConfirmationModal modalProps={modalProps} />
       <main>
+
+        {/* edit only  */}
+
+
+        <div className="d-flex justify-content-between align-items-center">
+          <div>
+            <p>{multiLang?.LiveManagementRegistrationLive?.liveDetails}</p>
+          </div>
+          <div className='d-flex gap-3'>
+            <CButton >{multiLang?.LiveManagementRegistrationLive?.console}  <CIcon icon={cilAudio}></CIcon> </CButton>
+            <CButton >{multiLang?.LiveManagementRegistrationLive?.liveCancel}</CButton>
+          </div>
+
+        </div>
+        <div className="d-flex justify-content-between p-3 h-100 w-100 bg-light rounded mt-2 mb-4">
+          <div className="align-items-center ms-2 align-items-center">
+            <p className="fw-medium me-3" style={{ 'white-space': 'nowrap' }}>
+              {multiLang?.LiveManagementRegistrationLive?.start}
+            </p>
+            <p>-</p>
+          </div>
+          <div className="align-items-center ms-2 align-items-center">
+            <p className="fw-medium me-1">{multiLang?.LiveManagementRegistrationLive?.end}</p>
+            <p>-</p>
+          </div>
+          <div className="align-items-center ms-2 align-items-center">
+            <p className="fw-medium me-1">{multiLang?.LiveManagementRegistrationLive?.time}</p>
+            <p>-</p>
+          </div>
+          <div className="align-items-center ms-2 align-items-center">
+            <p className="fw-medium me-1">{multiLang?.LiveManagementRegistrationLive?.uniqueVisitor}</p>
+            <p>-</p>
+          </div>
+          <div className="align-items-center ms-2 align-items-center">
+            <p className="fw-medium me-1">{multiLang?.LiveManagementRegistrationLive?.pageView}</p>
+            <p>-</p>
+          </div>
+          <div className="align-items-center ms-2 align-items-center">
+            <p className="fw-medium me-1">{multiLang?.LiveManagementRegistrationLive?.like}</p>
+            <p>-</p>
+          </div>
+          <div className="align-items-center ms-2 align-items-center">
+            <p className="fw-medium me-1">{multiLang?.LiveManagementRegistrationLive?.chat}</p>
+            <p>-</p>
+          </div>
+          <div className="align-items-center ms-2 align-items-center">
+            <p className="fw-medium me-1">{multiLang?.LiveManagementRegistrationLive?.creator}</p>
+            <p>-</p>
+          </div>
+
+        </div>
+
+
+        {/* edit only */}
+
         <div className='mb-2'>
           <div>
             <CNav variant="underline" className='d-flex gap3 tabNav'>
@@ -796,6 +906,7 @@ const LiveRegistration = () => {
                 </div>
               </div>
               <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '5%', gap: 10 }}>
+                <CButton onClick={() => navigateToList()} style={{ marginRight: '2%', background: '#ccc', border: 'none' }}>{multiLang?.LiveManagementRegistrationLive?.list}</CButton>
                 <CButton onClick={confirmationCloseModalHandler} style={{ marginRight: '2%', background: '#ccc', border: 'none' }}>{multiLang?.LiveManagementRegistrationLive?.Cancel}</CButton>
                 <CButton onClick={validateLiveRegister}>{multiLang?.LiveManagementRegistrationLive?.Save}</CButton>
               </div>
@@ -855,10 +966,11 @@ const LiveRegistration = () => {
                                           type="text"
                                           placeholder={multiLang?.LiveManagementRegistrationLive?.Enter_number}
                                           name='Points'
+                                          value={rewardPoints}
+                                          onChange={(e) => handleChange(e, 'quiz')}
                                         />
                                         <p className='w-100'>{multiLang?.LiveManagementRegistrationLive?.Points}</p>
                                       </div>
-
                                     </div>
                                   }
                                 </div>
@@ -913,8 +1025,9 @@ const LiveRegistration = () => {
                 </div>
               </div>
               <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '5%', gap: 10 }}>
-                <CButton style={{ marginRight: '2%', background: '#ccc', border: 'none' }}>{multiLang?.LiveManagementRegistrationQuiz?.Cancel}</CButton>
-                <CButton >{multiLang?.LiveManagementRegistrationQuiz?.Save}</CButton>
+                <CButton onClick={() => navigateToList()} style={{ marginRight: '2%', background: '#ccc', border: 'none' }}>{multiLang?.LiveManagementRegistrationLive?.list}</CButton>
+                <CButton onClick={confirmationCloseModalHandler} style={{ marginRight: '2%', background: '#ccc', border: 'none' }}>{multiLang?.LiveManagementRegistrationQuiz?.Cancel}</CButton>
+                <CButton onClick={() => validateAllRegistration()}>{multiLang?.LiveManagementRegistrationQuiz?.Save}</CButton>
               </div>
 
               <div>
@@ -932,7 +1045,7 @@ const LiveRegistration = () => {
                     <div className='d-flex col-md-12'>
                       <div className='col-md-6 pe-4'>
                         <div>
-                          <h5 className='mb-2'>{multiLang?.LiveManagementRegistrationQuiz?.Question}</h5>
+                          <h5 className='mb-2'>{multiLang?.LiveManagementRegistrationQuiz?.Question}  <span className="mandatory-red-asterisk">*</span></h5>
                           <CFormTextarea
                             id="exampleFormControlTextarea1"
                             rows={3}
@@ -1003,202 +1116,204 @@ const LiveRegistration = () => {
 
                           </div>
                         </div>
-                        <div className='answer'>
-                          <h5>Answer</h5>
-                          {selectedRadio === 'trueOrFalse' &&
-                            <div className='d-flex'>
-                              <CButton color="light" className="d-flex align-items-center w-50 gap-2" onClick={() => setAnswerSelectedRadio(true)}>
-                                <CFormCheck
-                                  className='w-50 gap-2'
-                                  type="radio"
-                                  id="radioButton1"
-                                  name="True"
-                                  label="True"
-                                  checked={answerSelectedRadio === true}
-                                />
-                                {answerSelectedRadio === true &&
-                                  <label
-                                    className="btn btn-dark text-white btn-sm flex-end"
-                                  >
-                                    correct
-                                  </label>
-                                }
+                        {selectedRadio !== null &&
+                          <div className='answer'>
+                            <h5>{multiLang?.LiveManagementRegistrationQuiz?.answer}</h5>
+                            {selectedRadio === 'trueOrFalse' &&
+                              <div className='d-flex'>
+                                <CButton color="light" className="d-flex align-items-center w-50 gap-2" onClick={() => setAnswerSelectedRadio(true)}>
+                                  <CFormCheck
+                                    className='w-50 gap-2'
+                                    type="radio"
+                                    id="radioButton1"
+                                    name="True"
+                                    label="True"
+                                    checked={answerSelectedRadio === true}
+                                  />
+                                  {answerSelectedRadio === true &&
+                                    <label
+                                      className="btn btn-dark text-white btn-sm flex-end"
+                                    >
+                                      {multiLang?.LiveManagementRegistrationQuiz?.correct}
+                                    </label>
+                                  }
 
-                              </CButton>
-                              <CButton color="light" className="d-flex align-items-center w-50 gap-2" onClick={() => setAnswerSelectedRadio(false)}>
-                                <CFormCheck
-                                  className='w-50 gap-2'
-                                  type="radio"
-                                  id="radioButton1"
-                                  name="False"
-                                  label="False"
-                                  checked={answerSelectedRadio === false}
-                                />
-                                {answerSelectedRadio === false &&
-                                  <label
-                                    className="btn btn-dark text-white btn-sm flex-end"
-                                  >
-                                    correct
-                                  </label>
+                                </CButton>
+                                <CButton color="light" className="d-flex align-items-center w-50 gap-2" onClick={() => setAnswerSelectedRadio(false)}>
+                                  <CFormCheck
+                                    className='w-50 gap-2'
+                                    type="radio"
+                                    id="radioButton1"
+                                    name="False"
+                                    label="False"
+                                    checked={answerSelectedRadio === false}
+                                  />
+                                  {answerSelectedRadio === false &&
+                                    <label
+                                      className="btn btn-dark text-white btn-sm flex-end"
+                                    >
+                                      {multiLang?.LiveManagementRegistrationQuiz?.correct}
+                                    </label>
+                                  }
+                                </CButton>
+                              </div>
+                            }
+                            {selectedRadio === 'imageMultipleChoice' &&
+                              <div className='mt-2 mb-2'>
+                                {uploadedImages?.length > 0 && (
+                                  <div className="upload-images-container uploadImgWrap">
+                                    {uploadedImages.map((imgFile, index) => (
+                                      <div key={index}>
+                                        <div>
+                                          <CButton color="light" className="d-flex align-items-center gap-2" onClick={() => imageAnswerHandler(index)}>
+                                            <CFormCheck
+                                              className='w-50 gap-2'
+                                              type="radio"
+                                              id="radioButton4"
+                                              checked={uploadedImages[index]?.value === true}
+                                            />
+
+                                            <div
+                                              className='remaining-img-container'
+                                            >
+                                              <img src={URL.createObjectURL(uploadedImages[index].image)} alt="" />
+                                              <button
+                                                className="thumbclsBtn"
+                                                onClick={(e) => deleteUploadedImageHandler(e, index)}
+                                              >
+                                                <i className="icon-close"></i>
+                                              </button>
+                                              <div className='d-flex'>
+                                                <CFormInput
+                                                  type="text"
+                                                  value={uploadedImages[index].title}
+                                                  placeholder={multiLang?.LiveManagementRegistrationLive?.Title_placeholder}
+                                                  // name='Title'
+                                                  onChange={(e) => titleHandler(index, e?.target?.value)}
+                                                />
+                                                <span>{uploadedImages[index]?.title?.length} / 15 {multiLang?.LiveManagementRegistrationQuiz?.byte}</span>
+                                              </div>
+                                            </div>
+
+                                          </CButton>
+                                          {uploadedImages[index].value === true &&
+                                            <label
+                                              className="btn btn-dark text-white btn-sm flex-end"
+                                            >
+                                              {multiLang?.LiveManagementRegistrationQuiz?.correct}
+                                            </label>
+                                          }
+                                        </div>
+                                      </div>
+
+                                    ))}
+                                  </div>
+                                )}
+                                {uploadedImages.length < 4 &&
+                                  <div className="formWrpInpt mt-2 mb-2">
+                                    <div className="upload-container-btn">
+                                      <label className="label-btn" color="dark" htmlFor="imageFiles">
+                                        {multiLang?.LiveManagementRegistrationQuiz?.Create_Answer} +
+                                        <input
+                                          type="file"
+                                          name="imageFiles"
+                                          id="imageFiles"
+                                          style={{ display: 'none' }}
+                                          multiple
+                                          accept=".png, .jpg, .jpeg, .gif"
+                                          onChange={(e) => uploadImagesHandler(e)}
+                                        />
+                                      </label>
+                                    </div>
+                                  </div>
                                 }
-                              </CButton>
-                            </div>
-                          }
-                          {selectedRadio === 'imageMultipleChoice' &&
-                            <div className='mt-2 mb-2'>
-                              {uploadedImages?.length > 0 && (
-                                <div className="upload-images-container uploadImgWrap">
-                                  {uploadedImages.map((imgFile, index) => (
-                                    <div key={index}>
+                                <div className="upload-container-guidance">
+                                  <div className="file-information">
+                                    <ul>
+                                      <li>- {multiLang?.LiveManagementRegistrationLive?.Image_size}</li>
+                                      <li>{multiLang?.LiveManagementRegistrationLive?.File_format}</li>
+                                    </ul>
+                                  </div>
+                                </div>
+                              </div>
+                            }
+
+                            {selectedRadio === 'multipleChoice' &&
+                              <div >
+                                <div>
+                                  {inputValues?.map((input, index) => (
+                                    <div key={index} className='d-flex mt-3 mb-2 align-items-center gap-3'>
                                       <div>
-                                        <CButton color="light" className="d-flex align-items-center gap-2" onClick={() => imageAnswerHandler(index)}>
+                                        <CButton color="light" className="d-flex align-items-center gap-2" onClick={() => MultipleAnswerHandler(index)}>
                                           <CFormCheck
                                             className='w-50 gap-2'
                                             type="radio"
                                             id="radioButton4"
-                                            checked={uploadedImages[index]?.value === true}
+                                            checked={input.answer === true}
                                           />
-
-                                          <div
-                                            className='remaining-img-container'
-                                          >
-                                            <img src={URL.createObjectURL(uploadedImages[index].image)} alt="" />
-                                            <button
-                                              className="thumbclsBtn"
-                                              onClick={(e) => deleteUploadedImageHandler(e, index)}
-                                            >
-                                              <i className="icon-close"></i>
-                                            </button>
-                                            <div className='d-flex'>
-                                              <CFormInput
-                                                type="text"
-                                                value={uploadedImages[index].title}
-                                                placeholder={multiLang?.LiveManagementRegistrationLive?.Title_placeholder}
-                                                // name='Title'
-                                                onChange={(e) => titleHandler(index, e?.target?.value)}
-                                              />
-                                              <span>{uploadedImages[index]?.title?.length} / 15 {multiLang?.LiveManagementRegistrationQuiz?.byte}</span>
-                                            </div>
-                                          </div>
+                                          <CFormInput
+                                            type="text"
+                                            value={input.value}
+                                            onClick={(e) => e.stopPropagation()}
+                                            onChange={(e) => handleMultipleInputChange(index, e.target.value)}
+                                          // placeholder={`Input ${index + 1} Value`}
+                                          />
+                                          <span>{input.value.length} / 30</span>
 
                                         </CButton>
-                                        {uploadedImages[index].value === true &&
-                                          <label
-                                            className="btn btn-dark text-white btn-sm flex-end"
-                                          >
-                                            correct
-                                          </label>
-                                        }
                                       </div>
+
+                                      {input.answer === true &&
+                                        <label
+                                          className="btn btn-dark text-white btn-sm flex-end"
+                                        >
+                                          {multiLang?.LiveManagementRegistrationQuiz?.correct}
+                                        </label>
+                                      }
+                                      {index >= 2 && (
+                                        <div>
+                                          <i role='button' onClick={() => deleteInputField(index)} className="icon-close"></i>
+                                        </div>
+                                      )}
+
                                     </div>
 
                                   ))}
                                 </div>
-                              )}
-                              {uploadedImages.length < 4 &&
-                                <div className="formWrpInpt mt-2 mb-2">
-                                  <div className="upload-container-btn">
-                                    <label className="label-btn" color="dark" htmlFor="imageFiles">
-                                      {multiLang?.LiveManagementRegistrationQuiz?.Create_Answer} +
-                                      <input
-                                        type="file"
-                                        name="imageFiles"
-                                        id="imageFiles"
-                                        style={{ display: 'none' }}
-                                        multiple
-                                        accept=".png, .jpg, .jpeg, .gif"
-                                        onChange={(e) => uploadImagesHandler(e)}
-                                      />
-                                    </label>
-                                  </div>
+                                {inputValues?.length < 4 &&
+                                  <CButton onClick={addInputField}>{multiLang?.LiveManagementRegistrationQuiz?.Create_Answer} +</CButton>
+                                }
+                              </div>
+                            }
+
+                            {selectedRadio === 'shortAnswer' &&
+                              <div className="formWrpInpt d-flex">
+                                <div className="d-flex formradiogroup mb-2 gap-3">
+                                  <CFormInput
+                                    type="text"
+                                    value={shortAnswer}
+                                    placeholder={multiLang?.LiveManagementRegistrationQuiz?.Enter_answer}
+                                    name='Title'
+                                    onChange={(e) => {
+                                      handleShortAnswerChange(e)
+                                    }}
+                                  />
                                 </div>
-                              }
-                              <div className="upload-container-guidance">
-                                <div className="file-information">
-                                  <ul>
-                                    <li>- {multiLang?.LiveManagementRegistrationLive?.Image_size}</li>
-                                    <li>{multiLang?.LiveManagementRegistrationLive?.File_format}</li>
-                                  </ul>
-                                </div>
+                                <span className="txt-byte-information">{shortAnswer.length} / 50 {multiLang?.LiveManagementRegistrationLive?.byte}</span>
                               </div>
-                            </div>
-                          }
-
-                          {selectedRadio === 'multipleChoice' &&
-                            <div >
-                              <div>
-                                {inputValues?.map((input, index) => (
-                                  <div key={index} className='d-flex mt-3 mb-2 align-items-center gap-3'>
-                                    <div>
-                                      <CButton color="light" className="d-flex align-items-center gap-2" onClick={() => MultipleAnswerHandler(index)}>
-                                        <CFormCheck
-                                          className='w-50 gap-2'
-                                          type="radio"
-                                          id="radioButton4"
-                                          checked={input.answer === true}
-                                        />
-                                        <CFormInput
-                                          type="text"
-                                          value={input.value}
-                                          onClick={(e) => e.stopPropagation()}
-                                          onChange={(e) => handleMultipleInputChange(index, e.target.value)}
-                                        // placeholder={`Input ${index + 1} Value`}
-                                        />
-                                        <span>{input.value.length} / 30</span>
-
-                                      </CButton>
-                                    </div>
-
-                                    {input.answer === true &&
-                                      <label
-                                        className="btn btn-dark text-white btn-sm flex-end"
-                                      >
-                                        correct
-                                      </label>
-                                    }
-                                    {index >= 2 && (
-                                      <div>
-                                        <i role='button' onClick={() => deleteInputField(index)} className="icon-close"></i>
-                                      </div>
-                                    )}
-
-                                  </div>
-
-                                ))}
-                              </div>
-                              {inputValues?.length < 4 &&
-                                <CButton onClick={addInputField}>{multiLang?.LiveManagementRegistrationQuiz?.Create_Answer} +</CButton>
-                              }
-                            </div>
-                          }
-
-                          {selectedRadio === 'shortAnswer' &&
-                            <div className="formWrpInpt d-flex">
-                              <div className="d-flex formradiogroup mb-2 gap-3">
-                                <CFormInput
-                                  type="text"
-                                  value={shortAnswer}
-                                  placeholder={multiLang?.LiveManagementRegistrationQuiz?.Enter_answer}
-                                  name='Title'
-                                  onChange={(e) => {
-                                    handleShortAnswerChange(e)
-                                  }}
-                                />
-                              </div>
-                              <span className="txt-byte-information">{shortAnswer.length} / 50 {multiLang?.LiveManagementRegistrationLive?.byte}</span>
-                            </div>
-                          }
-                        </div>
+                            }
+                          </div>
+                        }
 
                         <div className='answer d-flex align-items-center gap-2'>
-                          <h5>Time limit</h5>
+                          <h5>{multiLang?.LiveManagementRegistrationQuiz?.timelimit}</h5>
                           <CFormInput
                             className='w-25'
                             type='text'
                             value={timeLimit}
                             onChange={handleTimeInputChange}
                           />
-                          <p>second(s)</p>
+                          <p>{multiLang?.LiveManagementRegistrationQuiz?.seconds}</p>
                         </div>
                       </div>
 
@@ -1244,7 +1359,6 @@ const LiveRegistration = () => {
 
                                   {selectedRadio === 'multipleChoice' &&
                                     <div className='gap-2 mt-3 d-flex justify-content-center gap-3'>
-
                                       {inputValues?.length > 0 && (
                                         <div className="upload-images-container uploadImgWrap d-block">
                                           {inputValues.map((input, index) => (
@@ -1280,16 +1394,16 @@ const LiveRegistration = () => {
                   </CModalBody>
                   <CModalFooter className='d-flex justify-content-center'>
                     <CButton color="secondary" onClick={() => { setVisible(false); resetQuiz() }}>
-                      Close
+                      {multiLang?.LiveManagementRegistrationQuiz?.close}
                     </CButton>
-                    <CButton color="primary" onClick={() => validateQuize()}>Save</CButton>
+                    <CButton color="primary" onClick={() => validateQuize()}>{multiLang?.LiveManagementRegistrationQuiz?.Save}</CButton>
                   </CModalFooter>
                 </CModal>
               </div>
-
-
             </div>
           }
+        </div>
+        <div>
 
         </div>
       </main>
