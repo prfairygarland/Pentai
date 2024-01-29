@@ -1,11 +1,17 @@
 import { CButton, CFormCheck, CFormInput, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle } from '@coreui/react'
 import { enqueueSnackbar } from 'notistack'
 import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import Loader from 'src/components/common/Loader'
 import { deleteApi, getApi, postApi, putApi } from 'src/utils/Api'
 import { API_ENDPOINT } from 'src/utils/config'
 
 const AddSubCategory = ({ setModal, getMod, Modal, getMainSubCatId, getSubCatId, removeSubCatIds, getVal, setCat }) => {
+
+
+  const { t, i18n } = useTranslation();
+  const translationObject = i18n.getDataByLanguage(i18n.language);
+  const multiLang = translationObject?.translation?.supplyRentalManagementAllSupplies
 
   const [deleteVisible, setDeleteVisible] = useState(false)
   const [isLoading, setIsLoading] = useState(false);
@@ -171,25 +177,25 @@ const AddSubCategory = ({ setModal, getMod, Modal, getMainSubCatId, getSubCatId,
       <div>
         {getSubCatId !== null &&
         <div className='d-flex justify-content-end'>
-          <CButton onClick={() => setDeleteVisible(true)}>Delete</CButton>
+            <CButton onClick={() => setDeleteVisible(true)}>{multiLang?.delete}</CButton>
         </div>
         }
         <div className="dropdown-container mb-2">
-          <h5 className="me-3">Subcategory</h5>
+          <h5 className="me-3">{multiLang?.subCategory}</h5>
         </div>
         <div className="card-body">
           <div className="formWraper">
             <div className="form-outline form-white   d-flex ">
               <div className="formWrpLabel" >
                 <label className="fw-bolder ">
-                  Subcategory Name
+                  {multiLang?.subCategoryName}
                 </label>
               </div>
               <div className="formWrpInpt d-flex">
                 <div className="d-flex formradiogroup mb-2 gap-3">
                   <CFormInput
                     type="text"
-                    placeholder=""
+                    placeholder={multiLang?.placeholder}
                     name="name"
                     value={addSubCategoryData.name}
                     onChange={(e) => {
@@ -197,21 +203,21 @@ const AddSubCategory = ({ setModal, getMod, Modal, getMainSubCatId, getSubCatId,
                     }}
                   />
                 </div>
-                <span className="txt-byte-information"> {addSubCategoryData.name.length} / 24 byte</span>
+                <span className="txt-byte-information"> {addSubCategoryData.name.length} / 24 {multiLang?.byte}</span>
               </div>
             </div>
             <div className="d-flex col-md-12">
               <div className="form-outline form-white d-flex w-100">
                 <div className="formWrpLabel" >
-                  <label className="fw-bolder ">Visibility</label>
+                  <label className="fw-bolder ">{multiLang?.visibility}</label>
                 </div>
                 <div className="d-flex gap-2 ms-2">
-                  <CFormCheck type="radio" name="visibility" id="exampleRadios1" label="Visible"
+                  <CFormCheck type="radio" name="visibility" id="exampleRadios1" label={multiLang?.visible}
                     defaultChecked={addSubCategoryData.visibility}
                     onClick={() => setAddSubCategoryData((prev) => ({ ...prev, visibility: true }))}
                     value={true}
                   />
-                  <CFormCheck type="radio" name="visibility" id="exampleRadios2" label="Hide"
+                  <CFormCheck type="radio" name="visibility" id="exampleRadios2" label={multiLang?.hide}
                     defaultChecked={!addSubCategoryData.visibility}
                     onClick={() => setAddSubCategoryData((prev) => ({ ...prev, visibility: false }))}
                     value={false}
@@ -223,7 +229,7 @@ const AddSubCategory = ({ setModal, getMod, Modal, getMainSubCatId, getSubCatId,
             <div className="form-outline form-white  d-flex ">
               <div className="formWrpLabel" >
                 <label className="fw-bolder ">
-                  Associated Items
+                  {multiLang?.associatedItems}
                 </label>
               </div>
               <div className="formWrpInpt">
@@ -243,8 +249,8 @@ const AddSubCategory = ({ setModal, getMod, Modal, getMainSubCatId, getSubCatId,
         </div>
       </div>
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '5%', gap: 10 }}>
-        <CButton onClick={() => saveSubCategory('cancle')} style={{ marginRight: '2%', background: '#ccc', border: 'none' }}>Cancel</CButton>
-        <CButton onClick={() => saveSubCategory('save')} >Save</CButton>
+        <CButton onClick={() => saveSubCategory('cancle')} style={{ marginRight: '2%', background: '#ccc', border: 'none' }}>{multiLang?.cancel}</CButton>
+        <CButton onClick={() => saveSubCategory('save')} >{multiLang?.save}</CButton>
       </div>
       <CModal
         backdrop="static"
@@ -253,17 +259,17 @@ const AddSubCategory = ({ setModal, getMod, Modal, getMainSubCatId, getSubCatId,
         aria-labelledby="StaticBackdropExampleLabel"
       >
         <CModalHeader>
-          <CModalTitle id="StaticBackdropExampleLabel">Delete</CModalTitle>
+          <CModalTitle id="StaticBackdropExampleLabel">{multiLang?.delete}</CModalTitle>
         </CModalHeader>
         <CModalBody>
-          <p>Are you sure you want to delete this category?
+          <p>{multiLang?.deletePopUp}
             <br />
-            All categories and items belonging will be deleted.</p>
+            {multiLang?.deletePopUpMsg}</p>
         </CModalBody>
         <CModalFooter>
-          <CButton color="primary" onClick={() => deleteCategory()}>Delete</CButton>
+          <CButton color="primary" onClick={() => deleteCategory()}>{multiLang?.delete}</CButton>
           <CButton color="secondary" onClick={() => setDeleteVisible(false)}>
-            Cancel
+            {multiLang?.cancel}
           </CButton>
         </CModalFooter>
       </CModal>

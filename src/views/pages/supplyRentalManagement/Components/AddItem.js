@@ -2,6 +2,7 @@ import { CButton, CFormCheck, CFormInput, CFormSelect, CFormSwitch, CFormTextare
 import { enqueueSnackbar } from 'notistack';
 import React, { useEffect, useRef, useState } from 'react'
 import DatePicker from 'react-date-picker';
+import { useTranslation } from 'react-i18next';
 import Loader from 'src/components/common/Loader';
 import { deleteApi, getApi, postApi, putApi } from 'src/utils/Api';
 import { ALL_CONSTANTS, API_ENDPOINT } from 'src/utils/config';
@@ -9,6 +10,9 @@ import { ALL_CONSTANTS, API_ENDPOINT } from 'src/utils/config';
 
 const AddItem = ({ getVal, setCat, setSubIcon, setModalIcon, setModal, getMod, modalName, supplyID, setMainIds, getItemId, removeItemIds, getCatId, setCatId, getSubCatId, setSubCatId, getModId, setModId }) => {
 
+  const { t, i18n } = useTranslation();
+  const translationObject = i18n.getDataByLanguage(i18n.language);
+  const multiLang = translationObject?.translation?.supplyRentalManagementAllSupplies
 
   const [deleteVisible, setDeleteVisible] = useState(false)
   const [isLoading, setIsLoading] = useState(false);
@@ -428,19 +432,19 @@ const AddItem = ({ getVal, setCat, setSubIcon, setModalIcon, setModal, getMod, m
       {isLoading && <Loader />}
       <div className='addItemWrp'>
         {getItemId !== null &&
-        <div className='d-flex justify-content-end'>
-          <CButton onClick={() => setDeleteVisible(true)}>Delete</CButton>
-        </div>
+          <div className='d-flex justify-content-end'>
+            <CButton onClick={() => setDeleteVisible(true)}>{multiLang?.delete}</CButton>
+          </div>
         }
         <div className="dropdown-container mb-2">
-          <h5 className="me-3">Item Number</h5>
+          <h5 className="me-3">{multiLang?.itemNumber}</h5>
         </div>
         <div className="card-body">
           <div className="formWraper">
             <div className="form-outline form-white   d-flex ">
               <div className="formWrpLabel" >
                 <label className="fw-bolder ">
-                  Model Name
+                  {multiLang?.modelName}
                 </label>
               </div>
               <div className="formWrpInpt d-flex">
@@ -452,14 +456,14 @@ const AddItem = ({ getVal, setCat, setSubIcon, setModalIcon, setModal, getMod, m
             <div className="form-outline form-white   d-flex ">
               <div className="formWrpLabel" >
                 <label className="fw-bolder ">
-                  Item Number
+                  {multiLang?.itemNumber}
                 </label>
               </div>
               <div className="formWrpInpt d-flex">
                 <div className="d-flex formradiogroup mb-2 gap-3">
                   <CFormInput
                     type="text"
-                    placeholder=""
+                    placeholder={multiLang?.placeholder}
                     name='itemNumber'
                     value={addItemData.itemNumber}
                     onChange={(e) => {
@@ -474,7 +478,7 @@ const AddItem = ({ getVal, setCat, setSubIcon, setModalIcon, setModal, getMod, m
               <div className='d-flex col-md-6'>
                 <div className="formWrpLabel" >
                   <label className="fw-bolder ">
-                    Item Status
+                    {multiLang?.itemStatus}
                   </label>
                 </div>
                 <div className="formWrpInpt d-flex w-100">
@@ -483,12 +487,12 @@ const AddItem = ({ getVal, setCat, setSubIcon, setModalIcon, setModal, getMod, m
                       name='itemStatus'
                       value={addItemData.itemStatus}
                       options={[
-                        { label: 'select', value: '' },
+                        { label: multiLang?.select, value: '' },
                         {
-                          label: 'Available', value: 'available'
+                          label: multiLang?.available, value: 'available'
                         },
                         {
-                          label: 'Unavailable', value: 'unAvailable'
+                          label: multiLang?.unAvailable, value: 'unAvailable'
                         },
                       ]}
                       onChange={handleInputChange}
@@ -499,7 +503,7 @@ const AddItem = ({ getVal, setCat, setSubIcon, setModalIcon, setModal, getMod, m
               <div className='d-flex col-md-6'>
                 <div className="formWrpLabel " >
                   <label className="fw-bolder ">
-                    Item Registered Date
+                    {multiLang?.itemRegisteredDate}
                   </label>
                 </div>
                 <div className="formWrpInpt d-flex w-100">
@@ -512,7 +516,7 @@ const AddItem = ({ getVal, setCat, setSubIcon, setModalIcon, setModal, getMod, m
             <div className="form-outline form-white   d-flex ">
               <div className="formWrpLabel">
                 <label className="fw-bolder ">
-                  Item Image
+                  {multiLang?.itemImage}
                 </label>
               </div>
               <div className="formWrpInpt d-flex">
@@ -522,16 +526,16 @@ const AddItem = ({ getVal, setCat, setSubIcon, setModalIcon, setModal, getMod, m
                 </div>
                 <div className='ms-4'>
                   <ul>
-                    <li>※ You can upload 1 image only</li>
-                    <li>Maximum File Size : 00</li>
-                    <li>File type : png , jpg , jpeg , gif</li>
+                    <li>※ {multiLang?.imageUploadMsg}</li>
+                    <li>{multiLang?.imageSize} : 00</li>
+                    <li>{multiLang?.fileType} : {multiLang?.imageFileType}</li>
                   </ul>
-                  <button className='mt-2' style={{ background: '#4f5d73', height: '40px', width: '80px', cursor: 'pointer', borderRadius: 8, color: 'white' }} onClick={handleImageChangeNew}>Upload</button>
+                  <button className='mt-2' style={{ background: '#4f5d73', height: '40px', width: '80px', cursor: 'pointer', borderRadius: 8, color: 'white' }} onClick={handleImageChangeNew}>{multiLang?.upload}</button>
                 </div>
               </div>
             </div>
             <div className="form-outline formWrpLabel form-white d-flex justify-content-end bg-light">
-              <p style={{ padding: '2%' }}>Custom Settings</p>
+              <p style={{ padding: '2%' }}>{multiLang?.customSettings}</p>
               <CFormSwitch
                 className="mx-1 me-2 mt-1"
                 color="success"
@@ -546,13 +550,13 @@ const AddItem = ({ getVal, setCat, setSubIcon, setModalIcon, setModal, getMod, m
               <div className="form-outline form-white  d-flex ">
                 <div className="formWrpLabel" >
                   <label className="fw-bolder ">
-                    Rental Duration
+                    {multiLang?.rentalDuration}
                   </label>
                 </div>
                 <div className="formWrpInpt">
                   <div className="d-flex formradiogroup mb-2 align-items-center  justify-content-center gap-5">
                     <p>
-                      Max. Rentable Weeks
+                      {multiLang?.maxRentableWeeks}
                     </p>
                     <p>
                       <CFormInput placeholder='0' type='number' name='rentalDuration'
@@ -569,15 +573,15 @@ const AddItem = ({ getVal, setCat, setSubIcon, setModalIcon, setModal, getMod, m
               <div className="d-flex col-md-12">
                 <div className="form-outline form-white d-flex w-100">
                   <div className="formWrpLabel" >
-                    <label className="fw-bolder ">Visibility</label>
+                    <label className="fw-bolder ">{multiLang?.visibility}</label>
                   </div>
                   <div className="push-notification-container gap-3">
-                    <CFormCheck type="radio" name="visibility" id="exampleRadios1" label="Visible"
+                    <CFormCheck type="radio" name="visibility" id="exampleRadios1" label={multiLang?.visible}
                       defaultChecked={addItemData.visibility}
                       onClick={() => setAddItemData((prev) => ({ ...prev, visibility: true }))}
                       value={true}
                     />
-                    <CFormCheck type="radio" name="visibility" id="exampleRadios2" label="Hide"
+                    <CFormCheck type="radio" name="visibility" id="exampleRadios2" label={multiLang?.hide}
                       defaultChecked={!addItemData.visibility}
                       onClick={() => setAddItemData((prev) => ({ ...prev, visibility: false }))}
                       value={false}
@@ -589,15 +593,15 @@ const AddItem = ({ getVal, setCat, setSubIcon, setModalIcon, setModal, getMod, m
               <div className="d-flex col-md-12">
                 <div className="form-outline form-white d-flex w-100">
                   <div className="formWrpLabel">
-                    <label className="fw-bolder ">Request as provided option</label>
+                    <label className="fw-bolder ">{multiLang?.requestAsProvidedOption}</label>
                   </div>
                   <div className="push-notification-container gap-3">
-                    <CFormCheck type="radio" name="providedOption" id="exampleRadios1" label="Visible"
+                    <CFormCheck type="radio" name="providedOption" id="exampleRadios1" label={multiLang?.visible}
                       defaultChecked={addItemData.providedOption}
                       onClick={() => setAddItemData((prev) => ({ ...prev, providedOption: true }))}
                       value={true}
                     />
-                    <CFormCheck type="radio" name="providedOption" id="exampleRadios2" label="Hide"
+                    <CFormCheck type="radio" name="providedOption" id="exampleRadios2" label={multiLang?.hide}
                       defaultChecked={!addItemData.providedOption}
                       onClick={() => setAddItemData((prev) => ({ ...prev, providedOption: false }))}
                       value={false}
@@ -609,14 +613,14 @@ const AddItem = ({ getVal, setCat, setSubIcon, setModalIcon, setModal, getMod, m
               <div className="form-outline form-white  d-flex ">
                 <div className="formWrpLabel" >
                   <label className="fw-bolder">
-                    Point of pick and return
+                    {multiLang?.pointOfPickAndReturn}
                   </label>
                 </div>
                 <div className="formWrpInpt">
                   <div className="d-flex formradiogroup mb-2 gap-3">
                     <CFormInput
                       type="text"
-                      placeholder="Enter name, Location"
+                      placeholder={multiLang?.pointOfPickAndReturnPlaceholder}
                       name='pickUpAndReturn'
                       value={addItemData.pickUpAndReturn}
                       onChange={(e) => {
@@ -629,14 +633,14 @@ const AddItem = ({ getVal, setCat, setSubIcon, setModalIcon, setModal, getMod, m
               <div className="form-outline form-white  d-flex ">
                 <div className="formWrpLabel" >
                   <label className="fw-bolder">
-                    Reason remarks guide text
+                    {multiLang?.reasonRemarksGuideText}
                   </label>
                 </div>
                 <div className="formWrpInpt">
                   <div className="d-flex formradiogroup mb-2 gap-3">
                     <CFormInput
                       type="text"
-                      placeholder="Enter guide text"
+                      placeholder={multiLang?.reasonRemarksGuideTextPlaceholder}
                       name='reasonRemarks'
                       value={addItemData.reasonRemarks}
                       onChange={(e) => {
@@ -649,7 +653,7 @@ const AddItem = ({ getVal, setCat, setSubIcon, setModalIcon, setModal, getMod, m
               <div className="form-outline form-white  d-flex ">
                 <div className="formWrpLabel" >
                   <label className="fw-bolder">
-                    Supply Rental guide description
+                    {multiLang?.supplyRentalGuideDescription}
                   </label>
                 </div>
                 <div className="formWrpInpt">
@@ -671,8 +675,8 @@ const AddItem = ({ getVal, setCat, setSubIcon, setModalIcon, setModal, getMod, m
         </div>
       </div>
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '5%', gap: 10 }}>
-        <CButton onClick={() => saveSupplyType('cancle')} style={{ marginRight: '2%', background: '#ccc', border: 'none' }}>Cancel</CButton>
-        <CButton onClick={() => saveSupplyType('save')}>Save</CButton>
+        <CButton onClick={() => saveSupplyType('cancle')} style={{ marginRight: '2%', background: '#ccc', border: 'none' }}>{multiLang?.cancel}</CButton>
+        <CButton onClick={() => saveSupplyType('save')}>{multiLang?.save}</CButton>
       </div>
       <CModal
         backdrop="static"
@@ -681,15 +685,15 @@ const AddItem = ({ getVal, setCat, setSubIcon, setModalIcon, setModal, getMod, m
         aria-labelledby="StaticBackdropExampleLabel"
       >
         <CModalHeader>
-          <CModalTitle id="StaticBackdropExampleLabel">Delete</CModalTitle>
+          <CModalTitle id="StaticBackdropExampleLabel">{multiLang?.delete}</CModalTitle>
         </CModalHeader>
         <CModalBody>
-          <p>Are you sure you want to delete this item?</p>
+          <p>{multiLang?.deleteItem}</p>
         </CModalBody>
         <CModalFooter>
-          <CButton color="primary" onClick={() => deleteSupplyType()}>Delete</CButton>
+          <CButton color="primary" onClick={() => deleteSupplyType()}>{multiLang?.delete}</CButton>
           <CButton color="secondary" onClick={() => setDeleteVisible(false)}>
-            Cancel
+            {multiLang?.cancel}
           </CButton>
         </CModalFooter>
       </CModal>

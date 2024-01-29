@@ -7,9 +7,13 @@ import { getBookRental, getOprationClub, getSupplyRental, getUserDetail } from '
 import { ALL_CONSTANTS } from 'src/utils/config';
 import { imageUrl } from '../supplyRentalStatus';
 import moment from 'moment/moment';
+import { useTranslation } from 'react-i18next';
 
 const SupplyRentalUserDetals = ({ userInfoData, type }) => {
 
+  const { t, i18n } = useTranslation();
+  const translationObject = i18n.getDataByLanguage(i18n.language);
+  const multiLang = translationObject?.translation?.supplyRentalManagement
 
 
   return (
@@ -23,7 +27,7 @@ const SupplyRentalUserDetals = ({ userInfoData, type }) => {
               <div className='formWraper'>
                 <div className="form-outline form-white  d-flex ">
                   <div className='formWrpLabel'>
-                    <label className="fw-bolder ">Profile Image</label>
+                    <label className="fw-bolder ">{multiLang?.profileImage}</label>
                   </div>
                   <div className='formWrpInpt'>
                     {userInfoData?.userImage != null ?
@@ -36,7 +40,7 @@ const SupplyRentalUserDetals = ({ userInfoData, type }) => {
 
                 <div className="form-outline form-white  d-flex ">
                   <div className='formWrpLabel'>
-                    <label className="fw-bolder ">Employee No.</label>
+                    <label className="fw-bolder ">{multiLang?.employeeNo}</label>
                   </div>
                   <div className='formWrpInpt'>{userInfoData?.employeeCode ? userInfoData?.employeeCode : ''}</div>
                 </div>
@@ -44,7 +48,7 @@ const SupplyRentalUserDetals = ({ userInfoData, type }) => {
                 <div className='d-flex col-md-12'>
                   <div className="form-outline form-white d-flex col-md-6">
                     <div className='formWrpLabel'>
-                      <label className="fw-bolder ">Name</label>
+                      <label className="fw-bolder ">{multiLang?.name}</label>
                     </div>
                     <div className='formWrpInpt'>{userInfoData?.koreanName ? userInfoData?.koreanName : 'NA'}
                     </div>
@@ -52,7 +56,7 @@ const SupplyRentalUserDetals = ({ userInfoData, type }) => {
 
                   <div className="form-outline form-white  d-flex  col-md-6">
                     <div className='formWrpLabel'>
-                      <label className="fw-bolder ">English Name</label>
+                      <label className="fw-bolder ">{multiLang?.englishName}</label>
                     </div>
                     <div className='formWrpInpt'>
                       {userInfoData?.englishName ? userInfoData?.englishName : 'NA'}
@@ -62,7 +66,7 @@ const SupplyRentalUserDetals = ({ userInfoData, type }) => {
 
                 <div className="form-outline form-white d-flex ">
                   <div className='formWrpLabel'>
-                    <label className="fw-bolder ">Email</label>
+                    <label className="fw-bolder ">{multiLang?.email}</label>
                   </div>
                   <div className='formWrpInpt'>{userInfoData?.email ? userInfoData.email : 'NA='}
                   </div>
@@ -71,14 +75,14 @@ const SupplyRentalUserDetals = ({ userInfoData, type }) => {
                 <div className='d-flex col-md-12'>
                   <div className="form-outline form-white d-flex col-md-6">
                     <div className='formWrpLabel'>
-                      <label className="fw-bolder ">Company</label>
+                      <label className="fw-bolder ">{multiLang?.company}</label>
                     </div>
                     <div className='formWrpInpt'>{userInfoData?.companyName ? userInfoData?.companyName : 'NA'}
                     </div>
                   </div>
                   <div className="form-outline form-white  d-flex  col-md-6">
                     <div className='formWrpLabel'>
-                      <label className="fw-bolder ">Division</label>
+                      <label className="fw-bolder ">{multiLang?.division}</label>
                     </div>
                     <div className='formWrpInpt'>
                       {userInfoData?.divisionName ? userInfoData?.divisionName : 'NA'}
@@ -89,7 +93,7 @@ const SupplyRentalUserDetals = ({ userInfoData, type }) => {
                 <div className='d-flex col-md-12'>
                   <div className="form-outline form-white d-flex col-md-6">
                     <div className='formWrpLabel'>
-                      <label className="fw-bolder ">Group</label>
+                      <label className="fw-bolder ">{multiLang?.group}</label>
                     </div>
                     <div className='formWrpInpt'>
                       {userInfoData?.groupName ? userInfoData?.groupName : 'NA'}
@@ -97,7 +101,7 @@ const SupplyRentalUserDetals = ({ userInfoData, type }) => {
                   </div>
                   <div className="form-outline form-white  d-flex  col-md-6">
                     <div className='formWrpLabel'>
-                      <label className="fw-bolder ">Team</label>
+                      <label className="fw-bolder ">{multiLang?.team}</label>
                     </div>
                     <div className='formWrpInpt'>
                       {userInfoData?.teamName ? userInfoData?.teamName : 'NA'}
@@ -108,7 +112,7 @@ const SupplyRentalUserDetals = ({ userInfoData, type }) => {
 
                 <div className="form-outline form-white d-flex ">
                   <div className='formWrpLabel'>
-                    <label className="fw-bolder ">Last Access
+                    <label className="fw-bolder ">{multiLang?.lastAccess}
                     </label>
                   </div>
                   <div className='formWrpInpt'>
@@ -118,13 +122,13 @@ const SupplyRentalUserDetals = ({ userInfoData, type }) => {
 
                 <div className="form-outline d-flex">
                   <div className='formWrpLabel'>
-                    <label className="fw-bolder ">Rental Info.
+                    <label className="fw-bolder ">{multiLang?.rentalInfo}
                     </label>
                   </div>
                   <div className='d-flex'>
                     <div className='col-md-6'>
                       <div className='formWrpLabel' style={{ maxWidth: '100%' }}>
-                        <label className="fw-bolder">Supply Rental :{userInfoData.suppliesCount ? userInfoData.suppliesCount : '0'} </label>
+                        <label className="fw-bolder">{multiLang?.supplyRental} :{userInfoData.suppliesCount ? userInfoData.suppliesCount : '0'} </label>
                       </div>
                       <div className="border-end px-1">
                         {userInfoData.suppliesInfo?.map((data, i) => (
@@ -142,7 +146,7 @@ const SupplyRentalUserDetals = ({ userInfoData, type }) => {
                     </div>
                     <div className='col-md-6'>
                       <div className='formWrpLabel' style={{ maxWidth: '100%' }}>
-                        <label className="fw-bolder">Book Rental :{userInfoData.bookRentalCount ? userInfoData.bookRentalCount : '0'} </label>
+                        <label className="fw-bolder">{multiLang?.bookRental} :{userInfoData.bookRentalCount ? userInfoData.bookRentalCount : '0'} </label>
                       </div>
                       <div className="border-start px-1">
                         {userInfoData.bookRentalInfo?.map((data, i) => (

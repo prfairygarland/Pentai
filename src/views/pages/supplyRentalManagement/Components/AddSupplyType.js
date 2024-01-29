@@ -3,12 +3,17 @@ import CIcon from '@coreui/icons-react';
 import { CButton, CFormCheck, CFormInput, CFormSelect, CFormTextarea, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle } from '@coreui/react'
 import { enqueueSnackbar } from 'notistack';
 import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import Loader from 'src/components/common/Loader';
 import { deleteApi, getApi, postApi, putApi } from 'src/utils/Api';
 import { API_ENDPOINT } from 'src/utils/config';
 
 const AddSupplyType = ({ setModal, getMod, Modal, getId, removeIds, getVal }) => {
+
+  const { t, i18n } = useTranslation();
+  const translationObject = i18n.getDataByLanguage(i18n.language);
+  const multiLang = translationObject?.translation?.supplyRentalManagementAllSupplies
   const [deleteVisible, setDeleteVisible] = useState(false)
   const navigate = useNavigate()
   const [isLoading, setIsLoading] = useState(false);
@@ -223,25 +228,25 @@ const AddSupplyType = ({ setModal, getMod, Modal, getId, removeIds, getVal }) =>
       <div>
         {getId &&
           <div className='d-flex justify-content-end'>
-            <CButton onClick={() => setDeleteVisible(true)}>Delete</CButton>
+            <CButton onClick={() => setDeleteVisible(true)}>{multiLang?.delete}</CButton>
           </div>
         }
         <div className="dropdown-container mb-2">
-          <h5 className="me-3">Supply Type</h5>
+          <h5 className="me-3">{multiLang?.supplyType}</h5>
         </div>
         <div className="card-body">
           <div className="formWraper">
             <div className="form-outline form-white   d-flex ">
               <div className="formWrpLabel" >
                 <label className="fw-bolder ">
-                  Supply Type  Name
+                  {multiLang?.supplyTypeName}
                 </label>
               </div>
               <div className="formWrpInpt d-flex">
                 <div className="d-flex formradiogroup mb-2 gap-3">
                   <CFormInput
                     type="text"
-                    placeholder=""
+                    placeholder={multiLang?.placeholder}
                     name='name'
                     value={addSupplyTypeData.name}
                     onChange={(e) => {
@@ -249,13 +254,13 @@ const AddSupplyType = ({ setModal, getMod, Modal, getId, removeIds, getVal }) =>
                     }}
                   />
                 </div>
-                <span className="txt-byte-information">{addSupplyTypeData.name.length} / 26 byte</span>
+                <span className="txt-byte-information">{addSupplyTypeData.name.length} / 26 {multiLang?.byte}</span>
               </div>
             </div>
             <div className="form-outline form-white  d-flex ">
               <div className="formWrpLabel" >
                 <label className="fw-bolder ">
-                  Associated Items
+                  {multiLang?.associatedItems}
                 </label>
               </div>
               <div className="formWrpInpt">
@@ -272,18 +277,18 @@ const AddSupplyType = ({ setModal, getMod, Modal, getId, removeIds, getVal }) =>
               </div>
             </div>
             <div className="form-outline formWrpLabel form-white d-flex justify-content-end bg-light">
-              <p style={{ padding: '2%' }}>Default settings</p>
+              <p style={{ padding: '2%' }}>{multiLang?.defaultSettings}</p>
             </div>
             <div className="form-outline form-white  d-flex ">
               <div className="formWrpLabel" >
                 <label className="fw-bolder ">
-                  Rental Duration
+                  {multiLang?.rentalDuration}
                 </label>
               </div>
               <div className="formWrpInpt">
                 <div className="d-flex formradiogroup mb-2 align-items-center  justify-content-center gap-5">
                   <p>
-                    Max. Rentable Weeks
+                    {multiLang?.maxRentableWeeks}
                   </p>
                   <p>
                     <CFormInput placeholder='0' type='number' name='rentalDuration'
@@ -301,15 +306,15 @@ const AddSupplyType = ({ setModal, getMod, Modal, getId, removeIds, getVal }) =>
             <div className="d-flex col-md-12">
               <div className="form-outline form-white d-flex w-100">
                 <div className="formWrpLabel" >
-                  <label className="fw-bolder ">Visibility</label>
+                  <label className="fw-bolder ">{multiLang?.visibility}</label>
                 </div>
                 <div className="push-notification-container gap-3">
-                  <CFormCheck type="radio" name="visibility" id="exampleRadios1" label="Visible"
+                  <CFormCheck type="radio" name="visibility" id="exampleRadios1" label={multiLang?.visible}
                     defaultChecked={addSupplyTypeData.visibility}
                     onClick={() => setAddSupplyTypeData((prev) => ({ ...prev, visibility: true }))}
                     value={true}
                   />
-                  <CFormCheck type="radio" name="visibility" id="exampleRadios2" label="Hide"
+                  <CFormCheck type="radio" name="visibility" id="exampleRadios2" label={multiLang?.hide}
                     defaultChecked={!addSupplyTypeData.visibility}
                     onClick={() => setAddSupplyTypeData((prev) => ({ ...prev, visibility: false }))}
                     value={false}
@@ -321,15 +326,15 @@ const AddSupplyType = ({ setModal, getMod, Modal, getId, removeIds, getVal }) =>
             <div className="d-flex col-md-12">
               <div className="form-outline form-white d-flex w-100">
                 <div className="formWrpLabel">
-                  <label className="fw-bolder ">Request as provided option</label>
+                  <label className="fw-bolder ">{multiLang?.requestAsProvidedOption}</label>
                 </div>
                 <div className="push-notification-container gap-3">
-                  <CFormCheck type="radio" name="providedOption" id="exampleRadios1" label="Visible"
+                  <CFormCheck type="radio" name="providedOption" id="exampleRadios1" label={multiLang?.visible}
                     defaultChecked={addSupplyTypeData.providedOption}
                     onClick={() => setAddSupplyTypeData((prev) => ({ ...prev, providedOption: true }))}
                     value={true}
                   />
-                  <CFormCheck type="radio" name="providedOption" id="exampleRadios2" label="Hide"
+                  <CFormCheck type="radio" name="providedOption" id="exampleRadios2" label={multiLang?.hide}
                     defaultChecked={!addSupplyTypeData.providedOption}
                     onClick={() => setAddSupplyTypeData((prev) => ({ ...prev, providedOption: false }))}
                     value={false}
@@ -341,14 +346,14 @@ const AddSupplyType = ({ setModal, getMod, Modal, getId, removeIds, getVal }) =>
             <div className="form-outline form-white  d-flex ">
               <div className="formWrpLabel" >
                 <label className="fw-bolder">
-                  Point of pick and return
+                  {multiLang?.pointOfPickAndReturn}
                 </label>
               </div>
               <div className="formWrpInpt">
                 <div className="d-flex formradiogroup mb-2 gap-3">
                   <CFormInput
                     type="text"
-                    placeholder="Enter name, Location"
+                    placeholder={multiLang?.pointOfPickAndReturnPlaceholder}
                     name='pickUpAndReturn'
                     value={addSupplyTypeData.pickUpAndReturn}
                     onChange={(e) => {
@@ -361,14 +366,14 @@ const AddSupplyType = ({ setModal, getMod, Modal, getId, removeIds, getVal }) =>
             <div className="form-outline form-white  d-flex ">
               <div className="formWrpLabel" >
                 <label className="fw-bolder">
-                  Reason remarks guide text
+                  {multiLang?.reasonRemarksGuideText}
                 </label>
               </div>
               <div className="formWrpInpt">
                 <div className="d-flex formradiogroup mb-2 gap-3">
                   <CFormInput
                     type="text"
-                    placeholder="Enter guide text"
+                    placeholder={multiLang?.reasonRemarksGuideTextPlaceholder}
                     name='reasonRemarks'
                     value={addSupplyTypeData.reasonRemarks}
                     onChange={(e) => {
@@ -381,7 +386,7 @@ const AddSupplyType = ({ setModal, getMod, Modal, getId, removeIds, getVal }) =>
             <div className="form-outline form-white  d-flex ">
               <div className="formWrpLabel" >
                 <label className="fw-bolder">
-                  Supply Rental guide description
+                  {multiLang?.supplyRentalGuideDescription}
                 </label>
               </div>
               <div className="formWrpInpt">
@@ -404,15 +409,15 @@ const AddSupplyType = ({ setModal, getMod, Modal, getId, removeIds, getVal }) =>
       <div className='p-4'>
         <div className='d-flex gap-3'>
           <CIcon icon={cilInfo} size="lg" />
-          <p>Values you set here will automatically apply to all lower categories as the default settings.</p>
+          <p>{multiLang?.defaultSettingsMsg}</p>
         </div>
         <div className='mt-2'>
-          <p>But, you can also customize the settings for each subcategory separately on their own settings page.</p>
+          <p>{multiLang?.defaultSettingsUpdateMsg}</p>
         </div>
       </div>
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '5%', gap: 10 }}>
-        <CButton onClick={() => saveSupplyType('cancle')} style={{ marginRight: '2%', background: '#ccc', border: 'none' }}>Cancel</CButton>
-        <CButton onClick={() => saveSupplyType('save')}>Save</CButton>
+        <CButton onClick={() => saveSupplyType('cancle')} style={{ marginRight: '2%', background: '#ccc', border: 'none' }}>{multiLang?.cancel}</CButton>
+        <CButton onClick={() => saveSupplyType('save')}>{multiLang?.save}</CButton>
       </div>
 
       <CModal
@@ -422,17 +427,17 @@ const AddSupplyType = ({ setModal, getMod, Modal, getId, removeIds, getVal }) =>
         aria-labelledby="StaticBackdropExampleLabel"
       >
         <CModalHeader>
-          <CModalTitle id="StaticBackdropExampleLabel">Delete</CModalTitle>
+          <CModalTitle id="StaticBackdropExampleLabel">{multiLang?.delete}</CModalTitle>
         </CModalHeader>
         <CModalBody>
-          <p>Are you sure you want to delete this category?
+          <p>{multiLang?.deletePopUp}
             <br />
-            All categories and items belonging will be deleted.</p>
+            {multiLang?.deletePopUpMsg}</p>
         </CModalBody>
         <CModalFooter>
-          <CButton color="primary" onClick={() => deleteSupplyType()}>Delete</CButton>
+          <CButton color="primary" onClick={() => deleteSupplyType()}>{multiLang?.delete}</CButton>
           <CButton color="secondary" onClick={() => setDeleteVisible(false)}>
-            Cancel
+            {multiLang?.cancel}
           </CButton>
         </CModalFooter>
       </CModal>
