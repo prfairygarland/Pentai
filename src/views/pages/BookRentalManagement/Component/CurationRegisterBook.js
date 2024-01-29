@@ -15,7 +15,7 @@ const CurationRegisterBook = ({setDeleted, setIconSet, setSideBarId, setCategory
         categoryID: '',
         subCategoryID: '',
         description: '',
-        image:null
+        image:null,
         description: '',
         image:null
     })
@@ -249,7 +249,6 @@ const CurationRegisterBook = ({setDeleted, setIconSet, setSideBarId, setCategory
 
     const PostData = async () => {
         let Imgurl = RegisteredData?.image?.toString().replace('http:', 'https:')
-        let Imgurl = RegisteredData?.image?.toString().replace('http:', 'https:')
         const url = `${API_ENDPOINT.createBook}`
         try {
             const body = {
@@ -291,9 +290,7 @@ const CurationRegisterBook = ({setDeleted, setIconSet, setSideBarId, setCategory
             else{
                 enqueueSnackbar("failed to creat book",{ variant: 'error' })
             }
-            else{
-                enqueueSnackbar("failed to creat book",{ variant: 'error' })
-            }
+        }
         } catch (error) {
             console.log(error)
         }

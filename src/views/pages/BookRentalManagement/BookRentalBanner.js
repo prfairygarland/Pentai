@@ -57,7 +57,6 @@ const BookRentalBanner = () => {
     const urlsToFiles = async (url) => {
         if (!url) return
         const blob = await urlToBlob(imageUrl + url)
-        const blob = await urlToBlob(imageUrl + url)
         const fileName = url
         return new File([blob], fileName, { type: blob.type })
     }
@@ -66,7 +65,6 @@ const BookRentalBanner = () => {
         let url = `${API_ENDPOINT.get_banner_CategoryDetail}`
 
         const res = await getApi(url)
-        if (res?.status === 200) {
         if (res?.status === 200) {
             setBannerSetting(res.data)
             //   enqueueSnackbar('Banner updated success', { variant: 'success' })
@@ -246,8 +244,6 @@ const BookRentalBanner = () => {
                     bannerUpdateId ?
                         enqueueSnackbar('Banner Updated Successfully', { variant: 'success' }) :
                         enqueueSnackbar('Banner Added Successfully', { variant: 'success' })
-                        enqueueSnackbar('Banner Updated Successfully', { variant: 'success' }) :
-                        enqueueSnackbar('Banner Added Successfully', { variant: 'success' })
                 }
                 getBannerList()
             }
@@ -412,7 +408,6 @@ const BookRentalBanner = () => {
             accessor: '',
             Cell: ({ row }) =>
                 <img alt="" crossOrigin='anonymous' src={imageUrl + row?.original?.image} style={{ width: '100%', height: '100px' }}></img>
-                <img alt="" crossOrigin='anonymous' src={imageUrl + row?.original?.image} style={{ width: '100%', height: '100px' }}></img>
 
         },
         {
@@ -445,7 +440,6 @@ const BookRentalBanner = () => {
         {
             Header: 'Action',
             accessor: 'button',
-            Cell: ({ row }) => <CButton className='mx-3 rounded border-1 btn-black' onClick={() => { setDeleteId(row.original.id); setDeleteVisible(true) }}>Delete</CButton>
             Cell: ({ row }) => <CButton className='mx-3 rounded border-1 btn-black' onClick={() => { setDeleteId(row.original.id); setDeleteVisible(true) }}>Delete</CButton>
 
         },

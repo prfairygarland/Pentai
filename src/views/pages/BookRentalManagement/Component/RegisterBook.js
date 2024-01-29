@@ -183,16 +183,11 @@ const RegisterBook = ({ setDeleted, setBook, setSearchBookId, searchBookId, sear
                     return {
                         ...prev,
                         bookgenre: genreId.toString()
-                        bookgenre: genreId.toString()
                     }
                 })
             }
         }
         getBookGenreData()
-        // FilterBookData()
-    }, [genreId])
-
-    console.log(genre)
         // FilterBookData()
     }, [genreId])
 
@@ -276,7 +271,6 @@ const RegisterBook = ({ setDeleted, setBook, setSearchBookId, searchBookId, sear
 
     const PostData = async () => {
         let Imgurl = RegisteredData?.image?.toString().replace('http:', 'https:')
-        let Imgurl = RegisteredData?.image?.toString().replace('http:', 'https:')
         const url = `${API_ENDPOINT.createBook}`
         try {
             const body = {
@@ -308,17 +302,6 @@ const RegisterBook = ({ setDeleted, setBook, setSearchBookId, searchBookId, sear
                     setSearchBooks([])
                     setDeleted((prev) => prev + 1)
                     setBook('search')
-            else {
-                const res = await postApi(url, body)
-                console.log('body', body)
-                if (res?.data?.status === 200) {
-                    enqueueSnackbar("Book created successfully", { variant: "success" })
-                    console.log('sucessfully updated')
-                    setCategories('AllBooks')
-                    setSearchBooks([])
-                    setDeleted((prev) => prev + 1)
-                    setBook('search')
-
                 }
                 else {
                     enqueueSnackbar("Failed to create book", { variant: "error" })
@@ -347,7 +330,6 @@ const RegisterBook = ({ setDeleted, setBook, setSearchBookId, searchBookId, sear
                             <div>
                                 <div style={{ width: '180px', overflow: 'hidden', marginBottom: '5%' }} >
                                     {(RegisteredData?.image || image) ? <img src={image ? image : RegisteredData?.image} style={{ height: '100%', width: '100%' }} /> : <img alt='' src='https://www.beelights.gr/assets/images/empty-image.png' style={{ height: '100%', width: '100%' }} />}
-                                    {(RegisteredData?.image || image) ? <img src={image ? image : RegisteredData?.image} style={{ height: '100%', width: '100%' }} /> : <img alt='' src='https://www.beelights.gr/assets/images/empty-image.png' style={{ height: '100%', width: '100%' }} />}
                                     <input style={{ display: 'none' }} type="file" name="upload" accept=".png, .jpg, .jpeg, .gif" ref={inputRef} onChange={handleUpload} />
                                 </div>
                                 <button style={{ background: '#4f5d73', height: '40px', width: '80px', cursor: 'pointer', borderRadius: 8, color: 'white' }} onClick={handleImageChange}>Upload</button>
@@ -367,7 +349,6 @@ const RegisterBook = ({ setDeleted, setBook, setSearchBookId, searchBookId, sear
                                             <CFormSelect
                                                 options={genre}
                                                 onChange={hanldleGenreSelect}
-                                                value={RegisteredData.bookgenre}
                                                 value={RegisteredData.bookgenre}
                                             />
                                         </div>
@@ -399,20 +380,17 @@ const RegisterBook = ({ setDeleted, setBook, setSearchBookId, searchBookId, sear
                                     <td>ISBN</td>
                                     <td>
                                         <input style={{ border: '1px solid #ccc', width: '98%', margin: 5 }} value={RegisteredData.ISBN} onChange={hanldleChangeISBN} />
-                                        <input style={{ border: '1px solid #ccc', width: '98%', margin: 5 }} value={RegisteredData.ISBN} onChange={hanldleChangeISBN} />
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>Book Title</td>
                                     <td>
                                         <input style={{ border: '1px solid #ccc', width: '98%', margin: 5 }} value={RegisteredData.title} onChange={hanldleChangeTitle} />
-                                        <input style={{ border: '1px solid #ccc', width: '98%', margin: 5 }} value={RegisteredData.title} onChange={hanldleChangeTitle} />
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>Author </td>
                                     <td>
-                                        <input style={{ border: '1px solid #ccc', width: '98%', margin: 5 }} value={RegisteredData.Author} onChange={hanldleChangeAuthor} />
                                         <input style={{ border: '1px solid #ccc', width: '98%', margin: 5 }} value={RegisteredData.Author} onChange={hanldleChangeAuthor} />
                                     </td>
                                 </tr>
