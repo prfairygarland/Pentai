@@ -66,11 +66,14 @@ const AllBook = () => {
     const [bookItemId, setBookItemId] = useState(null)
     const [deleteVisible, setdeleteVisible] = useState(false)
     const [deletebookId, setDeleteBookId] = useState(null)
-    const [searchBookTitle, setSearchBookTitle] = useState('')
-    const [searchBookDetail, setSearchBookDetail] = useState([])
+    const [searchBookId, setSearchBookId] = useState('')
+    const [searchBookDetail, setSearchBookDetail] = useState({})
     const [searchItemPerPage, setItemPerPage] = useState(3)
     const [currentSearchPage, setSearchCurrentPage] = useState(0)
     const [totalSearchPage, setSearchtotalPage] = useState(0)
+
+
+    console.log('AllBookList', AllBookList)
 
 
     const getLibraryLists = async () => {
@@ -78,15 +81,21 @@ const AllBook = () => {
         const res = await getApi(API_ENDPOINT.get_libraryList)
         if (res?.status === 200) {
             setLibraryList(res?.data)
+        if (res?.status === 200) {
+            setLibraryList(res?.data)
         }
 
     }
+
+      console.log('searchBookDetail', searchBookDetail)   
 
     const getLibraryDetails = async (id) => {
 
         let url = `${API_ENDPOINT.get_libraryDetails}?id=${id}`
 
         const res = await getApi(url)
+        if (res?.status === 200) {
+            setLibraryDetail(res?.data)
         if (res?.status === 200) {
             setLibraryDetail(res?.data)
         }
@@ -118,18 +127,20 @@ const AllBook = () => {
                 setTotalCount(response?.totalCount)
                 setTotalPages(Math.ceil(response.totalCount / Number(itemsPerPage)))
                 console.log('books',response?.data)
+                console.log('books',response?.data)
             } else {
                 setAllBookList([])
+                setTotalCount(0)
             }
         } catch (error) {
             console.log(error)
         }
-
     }
 
     const SearchBookList = async () => {
         let url = `${API_ENDPOINT.searchGoogleBook}`
         if (searchBookFilter.title) {
+            url = url + `?searchByName=${searchBookFilter.title}&limit=${searchItemPerPage}&offset=${currentSearchPage + 1}`
             url = url + `?searchByName=${searchBookFilter.title}&limit=${searchItemPerPage}&offset=${currentSearchPage + 1}`
         }
 
@@ -138,12 +149,18 @@ const AllBook = () => {
             if (res?.status === 200) {
                 setSearchBooks(res?.data)
                 setSearchtotalPage(Math.ceil(res?.data?.length /searchItemPerPage ))
+                setSearchtotalPage(Math.ceil(res?.data?.length /searchItemPerPage ))
             }
         } catch (error) {
             console.log(error)
         }
 
     }
+
+    useEffect(() => {
+        SearchBookList()
+    }, [setSearchCurrentPage])
+    
 
     useEffect(() => {
         SearchBookList()
@@ -191,6 +208,7 @@ const AllBook = () => {
 
         const res = await getApi(url)
         if (res?.status === 200) {
+        if (res?.status === 200) {
             setItemBookDetail(res.data)
 
         }
@@ -200,6 +218,13 @@ const AllBook = () => {
     useEffect(() => {
         getBookList()
     }, [filterData.bookGenre, filterData.status, filterData.visibility, itemsPerPage, currentPage])
+
+    useEffect(() => {
+      if(filterData?.title===''){
+        getBookList()
+      }
+    }, [filterData.title])
+    
 
 
     useEffect(() => {
@@ -242,6 +267,7 @@ const AllBook = () => {
             Cell: ({ row }) => <div className='d-flex justify-content-center align-items-center  '>
                 <CButton onClick={() => { setCategories('BookDetail'); setBookId(row.original.id); DisplayBook(row.original.id) }} className='rounded border-1 mx-2'>Modify</CButton>
                 <CButton onClick={() => { setdeleteVisible(true); setDeleteBookId(row.original.id) }} className='rounded border-1 btn-black'>Delete</CButton>
+                <CButton onClick={() => { setdeleteVisible(true); setDeleteBookId(row.original.id) }} className='rounded border-1 btn-black'>Delete</CButton>
             </div>
         },
     ], [])
@@ -255,7 +281,11 @@ const AllBook = () => {
         }
         if (filterData?.status) {
             url = url + `&status=${filterData?.status}`
+        if (filterData?.status) {
+            url = url + `&status=${filterData?.status}`
         }
+        if (filterData.bookGenre && filterData.bookGenre !== 'All') {
+            url = url + `&genreId=${filterData?.bookGenre}`
         if (filterData.bookGenre && filterData.bookGenre !== 'All') {
             url = url + `&genreId=${filterData?.bookGenre}`
         }
@@ -263,7 +293,11 @@ const AllBook = () => {
 
         const res = await getApi(url)
         console.log('res =>', res);
+        const res = await getApi(url)
+        console.log('res =>', res);
 
+        if (res?.filePath) {
+            const downloadLink = res?.filePath;
         if (res?.filePath) {
             const downloadLink = res?.filePath;
             const link = document.createElement('a');
@@ -278,6 +312,8 @@ const AllBook = () => {
             console.log('No data found');
         }
     }
+
+    console.log('filt', filterData)
 
     console.log('filt', filterData)
 
@@ -317,6 +353,8 @@ const AllBook = () => {
     }
 
     
+
+    
     const handleStatusChange = (e) => {
         const value = e.target.value
         setFilteredData((prev) => {
@@ -326,6 +364,8 @@ const AllBook = () => {
             }
         })
     }
+    console.log('filter', filterData)
+    
     console.log('filter', filterData)
     
     const handleVisibilityChange = (e) => {
@@ -440,6 +480,7 @@ const AllBook = () => {
         getALLBookgenre()
         getBookList()
         getLibraryLists()
+        getLibraryLists()
         // handleAddSubcategory()
         // handleAddBook(categoryID, subCategoryID)
     }, [deleted])
@@ -461,6 +502,7 @@ const AllBook = () => {
         try {
             const res = await deleteApi(url, bookId)
             if (res?.data?.status === 200) {
+            if (res?.data?.status === 200) {
                 setDeleted((prev) => prev + 1)
                 getBookList()
             }
@@ -470,11 +512,11 @@ const AllBook = () => {
     }
 
     useEffect(() => {
-      const data = searchBooks.filter((item) => item.title === searchBookTitle)
+      const data = searchBooks[searchBookId]
 
       setSearchBookDetail(data)
 
-    }, [searchBookTitle])
+    }, [searchBookId])
     
 
     useEffect(() => {
@@ -504,6 +546,9 @@ const AllBook = () => {
            <div className='col-md-4'>
            <CSidebar className='w-100 pe-3'>
                 <CSidebarBrand className=' black-text d-flex justify-content-start p-3' style={{ color: 'black', background: 'none' }}><h5 style={{fontSize: '15px'}}>Category Hierarchy</h5></CSidebarBrand>
+           <div className='col-md-4'>
+           <CSidebar className='w-100 pe-3'>
+                <CSidebarBrand className=' black-text d-flex justify-content-start p-3' style={{ color: 'black', background: 'none' }}><h5 style={{fontSize: '15px'}}>Category Hierarchy</h5></CSidebarBrand>
                 <CSidebarBrand className=' black-text d-flex justify-content-between mb-2' style={{ color: 'black', borderBottom: '1px solid #000', background: 'none', alignItems: 'center' }}>
                     <p onClick={() => setCategories('AllBooks')} role='button'>All Books</p>
                 </CSidebarBrand>
@@ -519,6 +564,7 @@ const AllBook = () => {
                                             <p onClick={() => { setCategories('library'); getLibraryDetails(category.id) }} role='button'>{category.name}</p>
                                         </div>
                                         <div>
+                                            <CButton onClick={() => { setCategories('bookgenre'); setGenreId(null) }} className='btn-sm' style={{whiteSpace:'nowrap'}}>Add sub</CButton>
                                             <CButton onClick={() => { setCategories('bookgenre'); setGenreId(null) }} className='btn-sm' style={{whiteSpace:'nowrap'}}>Add sub</CButton>
                                         </div>
                                     </div>
@@ -536,10 +582,12 @@ const AllBook = () => {
                                                             </div>
                                                             <div>
                                                                 <CButton onClick={() => {setCategories('Sub');setGenreId(subcategory.id);setSearchBooks([]);setSearchBookDetail([])}} className='btn-sm' style={{whiteSpace:'nowrap'}}>Add sub</CButton>
+                                                                <CButton onClick={() => {setCategories('Sub');setGenreId(subcategory.id);setSearchBooks([]);setSearchBookDetail([])}} className='btn-sm' style={{whiteSpace:'nowrap'}}>Add sub</CButton>
                                                             </div>
                                                         </div>
                                                         <div>
                                                             {
+                                                                sideSubBarId === subcategory?.id && 
                                                                 sideSubBarId === subcategory?.id && 
                                                                 <div>
                                                                     {subcategory?.books?.map((book, index) => (
@@ -551,6 +599,7 @@ const AllBook = () => {
                                                                                     <p onClick={() => { setCategories('BookDetail'); setBookId(book.id); DisplayBook(book.id) }} role='button'>{book.title}</p>
                                                                                 </div>
                                                                                 <div>
+                                                                                    <CButton onClick={() => { setCategories('itemNumber'); setBookItemId(null); DisplayBook(book.id) }} className='btn-sm'  style={{whiteSpace:'nowrap'}}>Add sub</CButton>
                                                                                     <CButton onClick={() => { setCategories('itemNumber'); setBookItemId(null); DisplayBook(book.id) }} className='btn-sm'  style={{whiteSpace:'nowrap'}}>Add sub</CButton>
                                                                                 </div>
                                                                             </div>
@@ -588,12 +637,15 @@ const AllBook = () => {
 
             </CSidebar>
            </div>
+           </div>
 
             {/* </div>   */}
             {categories === 'library' && <Library setCategories={setCategories} libraryDetails={libraryDetails} CategoryId={CategoryId} library={library} />}
             {categories === 'bookgenre' && <BookGenre setFilteredData={setFilteredData} setCategories={setCategories} setDeleted={setDeleted} genreId={genreId} getALLBookgenre={getALLBookgenre} library={library} />}
-            {categories === 'BookDetail' && <BooksDetail setFilteredData={setFilteredData} genreId={genreId} deleteSingleBook={deleteSingleBook} setDeleted={setDeleted} getBookList={getBookList} setCategories={setCategories} bookDisplay={bookDisplay} Genre={Genre} bookId={bookId} genreBooks={genreBooks} library={library} />}
+            {categories === 'BookDetail' && <BooksDetail setSideBarId={setSideBarId} setIconSet={setIconSet} setFilteredData={setFilteredData} genreId={genreId} deleteSingleBook={deleteSingleBook} setDeleted={setDeleted} getBookList={getBookList} setCategories={setCategories} bookDisplay={bookDisplay} Genre={Genre} bookId={bookId} genreBooks={genreBooks} library={library} />}
             {categories === 'itemNumber' && <ItemNumber setFilteredData={setFilteredData} setCategories={setCategories} bookDisplay={bookDisplay} bookItemDetail={bookItemDetail} setDeleted={setDeleted} Genre={Genre} bookId={bookId} bookItemId={bookItemId} genreBooks={genreBooks} library={library} />}
+            {categories === 'AllBooks' && 
+            <div className='col-md-8' style={{ padding: 5, minHeight: '100%' }}>
             {categories === 'AllBooks' && 
             <div className='col-md-8' style={{ padding: 5, minHeight: '100%' }}>
                 <div className='d-flex justify-content-end m-1 '>
@@ -610,6 +662,8 @@ const AllBook = () => {
                             className='me-3'
                             options={[
                                 { label: 'All', value: 'All' },
+                                { label: 'Available', value: 'available' },
+                                { label: 'Unavailable', value: 'unAvailable' },
                                 { label: 'Available', value: 'available' },
                                 { label: 'Unavailable', value: 'unAvailable' },
                             ]}
@@ -631,11 +685,11 @@ const AllBook = () => {
                     <CButton onClick={getBookList}>Search</CButton>
                 </div>
                 <div>
-                    <p style={{ fontSize: 'medium', padding: 5 }}>Total: {totalCount}</p>
+                    <p style={{ fontSize: 'medium', padding: 5 }}>Total: {totalCount > 0 ? totalCount : '0'}</p>
                 </div>
-                <div>
+               {AllBookList.length > 0 ?  <div>
                     <ReactTable columns={columns} data={AllBookList} showCheckbox={false} onSelectionChange={handleSelectionChange} />
-                </div>
+                </div> : <p style={{textAlign:'center', color:'#999', fontSize:'1.2rem'}}>No Search Result</p>}
                 <div className='d-flex w-100 justify-content-center gap-3'>
                     {AllBookList.length > 0 &&
                         <div className='userlist-pagination'>
@@ -678,6 +732,7 @@ const AllBook = () => {
                     </div>
                     <div className='clearfix'>
                         <CButton className='float-end btn-black'>Delete</CButton>
+                        <CButton className='float-end btn-black'>Delete</CButton>
                     </div>
                 </div>
                 <div style={{ width: '40%', display: 'flex', justifyContent: 'space-between', marginLeft: '5%' }}>
@@ -689,8 +744,8 @@ const AllBook = () => {
                     </div>
                 </div>
                 {categories === 'Sub' && (<div>
-                    {book === 'search' && <SearchBooks totalSearchPage={totalSearchPage} currentSearchPage={currentSearchPage} setSearchCurrentPage={setSearchCurrentPage} setSearchBookTitle={setSearchBookTitle} setBook={setBook} searchBookFilter={searchBookFilter} setSearchBookFilter={setSearchBookFilter} searchBooks={searchBooks} SearchBookList={SearchBookList} />}
-                    {book === 'Register' && <RegisterBook  setSearchBookDetail={setSearchBookDetail} searchBookDetail={searchBookDetail} setFilteredData={setFilteredData} genreId={genreId} setCategories={setCategories} setDeleted={setDeleted} setBook={setBook} setSearchBooks={setSearchBooks} searchBooks={searchBooks} />}
+                    {book === 'search' && <SearchBooks totalSearchPage={totalSearchPage} currentSearchPage={currentSearchPage} setSearchCurrentPage={setSearchCurrentPage} setSearchBookId={setSearchBookId} setBook={setBook} searchBookFilter={searchBookFilter} setSearchBookFilter={setSearchBookFilter} searchBooks={searchBooks} SearchBookList={SearchBookList} />}
+                    {book === 'Register' && <RegisterBook setSearchBookId={setSearchBookId} searchBookId={searchBookId}  setSearchBookDetail={setSearchBookDetail} searchBookDetail={searchBookDetail} setFilteredData={setFilteredData} genreId={genreId} setCategories={setCategories} setDeleted={setDeleted} setBook={setBook} setSearchBooks={setSearchBooks} searchBooks={searchBooks} />}
                 </div>)}
 
             </div>}

@@ -22,14 +22,14 @@ const Library = ({ library, CategoryId, setCategories, libraryDetails }) => {
         title:libraryDetails?.name,
         // code: libraryDetails?,
         AssociiatedItems: libraryDetails?.associatedItem,
-        isVisible: libraryDetails?.visibility,
+        isVisible: libraryDetails?.visibility === 'hide' ? false : true,
         rentableDurationWeek:libraryDetails?.rentableDurationWeek,
         extendDurationWeek:libraryDetails?.extendDurationWeek,
         pickUpAndReturn:libraryDetails?.pickUpAndReturn
        })
     }, [libraryDetails])
 
-    console.log('ids', CategoryId)
+    console.log('details', libraryDetails)
     console.log('data', data)
 
     const updateGenre = async () =>{

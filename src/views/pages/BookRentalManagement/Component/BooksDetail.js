@@ -6,8 +6,9 @@ import Loader from 'src/components/common/Loader'
 import { deleteApi, getApi, postApi, putApi } from 'src/utils/Api'
 import { API_ENDPOINT } from 'src/utils/config'
 import { imageUrl } from '../BookRentalStatus'
+import { imageUrl } from '../BookRentalStatus'
 
-const BooksDetail = ({ bookId,genreId, setFilteredData, setDeleted, bookDisplay, setCategories }) => {
+const BooksDetail = ({ bookId, genreId, setIconSet, setSideBarId, setFilteredData, setDeleted, bookDisplay, setCategories }) => {
 
     const [bookData, setBookData] = useState({
         bookgenre: '',
@@ -17,6 +18,7 @@ const BooksDetail = ({ bookId,genreId, setFilteredData, setDeleted, bookDisplay,
         image: null,
         bookdesr: '',
         visibility: true,
+        visibility: true,
         AssociatedItem: null
     })
     const [genre, setGenre] = useState([])
@@ -25,28 +27,33 @@ const BooksDetail = ({ bookId,genreId, setFilteredData, setDeleted, bookDisplay,
     const [postImage, setPostImage] = useState(null)
     const inputRef = useRef(null)
     const [image, setImage] = useState(null);
-    console.log('genreId',genreId)
-    console.log('bookId',bookId)
+    console.log('genreId', genreId)
+    console.log('bookId', bookId)
 
     console.log(bookDisplay)
+
+    console.log('serverImage', postImage)
 
     console.log('bookData', bookData)
 
     console.log('img', bookData.image)
 
     useEffect(() => {
+
         setBookData({
-            bookgenre: genre?.filter((ele)=>ele?.label === bookDisplay?.genreName)[0]?.value?.toString(),
+            bookgenre: genre?.filter((ele) => ele?.label === bookDisplay?.genreName)[0]?.value?.toString(),
             title: bookDisplay.title,
             ISBN: bookDisplay.SIBNCode,
             author: bookDisplay.author,
             image: bookDisplay.image,
             bookdesr: bookDisplay.description,
-            visibility: bookDisplay.visibility === 'visible' ? true : false ,
+            visibility: bookDisplay.visibility === 'visible' ? true : false,
             AssociatedItem: bookDisplay.associatedItem ? bookDisplay.associatedItem : 0,
             AvailabilityCount: bookDisplay.availabilityCount,
 
         })
+        // setImage(bookDisplay.image)
+
 
     }, [bookDisplay, bookId])
 
@@ -83,13 +90,15 @@ const BooksDetail = ({ bookId,genreId, setFilteredData, setDeleted, bookDisplay,
         try {
             const res = await deleteApi(url, bookId)
             if (res?.data?.status === 200) {
-                enqueueSnackbar('book deleted sucessfully', { variant : 'success'})
+                enqueueSnackbar('book deleted sucessfully', { variant: 'success' })
                 setDeleted((prev) => prev + 1)
-                 setCategories('AllBooks')
+                setCategories('AllBooks')
                 setdeleteVisible(false)
+                setIconSet(null)
+                setSideBarId(null)
             }
-            else{
-                enqueueSnackbar('failed to delete book', { variant : 'error'})
+            else {
+                enqueueSnackbar('failed to delete book', { variant: 'error' })
             }
         } catch (error) {
             console.log(error)
@@ -103,12 +112,14 @@ const BooksDetail = ({ bookId,genreId, setFilteredData, setDeleted, bookDisplay,
         const url = `${API_ENDPOINT.Edit_book}`
         const body = {
             id: bookId,
-            genreId:bookData?.bookgenre ? bookData?.bookgenre : '' ,
+            genreId: bookData?.bookgenre ? bookData?.bookgenre : '',
             title: bookData?.title,
             author: bookData?.author,
             SIBNCode: bookData?.ISBN,
             description: bookData?.bookdesr,
             image: image ? image : bookData?.image,
+            visibility: bookData?.visibility === true ? 'visible' : 'hide',
+            associatedItem: bookData.AssociatedItem ? bookData.AssociatedItem : 0
             visibility: bookData?.visibility === true ? 'visible' : 'hide',
             associatedItem: bookData.AssociatedItem ? bookData.AssociatedItem : 0
             // availabilityCount: bookDisplay.availabilityCount ? bookDisplay.availabilityCount : '',
@@ -118,12 +129,14 @@ const BooksDetail = ({ bookId,genreId, setFilteredData, setDeleted, bookDisplay,
         try {
             const res = await putApi(url, body)
             if (res?.data?.status === 200) {
-                enqueueSnackbar('book updated successfully',{variant : 'success'})
+                enqueueSnackbar('book updated successfully', { variant: 'success' })
                 setDeleted((prev) => prev + 1)
                 setCategories('AllBooks')
+                setIconSet(null)
+                setSideBarId(null)
             }
-            else{
-                enqueueSnackbar('failed to update book',{variant : 'error'})
+            else {
+                enqueueSnackbar('failed to update book', { variant: 'error' })
             }
         } catch (error) {
             console.log(error)
@@ -136,12 +149,15 @@ const BooksDetail = ({ bookId,genreId, setFilteredData, setDeleted, bookDisplay,
             setImage(URL.createObjectURL(e.target.files[0]))
             const formData = new FormData()
             formData.append('images', e?.target?.files[0])
+            formData.append('images', e?.target?.files[0])
             let url = API_ENDPOINT.uploadImages
             const res = await postApi(url, formData)
              setPostImage(res?.data?.processedImageUrls[0]?.imageUrl)
         }
 
     }
+
+    console.log('image', image)
 
     console.log('image', image)
 
@@ -205,6 +221,8 @@ const BooksDetail = ({ bookId,genreId, setFilteredData, setDeleted, bookDisplay,
             visibility: '',
             status: ''
         })
+        setIconSet(null)
+        setSideBarId(null)
     }
 
 
@@ -299,7 +317,7 @@ const BooksDetail = ({ bookId,genreId, setFilteredData, setDeleted, bookDisplay,
                                 </div>
                                 <div className="formWrpInpt d-flex">
                                     <div style={{ width: '180px', overflow: 'hidden', marginBottom: '5%' }} >
-                                        {bookData?.image !== null ? <img alt='' src={ image ? image : bookData?.image } style={{ height: '100%', width: '100%' }} /> : <img alt='' src='https://www.beelights.gr/assets/images/empty-image.png' style={{ height: '100%', width: '100%' }} />}
+                                        {bookData?.image !== null ? <img alt='' src={image ? image : bookData?.image} style={{ height: '100%', width: '100%' }} /> : <img alt='' src='https://www.beelights.gr/assets/images/empty-image.png' style={{ height: '100%', width: '100%' }} />}
                                         <input style={{ display: 'none' }} type="file" name="upload" accept=".png, .jpg, .jpeg" ref={inputRef} onChange={handleUpload} />
                                     </div>
                                     <div className='ms-4'>
@@ -346,8 +364,8 @@ const BooksDetail = ({ bookId,genreId, setFilteredData, setDeleted, bookDisplay,
                                                 defaultChecked={bookData.visibility}
                                                 onClick={() => setBookData((prev) => ({ ...prev, visibility: true }))}
                                                 value={true}
-                                                // checked={bookData.visibility}
-                                                // value={bookData.visibility}
+                                            // checked={bookData.visibility}
+                                            // value={bookData.visibility}
                                             />
                                             <CFormCheck type="radio" name="visibility" id="exampleRadios2" label="Hide"
                                                 defaultChecked={!bookData.visibility}
@@ -381,8 +399,8 @@ const BooksDetail = ({ bookId,genreId, setFilteredData, setDeleted, bookDisplay,
                 </div>
                 <CModal
                     backdrop="static"
-                      visible={deleteVisible}
-                      onClose={() => setdeleteVisible(false)}
+                    visible={deleteVisible}
+                    onClose={() => setdeleteVisible(false)}
                     aria-labelledby="StaticBackdropExampleLabel"
                 >
                     <CModalHeader>

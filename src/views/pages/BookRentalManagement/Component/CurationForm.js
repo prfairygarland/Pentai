@@ -1,11 +1,12 @@
 import { CButton, CFormCheck, CFormInput, CFormSelect, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle } from '@coreui/react'
+import { CButton, CFormCheck, CFormInput, CFormSelect, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle } from '@coreui/react'
 import { enqueueSnackbar } from 'notistack'
 import React, { useEffect, useState } from 'react'
 import DatePicker from 'react-date-picker'
 import { deleteApi, postApi, putApi } from 'src/utils/Api'
 import { API_ENDPOINT } from 'src/utils/config'
 
-const CurationForm = ({ setStateUpdate, curation, setCategories, categoryDetails, categoryID }) => {
+const CurationForm = ({ setStateUpdate, setCuration, curation, setCategories, categoryDetails, categoryID }) => {
 
     const [bannerStartDate, setBannerStartDate] = useState('')
     const [bannerStartHours, setBannerStartHours] = useState('00')
@@ -18,6 +19,7 @@ const CurationForm = ({ setStateUpdate, curation, setCategories, categoryDetails
         title: '',
         displayPeriod: '',
         isExpired: true,
+        isExpired: true,
         startDateTime: '',
         endDateTime: '',
         noLink: false,
@@ -28,19 +30,12 @@ const CurationForm = ({ setStateUpdate, curation, setCategories, categoryDetails
         visibility: false
     })
     const [deleteVisible, setdeleteVisible] = useState(false)
+    const [deleteVisible, setdeleteVisible] = useState(false)
 
     console.log('curationData', data)
     console.log('curationType', curation)
+    console.log('curationType', curation)
     console.log("curraction =>", categoryDetails)
-
-    useEffect(() => {
-        setData((prev) => {
-            return {
-                ...prev,
-                curationType: curation
-            }
-        })
-    }, [curation])
 
     useEffect(() => {
         if (categoryID) {
@@ -48,6 +43,7 @@ const CurationForm = ({ setStateUpdate, curation, setCategories, categoryDetails
                 curationType: categoryDetails?.curationType,
                 title: categoryDetails?.categoryName,
                 // displayPeriod: categoryDetails?.,
+                isExpired: categoryDetails?.isExpired === 'no' ? false : true,
                 isExpired: categoryDetails?.isExpired === 'no' ? false : true,
                 startDateTime: categoryDetails?.startDateTime,
                 endDateTime: categoryDetails?.endDateTime,
@@ -59,12 +55,14 @@ const CurationForm = ({ setStateUpdate, curation, setCategories, categoryDetails
                 visibility: categoryDetails?.visibility,
             })
 
+
             categoryDetails?.startDateTime ? setBannerStartDate(categoryDetails?.startDateTime) : setBannerStartDate('')
             categoryDetails?.endDateTime ? setBannerEndDate(categoryDetails?.endDateTime) : setBannerEndDate('')
         }
         else {
+        else {
             setData({
-                curationType: '',
+                curationType: curation,
                 title: '',
                 displayPeriod: '',
                 isExpired: false,
@@ -77,6 +75,8 @@ const CurationForm = ({ setStateUpdate, curation, setCategories, categoryDetails
                 link2: '',
                 visibility: false
             })
+            setBannerStartDate('')
+            setBannerEndDate('')
         }
 
     }, [categoryDetails, categoryID])
@@ -93,6 +93,7 @@ const CurationForm = ({ setStateUpdate, curation, setCategories, categoryDetails
         if (month.length < 2) month = '0' + month
         if (day.length < 2) day = '0' + day
         setBannerStartDate([year, month, day].join('/'))
+        setBannerStartDate(event)
     }
 
     const bannerStartTimeHandler = (e) => {
@@ -194,8 +195,8 @@ const CurationForm = ({ setStateUpdate, curation, setCategories, categoryDetails
             name: data.title,
             curation: data.curationType,
             isExpired: data.isExpired === true ? 'yes' : 'no',
-            startDateTime: data.isExpired === 'no' ? "" : new Date(bannerStartDate + 'T' + bannerStartHours + ':' + bannerStartMins),
-            endDateTime: data.isExpired === 'no' ? "" : new Date(bannerEndDate + 'T' + bannerEndHours + ':' + bannerEndHours),
+            startDateTime: data.isExpired === true ? "" : bannerStartDate ,
+            endDateTime: data.isExpired === true ? "" :   bannerEndDate ,
             linkName1: data.noLink === false ? data.link1Name : "",
             linkUrl1: data.noLink === false ? data.link1 : "",
             linkName2: data.noLink === false ? data.link2Name : "",
@@ -204,16 +205,16 @@ const CurationForm = ({ setStateUpdate, curation, setCategories, categoryDetails
 
         const filterData = Object.fromEntries(Object.entries(body).filter(([key, value]) => value !== ""))
 
-        console.log('body', filterData)
-        // const res = await postApi(url, filterData)
-        // console.log('resStaus', res)
-        // if (res?.data?.status === 200) {
-        //     enqueueSnackbar("Category created successfully", { variant: "success" })
-        //     setStateUpdate((prev) => prev + 1)
-        // }
-        // else {
-        //     enqueueSnackbar("Failed to create category", { variant: "error" })
-        // }
+        console.log('createbody', filterData)
+        const res = await postApi(url, filterData)
+        console.log('resStaus', res)
+        if (res?.data?.status === 200) {
+            enqueueSnackbar("Category created successfully", { variant: "success" })
+            setStateUpdate((prev) => prev + 1)
+        }
+        else {
+            enqueueSnackbar("Failed to create category", { variant: "error" })
+        }
     }
 
     const handleDeleteCategory = async () => {
@@ -223,10 +224,11 @@ const CurationForm = ({ setStateUpdate, curation, setCategories, categoryDetails
         if (res?.data?.status === 200) {
             setStateUpdate((prev) => prev + 1)
             enqueueSnackbar('category deleted', { variant: 'success' })
-            console.log('category deleted')
             setdeleteVisible(false)
+            setCategories('AllCuration')
         }
         else {
+            enqueueSnackbar('failed to deleted category', { variant: 'error' })
             enqueueSnackbar('failed to deleted category', { variant: 'error' })
             console.log('caught an error')
         }
@@ -240,8 +242,8 @@ const CurationForm = ({ setStateUpdate, curation, setCategories, categoryDetails
             name: data.title,
             curation: data.curationType,
             isExpired: data.isExpired === true ? 'yes' : 'no',
-            startDateTime: data.isExpired === true ? "" : bannerStartDate + 'T' + bannerStartHours + ':' + bannerStartMins,
-            endDateTime: data.isExpired === true ? "" : bannerEndDate + 'T' + bannerEndHours + ':' + bannerEndHours,
+            startDateTime: data.isExpired === true ? "" : bannerStartDate  ,
+            endDateTime: data.isExpired === true ? "" : bannerEndDate,
             linkName1: data.link1Name ? data.link1Name : "",
             linkUrl1: data.link1 ? data.link1 : "",
             linkName2: data.link2Name ? data.link2Name : "",
@@ -257,6 +259,7 @@ const CurationForm = ({ setStateUpdate, curation, setCategories, categoryDetails
             enqueueSnackbar("Category updated successfully", { variant: "success" })
             setStateUpdate((prev) => prev + 1)
             setCategories('AllCuration')
+            setCategories('AllCuration')
         }
         else {
             enqueueSnackbar("Failed to update category", { variant: "error" })
@@ -265,13 +268,16 @@ const CurationForm = ({ setStateUpdate, curation, setCategories, categoryDetails
 
     return (
         <div className='col-md-8'>
+        <div className='col-md-8'>
             {/* <h1>Curation form</h1> */}
             <div style={{ width: '100%', borderRadius: '0' }}>
                 <div className="card p-2">
                     <div className="dropdown-container">
                         {/* <label className="me-3">Curation</label> */}
+                        {/* <label className="me-3">Curation</label> */}
                     </div>
                     <div className='clearfix '>
+                        <CButton onClick={() => setdeleteVisible(true)} className='float-end'>Delete</CButton>
                         <CButton onClick={() => setdeleteVisible(true)} className='float-end'>Delete</CButton>
                     </div>
                     <div className="card-body">
@@ -322,12 +328,16 @@ const CurationForm = ({ setStateUpdate, curation, setCategories, categoryDetails
                                 </div>
                                 <div className="p-2">
                                     <div style={data.isExpired ? { pointerEvents: 'none', opacity: 0.4 } : null} >
+                                <div className="p-2">
+                                    <div style={data.isExpired ? { pointerEvents: 'none', opacity: 0.4 } : null} >
                                         <div>
                                             <DatePicker
                                                 value={bannerStartDate}
                                                 minDate={new Date()}
                                                 onChange={(event) => handleBannerStartDate(event)}
+                                                dateFormat="yyyy-MM-dd h:mm aa"
                                             />
+                                             <input
                                              <input
                                                 type="time"
                                                 name="time"
@@ -338,13 +348,16 @@ const CurationForm = ({ setStateUpdate, curation, setCategories, categoryDetails
                                             />
                                         </div>
                                        
+                                       
                                         -&nbsp;&nbsp;
                                         <div>
                                             <DatePicker
                                                 value={bannerEndDate}
                                                 minDate={new Date()}
                                                 onChange={(event) => handleBannerEndDate(event)}
+                                                dateFormat="yyyy-MM-dd h:mm aa"
                                             />
+                                       
                                        
                                             <input
                                                 type="time"
@@ -362,6 +375,9 @@ const CurationForm = ({ setStateUpdate, curation, setCategories, categoryDetails
                                             defaultChecked={data.isExpired}
                                             // checked={data.isExpired}
                                             value={data.isExpired}
+                                            defaultChecked={data.isExpired}
+                                            // checked={data.isExpired}
+                                            value={data.isExpired}
                                             onChange={handleChangeExpire}
                                         />
                                         <p>No Expiration Date
@@ -371,11 +387,15 @@ const CurationForm = ({ setStateUpdate, curation, setCategories, categoryDetails
                             </div>
                             <div className="d-flex ">
                                 <div className="form-outline form-white d-flex w-100">
+                            <div className="d-flex ">
+                                <div className="form-outline form-white d-flex w-100">
                                     <div className="formWrpLabel">
                                         <label className="fw-bolder ">Link Menu</label>
                                     </div>
                                     <div  className='w-100 p-3'>
+                                    <div  className='w-100 p-3'>
 
+                                        <div style={{ width: '100%' }} className="push-notification-container pt-2 pb-2 gap-3">
                                         <div style={{ width: '100%' }} className="push-notification-container pt-2 pb-2 gap-3">
                                             <CFormCheck
                                                 type="checkbox"
@@ -388,6 +408,7 @@ const CurationForm = ({ setStateUpdate, curation, setCategories, categoryDetails
                                         </div>
                                         <div style={data.noLink ? { pointerEvents: 'none', opacity: 0.4 } : null} className='gap-3'>
                                             <div className='push-notification-container pt-2 pb-2 gap-3'>
+                                            <div className='push-notification-container pt-2 pb-2 gap-3'>
                                                 <CFormCheck
                                                     type="checkbox"
                                                     name="isVisible"
@@ -395,7 +416,10 @@ const CurationForm = ({ setStateUpdate, curation, setCategories, categoryDetails
                                                 <p>Link (Max 2 link)</p>
                                             </div>
                                             <div className='w-100' style={{  display: 'flex', flexDirection: 'column', gap: 10 }}>
+                                            <div className='w-100' style={{  display: 'flex', flexDirection: 'column', gap: 10 }}>
                                                 <CFormInput type='text' value={data.link1Name} onChange={handleLinkName1} placeholder='Enter title' />
+                                                <CFormInput type='text' value={data.link1} onChange={handleLink1} placeholder='Enter URL'  />
+                                          
                                                 <CFormInput type='text' value={data.link1} onChange={handleLink1} placeholder='Enter URL'  />
                                           
                                                 <CFormInput type='text' value={data.link2Name} onChange={handleLinkName2} placeholder='Enter title' />
@@ -414,7 +438,29 @@ const CurationForm = ({ setStateUpdate, curation, setCategories, categoryDetails
                 <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '5%', gap: 10 }}>
                     <CButton onClick={() => setCategories('AllCuration')} style={{ marginRight: '2%', background: '#ccc', border: 'none' }}>Cancel</CButton>
                     <CButton onClick={categoryID ? handleUpdateCategories : handleCreateCategories}>Save</CButton>
+                    <CButton onClick={categoryID ? handleUpdateCategories : handleCreateCategories}>Save</CButton>
                 </div>
+                <CModal
+                    backdrop="static"
+                    visible={deleteVisible}
+                    onClose={() => setdeleteVisible(false)}
+                    aria-labelledby="StaticBackdropExampleLabel"
+                >
+                    <CModalHeader>
+                        <CModalTitle id="StaticBackdropExampleLabel">Delete</CModalTitle>
+                    </CModalHeader>
+                    <CModalBody>
+                        <p>Are you sure you want to delete this category?
+                            <br />
+                            All categories and items belonging will be deleted.</p>
+                    </CModalBody>
+                    <CModalFooter>
+                        <CButton onClick={handleDeleteCategory} color="primary">Delete</CButton>
+                        <CButton onClick={() => setdeleteVisible(false)} color="secondary">
+                            Cancel
+                        </CButton>
+                    </CModalFooter>
+                </CModal>
                 <CModal
                     backdrop="static"
                     visible={deleteVisible}

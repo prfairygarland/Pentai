@@ -1,15 +1,19 @@
 import { CButton, CFormCheck, CFormInput, CFormSelect, CFormSwitch, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle } from '@coreui/react'
 import { enqueueSnackbar } from 'notistack'
+import { CButton, CFormCheck, CFormInput, CFormSelect, CFormSwitch, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle } from '@coreui/react'
+import { enqueueSnackbar } from 'notistack'
 import React, { useEffect, useState } from 'react'
 import DatePicker from 'react-date-picker'
 import { deleteApi, postApi, putApi } from 'src/utils/Api'
 import { API_ENDPOINT } from 'src/utils/config'
 
-const SeriesCategory = ({ subCategoryID, setStateUpdate, subCategoryDetail, categoryID, setCategories }) => {
+const SeriesCategory = ({ subCategoryID, setSideBarId, setIconSet, setStateUpdate, subCategoryDetail, categoryID, setCategories }) => {
 
     const [title, setTitle] = useState('')
     const [deleteVisible, setdeleteVisible] = useState(false)
+    const [deleteVisible, setdeleteVisible] = useState(false)
 
+    console.log('subCategoryDetail', subCategoryDetail)
     console.log('subCategoryDetail', subCategoryDetail)
 
 
@@ -23,6 +27,8 @@ const SeriesCategory = ({ subCategoryID, setStateUpdate, subCategoryDetail, cate
     }, [subCategoryDetail, subCategoryID])
 
 
+
+    console.log('subCategoryID', categoryID)
 
     console.log('subCategoryID', categoryID)
 
@@ -40,24 +46,34 @@ const SeriesCategory = ({ subCategoryID, setStateUpdate, subCategoryDetail, cate
         if (res?.data?.status === 200) {
             setStateUpdate((prev) => prev + 1)
             enqueueSnackbar('series created successfully', { variant : 'success'})
+            enqueueSnackbar('series created successfully', { variant : 'success'})
             console.log('created sucessfull')
+            setCategories('AllCuration')
+            setIconSet(null)
+            setSideBarId(null)
         }
         else {
             console.log('failed to create')
+            enqueueSnackbar('Failed to create series', { variant : 'error'})
             enqueueSnackbar('Failed to create series', { variant : 'error'})
         }
     }
 
     const deleteSubCategory = async () => {
-        let url = `$${API_ENDPOINT.delete_subCategories}?id=`
+        let url = `${API_ENDPOINT.delete_subCategories}?id=`
 
-        const res = await deleteApi(url, 22)
+        const res = await deleteApi(url, subCategoryDetail?.id)
         if (res?.data?.status === 200) {
             setStateUpdate((prev) => prev + 1)
             enqueueSnackbar('Deleted successfully', { variant : 'success'})
+            enqueueSnackbar('Deleted successfully', { variant : 'success'})
             console.log('delete sucessfull')
+            setCategories('AllCuration')
+            setIconSet(null)
+            setSideBarId(null)
         }
         else {
+            enqueueSnackbar('Failed to delete', { variant : 'error'})
             enqueueSnackbar('Failed to delete', { variant : 'error'})
             console.log('failed to delete')
         }
@@ -71,8 +87,18 @@ const SeriesCategory = ({ subCategoryID, setStateUpdate, subCategoryDetail, cate
             id: subCategoryDetail?.id,
             categoryId:categoryID,
             name: title
+            id: subCategoryDetail?.id,
+            categoryId:categoryID,
+            name: title
         }
 
+        const res = await putApi(url, body)
+        if(res?.data?.status===200){
+            // alert('updated')
+            enqueueSnackbar('updated successfully', { variant: 'success'})
+            setStateUpdate((prev) => prev + 1)
+            setCategories('AllCuration')
+            setdeleteVisible(false)
         const res = await putApi(url, body)
         if(res?.data?.status===200){
             // alert('updated')
@@ -83,7 +109,13 @@ const SeriesCategory = ({ subCategoryID, setStateUpdate, subCategoryDetail, cate
         }
         else{
             enqueueSnackbar('failed to update category', { variant: 'error'})
+            enqueueSnackbar('failed to update category', { variant: 'error'})
         }
+    }
+
+    const handleCancel  = () =>{
+        setCategories('AllCuration')
+        setTitle('')
     }
 
     const handleCancel  = () =>{
@@ -95,6 +127,7 @@ const SeriesCategory = ({ subCategoryID, setStateUpdate, subCategoryDetail, cate
         <div style={{ width: '100%' }}>
             <h1>SeriesCategory</h1>
             <div className='d-flex justify-content-end mb-4'>
+                <CButton onClick={() => setdeleteVisible(true)}>Delete</CButton>
                 <CButton onClick={() => setdeleteVisible(true)}>Delete</CButton>
             </div>
             <div className="card-body">
@@ -119,8 +152,30 @@ const SeriesCategory = ({ subCategoryID, setStateUpdate, subCategoryDetail, cate
             </div>
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '5%', gap: 10 }}>
                 <CButton onClick={handleCancel} style={{ marginRight: '2%', background: '#ccc', border: 'none' }}>Cancel</CButton>
+                <CButton onClick={handleCancel} style={{ marginRight: '2%', background: '#ccc', border: 'none' }}>Cancel</CButton>
                 <CButton onClick={subCategoryID ?  updateSubCategory :  CreateSubCategories}>Save</CButton>
             </div>
+            <CModal
+                    backdrop="static"
+                    visible={deleteVisible}
+                    onClose={() => setdeleteVisible(false)}
+                    aria-labelledby="StaticBackdropExampleLabel"
+                >
+                    <CModalHeader>
+                        <CModalTitle id="StaticBackdropExampleLabel">Delete</CModalTitle>
+                    </CModalHeader>
+                    <CModalBody>
+                        <p>Are you sure you want to delete this category?
+                            <br />
+                            All categories and items belonging will be deleted.</p>
+                    </CModalBody>
+                    <CModalFooter>
+                        <CButton color="primary" onClick={deleteSubCategory}>Delete</CButton>
+                        <CButton color="secondary" onClick={() => setdeleteVisible(false)}>
+                            Cancel
+                        </CButton>
+                    </CModalFooter>
+                </CModal>
             <CModal
                     backdrop="static"
                     visible={deleteVisible}

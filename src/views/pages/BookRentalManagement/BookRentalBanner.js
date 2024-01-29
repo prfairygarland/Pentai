@@ -44,7 +44,8 @@ const BookRentalBanner = () => {
 
     }
 
-    console.log('bannerList', bannerList)
+    console.log('bannerSetting', bannerSetting)
+    console.log('isExp', isExpiration)
 
 
     async function urlToBlob(url) {
@@ -56,6 +57,7 @@ const BookRentalBanner = () => {
     const urlsToFiles = async (url) => {
         if (!url) return
         const blob = await urlToBlob(imageUrl + url)
+        const blob = await urlToBlob(imageUrl + url)
         const fileName = url
         return new File([blob], fileName, { type: blob.type })
     }
@@ -64,6 +66,7 @@ const BookRentalBanner = () => {
         let url = `${API_ENDPOINT.get_banner_CategoryDetail}`
 
         const res = await getApi(url)
+        if (res?.status === 200) {
         if (res?.status === 200) {
             setBannerSetting(res.data)
             //   enqueueSnackbar('Banner updated success', { variant: 'success' })
@@ -103,6 +106,7 @@ const BookRentalBanner = () => {
         try {
             let url = `${API_ENDPOINT.get_bannerDetails}?id=${id}`
             const res = await getApi(url)
+            console.log('resss', res.data)
             if (res?.status === 200) {
                 setBannerTitle(res?.data?.title)
                 const startTime = new Date(res?.data?.startDateTime)
@@ -207,7 +211,7 @@ const BookRentalBanner = () => {
     const saveClubBannerHandler = async () => {
         try {
             const formData = new FormData()
-            formData.append('bannerCategoryId', bannerSetting.id)
+            // formData.append('bannerCategoryId', bannerSetting?.id)
             formData.append('title', bannerTitle)
             formData.append('image', uploadedBannerImage)
             formData.append('type', imageType)
@@ -226,6 +230,7 @@ const BookRentalBanner = () => {
 
             let res = ''
             let body = formData
+            console.log('id', bannerUpdateId)
             if (bannerUpdateId) {
                 formData.append('id', bannerUpdateId)
                 res = await putApi(API_ENDPOINT.update_banner, formData)
@@ -239,6 +244,8 @@ const BookRentalBanner = () => {
                     enqueueSnackbar(res?.data?.error, { variant: 'error' })
                 } else {
                     bannerUpdateId ?
+                        enqueueSnackbar('Banner Updated Successfully', { variant: 'success' }) :
+                        enqueueSnackbar('Banner Added Successfully', { variant: 'success' })
                         enqueueSnackbar('Banner Updated Successfully', { variant: 'success' }) :
                         enqueueSnackbar('Banner Added Successfully', { variant: 'success' })
                 }
@@ -348,6 +355,7 @@ const BookRentalBanner = () => {
                 getBannerList()
                 enqueueSnackbar('Banner Deleted Successfully', { variant: 'success' })
                 setDeleteVisible(false)
+                setDeleteVisible(false)
             } else {
                 enqueueSnackbar('Something went wrong, please try later!', { variant: 'success' })
             }
@@ -404,6 +412,7 @@ const BookRentalBanner = () => {
             accessor: '',
             Cell: ({ row }) =>
                 <img alt="" crossOrigin='anonymous' src={imageUrl + row?.original?.image} style={{ width: '100%', height: '100px' }}></img>
+                <img alt="" crossOrigin='anonymous' src={imageUrl + row?.original?.image} style={{ width: '100%', height: '100px' }}></img>
 
         },
         {
@@ -414,7 +423,7 @@ const BookRentalBanner = () => {
         {
             Header: 'Posting Period',
             accessor: '',
-            Cell: ({ row }) => <p>{row.original.isExpired === 'no' && (row.original.startDateTime && row.original.endDateTime) ? `${moment(row.original.startDateTime).format("YYYY-MM-DD HH:mm")}~${moment(row.original.endDateTime).format("YYYY-MM-DD HH:mm:ss")}` : 'No expiration date'} </p>,
+            Cell: ({ row }) => <p>{row.original.isExpired === 'no' ? `${moment(row.original.startDateTime).format("YYYY-MM-DD HH:mm")}~${moment(row.original.endDateTime).format("YYYY-MM-DD HH:mm:ss")}` : 'No expiration date'} </p>,
 
         },
         {
@@ -436,6 +445,7 @@ const BookRentalBanner = () => {
         {
             Header: 'Action',
             accessor: 'button',
+            Cell: ({ row }) => <CButton className='mx-3 rounded border-1 btn-black' onClick={() => { setDeleteId(row.original.id); setDeleteVisible(true) }}>Delete</CButton>
             Cell: ({ row }) => <CButton className='mx-3 rounded border-1 btn-black' onClick={() => { setDeleteId(row.original.id); setDeleteVisible(true) }}>Delete</CButton>
 
         },
@@ -612,7 +622,6 @@ const BookRentalBanner = () => {
                                         </div>
                                     </div>
                                     <div>
-
                                     </div>
                                     <div className="push-notification-container gap-3">
                                         <CFormCheck
