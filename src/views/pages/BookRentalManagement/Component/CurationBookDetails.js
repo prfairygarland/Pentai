@@ -6,7 +6,7 @@ import Loader from 'src/components/common/Loader'
 import { deleteApi, getApi, postApi, putApi } from 'src/utils/Api'
 import { API_ENDPOINT } from 'src/utils/config'
 
-const CurationBookDetails = ({ bookId, setDeleted, categoryID, subCategoryBookID, subCategoryID, setStateUpdate, genreBooks, getBookList, bookDisplay, setCategories }) => {
+const CurationBookDetails = ({ bookId, setIconSet, setSideBarId,  setDeleted, categoryID, subCategoryBookID, subCategoryID, setStateUpdate, genreBooks, getBookList, bookDisplay, setCategories }) => {
 
     const [bookData, setBookData] = useState({
         bookgenre: '',
@@ -74,7 +74,7 @@ const CurationBookDetails = ({ bookId, setDeleted, categoryID, subCategoryBookID
                 setBookData((prev) => {
                     return {
                         ...prev,
-                        bookgenre: data[0].value.toString()
+                        bookgenre: data[0]?.value?.toString()
                     }
                 })
             }
@@ -102,6 +102,8 @@ const CurationBookDetails = ({ bookId, setDeleted, categoryID, subCategoryBookID
                 enqueueSnackbar('book deleted successfully', { variant: 'success' })
                 setStateUpdate((prev) => prev + 1)
                 setCategories('AllCuration')
+                setIconSet(null)
+                setSideBarId(null)
             }
             else {
                 enqueueSnackbar('failed to delete book', { variant: 'error' })
@@ -118,8 +120,8 @@ const CurationBookDetails = ({ bookId, setDeleted, categoryID, subCategoryBookID
         const body = {
             id: bookData?.id,
             genreId: bookData.bookgenre ? bookData.bookgenre : '',
-            categoryId: categoryID.toString(),
-            subCategoryId: subCategoryID ? subCategoryID : '',
+            categoryId: categoryID?.toString(),
+            subCategoryId: subCategoryID ? subCategoryID.toString() : '',
             title: bookData.title,
             author: bookData.author,
             SIBNCode: bookData.ISBN,
@@ -137,6 +139,8 @@ const CurationBookDetails = ({ bookId, setDeleted, categoryID, subCategoryBookID
             if (res?.data?.status === 200) {
                 enqueueSnackbar('book updated successfully', {variant:'success'})
                 setCategories('AllCuration')
+                setIconSet(null)
+                setSideBarId(null)
                 setDeleted((prev) => prev + 1)
             }
             else {
@@ -212,6 +216,8 @@ const CurationBookDetails = ({ bookId, setDeleted, categoryID, subCategoryBookID
 
     const handleCancel = () => {
         setCategories('AllCuration')
+        setIconSet(null)
+        setSideBarId(null)
     }
 
 
@@ -306,7 +312,7 @@ const CurationBookDetails = ({ bookId, setDeleted, categoryID, subCategoryBookID
                                 </div>
                                 <div className="formWrpInpt d-flex">
                                     <div style={{ width: '180px', overflow: 'hidden', marginBottom: '5%' }} >
-                                        {bookData.image !== null ? <img alt='' src={image ? image : bookData.image} style={{ height: '100%', width: '100%' }} /> : <img alt='' src='https://www.beelights.gr/assets/images/empty-image.png' style={{ height: '100%', width: '100%' }} />}
+                                        {bookData.image !== null ? <img alt=''  src={image ? image : bookData.image} style={{ height: '100%', width: '100%' }} /> : <img alt='' src='https://www.beelights.gr/assets/images/empty-image.png' style={{ height: '100%', width: '100%' }} />}
                                         <input style={{ display: 'none' }} type="file" name="upload" accept=".png, .jpg, .jpeg" ref={inputRef} onChange={handleUpload} />
                                     </div>
                                     <div className='ms-4'>

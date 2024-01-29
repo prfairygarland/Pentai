@@ -1,10 +1,11 @@
 import { CButton } from '@coreui/react'
 import React, { useEffect } from 'react'
 import ReactPaginate from 'react-paginate'
+import ReactPaginate from 'react-paginate'
 import ReactTable from 'src/components/common/ReactTable'
 import { API_ENDPOINT } from 'src/utils/config'
 
-const SearchBooks = ({ searchBooks, totalSearchPage, currentSearchPage,setSearchCurrentPage, setSearchBookTitle, searchBookFilter, SearchBookList, setSearchBookFilter, setBook }) => {
+const SearchBooks = ({ searchBooks, totalSearchPage, currentSearchPage,setSearchCurrentPage, setSearchBookId, searchBookFilter, SearchBookList, setSearchBookFilter, setBook }) => {
 
     const handleChange = (e) => {
         const value = e.target.value
@@ -16,16 +17,20 @@ const SearchBooks = ({ searchBooks, totalSearchPage, currentSearchPage,setSearch
         })
     }
 
+    console.log('searchBooks', searchBooks.length)
 
-    const PostData = (title) => {
+    const PostData = (id) => {
         setBook('Register')
         setSearchBookFilter({
             title: ''
         })
 
-        setSearchBookTitle(title)
+        setSearchBookId(id)
     }
 
+    const handlePageChange = (selectedPage) => {
+        // setCurrentPage(selectedPage.selected)
+        setSearchCurrentPage(selectedPage)
     const handlePageChange = (selectedPage) => {
         // setCurrentPage(selectedPage.selected)
         setSearchCurrentPage(selectedPage)
@@ -40,18 +45,18 @@ const SearchBooks = ({ searchBooks, totalSearchPage, currentSearchPage,setSearch
             <div>
 
 
-                <table border="1" className="table table-bordered" >
-                    {searchBooks.length > 0 && (<thead>
+              <table border="1" className="table table-bordered" >
+                    {searchBooks.length > 0 && <thead>
                         <tr>
                             <th>Book Cover Image</th>
                             <th>Book Information</th>
                             <th>Action</th>
                         </tr>
-                    </thead>)}
+                    </thead>}
                     <tbody>
                         {
-                            searchBooks?.map((item, i) => (
-                                <tr key={i}>
+                            searchBooks?.map((item, index) => (
+                                <tr key={index}>
                                     <td> <img src={item?.imageLinks?.thumbnail} />  </td>
                                     <td>
                                         <table className="table table-bordered">
@@ -61,6 +66,7 @@ const SearchBooks = ({ searchBooks, totalSearchPage, currentSearchPage,setSearch
                                             </tr>
                                             <tr>
                                                 <td>Book Title</td>
+                                                <td>Book Title</td>
                                                 <td>{item?.title ? item?.title : ''}</td>
                                             </tr>
                                             <tr>
@@ -69,10 +75,32 @@ const SearchBooks = ({ searchBooks, totalSearchPage, currentSearchPage,setSearch
                                             </tr>
                                         </table>
                                     </td>
-                                    <td><CButton onClick={() => PostData(item?.title)}>Add</CButton></td>
+                                    <td><CButton onClick={() => PostData(index)}>Add</CButton></td>
                                 </tr>
                             ))
                         }
+                            ))
+                        }
+
+                    </tbody>
+                </table>
+                {searchBooks.length > 0 &&
+                    <div className='userlist-pagination'>
+                        <div className='userlist-pagination dataTables_paginate'>
+                            <ReactPaginate
+                                breakLabel={'...'}
+                                marginPagesDisplayed={1}
+                                previousLabel={<button>Previous</button>}
+                                nextLabel={<button>Next</button>}
+                                pageCount={totalSearchPage}
+                                onPageChange={handlePageChange}
+                                forcePage={currentSearchPage}
+                                // renderOnZeroPageCount={null}
+                                pageRangeDisplayed={3}
+                            />
+                        </div>
+
+                    </div>
 
                     </tbody>
                 </table>

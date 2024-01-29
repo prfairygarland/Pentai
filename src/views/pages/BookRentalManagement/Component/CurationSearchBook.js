@@ -3,14 +3,7 @@ import React, { useEffect } from 'react'
 import ReactTable from 'src/components/common/ReactTable'
 import { API_ENDPOINT } from 'src/utils/config'
 
-const CurationSearchBook = ({ searchBooks, setSearchBookTitle, SearchBookList, searchBookFilter, setCurationBook, setSearchBookFilter }) => {
-
-    const data = [
-        { title: 'history', ISBN: 86578587, Author: 'Don Norman' },
-        { title: 'history', ISBN: 86578587, Author: 'Don Norman' },
-        { title: 'history', ISBN: 86578587, Author: 'Don Norman' },
-        { title: 'history', ISBN: 86578587, Author: 'Don Norman' },
-    ]
+const CurationSearchBook = ({ searchBooks, setSearchBookId, SearchBookList, searchBookFilter, setCurationBook, setSearchBookFilter }) => {
 
     const handleChange = (e) => {
         const value = e.target.value
@@ -22,13 +15,13 @@ const CurationSearchBook = ({ searchBooks, setSearchBookTitle, SearchBookList, s
         })
     }
 
-    const PostData = (title) => {
+    const PostData = (id) => {
         setCurationBook('CurationRegister')
         setSearchBookFilter({
             title: ''
         })
 
-        setSearchBookTitle(title)
+        setSearchBookId(id)
     }
 
     console.log('curSearch', searchBooks)
@@ -42,13 +35,13 @@ const CurationSearchBook = ({ searchBooks, setSearchBookTitle, SearchBookList, s
             <div>
 
                 <table border="1" className="table table-bordered">
-                    <thead>
+                  {searchBooks.length > 0 &&  <thead>
                         <tr>
                             <th>Book Cover Image</th>
                             <th>Book Information</th>
                             <th>Action</th>
                         </tr>
-                    </thead>
+                    </thead>}
                     <tbody>
                         {
                             searchBooks?.map((item, i) => (
@@ -61,7 +54,7 @@ const CurationSearchBook = ({ searchBooks, setSearchBookTitle, SearchBookList, s
                                                 <td>{item?.industryIdentifiers ? item?.industryIdentifiers[0]?.identifier : 'NA'}</td>
                                             </tr>
                                             <tr>
-                                                <td>Title</td>
+                                                <td>Book Title</td>
                                                 <td>{item?.title ? item?.title : ''}</td>
                                             </tr>
                                             <tr>
@@ -70,9 +63,13 @@ const CurationSearchBook = ({ searchBooks, setSearchBookTitle, SearchBookList, s
                                             </tr>
                                         </table>
                                     </td>
-                                    <td><CButton onClick={() => PostData(item.title)}>Add</CButton></td>
+                                    <td><CButton onClick={() => PostData(i)}>Add</CButton></td>
                                 </tr>
 
+                            ))
+                        }
+                    </tbody>
+                </table>
                             ))
                         }
                     </tbody>

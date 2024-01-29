@@ -6,7 +6,7 @@ import { imageUrl } from '../BookRentalStatus';
 import { useCallback } from 'react';
 import { enqueueSnackbar } from 'notistack';
 
-const CurationRegisterBook = ({setDeleted, setCurationSearchBookDetail, searchCurationBookDetail, setCategories, searchBooks, setCurationBook, setSearchBooks }) => {
+const CurationRegisterBook = ({setDeleted, setIconSet, setSideBarId, setCategoryID, searchBookId, categoryID, subCategoryID, setCurationSearchBookDetail, searchCurationBookDetail, setCategories, searchBooks, setCurationBook, setSearchBooks }) => {
     const [RegisteredData, setRegisteredData] = useState({
         bookgenre: '',
         ISBN: '',
@@ -14,6 +14,8 @@ const CurationRegisterBook = ({setDeleted, setCurationSearchBookDetail, searchCu
         Author: '',
         categoryID: '',
         subCategoryID: '',
+        description: '',
+        image:null
         description: '',
         image:null
     })
@@ -25,25 +27,24 @@ const CurationRegisterBook = ({setDeleted, setCurationSearchBookDetail, searchCu
     const [postImage, setPostImage] = useState(null)
     const [filterBook, setFilterBook] = useState()
 
-    console.log('s', searchCurationBookDetail)
+    console.log('s', categoryID)
+    console.log('s1', subCategoryID)
 
 
         useEffect(() => {
-            if(searchCurationBookDetail.length > 0){
-                searchCurationBookDetail?.map((item) => {
+            if(searchCurationBookDetail){
                     setRegisteredData({
                         bookgenre: RegisteredData.bookgenre,
                         categoryID: RegisteredData.categoryID,
                         subCategoryID: RegisteredData.subCategoryID,
-                        title: item?.title,
-                        Author: item?.authors ? item?.authors[0] : '',
-                        ISBN: item?.industryIdentifiers ? item?.industryIdentifiers[0].identifier.replace('/[^0-9]/g', '') : '',
-                        description: item?.description ? item.description : '',
-                        image: item?.imageLinks ? item?.imageLinks.thumbnail : '',
+                        title: searchCurationBookDetail?.title,
+                        Author: searchCurationBookDetail?.authors ? searchCurationBookDetail?.authors[0] : '',
+                        ISBN: searchCurationBookDetail?.industryIdentifiers ? searchCurationBookDetail?.industryIdentifiers[0].identifier.replace('/[^0-9]/g', '') : '',
+                        description: searchCurationBookDetail?.description ? searchCurationBookDetail.description : '',
+                        image: searchCurationBookDetail?.imageLinks ? searchCurationBookDetail?.imageLinks.thumbnail : null,
                         // availabilityCount: 5,
                         // address: 'PTK 17s'
                     })
-                })
             }
             else{
                 setRegisteredData({
@@ -58,6 +59,8 @@ const CurationRegisterBook = ({setDeleted, setCurationSearchBookDetail, searchCu
                 })
             }
         }, [searchCurationBookDetail])
+
+        console.log('reg', RegisteredData)
 
 
     const hanldleGenreSelect = (e) => {
@@ -144,7 +147,7 @@ const CurationRegisterBook = ({setDeleted, setCurationSearchBookDetail, searchCu
             setRegisteredData((prev) => {
                 return {
                     ...prev,
-                    subCategoryID: Subcategorydata[0].value.toString()
+                    subCategoryID: (subCategoryID && categoryID )? subCategoryID.toString() : Subcategorydata[0].value.toString()
                 }
             })
 
@@ -181,19 +184,24 @@ const CurationRegisterBook = ({setDeleted, setCurationSearchBookDetail, searchCu
         getBookGenreData()
 
         // console.log('hello')
+        // console.log('hello')
 
     }, [])
 
     useEffect(() => {
-        subCategoryList()
-    }, [])
+        subCategoryList(categoryID)
+    }, [categoryID])
 
     const handleCancel = () =>{
+        setCategories('AllCuration')
         setCategories('AllCuration')
         setCurationBook('Curationsearch')
         setSearchBooks([])
         setSearchBooks([])
-        setCurationSearchBookDetail([])
+        setCurationSearchBookDetail({})
+        setCategoryID(null)
+        setIconSet(null)
+        setSideBarId(null)
     }
 
 
@@ -208,11 +216,17 @@ const CurationRegisterBook = ({setDeleted, setCurationSearchBookDetail, searchCu
                 })
 
                 setCategory(categorydata)
+                setRegisteredData((prev) => {
+                    return {
+                        ...prev,
+                        categoryID: categoryID ? categoryID.toString() : categorydata[0].value.toString()
+                    }
+                })
 
             }
         }
         BookCategoryList()
-    }, [])
+    }, [categoryID, subCategoryID])
 
 
 
@@ -235,6 +249,7 @@ const CurationRegisterBook = ({setDeleted, setCurationSearchBookDetail, searchCu
 
     const PostData = async () => {
         let Imgurl = RegisteredData?.image?.toString().replace('http:', 'https:')
+        let Imgurl = RegisteredData?.image?.toString().replace('http:', 'https:')
         const url = `${API_ENDPOINT.createBook}`
         try {
             const body = {
@@ -245,6 +260,7 @@ const CurationRegisterBook = ({setDeleted, setCurationSearchBookDetail, searchCu
                 author: filterBook?.author ? filterBook?.author : RegisteredData.Author,
                 SIBNCode: filterBook?.SIBNCode ? filterBook?.SIBNCode : RegisteredData.ISBN,
                 description: filterBook?.description ? filterBook?.description : RegisteredData.description,
+                image: RegisteredData?.image ? Imgurl : imageUrl + postImage,
                 image: RegisteredData?.image ? Imgurl : imageUrl + postImage,
                 // availabilityCount: 6,
                 // address: 'PTK 16F'
@@ -259,14 +275,21 @@ const CurationRegisterBook = ({setDeleted, setCurationSearchBookDetail, searchCu
             console.log('body', body)
             if (res?.data?.status === 200) {
                 enqueueSnackbar("book created successfully",{ variant: 'success' })
+            if (res?.data?.status === 200) {
+                enqueueSnackbar("book created successfully",{ variant: 'success' })
                 console.log('sucessfully updated')
                 setCategories('AllCuration')
                 setCurationBook('Curationsearch')
+                setIconSet(null)
+                setSideBarId(null)
 
                 // setBook('search')
                 // setSearchBooks([])
                 setDeleted((prev) => prev + 1)
                 
+            }
+            else{
+                enqueueSnackbar("failed to creat book",{ variant: 'error' })
             }
             else{
                 enqueueSnackbar("failed to creat book",{ variant: 'error' })
@@ -309,7 +332,7 @@ const CurationRegisterBook = ({setDeleted, setCurationSearchBookDetail, searchCu
                         <td>
                             <div>
                                 <div style={{ width: '180px', overflow: 'hidden', marginBottom: '5%' }} >
-                                    {(RegisteredData?.image!==null) ? <img src={image ? image : RegisteredData?.image} style={{ height: '100%', width: '100%' }} /> : <img alt='' src='https://www.beelights.gr/assets/images/empty-image.png' style={{ height: '100%', width: '100%' }} />}
+                                    {RegisteredData?.image!==null ? <img src={image ? image : RegisteredData?.image} style={{ height: '100%', width: '100%' }} /> : <img alt='' src='https://www.beelights.gr/assets/images/empty-image.png' style={{ height: '100%', width: '100%' }} />}
                                     <input style={{ display: 'none' }} type="file" name="upload" accept=".png, .jpg, .jpeg, .gif" ref={inputRef} onChange={handleUpload} />
                                 </div>
                                 <button style={{ background: '#4f5d73', height: '40px', width: '80px', cursor: 'pointer', borderRadius: 8, color: 'white' }} onClick={handleImageChange}>Upload</button>
@@ -340,6 +363,7 @@ const CurationRegisterBook = ({setDeleted, setCurationSearchBookDetail, searchCu
                                             <CFormSelect
                                                 options={category ? category : []}
                                                 onChange={hanldleChangeCategory}
+                                                value={RegisteredData.categoryID}
                                             />
                                         </div>
                                     </td>
@@ -351,6 +375,7 @@ const CurationRegisterBook = ({setDeleted, setCurationSearchBookDetail, searchCu
                                             <CFormSelect
                                                 options={Subcategory ? Subcategory : []}
                                                 onChange={hanldleChangeSubCategory}
+                                                value={RegisteredData.subCategoryID}
                                             />
                                         </div>
                                     </td>

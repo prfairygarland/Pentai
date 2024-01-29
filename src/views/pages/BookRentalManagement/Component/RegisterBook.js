@@ -6,7 +6,7 @@ import { imageUrl } from '../BookRentalStatus';
 import { useCallback } from 'react';
 import { enqueueSnackbar } from 'notistack';
 
-const RegisterBook = ({ setDeleted, setBook, searchBookDetail, setSearchBookDetail, searchBooks, genreId,  setFilteredData, setSearchBooks, setCategories }) => {
+const RegisterBook = ({ setDeleted, setBook, setSearchBookId, searchBookId, searchBookDetail, setSearchBookDetail, searchBooks, genreId, setFilteredData, setSearchBooks, setCategories }) => {
     const [RegisteredData, setRegisteredData] = useState({
         bookgenre: '',
         ISBN: '',
@@ -15,8 +15,13 @@ const RegisterBook = ({ setDeleted, setBook, searchBookDetail, setSearchBookDeta
         categoryID: '',
         subCategoryID: '',
         description: '',
-        image:null
+        image: null
     })
+
+    console.log('genreid', searchBookDetail)
+
+    console.log('details', RegisteredData)
+
 
     console.log('genreid', searchBookDetail)
 
@@ -33,23 +38,19 @@ const RegisterBook = ({ setDeleted, setBook, searchBookDetail, setSearchBookDeta
 
 
     useEffect(() => {
-        if(searchBookDetail.length > 0){
-            searchBookDetail?.map((item) => {
-                setRegisteredData({
-                    bookgenre: RegisteredData.bookgenre,
-                    categoryID: RegisteredData.categoryID,
-                    subCategoryID: RegisteredData.subCategoryID,
-                    title: item?.title,
-                    Author: item?.authors ? item?.authors[0] : '',
-                    ISBN: item?.industryIdentifiers ? item?.industryIdentifiers[0].identifier.replace('/[^0-9]/g', '') : '',
-                    description: item?.description ? item.description : '',
-                    image: item?.imageLinks ? item?.imageLinks.thumbnail : '',
-                    // availabilityCount: 5,
-                    // address: 'PTK 17s'
-                })
+        if (searchBookId) {
+            setRegisteredData({
+                bookgenre: RegisteredData.bookgenre,
+                categoryID: RegisteredData.categoryID,
+                subCategoryID: RegisteredData.subCategoryID,
+                title: searchBookDetail?.title,
+                Author: searchBookDetail?.authors ? searchBookDetail?.authors[0] : '',
+                ISBN: searchBookDetail?.industryIdentifiers ? searchBookDetail?.industryIdentifiers[0].identifier.replace('/[^0-9]/g', '') : '',
+                description: searchBookDetail?.description ? searchBookDetail.description : '',
+                image: searchBookDetail?.imageLinks ? searchBookDetail?.imageLinks.thumbnail : '',
             })
         }
-        else{
+        else {
             setRegisteredData({
                 bookgenre: '',
                 ISBN: '',
@@ -60,8 +61,8 @@ const RegisterBook = ({ setDeleted, setBook, searchBookDetail, setSearchBookDeta
                 description: ''
             })
         }
-    }, [searchBookDetail])
-    
+    }, [searchBookDetail, searchBookId])
+
 
 
     const hanldleGenreSelect = (e) => {
@@ -166,6 +167,8 @@ const RegisterBook = ({ setDeleted, setBook, searchBookDetail, setSearchBookDeta
 
     console.log('reg', RegisteredData)
 
+    console.log('reg', RegisteredData)
+
 
     useEffect(() => {
         const getBookGenreData = async () => {
@@ -180,11 +183,16 @@ const RegisterBook = ({ setDeleted, setBook, searchBookDetail, setSearchBookDeta
                     return {
                         ...prev,
                         bookgenre: genreId.toString()
+                        bookgenre: genreId.toString()
                     }
                 })
             }
         }
         getBookGenreData()
+        // FilterBookData()
+    }, [genreId])
+
+    console.log(genre)
         // FilterBookData()
     }, [genreId])
 
@@ -205,8 +213,18 @@ const RegisterBook = ({ setDeleted, setBook, searchBookDetail, setSearchBookDeta
             visibility: '',
             status: ''
         })
+        setBook('search')
+        setDeleted((prev) => prev + 1)
+        setFilteredData({
+            title: '',
+            bookGenre: '',
+            itemStatus: '',
+            visibility: '',
+            status: ''
+        })
         setSearchBooks([])
-        setSearchBookDetail([])
+        setSearchBookDetail({})
+        setSearchBookId(null)
     }
 
     useEffect(() => {
@@ -219,6 +237,12 @@ const RegisterBook = ({ setDeleted, setBook, searchBookDetail, setSearchBookDeta
                 })
 
                 setCategory(categorydata)
+                setRegisteredData((prev) => {
+                    return {
+                        ...prev,
+                        categoryID: categorydata[0]?.value?.toString()
+                    }
+                })
                 setRegisteredData((prev) => {
                     return {
                         ...prev,
@@ -252,12 +276,18 @@ const RegisterBook = ({ setDeleted, setBook, searchBookDetail, setSearchBookDeta
 
     const PostData = async () => {
         let Imgurl = RegisteredData?.image?.toString().replace('http:', 'https:')
+        let Imgurl = RegisteredData?.image?.toString().replace('http:', 'https:')
         const url = `${API_ENDPOINT.createBook}`
         try {
             const body = {
                 genreId: RegisteredData.bookgenre,
                 categoryId: RegisteredData.categoryID,
                 // subCategoryId: RegisteredData.subCategory ? RegisteredData.subCategory : '',
+                title: RegisteredData.title,
+                author: RegisteredData.Author,
+                SIBNCode: RegisteredData.ISBN,
+                description: RegisteredData.description,
+                image: RegisteredData?.image ? Imgurl : imageUrl + postImage,
                 title: RegisteredData.title,
                 author: RegisteredData.Author,
                 SIBNCode: RegisteredData.ISBN,
@@ -278,12 +308,23 @@ const RegisterBook = ({ setDeleted, setBook, searchBookDetail, setSearchBookDeta
                     setSearchBooks([])
                     setDeleted((prev) => prev + 1)
                     setBook('search')
+            else {
+                const res = await postApi(url, body)
+                console.log('body', body)
+                if (res?.data?.status === 200) {
+                    enqueueSnackbar("Book created successfully", { variant: "success" })
+                    console.log('sucessfully updated')
+                    setCategories('AllBooks')
+                    setSearchBooks([])
+                    setDeleted((prev) => prev + 1)
+                    setBook('search')
 
                 }
-                else{
+                else {
                     enqueueSnackbar("Failed to create book", { variant: "error" })
                 }
             }
+
 
         } catch (error) {
             console.log(error)
@@ -306,6 +347,7 @@ const RegisterBook = ({ setDeleted, setBook, searchBookDetail, setSearchBookDeta
                             <div>
                                 <div style={{ width: '180px', overflow: 'hidden', marginBottom: '5%' }} >
                                     {(RegisteredData?.image || image) ? <img src={image ? image : RegisteredData?.image} style={{ height: '100%', width: '100%' }} /> : <img alt='' src='https://www.beelights.gr/assets/images/empty-image.png' style={{ height: '100%', width: '100%' }} />}
+                                    {(RegisteredData?.image || image) ? <img src={image ? image : RegisteredData?.image} style={{ height: '100%', width: '100%' }} /> : <img alt='' src='https://www.beelights.gr/assets/images/empty-image.png' style={{ height: '100%', width: '100%' }} />}
                                     <input style={{ display: 'none' }} type="file" name="upload" accept=".png, .jpg, .jpeg, .gif" ref={inputRef} onChange={handleUpload} />
                                 </div>
                                 <button style={{ background: '#4f5d73', height: '40px', width: '80px', cursor: 'pointer', borderRadius: 8, color: 'white' }} onClick={handleImageChange}>Upload</button>
@@ -325,6 +367,7 @@ const RegisterBook = ({ setDeleted, setBook, searchBookDetail, setSearchBookDeta
                                             <CFormSelect
                                                 options={genre}
                                                 onChange={hanldleGenreSelect}
+                                                value={RegisteredData.bookgenre}
                                                 value={RegisteredData.bookgenre}
                                             />
                                         </div>
@@ -356,17 +399,20 @@ const RegisterBook = ({ setDeleted, setBook, searchBookDetail, setSearchBookDeta
                                     <td>ISBN</td>
                                     <td>
                                         <input style={{ border: '1px solid #ccc', width: '98%', margin: 5 }} value={RegisteredData.ISBN} onChange={hanldleChangeISBN} />
+                                        <input style={{ border: '1px solid #ccc', width: '98%', margin: 5 }} value={RegisteredData.ISBN} onChange={hanldleChangeISBN} />
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>Book Title</td>
                                     <td>
                                         <input style={{ border: '1px solid #ccc', width: '98%', margin: 5 }} value={RegisteredData.title} onChange={hanldleChangeTitle} />
+                                        <input style={{ border: '1px solid #ccc', width: '98%', margin: 5 }} value={RegisteredData.title} onChange={hanldleChangeTitle} />
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>Author </td>
                                     <td>
+                                        <input style={{ border: '1px solid #ccc', width: '98%', margin: 5 }} value={RegisteredData.Author} onChange={hanldleChangeAuthor} />
                                         <input style={{ border: '1px solid #ccc', width: '98%', margin: 5 }} value={RegisteredData.Author} onChange={hanldleChangeAuthor} />
                                     </td>
                                 </tr>
