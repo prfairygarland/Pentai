@@ -14,15 +14,19 @@ import ReactTable from 'src/components/common/ReactTable'
 import { getApi } from 'src/utils/Api'
 import { API_ENDPOINT } from 'src/utils/config'
 import moment from 'moment/moment'
+import ReactPaginate from 'react-paginate'
+import { paginationItemPerPageOptions } from 'src/utils/constant'
 
 const AllReservationListing = () => {
   const [meetingData, setMeetingData] = useState('')
+  const [filterObj, setFilterObj] = useState({})
   const [searchStartDate, setSearchStartDate] = useState('')
   const [searchEndDate, setSearchEndDate] = useState('')
   const [searchTxt, setSearchTxt] = useState('')
   const [searchBuilding, setSearchBuilding] = useState('')
   const [searchFloor, setSearchFloor] = useState('')
   const [totalDataCount, setTotalDataCount] = useState(0)
+  const [totalPages, setTotalPages] = useState(0)
   const [currentPage, setCurrentPage] = useState(0)
   const [itemsPerPage, setItemsPerPage] = useState(5)
   const [showMeetingRoomDetails, setShowMeetingRoomDetails] = useState(false)
@@ -41,6 +45,10 @@ const AllReservationListing = () => {
     { value: 'past', name: 'Past' },
     { value: 'all', name: 'All' },
   ])
+
+  const handlePageChange = (selectedPage) => {
+    setCurrentPage(selectedPage.selected)
+  }
 
   const showMeetingReservationInfoHandler = async (reservationId) => {
     try {
@@ -138,14 +146,17 @@ const AllReservationListing = () => {
     [currentPage, itemsPerPage],
   )
 
-  const handleStartDateChange = (event, callBack) => {
+  const handleDateChange = (event, filterObjKey) => {
     let d = new Date(event),
       month = '' + (d.getMonth() + 1),
       day = '' + d.getDate(),
       year = d.getFullYear()
     if (month.length < 2) month = '0' + month
     if (day.length < 2) day = '0' + day
-    callBack([year, month, day].join('-'))
+    setFilterObj((prev) => {
+      return { ...prev, [filterObjKey]: [year, month, day].join('-') }
+    })
+    // getMeetingList()
   }
 
   const getBuildings = async () => {
@@ -174,14 +185,24 @@ const AllReservationListing = () => {
     } catch (error) {
       console.log(error)
     }
+    setFilterObj((prev) => {
+      return { ...prev, buildingId: buildId }
+    })
+    getMeetingList()
   }
 
   const getMeetingList = async () => {
+    let url = API_ENDPOINT.meeting_lists
+    url += `?offset=${currentPage + 1}&limit=${itemsPerPage}`
     try {
-      const res = await getApi(API_ENDPOINT.meeting_lists)
+      const res = await getApi(url)
       if (res.status === 200) {
         console.log(res?.data)
         setMeetingData(res?.data)
+        setTotalDataCount(res?.totalCount)
+        setTotalPages(Math.ceil(res.totalCount / Number(itemsPerPage)))
+      } else {
+        setMeetingData([])
       }
     } catch (error) {
       console.log(error)
@@ -189,20 +210,23 @@ const AllReservationListing = () => {
   }
 
   useEffect(() => {
-    getBuildings()
     getMeetingList()
+  }, [itemsPerPage, currentPage])
+
+  useEffect(() => {
+    getBuildings()
   }, [])
   return (
     <>
       <div style={{ display: 'flex', justifyContent: 'end' }}>
         <DatePicker
-          value={searchStartDate}
-          onChange={(event) => handleStartDateChange(event, setSearchStartDate)}
+          value={filterObj?.searchStartDate}
+          onChange={(event) => handleDateChange(event, 'searchStartDate')}
         />
         &nbsp; - &nbsp;
         <DatePicker
           value={searchEndDate}
-          onChange={(event) => handleStartDateChange(event, setSearchEndDate)}
+          onChange={(event) => handleDateChange(event, 'searchEndDate')}
         />
       </div>
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -286,7 +310,7 @@ const AllReservationListing = () => {
           </CFormSelect>
         </div>
       </div>
-      {totalDataCount > 0 && <p style={{ margin: 0 }}>Total</p>}
+      {totalDataCount > 0 && <p style={{ margin: 0 }}>Total&nbsp;:&nbsp; {totalDataCount}</p>}
       {meetingData && (
         <ReactTable
           columns={meetingColumns}
@@ -295,6 +319,40 @@ const AllReservationListing = () => {
           onSelectionChange={() => {}}
         />
       )}
+      <div className="d-flex w-100 justify-content-center gap-3">
+        {meetingData.length > 0 && (
+          <div className="userlist-pagination">
+            <div className="userlist-pagination dataTables_paginate">
+              <ReactPaginate
+                breakLabel={'...'}
+                marginPagesDisplayed={1}
+                previousLabel={<button>Previous</button>}
+                nextLabel={<button>Next</button>}
+                pageCount={totalPages}
+                onPageChange={handlePageChange}
+                forcePage={currentPage}
+                renderOnZeroPageCount={null}
+                pageRangeDisplayed={4}
+              />
+            </div>
+          </div>
+        )}
+        {meetingData.length > 0 && (
+          <div className="d-flex align-items-center gap-2 mt-2">
+            <label>Show</label>
+            <CFormSelect
+              className=""
+              aria-label=""
+              options={paginationItemPerPageOptions}
+              onChange={(event) => {
+                setItemsPerPage(parseInt(event?.target?.value))
+                setCurrentPage(0)
+              }}
+            />
+            <label>Lists</label>
+          </div>
+        )}
+      </div>
       <CModal
         alignment="center"
         visible={showMeetingRoomDetails}
