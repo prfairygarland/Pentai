@@ -37,7 +37,7 @@ const MeetingRoomsReservationStatus = () => {
       <main>
         <div className="container p-3 mb-3">
           <div>
-            <div>Meeting Room Reservation Status</div>
+            <div>{multiLangObj?.meetingRoomReservationStatus}</div>
             <div>
               <CButton onClick={() => setShowBookMeetingRoom(true)}>
                 {multiLangObj?.btnBookMeetingRooms}

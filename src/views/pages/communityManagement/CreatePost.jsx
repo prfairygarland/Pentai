@@ -140,8 +140,16 @@ const CreatePost = () => {
       enqueueSnackbar(multiLangObj?.pleaseEnterTitle, { variant: 'error' })
       return false
     }
+    if (data.title.trim().length < 3) {
+      enqueueSnackbar(multiLangObj?.titleLengthMustBeAlteast, { variant: 'error' })
+      return false
+    }
     if (data.content.trim() === '') {
       enqueueSnackbar(multiLangObj?.pleaseEnterContent, { variant: 'error' })
+      return false
+    }
+    if (data.content.trim().length < 3) {
+      enqueueSnackbar(multiLangObj?.contentLengthMustBeAlteast, { variant: 'error' })
       return false
     }
     if (mode === 'save') {
