@@ -179,9 +179,9 @@ const AddCategory = ({ setModal, getMod, Modal, getMainCatId, getCatId, removeCa
       {isLoading && <Loader />}
       <div>
         {getCatId !== null &&
-        <div className='d-flex justify-content-end'>
+          <div className='d-flex justify-content-end'>
             <CButton onClick={() => setDeleteVisible(true)}>{multiLang?.delete}</CButton>
-        </div>
+          </div>
         }
         <div className="dropdown-container mb-2">
           <h5 className="me-3">{multiLang?.category}</h5>
@@ -253,11 +253,11 @@ const AddCategory = ({ setModal, getMod, Modal, getMainCatId, getCatId, removeCa
         <CButton onClick={() => saveCategory('save')}>{multiLang?.save}</CButton>
       </div>
       <CModal
-      backdrop="static"
-      visible={deleteVisible}
-      onClose={() => setDeleteVisible(false)}
-      aria-labelledby="StaticBackdropExampleLabel"
-    >
+        backdrop="static"
+        visible={deleteVisible}
+        onClose={() => setDeleteVisible(false)}
+        aria-labelledby="StaticBackdropExampleLabel"
+      >
         <CModalHeader>
           <CModalTitle id="StaticBackdropExampleLabel">{multiLang?.delete}</CModalTitle>
         </CModalHeader>
