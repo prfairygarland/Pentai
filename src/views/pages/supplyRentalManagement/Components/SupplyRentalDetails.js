@@ -7,13 +7,17 @@ import { getBookRental, getOprationClub, getSupplyRental, getUserDetail, putApi 
 import { ALL_CONSTANTS, API_ENDPOINT } from 'src/utils/config';
 import { imageUrl } from '../supplyRentalStatus';
 import moment from 'moment/moment';
+import { useTranslation } from 'react-i18next';
 
 const SupplyRentalDetails = ({ endModal, RentalStatusData, setRentalStatusData, setUserInfoPopup, type }) => {
+  const { t, i18n } = useTranslation();
+  const translationObject = i18n.getDataByLanguage(i18n.language);
+  const multiLang = translationObject?.translation?.supplyRentalManagement
   const [name, setName] = useState('Ak')
   const [visible, setVisible] = useState(false)
   const [rentalVisible, setRentalVisible] = useState(false)
   const [returnVisible, setReturnVisible] = useState(false)
-  const [selectedCheckbox, setSelectedCheckbox] = useState(RentalStatusData?.longTerm !== 'no' ? 'Rental' : 'Provide');
+  const [selectedCheckbox, setSelectedCheckbox] = useState(RentalStatusData?.longTerm !== 'no' ? multiLang?.rental : multiLang?.provide);
   const handleCheckboxChange = (checkbox) => {
     // Update the selected checkbox state
     setSelectedCheckbox(checkbox);
@@ -68,7 +72,7 @@ const SupplyRentalDetails = ({ endModal, RentalStatusData, setRentalStatusData, 
                     <div className="form-outline form-white  d-flex ">
 
                       <div className='formWrpLabel'>
-                        <label className="fw-bolder ">item Image</label>
+                        <label className="fw-bolder ">{multiLang?.itemImage}</label>
                       </div>
 
                       <div className='formWrpInpt'>
@@ -78,7 +82,7 @@ const SupplyRentalDetails = ({ endModal, RentalStatusData, setRentalStatusData, 
 
                     <div className="form-outline form-white  d-flex ">
                       <div className='formWrpLabel'>
-                        <label className="fw-bolder ">Supply Type</label>
+                        <label className="fw-bolder ">{multiLang?.supplyType}</label>
                       </div>
                       <div className='formWrpInpt'>{RentalStatusData?.supplyType ? RentalStatusData?.supplyType : '-'}</div>
                     </div>
@@ -86,14 +90,14 @@ const SupplyRentalDetails = ({ endModal, RentalStatusData, setRentalStatusData, 
                     <div className='d-flex col-md-12'>
                       <div className="form-outline form-white d-flex col-md-6">
                         <div className='formWrpLabel'>
-                          <label className="fw-bolder ">Model Name</label>
+                          <label className="fw-bolder ">{multiLang?.modelName}</label>
                         </div>
                         <div className='formWrpInpt'>{RentalStatusData?.modelName ? RentalStatusData?.modelName : 'NA'}
                         </div>
                       </div>
                       <div className="form-outline form-white  d-flex  col-md-6">
                         <div className='formWrpLabel'>
-                          <label className="fw-bolder ">Item Number</label>
+                          <label className="fw-bolder ">{multiLang?.itemNumber}</label>
                         </div>
                         <div className='formWrpInpt'>
                           {RentalStatusData?.itemNumber ? RentalStatusData?.itemNumber : 'NA'}
@@ -103,7 +107,7 @@ const SupplyRentalDetails = ({ endModal, RentalStatusData, setRentalStatusData, 
 
                     <div className="form-outline form-white  d-flex ">
                       <div className='formWrpLabel'>
-                        <label className="fw-bolder ">User Name</label>
+                        <label className="fw-bolder ">{multiLang?.userName}</label>
                       </div>
                       <div className='formWrpInpt'>{RentalStatusData?.userName ? RentalStatusData?.userName : '-'}</div>
                     </div>
@@ -115,14 +119,14 @@ const SupplyRentalDetails = ({ endModal, RentalStatusData, setRentalStatusData, 
                     <div className='d-flex col-md-12'>
                       <div className="form-outline form-white d-flex col-md-6">
                         <div className='formWrpLabel'>
-                          <label className="fw-bolder ">Rental Duration</label>
+                          <label className="fw-bolder ">{multiLang?.rentalDuration}</label>
                         </div>
                         <div className='formWrpInpt'>{`${moment(RentalStatusData?.startDateTime).format("YYYY-MM-DD")}-${moment(RentalStatusData?.endDateTime).format("YYYY-MM-DD")}`}
                         </div>
                       </div>
                       <div className="form-outline form-white  d-flex  col-md-6">
                         <div className='formWrpLabel'>
-                          <label className="fw-bolder ">Requested Rental week</label>
+                          <label className="fw-bolder ">{multiLang?.requestedRentalWeek}</label>
                         </div>
                         {RentalStatusData?.longTerm !== 'yes' &&
                           <div className='formWrpInpt'>
@@ -134,7 +138,7 @@ const SupplyRentalDetails = ({ endModal, RentalStatusData, setRentalStatusData, 
 
                     <div className="form-outline form-white d-flex ">
                       <div className='formWrpLabel'>
-                        <label className="fw-bolder ">Rental status</label>
+                        <label className="fw-bolder ">{multiLang?.rentalStatus}</label>
                       </div>
                       <div className='formWrpInpt'>{RentalStatusData?.rentalStatus ? RentalStatusData?.rentalStatus : 'NA'}
                       </div>
@@ -143,8 +147,7 @@ const SupplyRentalDetails = ({ endModal, RentalStatusData, setRentalStatusData, 
                     <div className='d-flex col-md-12'>
                       <div className="form-outline form-white d-flex col-md-6">
                         <div className='formWrpLabel'>
-                          <label className="fw-bolder ">Rental Request
-                            Time</label>
+                          <label className="fw-bolder ">{multiLang?.rentalRequestTime}</label>
                         </div>
                         <div className='formWrpInpt'>
                           {RentalStatusData?.startDateTime ? `${moment(RentalStatusData?.startDateTime).format("YYYY-MM-DD HH:mm:ss")}` : 'NA'}
@@ -152,8 +155,7 @@ const SupplyRentalDetails = ({ endModal, RentalStatusData, setRentalStatusData, 
                       </div>
                       <div className="form-outline form-white  d-flex  col-md-6">
                         <div className='formWrpLabel'>
-                          <label className="fw-bolder ">Rental Confirmed
-                            Time</label>
+                          <label className="fw-bolder ">{multiLang?.rentalConfirmedTime}</label>
                         </div>
                         <div className='formWrpInpt'>
                           {RentalStatusData?.rentalConfirmDateTime ? `${moment(RentalStatusData?.rentalConfirmDateTime).format("YYYY-MM-DD HH:mm:ss")}` : '-'}
@@ -164,8 +166,7 @@ const SupplyRentalDetails = ({ endModal, RentalStatusData, setRentalStatusData, 
                     <div className='d-flex col-md-12'>
                       <div className="form-outline form-white d-flex col-md-6">
                         <div className='formWrpLabel'>
-                          <label className="fw-bolder ">Return Request
-                            Time</label>
+                          <label className="fw-bolder ">{multiLang?.returnRequestTime}</label>
                         </div>
                         <div className='formWrpInpt'>
                           {RentalStatusData?.returnRequestDateTime ? `${moment(RentalStatusData?.returnRequestDateTime).format("YYYY-MM-DD HH:mm:ss")}` : 'NA'}
@@ -173,8 +174,7 @@ const SupplyRentalDetails = ({ endModal, RentalStatusData, setRentalStatusData, 
                       </div>
                       <div className="form-outline form-white  d-flex  col-md-6">
                         <div className='formWrpLabel'>
-                          <label className="fw-bolder ">Returned
-                            Time</label>
+                          <label className="fw-bolder ">{multiLang?.returnedTime}</label>
                         </div>
                         <div className='formWrpInpt'>
                           {RentalStatusData?.returnDate ? `${moment(RentalStatusData?.returnDate).format("YYYY-MM-DD HH:mm:ss")}` : '-'}
@@ -183,7 +183,7 @@ const SupplyRentalDetails = ({ endModal, RentalStatusData, setRentalStatusData, 
                     </div>
                     <div className="form-outline form-white d-flex">
                       <div className='formWrpLabel'>
-                        <label className="fw-bolder ">Reason remarks</label>
+                        <label className="fw-bolder ">{multiLang?.reasonRemarks}</label>
                       </div>
                       <div className='formWrpInpt clearfix d-flex'>
                         <CFormTextarea
@@ -191,13 +191,13 @@ const SupplyRentalDetails = ({ endModal, RentalStatusData, setRentalStatusData, 
                           rows={1}
                           value={RentalStatusData?.reasonRemark}
                         ></CFormTextarea>
-                        <button disabled className='mx-2 px-3 py-2 rounded border-1 float-end'>Save</button>
+                        <button disabled className='mx-2 px-3 py-2 rounded border-1 float-end'>{multiLang?.save}</button>
                       </div>
                     </div>
 
                     <div className="form-outline form-white d-flex ">
                       <div className='formWrpLabel'>
-                        <label className="fw-bolder ">Request as provided</label>
+                        <label className="fw-bolder ">{multiLang?.requestAsProvided}</label>
                       </div>
                       <div className='formWrpInpt'>{RentalStatusData?.rentalStatus ? RentalStatusData?.rentalStatus : 'NA'}
                       </div>
@@ -209,12 +209,12 @@ const SupplyRentalDetails = ({ endModal, RentalStatusData, setRentalStatusData, 
                       <div>
                         <div className="form-outline form-white d-flex justify-content-center">
                           <div className='p-3'>
-                            <label className="fw-bolder">Rental Request Confirmation</label>
+                            <label className="fw-bolder">{multiLang?.rentalRequestConfirmation}</label>
                           </div>
                         </div>
                         <div className="form-outline form-white d-flex">
                           <div className='formWrpLabel'>
-                            <label className="fw-bolder ">Rental Request Confirmation</label>
+                            <label className="fw-bolder ">{multiLang?.rentalRequestConfirmation}</label>
                           </div>
                           <div className='formWrpInpt clearfix d-flex justify-content-between'>
                             <div className='d-flex formradiogroup mb-2 gap-3'>
@@ -222,7 +222,7 @@ const SupplyRentalDetails = ({ endModal, RentalStatusData, setRentalStatusData, 
                               <CFormCheck type="radio" name="club_board" id="exampleRadios2" label="Provide" checked={selectedCheckbox === 'Provide'} onChange={() => handleCheckboxChange('Provide')} />
                             </div>
                             <div>
-                              <button className='mx-2 px-3 py-2 rounded border-1 float-end' onClick={() => setRentalVisible(!rentalVisible)}>confirm</button>
+                              <button className='mx-2 px-3 py-2 rounded border-1 float-end' onClick={() => setRentalVisible(!rentalVisible)}>{multiLang?.confirm}</button>
                             </div>
                           </div>
                         </div>
@@ -232,14 +232,14 @@ const SupplyRentalDetails = ({ endModal, RentalStatusData, setRentalStatusData, 
                     {RentalStatusData?.status === 'returned' &&
                       <div className="form-outline form-white d-flex">
                         <div className='formWrpLabel'>
-                          <label className="fw-bolder ">Return Request Confirmation</label>
+                          <label className="fw-bolder ">{multiLang?.returnRequestConfirmation}</label>
                         </div>
                         <div className='formWrpInpt clearfix d-flex justify-content-end'>
                           <div className='d-flex formradiogroup mb-2 gap-3'>
 
                           </div>
                           <div>
-                            <button className='mx-2 px-3 py-2 rounded border-1 float-end' onClick={() => setReturnVisible(!returnVisible)}>confirm</button>
+                            <button className='mx-2 px-3 py-2 rounded border-1 float-end' onClick={() => setReturnVisible(!returnVisible)}>{multiLang?.confirm}</button>
                           </div>
                         </div>
                       </div>
@@ -248,15 +248,15 @@ const SupplyRentalDetails = ({ endModal, RentalStatusData, setRentalStatusData, 
                       <div>
                         <div className="form-outline form-white d-flex justify-content-center">
                           <div className='p-3'>
-                            <label className="fw-bolder">Change Rental status</label>
+                            <label className="fw-bolder">{multiLang?.changeRentalStatus}</label>
                           </div>
                         </div>
                         <div className="form-outline form-white d-flex">
                           <div className='formWrpLabel'>
-                            <label className="fw-bolder ">End Rental</label>
+                            <label className="fw-bolder ">{multiLang?.endRental}</label>
                           </div>
                           <div className='formWrpInpt clearfix'>
-                            <button onClick={() => setVisible(!visible)} className='mx-2 px-3 py-2 rounded border-1 float-end'>confirm</button>
+                            <button onClick={() => setVisible(!visible)} className='mx-2 px-3 py-2 rounded border-1 float-end'>{multiLang?.confirm}</button>
                           </div>
                         </div>
                       </div>
@@ -272,16 +272,15 @@ const SupplyRentalDetails = ({ endModal, RentalStatusData, setRentalStatusData, 
               aria-labelledby="LiveDemoExampleLabel"
             >
               <CModalHeader onClose={() => setRentalVisible(false)}>
-                <CModalTitle id="LiveDemoExampleLabel">Rental Request Confirm</CModalTitle>
+                <CModalTitle id="LiveDemoExampleLabel">{multiLang?.rentalRequestConfirm}</CModalTitle>
               </CModalHeader>
               <CModalBody className='text-center'>
-                <p>The user requested the rental type as Provided. Are you sure you want to reject the request and confirm the rental type as Rental?
-                </p>
+                <p>{multiLang?.rentalRequestConfirmPopUp}</p>
               </CModalBody>
               <CModalFooter className='d-flex justify-content-center gap-md-4 border-0 '>
-                <CButton className='px-4' color="primary" onClick={() => confirmSupply(selectedCheckbox, RentalStatusData.id)} >Yes</CButton>
+                <CButton className='px-4' color="primary" onClick={() => confirmSupply(selectedCheckbox, RentalStatusData.id)} >{multiLang?.yes}</CButton>
                 <CButton color="secondary" onClick={() => setRentalVisible(false)}>
-                  Cancel
+                  {multiLang?.cancel}
                 </CButton>
               </CModalFooter>
             </CModal>
@@ -291,18 +290,16 @@ const SupplyRentalDetails = ({ endModal, RentalStatusData, setRentalStatusData, 
               aria-labelledby="LiveDemoExampleLabel"
             >
               <CModalHeader onClose={() => setVisible(false)}>
-                <CModalTitle id="LiveDemoExampleLabel">Change Rental Status</CModalTitle>
+                <CModalTitle id="LiveDemoExampleLabel">{multiLang?.changeRentalStatus}</CModalTitle>
               </CModalHeader>
               <CModalBody className='text-center'>
-                <p>Are you sure you want to change the rental
-                  status to Returned
-                </p>
+                <p>{multiLang?.changeRentalStatusPopUp}</p>
               </CModalBody>
               <CModalFooter className='d-flex justify-content-center gap-md-4 border-0 '>
                 <CButton color="secondary" onClick={() => setVisible(false)}>
-                  Cancel
+                  {multiLang?.cancel}
                 </CButton>
-                <CButton className='px-4' color="primary" onClick={() => confirmSupply('Returned', RentalStatusData.id)}>Yes</CButton>
+                <CButton className='px-4' color="primary" onClick={() => confirmSupply('Returned', RentalStatusData.id)}>{multiLang?.yes}</CButton>
               </CModalFooter>
             </CModal>
             <CModal
@@ -311,16 +308,15 @@ const SupplyRentalDetails = ({ endModal, RentalStatusData, setRentalStatusData, 
               aria-labelledby="LiveDemoExampleLabel"
             >
               <CModalHeader onClose={() => setReturnVisible(false)}>
-                <CModalTitle id="LiveDemoExampleLabel">Rental Request Confirm</CModalTitle>
+                <CModalTitle id="LiveDemoExampleLabel">{multiLang?.rentalRequestConfirm}</CModalTitle>
               </CModalHeader>
               <CModalBody className='text-center'>
-                <p>Are you sure?
-                </p>
+                <p>{multiLang?.ConfirmationPopUp}</p>
               </CModalBody>
               <CModalFooter className='d-flex justify-content-center gap-md-4 border-0 '>
-                <CButton className='px-4' color="primary" onClick={() => confirmSupply('Returned', RentalStatusData.id)} >Yes</CButton>
+                <CButton className='px-4' color="primary" onClick={() => confirmSupply('Returned', RentalStatusData.id)} >{multiLang?.yes}</CButton>
                 <CButton color="secondary" onClick={() => setReturnVisible(false)}>
-                  Cancel
+                  {multiLang?.cancel}
                 </CButton>
               </CModalFooter>
             </CModal>

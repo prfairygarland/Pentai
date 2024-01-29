@@ -15,8 +15,13 @@ import AddItem from './Components/AddItem'
 import { Navigate, useNavigate } from 'react-router-dom'
 import CIcon from '@coreui/icons-react'
 import { cibZeit, cilCaretBottom, cilCaretRight } from '@coreui/icons'
+import { useTranslation } from 'react-i18next'
 
 const AllSupplies = () => {
+
+  const { t, i18n } = useTranslation();
+  const translationObject = i18n.getDataByLanguage(i18n.language);
+  const multiLang = translationObject?.translation?.supplyRentalManagementAllSupplies
 
   const initialData = {
     search: '',
@@ -430,8 +435,11 @@ const AllSupplies = () => {
       setModal('addSubCategory')
     } else if (type === 'addModal') {
       if (add === 'add') {
+        console.log('chck')
         setModalIds(null)
       }
+      console.log('test =>', subModalIds);
+
 
       setModal('addModal')
     } else if (type === 'addItem') {
@@ -451,13 +459,13 @@ const AllSupplies = () => {
         {isLoading && <Loader />}
         <div className='col-md-3'>
           <CSidebar>
-            <CSidebarBrand className=' black-text d-flex justify-content-start p-3' style={{ color: 'black', background: 'none' }}><h5>Category Hierarchy</h5></CSidebarBrand>
+            <CSidebarBrand className=' black-text d-flex justify-content-start p-3' style={{ color: 'black', background: 'none' }}><h5>{multiLang?.categoryHierarchy}</h5></CSidebarBrand>
             <CSidebarBrand className=' black-text d-flex justify-content-between mb-2' style={{ color: 'black', borderBottom: '1px solid #000', background: 'none', alignItems: 'center' }}>
-              <p role='button' onClick={() => handleSetModal('allList')}>All Supplies</p>
+              <p role='button' onClick={() => handleSetModal('allList')}>{multiLang?.allSupplies}</p>
               <CButton className='text-center btn-sm' style={{
                 whiteSpace: 'nowrap',
                 textOverflow: 'ellipsis',
-              }} onClick={() => handleSetModal('addSupplyType', 'add')}>Add sub</CButton>
+              }} onClick={() => handleSetModal('addSupplyType', 'add')}>{multiLang?.addSub}</CButton>
             </CSidebarBrand>
             <CSidebarNav style={{ color: 'black', padding: '3px', maxHeight: '500px', overflow: 'auto' }}>
               {mainCategoryData.map((tab) => (
@@ -471,7 +479,7 @@ const AllSupplies = () => {
                           <p role='button' onClick={() => (setIds(tab.id), handleSetModal('addSupplyType'))}>{tab.name}</p>
                         </div>
                         <div>
-                          <CButton className='btn-sm' onClick={() => { setSuppyId(tab.id); handleSetModal('addCategory', 'add') }}>Add sub</CButton>
+                          <CButton className='btn-sm' onClick={() => { setSuppyId(tab.id); handleSetModal('addCategory', 'add') }}>{multiLang?.addSub}</CButton>
                         </div>
                       </div>
                       <div>
@@ -486,7 +494,7 @@ const AllSupplies = () => {
                                     <p role='button' onClick={() => (setSuppyId(tab.id), setCatIds(catTab.id), handleSetModal('addCategory'))}>{catTab.name}</p>
                                   </div>
                                   <div>
-                                    <CButton className='btn-sm' onClick={() => { setCatId(catTab.id); handleSetModal('addSubCategory', 'add') }}>Add sub</CButton>
+                                    <CButton className='btn-sm' onClick={() => { setCatId(catTab.id); handleSetModal('addSubCategory', 'add') }}>{multiLang?.addSub}</CButton>
                                   </div>
                                 </div>
                                 <div>
@@ -501,7 +509,7 @@ const AllSupplies = () => {
                                               <p role='button' onClick={() => (setCatId(catTab.id), setSubCatIds(subCatTab.id), handleSetModal('addSubCategory'))}>{subCatTab.name}</p>
                                             </div>
                                             <div>
-                                              <CButton className='btn-sm' onClick={() => { setModalId(subCatTab.id); handleSetModal('addModal') }}>Add sub</CButton>
+                                              <CButton className='btn-sm' onClick={() => { setModalId(subCatTab.id); handleSetModal('addModal', 'add') }}>{multiLang?.addSub}</CButton>
                                             </div>
                                           </div>
                                           {sideModelId === subCatTab.id &&
@@ -516,7 +524,7 @@ const AllSupplies = () => {
                                                       <p role='button' onClick={() => (setModalId(subCatTab.id), setModalIds(modalTab.id), handleSetModal('addModal'))}>{modalTab.name}</p>
                                                     </div>
                                                     <div>
-                                                      <CButton className='btn-sm' onClick={() => { setCategoryId(catTab.id); setSubCategoryId(subCatTab.id); setMainID(tab.id); setItemName(modalTab.name); setGetModalId(modalTab.id); handleSetModal('addItem', 'add') }}>Add sub</CButton>
+                                                      <CButton className='btn-sm' onClick={() => { setCategoryId(catTab.id); setSubCategoryId(subCatTab.id); setMainID(tab.id); setItemName(modalTab.name); setGetModalId(modalTab.id); handleSetModal('addItem', 'add') }}>{multiLang?.addSub}</CButton>
                                                     </div>
                                                   </div>
                                                   {sideItemId === modalTab.id &&
@@ -529,7 +537,7 @@ const AllSupplies = () => {
                                                               <p role='button' onClick={() => { setItemName(modalTab.name); setItemIds(itemTab.id); handleSetModal('addItem') }}>{itemTab.itemNumber}</p>
                                                             </div>
                                                             {/* <div>
-                                                              <CButton className='btn-sm' onClick={() => handleSetModal('addSubCategory')}>Add sub</CButton>
+                                                              <CButton className='btn-sm' onClick={() => handleSetModal('addSubCategory')}>{multiLang?.addSub}</CButton>
                                                             </div> */}
                                                           </div>
                                                         </CNavItem>
@@ -563,12 +571,12 @@ const AllSupplies = () => {
         {getModal === 'allList' &&
           <div className='mb-4 col-md-9'>
             <div className='clearfix'>
-              <CButton className='float-end mx-2 mb-2' onClick={exportData}>Export</CButton>
+              <CButton className='float-end mx-2 mb-2' onClick={exportData}>{multiLang?.export}</CButton>
             </div>
             <div className='d-flex justify-content-between align-items-center my-4'>
               <div className='mx-1 d-flex'>
                 <input className='px-4 me-3' value={filterData.search} onChange={handleSearch} />
-                <CButton onClick={handleAllSupplyRentaldata}>Search</CButton>
+                <CButton onClick={handleAllSupplyRentaldata}>{multiLang?.search}</CButton>
               </div>
               <div className='d-flex me-5 gap-1'>
                 <CFormSelect
@@ -576,12 +584,12 @@ const AllSupplies = () => {
                   style={{ width: '170px' }}
                   value={filterData?.itemStatus}
                   options={[
-                    { label: 'All', value: 'All' },
+                    { label: multiLang?.all, value: 'All' },
                     {
-                      label: 'Available', value: 'Available'
+                      label: multiLang?.available, value: 'Available'
                     },
                     {
-                      label: 'Unavailable', value: 'Unavailable'
+                      label: multiLang?.unAvailable, value: 'Unavailable'
                     }
                   ]}
                   onChange={handleAllSupplieRentalStatusChange}
@@ -590,12 +598,12 @@ const AllSupplies = () => {
                   style={{ width: '170px' }}
                   value={filterData?.visibility}
                   options={[
-                    { label: 'All', value: 'All' },
+                    { label: multiLang?.all, value: 'All' },
                     {
-                      label: 'Visible', value: 'visible'
+                      label: multiLang?.visible, value: 'visible'
                     },
                     {
-                      label: 'Hidden', value: 'hide'
+                      label: multiLang?.hidden, value: 'hide'
                     }
                   ]}
                   onChange={handleAllaupplieVisibility}
@@ -604,7 +612,7 @@ const AllSupplies = () => {
 
             </div>
             <div className='mb-4'>
-              <p style={{ fontSize: 'medium' }}>Total: {totalCount > 0 ? totalCount : '0'}</p>
+              <p style={{ fontSize: 'medium' }}>{multiLang?.total}: {totalCount > 0 ? totalCount : '0'}</p>
             </div>
             <ReactTable showCheckbox={false} columns={columns} data={allSuppliesData} totalCount={10} onSelectionChange={handleSelectionChange} />
             {allSuppliesData.length > 0 &&
@@ -614,8 +622,8 @@ const AllSupplies = () => {
                     <ReactPaginate
                       breakLabel={'...'}
                       marginPagesDisplayed={1}
-                      previousLabel={<button>Previous</button>}
-                      nextLabel={<button>Next</button>}
+                      previousLabel={<button>{multiLang?.previous}</button>}
+                      nextLabel={<button>{multiLang?.next}</button>}
                       pageCount={totalPages}
                       onPageChange={handlePageChange}
                       forcePage={currentPage}
@@ -626,7 +634,7 @@ const AllSupplies = () => {
 
                 </div>
                 <div className='d-flex align-items-center gap-2 mt-2'>
-                  <label>Show</label>
+                  <label>{multiLang?.show}</label>
                   <CFormSelect
                     className=''
                     aria-label=""
@@ -637,7 +645,7 @@ const AllSupplies = () => {
                       setCurrentPage(0)
                     }}
                   />
-                  <label>Lists</label>
+                  <label>{multiLang?.lists}</label>
                 </div>
               </div>
             }
@@ -650,16 +658,16 @@ const AllSupplies = () => {
           aria-labelledby="StaticBackdropExampleLabel"
         >
           <CModalHeader>
-            <CModalTitle id="StaticBackdropExampleLabel">Delete board.</CModalTitle>
+            <CModalTitle id="StaticBackdropExampleLabel">{multiLang?.deleteBoard}</CModalTitle>
           </CModalHeader>
           <CModalBody>
-            <p>Are you sure you want to delete this room?</p>
+            <p>{multiLang?.deleteBoardPopUp}</p>
           </CModalBody>
           <CModalFooter>
             <CButton color="secondary" >
-              Delete
+              {multiLang?.delete}
             </CButton>
-            <CButton color="primary" onClick={() => setDeleteVisible(false)}>Cancel</CButton>
+            <CButton color="primary" onClick={() => setDeleteVisible(false)}>{multiLang?.cancel}</CButton>
           </CModalFooter>
         </CModal>
 

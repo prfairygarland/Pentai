@@ -45,6 +45,7 @@ const LiveRegistration = () => {
   const [shortAnswer, setShortAnswer] = useState('')
   const [timeLimit, setTimeLimit] = useState(10)
   const [mainQuizs, setMainQuizs] = useState([])
+  const [currentQuizeIndex, setCurrentQuizeIndex] = useState(null)
 
 
   const handleTimeInputChange = (e) => {
@@ -297,20 +298,33 @@ const LiveRegistration = () => {
       return
     }
     Array.from(e.target.files).forEach((file) => {
-      if (files.length === 10) {
+      if (files.length === 4) {
         return //only first 10 files will be uploaded
       }
-      files.push({ title: '', value: false, image: file })
+      if (files.length <= 0) {
+        files.push({ title: '', value: true, image: file })
+      } else {
+        files.push({ title: '', value: false, image: file })
+      }
     })
     e.target.value = null
-    // setData((prev) => ({ ...prev, images: files }))
     setUploadedImages(files)
   }
 
-  const deleteUploadedImageHandler = (imgFileIndex) => {
+  const deleteUploadedImageHandler = (e, imgFileIndex) => {
+    e.stopPropagation()
     const arrUploadedImages = [...uploadedImages]
+    console.log('arrUploadedImages =>', arrUploadedImages);
+    if (arrUploadedImages[imgFileIndex].value === true) {
+      console.log('1 =>', arrUploadedImages[imgFileIndex + 1]);
+      console.log('2 =>', arrUploadedImages[imgFileIndex - 1]);
+      if (arrUploadedImages[imgFileIndex - 1] === undefined) {
+        arrUploadedImages[imgFileIndex + 1].value = true
+      } else if (arrUploadedImages[imgFileIndex + 1] === undefined) {
+        arrUploadedImages[imgFileIndex - 1].value = true
+      }
+    }
     arrUploadedImages.splice(imgFileIndex, 1)
-    // setData((prev) => ({ ...prev, images: imgFiles }))
     setUploadedImages(arrUploadedImages)
   }
 
@@ -388,54 +402,152 @@ const LiveRegistration = () => {
     setShortAnswer(value)
   }
 
-  const validateQuize = () => {
-    console.log('time limit =>', timeLimit.length);
-    console.log('time selectedRadio =>', selectedRadio);
-    console.log('time answerSelectedRadio =>', answerSelectedRadio);
+  const validateQuize = async () => {
+
     if (quizQuestion.trim() === '') {
       enqueueSnackbar('Please enter a Question.', { variant: 'error' })
       return false
     } else if (selectedRadio === null) {
       enqueueSnackbar('Please select quiz type', { variant: 'error' })
       return false
-    } else if (selectedRadio === 'TrueFalse' && answerSelectedRadio === null) {
+    } else if (selectedRadio === 'trueOrFalse' && answerSelectedRadio === null) {
       enqueueSnackbar('Please select answer', { variant: 'error' })
       return false
-    } else if (selectedRadio === 'Image') {
-      if (uploadedImages.length < 1) {
-        enqueueSnackbar('Please select Image', { variant: 'error' })
-        return false
-      }
-      if (uploadedImages.length < 2) {
-        enqueueSnackbar('Please select atleast 2 images', { variant: 'error' })
-        return false
-      }
-    } else if (selectedRadio === 'MultipleChoice') {
-      const hasEmptyField = inputValues.some((input) => !input.value.trim());
+    }
+    else if (selectedRadio === 'imageMultipleChoice' && uploadedImages.length < 1) {
+      enqueueSnackbar('Please select Image', { variant: 'error' })
+      return false
+    }
+    else if (selectedRadio === 'imageMultipleChoice' && uploadedImages.length < 2) {
+      enqueueSnackbar('Please select atleast 2 images', { variant: 'error' })
+      return false
+    }
+    else if (selectedRadio === 'imageMultipleChoice' && uploadedImages.some(img => img.title === '')) {
+      console.log('hhs');
+      enqueueSnackbar('Enter image title', { variant: 'error' })
+      return false
+    }
+    else if (selectedRadio === 'multipleChoice' && inputValues?.some((input) => !input?.value.trim())) {
+      enqueueSnackbar(`Add Answer`, { variant: 'error' })
+      return
+    }
+    else if (selectedRadio === 'multipleChoice' && inputValues.length < 2) {
+      enqueueSnackbar('Please add atleast 2 options', { variant: 'error' })
+      return false
+    }
+    else if (selectedRadio === 'shortAnswer' && shortAnswer === '') {
+      enqueueSnackbar('Please enter a Answer.', { variant: 'error' })
+      return false
 
-      if (hasEmptyField) {
-        enqueueSnackbar(`Add Answer`, { variant: 'error' })
-        return
-      }
-      if (inputValues.length < 2) {
-        enqueueSnackbar('Please add atleast 2 options', { variant: 'error' })
-        return false
-      }
-    } else if (selectedRadio === 'ShortAnswer') {
-      if (shortAnswer === '') {
-        enqueueSnackbar('Please enter a Answer.', { variant: 'error' })
-        return false
-      }
     } else if (timeLimit.length === 0) {
       enqueueSnackbar('Please enter a Time limit.', { variant: 'error' })
+      return false
 
     } else if (timeLimit.length > 0 && timeLimit[0] === '0') {
       enqueueSnackbar('First digit cannot be 0. Please enter a valid Time limit.', { variant: 'error' })
+      return false
+    } else {
+      await saveQuiz()
     }
-    // else {
-    //   confirmationSaveClubBannerModalHandler(true)
-    //   // enqueueSnackbar(' uploaded image', { variant: 'success' })
-    // }
+
+  }
+
+  const resetQuiz = async () => {
+    setQuizQuestion('')
+    setSelectedRadio(null)
+    setAnswerSelectedRadio(null)
+    setUploadedImages([])
+    setInputValues([{ value: '', answer: true }])
+    setShortAnswer('')
+    setTimeLimit(10)
+  }
+
+  const saveQuiz = async () => {
+    let quizData = {
+      question: quizQuestion,
+      countDownTime: timeLimit
+    };
+
+    if (selectedRadio === 'trueOrFalse') {
+      quizData['type'] = "trueOrFalse"
+      quizData['options'] = [{ "title": "True" }, { "title": "False" }]
+      quizData['isCorrect'] = answerSelectedRadio
+    }
+
+    if (selectedRadio === 'imageMultipleChoice') {
+      quizData['type'] = "imageMultipleChoice"
+      quizData['options'] = uploadedImages
+      for (let index = 0; index < uploadedImages.length; index++) {
+        if (uploadedImages[index].value === true) {
+          quizData['isCorrect'] = { title: uploadedImages[index].title, image: uploadedImages[index].image }
+        }
+      }
+
+    }
+
+    if (selectedRadio === 'multipleChoice') {
+      quizData['type'] = "multipleChoice"
+      quizData['options'] = inputValues
+      for (let index = 0; index < inputValues.length; index++) {
+        if (inputValues[index].answer === true) {
+          quizData['isCorrect'] = { value: inputValues[index].value, answer: inputValues[index].answer }
+        }
+      }
+    }
+
+    if (selectedRadio === 'shortAnswer') {
+      quizData['type'] = "shortAnswer"
+      quizData['options'] = shortAnswer
+      quizData['isCorrect'] = shortAnswer
+    }
+
+    console.log('quizData =>', quizData);
+
+    if (currentQuizeIndex !== null) {
+      const getData = [...mainQuizs]
+      getData[currentQuizeIndex] = quizData
+      setMainQuizs(getData)
+      enqueueSnackbar('Update succesfully.', { variant: 'success' })
+      setCurrentQuizeIndex(null)
+    } else {
+      const allQuizData = mainQuizs ? [...mainQuizs] : []
+      allQuizData.push(quizData)
+      setMainQuizs(allQuizData)
+      enqueueSnackbar('Added succesfully.', { variant: 'success' })
+      setCurrentQuizeIndex(null)
+    }
+
+    setVisible(false)
+    resetQuiz()
+  }
+
+  const editQuiz = async (data, index) => {
+    console.log('edit data =>', data);
+    setCurrentQuizeIndex(index)
+    setQuizQuestion(data.question)
+    setTimeLimit(data.countDownTime)
+    setSelectedRadio(data.type)
+
+    if (data.type === 'trueOrFalse') {
+      setAnswerSelectedRadio(data.isCorrect)
+    }
+    if (data.type === 'imageMultipleChoice') {
+      setUploadedImages(data.options)
+    }
+    if (data.type === 'multipleChoice') {
+      setInputValues(data.options)
+    }
+    if (data.type === 'shortAnswer') {
+      setShortAnswer(data.options)
+    }
+    setVisible(true)
+  }
+
+  const deleteQuiz = async (index) => {
+    const originalData = [...mainQuizs]
+    originalData.splice(index, 1)
+    setMainQuizs(originalData)
+
   }
 
   return (
@@ -776,7 +888,19 @@ const LiveRegistration = () => {
                                   {multiLang?.LiveManagementRegistrationQuiz?.Create_Quiz}  <span className="mandatory-red-asterisk">*</span>
                                 </label>
                               </div>
-                              <div className="formWrpInpt d-flex w-100 align-items-center gap-2">
+                              <div className="formWrpInpt  w-100 align-items-center gap-2">
+                                <ul >
+                                  {mainQuizs.length > 0 &&
+                                    mainQuizs.map((data, i) => (
+                                      <li key={i} className='d-flex gap-3 align-items-center'>
+                                        <span>{i + 1}</span>
+                                        <p>{data.type}</p>
+                                        <p onClick={() => editQuiz(data, i)}>{data.question}</p>
+                                        <i role='button' onClick={() => deleteQuiz(i)} className="icon-close"></i>
+                                      </li>
+                                    ))
+                                  }
+                                </ul>
                                 <CButton onClick={() => setVisible(!visible)}>{multiLang?.LiveManagementRegistrationQuiz?.Create} +</CButton>
                               </div>
                             </div>
@@ -798,7 +922,7 @@ const LiveRegistration = () => {
                   size="xl"
                   backdrop="static"
                   visible={visible}
-                  onClose={() => setVisible(false)}
+                  onClose={() => { setVisible(false); resetQuiz() }}
                   aria-labelledby="StaticBackdropExampleLabel"
                 >
                   <CModalHeader>
@@ -823,54 +947,54 @@ const LiveRegistration = () => {
                         <div className=''>
                           <h5>{multiLang?.LiveManagementRegistrationQuiz?.Quiz_type}</h5>
                           <div className='d-flex flex-wrap mt-2 mb-2'>
-                            <CButton color="light" className="d-flex align-items-center w-50 gap-2" onClick={() => handleRadioChange('TrueFalse')}>
+                            <CButton color="light" className="d-flex align-items-center w-50 gap-2" onClick={() => { setAnswerSelectedRadio(true); handleRadioChange('trueOrFalse') }}>
                               <CFormCheck
                                 className='w-50 gap-2'
                                 type="radio"
                                 id="radioButton1"
                                 name="TrueFalse"
                                 // label="True/False"
-                                checked={selectedRadio === 'TrueFalse'}
+                                checked={selectedRadio === 'trueOrFalse'}
                               />
                               <CIcon icon={cilCircle}></CIcon>
                               <CIcon icon={cilX}></CIcon>
                               {multiLang?.LiveManagementRegistrationQuiz?.True_False}
                             </CButton>
 
-                            <CButton color="light" className="d-flex align-items-center w-50 gap-2" onClick={() => handleRadioChange('Image')}>
+                            <CButton color="light" className="d-flex align-items-center w-50 gap-2" onClick={() => handleRadioChange('imageMultipleChoice')}>
                               <CFormCheck
                                 className='w-50 gap-2'
                                 type="radio"
                                 id="radioButton2"
                                 name="Image"
                                 // label="Image"
-                                checked={selectedRadio === 'Image'}
+                                checked={selectedRadio === 'imageMultipleChoice'}
                               />
                               <CIcon icon={cilImage}></CIcon>
                               {multiLang?.LiveManagementRegistrationQuiz?.Image}
                             </CButton>
 
-                            <CButton color="light" className="d-flex align-items-center w-50 gap-2" onClick={() => handleRadioChange('MultipleChoice')}>
+                            <CButton color="light" className="d-flex align-items-center w-50 gap-2" onClick={() => handleRadioChange('multipleChoice')}>
                               <CFormCheck
                                 type="radio"
                                 className='w-50 gap-2'
                                 id="radioButton3"
                                 name="MultipleChoice"
                                 // label="Multiple choice"
-                                checked={selectedRadio === 'MultipleChoice'}
+                                checked={selectedRadio === 'multipleChoice'}
                               />
                               <CIcon icon={cilHamburgerMenu}></CIcon>
                               {multiLang?.LiveManagementRegistrationQuiz?.Multiple_Choice}
                             </CButton>
 
-                            <CButton color="light" className="d-flex align-items-center w-50 gap-2" onClick={() => handleRadioChange('ShortAnswer')}>
+                            <CButton color="light" className="d-flex align-items-center w-50 gap-2" onClick={() => handleRadioChange('shortAnswer')}>
                               <CFormCheck
                                 className='w-50 gap-2'
                                 type="radio"
                                 id="radioButton4"
                                 name="ShortAnswer"
                                 // label="Short-answer"
-                                checked={selectedRadio === 'ShortAnswer'}
+                                checked={selectedRadio === 'shortAnswer'}
                               />
                               <CIcon icon={cilRectangle}></CIcon>
 
@@ -881,7 +1005,7 @@ const LiveRegistration = () => {
                         </div>
                         <div className='answer'>
                           <h5>Answer</h5>
-                          {selectedRadio === 'TrueFalse' &&
+                          {selectedRadio === 'trueOrFalse' &&
                             <div className='d-flex'>
                               <CButton color="light" className="d-flex align-items-center w-50 gap-2" onClick={() => setAnswerSelectedRadio(true)}>
                                 <CFormCheck
@@ -920,7 +1044,7 @@ const LiveRegistration = () => {
                               </CButton>
                             </div>
                           }
-                          {selectedRadio === 'Image' &&
+                          {selectedRadio === 'imageMultipleChoice' &&
                             <div className='mt-2 mb-2'>
                               {uploadedImages?.length > 0 && (
                                 <div className="upload-images-container uploadImgWrap">
@@ -932,7 +1056,6 @@ const LiveRegistration = () => {
                                             className='w-50 gap-2'
                                             type="radio"
                                             id="radioButton4"
-                                            name="ShortAnswer"
                                             checked={uploadedImages[index]?.value === true}
                                           />
 
@@ -942,7 +1065,7 @@ const LiveRegistration = () => {
                                             <img src={URL.createObjectURL(uploadedImages[index].image)} alt="" />
                                             <button
                                               className="thumbclsBtn"
-                                              onClick={() => deleteUploadedImageHandler(index)}
+                                              onClick={(e) => deleteUploadedImageHandler(e, index)}
                                             >
                                               <i className="icon-close"></i>
                                             </button>
@@ -1001,23 +1124,23 @@ const LiveRegistration = () => {
                             </div>
                           }
 
-                          {selectedRadio === 'MultipleChoice' &&
+                          {selectedRadio === 'multipleChoice' &&
                             <div >
                               <div>
-                                {inputValues.map((input, index) => (
-                                  <div key={index} className='d-flex mt-3 mb-2'>
+                                {inputValues?.map((input, index) => (
+                                  <div key={index} className='d-flex mt-3 mb-2 align-items-center gap-3'>
                                     <div>
                                       <CButton color="light" className="d-flex align-items-center gap-2" onClick={() => MultipleAnswerHandler(index)}>
                                         <CFormCheck
                                           className='w-50 gap-2'
                                           type="radio"
                                           id="radioButton4"
-                                          name="ShortAnswer"
                                           checked={input.answer === true}
                                         />
                                         <CFormInput
                                           type="text"
                                           value={input.value}
+                                          onClick={(e) => e.stopPropagation()}
                                           onChange={(e) => handleMultipleInputChange(index, e.target.value)}
                                         // placeholder={`Input ${index + 1} Value`}
                                         />
@@ -1034,25 +1157,22 @@ const LiveRegistration = () => {
                                       </label>
                                     }
                                     {index >= 2 && (
-                                      <button
-                                        className="thumbclsBtn"
-                                        onClick={() => deleteInputField(index)}
-                                      >
-                                        <i className="icon-close"></i>
-                                      </button>
+                                      <div>
+                                        <i role='button' onClick={() => deleteInputField(index)} className="icon-close"></i>
+                                      </div>
                                     )}
 
                                   </div>
 
                                 ))}
                               </div>
-                              {inputValues.length < 4 &&
+                              {inputValues?.length < 4 &&
                                 <CButton onClick={addInputField}>{multiLang?.LiveManagementRegistrationQuiz?.Create_Answer} +</CButton>
                               }
                             </div>
                           }
 
-                          {selectedRadio === 'ShortAnswer' &&
+                          {selectedRadio === 'shortAnswer' &&
                             <div className="formWrpInpt d-flex">
                               <div className="d-flex formradiogroup mb-2 gap-3">
                                 <CFormInput
@@ -1094,14 +1214,14 @@ const LiveRegistration = () => {
                                   <CCardText>
                                     {quizQuestion}
                                   </CCardText>
-                                  {selectedRadio === 'TrueFalse' &&
-                                    <div className='TrueFalse gap-2 mt-3 d-flex justify-content-center gap-3'>
+                                  {selectedRadio === 'trueOrFalse' &&
+                                    <div className='gap-2 mt-3 d-flex justify-content-center gap-3'>
                                       <CFormCheck className='ms-2' button={{ color: 'secondary' }} type="radio" name="options" id="option3" autoComplete="off" label="True" disabled />
                                       <CFormCheck button={{ color: 'secondary' }} type="radio" name="options" id="option3" autoComplete="off" label="False" disabled />
                                     </div>
                                   }
-                                  {selectedRadio === 'Image' &&
-                                    <div className='TrueFalse gap-2 mt-3 d-flex justify-content-center gap-3'>
+                                  {selectedRadio === 'imageMultipleChoice' &&
+                                    <div className='gap-2 mt-3 d-flex justify-content-center gap-3'>
                                       {uploadedImages?.length > 0 && (
                                         <div className="upload-images-container uploadImgWrap">
                                           {uploadedImages.map((input, index) => (
@@ -1122,8 +1242,8 @@ const LiveRegistration = () => {
                                     </div>
                                   }
 
-                                  {selectedRadio === 'MultipleChoice' &&
-                                    <div className='TrueFalse gap-2 mt-3 d-flex justify-content-center gap-3'>
+                                  {selectedRadio === 'multipleChoice' &&
+                                    <div className='gap-2 mt-3 d-flex justify-content-center gap-3'>
 
                                       {inputValues?.length > 0 && (
                                         <div className="upload-images-container uploadImgWrap d-block">
@@ -1139,8 +1259,8 @@ const LiveRegistration = () => {
                                       )}
                                     </div>
                                   }
-                                  {selectedRadio === 'ShortAnswer' &&
-                                    <div className='TrueFalse gap-2 mt-3 d-flex justify-content-center gap-3'>
+                                  {selectedRadio === 'shortAnswer' &&
+                                    <div className='gap-2 mt-3 d-flex justify-content-center gap-3'>
 
                                       {inputValues?.length > 0 && (
                                         <div className="upload-images-container uploadImgWrap d-block">
@@ -1159,7 +1279,7 @@ const LiveRegistration = () => {
                     </div>
                   </CModalBody>
                   <CModalFooter className='d-flex justify-content-center'>
-                    <CButton color="secondary" onClick={() => setVisible(false)}>
+                    <CButton color="secondary" onClick={() => { setVisible(false); resetQuiz() }}>
                       Close
                     </CButton>
                     <CButton color="primary" onClick={() => validateQuize()}>Save</CButton>

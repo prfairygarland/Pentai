@@ -1,12 +1,16 @@
 import { CButton, CFormCheck, CFormInput, CFormTextarea, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle } from '@coreui/react'
 import { enqueueSnackbar } from 'notistack';
 import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next';
 import Loader from 'src/components/common/Loader';
 import { deleteApi, getApi, postApi, putApi } from 'src/utils/Api';
 import { API_ENDPOINT } from 'src/utils/config';
 
 const AddModel = ({ setModal, getMod, Modal, getMainModalId, getModalId, removeModalIds, getVal, setCat, setSubIcon }) => {
 
+  const { t, i18n } = useTranslation();
+  const translationObject = i18n.getDataByLanguage(i18n.language);
+  const multiLang = translationObject?.translation?.supplyRentalManagementAllSupplies
 
   const [deleteVisible, setDeleteVisible] = useState(false)
   const [isLoading, setIsLoading] = useState(false);
@@ -178,25 +182,25 @@ const AddModel = ({ setModal, getMod, Modal, getMainModalId, getModalId, removeM
       <div>
         {getModalId !== null &&
         <div className='d-flex justify-content-end'>
-          <CButton onClick={() => setDeleteVisible(true)}>Delete</CButton>
+            <CButton onClick={() => setDeleteVisible(true)}>{multiLang?.delete}</CButton>
         </div>
         }
         <div className="dropdown-container mb-2">
-          <h5 className="me-3">Model Name</h5>
+          <h5 className="me-3">{multiLang?.modelName}</h5>
         </div>
         <div className="card-body">
           <div className="formWraper">
             <div className="form-outline form-white   d-flex ">
               <div className="formWrpLabel" >
                 <label className="fw-bolder ">
-                  Model Name
+                  {multiLang?.modelName}
                 </label>
               </div>
               <div className="formWrpInpt d-flex">
                 <div className="d-flex formradiogroup mb-2 gap-3">
                   <CFormInput
                     type="text"
-                    placeholder=""
+                    placeholder={multiLang?.placeholder}
                     name="name"
                     value={addModalData.name}
                     onChange={(e) => {
@@ -209,15 +213,15 @@ const AddModel = ({ setModal, getMod, Modal, getMainModalId, getModalId, removeM
             <div className="d-flex col-md-12">
               <div className="form-outline form-white d-flex w-100">
                 <div className="formWrpLabel" >
-                  <label className="fw-bolder ">Visibility</label>
+                  <label className="fw-bolder ">{multiLang?.visibility}</label>
                 </div>
                 <div className="d-flex gap-2 ms-2">
-                  <CFormCheck type="radio" name="visibility" id="exampleRadios1" label="Visible"
+                  <CFormCheck type="radio" name="visibility" id="exampleRadios1" label={multiLang?.visible}
                     defaultChecked={addModalData.visibility}
                     onClick={() => setModalData((prev) => ({ ...prev, visibility: true }))}
                     value={true}
                   />
-                  <CFormCheck type="radio" name="visibility" id="exampleRadios2" label="Hide"
+                  <CFormCheck type="radio" name="visibility" id="exampleRadios2" label={multiLang?.hide}
                     defaultChecked={!addModalData.visibility}
                     onClick={() => setModalData((prev) => ({ ...prev, visibility: false }))}
                     value={false}
@@ -229,7 +233,7 @@ const AddModel = ({ setModal, getMod, Modal, getMainModalId, getModalId, removeM
             <div className="form-outline form-white  d-flex ">
               <div className="formWrpLabel">
                 <label className="fw-bolder ">
-                  Associated Items
+                  {multiLang?.associatedItems}
                 </label>
               </div>
               <div className="formWrpInpt">
@@ -249,8 +253,8 @@ const AddModel = ({ setModal, getMod, Modal, getMainModalId, getModalId, removeM
         </div>
       </div>
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '5%', gap: 10 }}>
-        <CButton onClick={() => saveModal('cancle')} style={{ marginRight: '2%', background: '#ccc', border: 'none' }}>Cancel</CButton>
-        <CButton onClick={() => saveModal('save')}>Save</CButton>
+        <CButton onClick={() => saveModal('cancle')} style={{ marginRight: '2%', background: '#ccc', border: 'none' }}>{multiLang?.cancel}</CButton>
+        <CButton onClick={() => saveModal('save')}>{multiLang?.save}</CButton>
       </div>
       <CModal
         backdrop="static"
@@ -259,17 +263,17 @@ const AddModel = ({ setModal, getMod, Modal, getMainModalId, getModalId, removeM
         aria-labelledby="StaticBackdropExampleLabel"
       >
         <CModalHeader>
-          <CModalTitle id="StaticBackdropExampleLabel">Delete</CModalTitle>
+          <CModalTitle id="StaticBackdropExampleLabel">{multiLang?.delete}</CModalTitle>
         </CModalHeader>
         <CModalBody>
-          <p>Are you sure you want to delete this category?
+          <p>{multiLang?.deletePopUp}
             <br />
-            All categories and items belonging will be deleted.</p>
+            {multiLang?.deletePopUpMsg}</p>
         </CModalBody>
         <CModalFooter>
-          <CButton color="primary" onClick={() => deleteCategory()}>Delete</CButton>
+          <CButton color="primary" onClick={() => deleteCategory()}>{multiLang?.delete}</CButton>
           <CButton color="secondary" onClick={() => setDeleteVisible(false)}>
-            Cancel
+            {multiLang?.cancel}
           </CButton>
         </CModalFooter>
       </CModal>

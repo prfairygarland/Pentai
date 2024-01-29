@@ -59,19 +59,20 @@ const UserList = () => {
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
   const translationObject = i18n.getDataByLanguage(i18n.language);
+  const multiLang = translationObject?.translation?.Userlist
 
 
-  const statusDropdownValues = [{ id: 2, Name: translationObject.translation.Userlist.All }, { id: 1, Name: translationObject.translation.Userlist.Active }, {
-    id: 0, Name: translationObject.translation.Userlist.Inactive
+  const statusDropdownValues = [{ id: 2, Name: multiLang?.All }, { id: 1, Name: multiLang?.Active }, {
+    id: 0, Name: multiLang?.Inactive
   }];
-  const textDropdownValues = [{ id: 1, Name: translationObject.translation.Userlist.Employee_No, type: 'employeeNo' }, { id: 2, Name: translationObject.translation.Userlist.Korean_Name, type: 'koreanName' }, { id: 3, Name: translationObject.translation.Userlist.English_Name, type: 'englishName' }, { id: 4, Name: translationObject.translation.Userlist.E_mail, type: 'email' }];
+  const textDropdownValues = [{ id: 1, Name: multiLang?.Employee_No, type: 'employeeNo' }, { id: 2, Name: multiLang?.Korean_Name, type: 'koreanName' }, { id: 3, Name: multiLang?.English_Name, type: 'englishName' }, { id: 4, Name: multiLang?.E_mail, type: 'email' }];
   const perPageValue = [5, 10, 20, 30]
 
-  console.log('nnfn =>', translationObject.translation.Userlist.Employee_No)
+  console.log('nnfn =>', multiLang?.Employee_No)
 
   const columns = useMemo(() => [
     {
-      Header: translationObject?.translation?.Userlist?.No,
+      Header: multiLang?.No,
       accessor: 'Id',
       Cell: ({ row }) => {
         return currentPage * itemsPerPage + (row.index + 1)
@@ -79,46 +80,46 @@ const UserList = () => {
 
     },
     {
-      Header: translationObject?.translation?.Userlist?.Employee_No,
+      Header: multiLang?.Employee_No,
       accessor: 'employeeCode'
     },
     {
-      Header: translationObject?.translation?.Userlist?.Name,
+      Header: multiLang?.Name,
       accessor: 'koreanName'
     },
     {
-      Header: translationObject?.translation?.Userlist?.English_Name,
+      Header: multiLang?.English_Name,
       accessor: 'englishName',
       // Cell: ({ row }) => <Link to={`/UserDetails/${row.original.id}`}>{row.original.englishName}</Link>
       Cell: ({ row }) => <p role='button' onClick={() => viewDetailsHandler(row.original.id)} className='text-center'>{row.original.englishName}</p>
 
     },
     {
-      Header: translationObject?.translation?.Userlist?.E_mail,
+      Header: multiLang?.E_mail,
       accessor: 'Email'
     },
     {
-      Header: translationObject?.translation?.Userlist?.Job_Title,
+      Header: multiLang?.Job_Title,
       accessor: 'jobTitle'
     },
     {
-      Header: translationObject?.translation?.Userlist?.Company,
+      Header: multiLang?.Company,
       accessor: 'companiesName'
     },
     {
-      Header: translationObject?.translation?.Userlist?.Division,
+      Header: multiLang?.Division,
       accessor: 'divisionName'
     },
     {
-      Header: translationObject?.translation?.Userlist?.Group,
+      Header: multiLang?.Group,
       accessor: 'groupName'
     },
     {
-      Header: translationObject?.translation?.Userlist?.Team,
+      Header: multiLang?.Team,
       accessor: 'TeamName'
     },
     {
-      Header: translationObject?.translation?.Userlist?.Status,
+      Header: multiLang?.Status,
       accessor: 'Status',
       Cell: ({ row }) => <p>{row.original.Status == 1 ? 'Active' : 'Inactive'}</p>
     },
@@ -127,7 +128,7 @@ const UserList = () => {
 
   const importHistoryColumns = useMemo(() => [
     {
-      Header: translationObject?.translation?.Userlist?.Employee_No,
+      Header: multiLang?.Employee_No,
       accessor: 'Id',
       Cell: ({ row }) => {
         return (currentImportHistoryPage - 1) * itemsPerPage + (row.index + 1)
@@ -135,22 +136,22 @@ const UserList = () => {
 
     },
     {
-      Header: translationObject?.translation?.Userlist?.File_Name,
+      Header: multiLang?.File_Name,
       accessor: 'filename'
     },
     {
-      Header: translationObject?.translation?.Userlist?.Imported_on,
+      Header: multiLang?.Imported_on,
       accessor: 'importDate',
       Cell: ({ row }) => <p>{row.original.importDate ? moment(row.original.importDate).format('YYYY-MM-DD HH:mm:ss') : '-'}</p>
 
     },
     {
-      Header: translationObject?.translation?.Userlist?.Importe_by,
+      Header: multiLang?.Importe_by,
       accessor: 'adminUsername',
       Cell: ({ row }) => <p>{row.original.adminUsername ? row.original.adminUsername : '-'}</p>
     },
     {
-      Header: translationObject?.translation?.Userlist?.Total_Records,
+      Header: multiLang?.Total_Records,
       accessor: 'importedUsersCount'
     },
     // {
@@ -605,278 +606,278 @@ const UserList = () => {
   return (
     <>
       {isLoading && <Loader />}
-    <div>
-      <div className='container bg-light p-3 mb-3'>
-        <div className='d-flex mb-3'>
-          <div className='me-5'>
-              <label className='me-3'>{translationObject.translation.Userlist.Status}</label>
-            <CDropdown className='dropDownbackground drpBtn'>
-              <CDropdownToggle color="white" >
-                  {statusSelectedValue.Name ? statusSelectedValue.Name : translationObject.translation.Userlist.Active}
-              </CDropdownToggle>
-              <CDropdownMenu>
-                {statusDropdownValues.map((option, index) => (
-                  <CDropdownItem role="button" key={index} onClick={() => statushandleSelect(option)}>
-                    {option.Name}
-                  </CDropdownItem>
-                ))}
-              </CDropdownMenu>
-            </CDropdown>
-          </div>
-          <div className='d-flex align-items-center'>
-            <label className='me-3'>Department</label>
-            <CDropdown className='dropDownbackground me-3 drpBtn' >
-              <CDropdownToggle color="white">{selectCompany.companyName ? selectCompany.companyName : 'Company'}</CDropdownToggle>
-              <CDropdownMenu>
-                {companiesData.map((option, index) => (
-                  <CDropdownItem role="button" key={index} onClick={() => { getDivisionData(option.id); setSelectCompany(option) }}>
-                    {option.companyName}
-                  </CDropdownItem>
-                ))}
-              </CDropdownMenu>
-            </CDropdown>
-            <CDropdown className={divisionData.length > 0 ? 'dropDownbackground me-3 drpBtn' : 'dropDownbackground me-3 drpBtn disable-class'} >
-              <CDropdownToggle color="white">{selectDivision.DivisionsName ? selectDivision.DivisionsName : 'Division'}</CDropdownToggle>
-
-              <CDropdownMenu >
-                  <CDropdownItem role="button" onClick={() => setSelectDivision({ DivisionsName: 'None' })}>None</CDropdownItem>
-                {divisionData.length > 0 && divisionData?.map((option, index) => (
-                  <CDropdownItem role="button" key={index} onClick={() => { getGroupData(option.id); setSelectDivision(option) }}>
-                    {option.DivisionsName}
-                  </CDropdownItem>
-                ))}
-              </CDropdownMenu>
-            </CDropdown>
-            <CDropdown className={groupData.length > 0 ? 'dropDownbackground me-3 drpBtn' : 'dropDownbackground me-3 drpBtn disable-class'}>
-              <CDropdownToggle color="white">{selectGroup.groupName ? selectGroup.groupName : 'Group'}</CDropdownToggle>
-              <CDropdownMenu>
-                  <CDropdownItem role="button" onClick={() => setSelectGroup({ groupName: 'None' })}>None</CDropdownItem>
-                {groupData.map((option, index) => (
-                  <CDropdownItem role="button" key={index} onClick={() => { getTeamData(option.id); setSelectGroup(option) }}>
-                    {option.groupName}
-                  </CDropdownItem>
-                ))}
-              </CDropdownMenu>
-            </CDropdown>
-            <CDropdown className={TeamData.length > 0 ? 'dropDownbackground me-4 drpBtn' : 'dropDownbackground me-4 drpBtn disable-class'}>
-              <CDropdownToggle color="white">{selectTeam.teamName ? selectTeam.teamName : 'Team'}</CDropdownToggle>
-              <CDropdownMenu>
-                  <CDropdownItem role="button" onClick={() => setSelectTeam({ teamName: 'None' })}>None</CDropdownItem>
-                {TeamData.map((option, index) => (
-                  <CDropdownItem role="button" key={index} onClick={() => setSelectTeam(option)} >
-                    {option.teamName}
-                  </CDropdownItem>
-                ))}
-              </CDropdownMenu>
-            </CDropdown>
-            <CFormCheck className='d-flex flex-row-reverse reveseCheckBox'  id="reverseCheckbox1" checked={isLeader} onChange={handleCheckboxChange} label="Leader only" />
-          </div>
-
-        </div>
-        <div className='d-flex  align-items-center gap-3 pe-3'>
-          <div className='col-md-2'>
-            <CDropdown className='dropDownbackground drpDBtn w-100'>
-              <CDropdownToggle color="white" >
-                {typeSelect.Name ? typeSelect.Name : 'Type'}
-              </CDropdownToggle>
-              <CDropdownMenu>
-                {textDropdownValues.map((option, index) => (
-                  <CDropdownItem role="button" key={index} onClick={() => setTypeSelect(option)}>
-                    {option.Name}
-                  </CDropdownItem>
-                ))}
-              </CDropdownMenu>
-            </CDropdown>
-          </div>
-          <div className="col-md-10  ">
-            <div className="d-flex form-inline w-100">
-              <input className="form-control mr-sm-10 me-2" value={searchInput} onChange={handleInputChange} type="search" placeholder="Search" aria-label="Search" />
-              <button className="btn btn-primary my-2 my-sm-0" disabled={!typeSelect.id || searchInput == ''} type="submit" onClick={() => { handleInputvalue() }}>Search</button>
+      <div>
+        <div className='container bg-light p-3 mb-3'>
+          <div className='d-flex mb-3'>
+            <div className='me-5'>
+              <label className='me-3'>{multiLang?.Status}</label>
+              <CDropdown className='dropDownbackground drpBtn'>
+                <CDropdownToggle color="white" >
+                  {statusSelectedValue.Name ? statusSelectedValue.Name : multiLang?.Active}
+                </CDropdownToggle>
+                <CDropdownMenu>
+                  {statusDropdownValues.map((option, index) => (
+                    <CDropdownItem role="button" key={index} onClick={() => statushandleSelect(option)}>
+                      {option.Name}
+                    </CDropdownItem>
+                  ))}
+                </CDropdownMenu>
+              </CDropdown>
             </div>
+            <div className='d-flex align-items-center'>
+              <label className='me-3'>{multiLang?.Department}</label>
+              <CDropdown className='dropDownbackground me-3 drpBtn' >
+                <CDropdownToggle color="white">{selectCompany.companyName ? selectCompany.companyName : multiLang?.Company}</CDropdownToggle>
+                <CDropdownMenu>
+                  {companiesData.map((option, index) => (
+                    <CDropdownItem role="button" key={index} onClick={() => { getDivisionData(option.id); setSelectCompany(option) }}>
+                      {option.companyName}
+                    </CDropdownItem>
+                  ))}
+                </CDropdownMenu>
+              </CDropdown>
+              <CDropdown className={divisionData.length > 0 ? 'dropDownbackground me-3 drpBtn' : 'dropDownbackground me-3 drpBtn disable-class'} >
+                <CDropdownToggle color="white">{selectDivision.DivisionsName ? selectDivision.DivisionsName : multiLang?.Division}</CDropdownToggle>
+
+                <CDropdownMenu >
+                  <CDropdownItem role="button" onClick={() => setSelectDivision({ DivisionsName: 'None' })}>None</CDropdownItem>
+                  {divisionData.length > 0 && divisionData?.map((option, index) => (
+                    <CDropdownItem role="button" key={index} onClick={() => { getGroupData(option.id); setSelectDivision(option) }}>
+                      {option.DivisionsName}
+                    </CDropdownItem>
+                  ))}
+                </CDropdownMenu>
+              </CDropdown>
+              <CDropdown className={groupData.length > 0 ? 'dropDownbackground me-3 drpBtn' : 'dropDownbackground me-3 drpBtn disable-class'}>
+                <CDropdownToggle color="white">{selectGroup.groupName ? selectGroup.groupName : multiLang?.Group}</CDropdownToggle>
+                <CDropdownMenu>
+                  <CDropdownItem role="button" onClick={() => setSelectGroup({ groupName: 'None' })}>{multiLang?.None}</CDropdownItem>
+                  {groupData.map((option, index) => (
+                    <CDropdownItem role="button" key={index} onClick={() => { getTeamData(option.id); setSelectGroup(option) }}>
+                      {option.groupName}
+                    </CDropdownItem>
+                  ))}
+                </CDropdownMenu>
+              </CDropdown>
+              <CDropdown className={TeamData.length > 0 ? 'dropDownbackground me-4 drpBtn' : 'dropDownbackground me-4 drpBtn disable-class'}>
+                <CDropdownToggle color="white">{selectTeam.teamName ? selectTeam.teamName : multiLang?.Team}</CDropdownToggle>
+                <CDropdownMenu>
+                  <CDropdownItem role="button" onClick={() => setSelectTeam({ teamName: 'None' })}>{multiLang?.None}</CDropdownItem>
+                  {TeamData.map((option, index) => (
+                    <CDropdownItem role="button" key={index} onClick={() => setSelectTeam(option)} >
+                      {option.teamName}
+                    </CDropdownItem>
+                  ))}
+                </CDropdownMenu>
+              </CDropdown>
+              <CFormCheck className='d-flex flex-row-reverse reveseCheckBox' id="reverseCheckbox1" checked={isLeader} onChange={handleCheckboxChange} label="Leader only" />
+            </div>
+
           </div>
-        </div>
-        <div className='d-flex justify-content-end mt-3'>
-          <CButton className='btn btn-black' onClick={() => clearAllFilters()}>Clear</CButton>
-        </div>
-      </div>
-      <div>
-        <div className='d-flex justify-content-between align-items-center mb-3'>
-          <p style={{ margin: 0 }}>Total:{totalUser}</p>
-          <div>
-
-            <button className='btn btn-light  me-3' onClick={() => setUserImportVisible(!userImportVisible)} >User Import</button>
-
-            <CModal
-              backdrop="static"
-              alignment="center"
-              visible={userImportVisible}
-              onClose={() => setUserImportVisible(false)}
-              aria-labelledby="LiveDemoExampleLabel">
-              <CModalHeader onClose={() => setUserImportVisible(false)}>
-                <CModalTitle>Excel File Upload</CModalTitle>
-              </CModalHeader>
-              <CModalBody>
-                <div className='d-flex w-100 gap-3 justify-content-end p-3'>
-                  <input type="file"
-                    onChange={handleFileSelect}
-                    multiple
-                    accept=".xlsx, .xls" />
-                  <CButton onClick={() => handleUploadUserImport()} disabled={!selectedFile}>Upload</CButton>
-                </div>
-                {userFileFormat && <p className='text-danger text-center'>Please add the correct header</p>}
-                {fileSize && <p className='text-danger text-center'>File size is not more 5 mb</p>}
-
-                  <div className='p-1'>
-                    {/* <p>Download Sample File</p> */}
-                    <CButton className='btn btn-primary' onClick={() => sampleUserExportFile()}>Sample File</CButton>
-                  </div>
-
-              </CModalBody>
-            </CModal>
-            <button className='btn btn-light  me-3' onClick={() => setOrgImportVisible(!orgImportVisible)}>Org Import</button>
-            <CModal
-              backdrop="static"
-              alignment="center"
-              visible={orgImportVisible}
-              onClose={() => setOrgImportVisible(false)}
-              aria-labelledby="LiveDemoExampleLabel">
-              <CModalHeader onClose={() => setOrgImportVisible(false)}>
-                <CModalTitle>Excel File Upload</CModalTitle>
-              </CModalHeader>
-              <CModalBody>
-                <div className='d-flex w-100 gap-3 justify-content-end p-3'>
-                  <input type="file"
-                    onChange={handleFileSelect}
-                    multiple
-                    accept=".xlsx, .xls" />
-                  <CButton onClick={() => handleOrgUpload()} disabled={!selectedFile}>Upload</CButton>
-                </div>
-                {fileFormat && <p className='text-danger text-center'>Please add the correct header</p>}
-                {fileSize && <p className='text-danger text-center'>File size is not more 5 mb</p>}
-
-                  <div className='p-1'>
-                    {/* <p>Download Sample File</p> */}
-                    <CButton className='btn btn-primary' onClick={() => sampleOrgExportFile()}>Sample File</CButton>
-                  </div>
-              </CModalBody>
-            </CModal>
-
-            <button className='btn btn-light  me-3' onClick={() => checkExportSelectid(!exportSelectid)}>Export</button>
-            <CModal
-              backdrop="static"
-              alignment="center"
-              visible={exportSelectid}
-              onClose={() => checkExportSelectid(false)}
-              aria-labelledby="LiveDemoExampleLabel">
-              <CModalHeader onClose={() => checkExportSelectid(false)}>
-                <CModalTitle>Export Data</CModalTitle>
-              </CModalHeader>
-              <CModalBody>
-                {dataIds?.length > 0 ? <p>Are you sure to export the selected user data?</p> : <p>Are you sure to export all user data?</p>}
-
-                <div className='d-flex justify-content-end'>
-                  <CButton onClick={() => getUserListExport()} >Export</CButton>
-                </div>
-                {fileFormat && <p className='text-danger text-center'>Please add the correct header</p>}
-
-              </CModalBody>
-            </CModal>
-            <CDropdown className='dropDownbackground drpDBtn align-items-center'>
-              <label>Show</label>
-              <CDropdownToggle color="white" className='mx-2 filterbtn' >{itemsPerPage}</CDropdownToggle>
-              <CDropdownMenu >
-                {perPageValue.map((option, index) => (
-                  <CDropdownItem role="button" key={index} onClick={() => perPagehandleSelect(option)}>
-                    {option}
-                  </CDropdownItem>
-                ))}
-              </CDropdownMenu>
-              <label>Lists</label>
-            </CDropdown>
-          </div>
-        </div>
-      </div>
-      <div>
-
-        <ReactTable columns={columns} data={userListData} totalCount={10} onSelectionChange={handleSelectionChange} />
-        <div>
-          {userListData.length > 0 &&
-            <div className='userlist-pagination'>
-              <div className='userlist-pagination dataTables_paginate'>
-                <ReactPaginate
-                  breakLabel={'...'}
-                  marginPagesDisplayed={1}
-                  previousLabel={<button>Previous</button>}
-                  nextLabel={<button>Next</button>}
-                  pageCount={totalPages}
-                  onPageChange={handlePageChange}
-                  forcePage={currentPage}
-                  renderOnZeroPageCount={null}
-                  pageRangeDisplayed={1}
-                />
+          <div className='d-flex  align-items-center gap-3 pe-3'>
+            <div className='col-md-2'>
+              <CDropdown className='dropDownbackground drpDBtn w-100'>
+                <CDropdownToggle color="white" >
+                  {typeSelect.Name ? typeSelect.Name : multiLang?.Type}
+                </CDropdownToggle>
+                <CDropdownMenu>
+                  {textDropdownValues.map((option, index) => (
+                    <CDropdownItem role="button" key={index} onClick={() => setTypeSelect(option)}>
+                      {option.Name}
+                    </CDropdownItem>
+                  ))}
+                </CDropdownMenu>
+              </CDropdown>
+            </div>
+            <div className="col-md-10  ">
+              <div className="d-flex form-inline w-100">
+                <input className="form-control mr-sm-10 me-2" value={searchInput} onChange={handleInputChange} type="search" placeholder={multiLang?.Search} aria-label="Search" />
+                <button className="btn btn-primary my-2 my-sm-0" disabled={!typeSelect.id || searchInput == ''} type="submit" onClick={() => { handleInputvalue() }}>{multiLang?.Search}</button>
               </div>
             </div>
-          }
-
-          <div>
-            <button className='btn btn-primary mb-3' onClick={() => { setImportVisible(!importVisible); getImportHistoryData(1) }}>Import History</button>
           </div>
+          <div className='d-flex justify-content-end mt-3'>
+            <CButton className='btn btn-primary' onClick={() => clearAllFilters()}>{multiLang?.Clear}</CButton>
+          </div>
+        </div>
+        <div>
+          <div className='d-flex justify-content-between align-items-center mb-3'>
+            <p style={{ margin: 0 }}>{multiLang?.Total}:{totalUser}</p>
+            <div>
+
+              <button className='btn btn-light  me-3' onClick={() => setUserImportVisible(!userImportVisible)} >{multiLang?.User_Import}</button>
+
+              <CModal
+                backdrop="static"
+                alignment="center"
+                visible={userImportVisible}
+                onClose={() => setUserImportVisible(false)}
+                aria-labelledby="LiveDemoExampleLabel">
+                <CModalHeader onClose={() => setUserImportVisible(false)}>
+                  <CModalTitle>{multiLang?.Excel_File_Upload}</CModalTitle>
+                </CModalHeader>
+                <CModalBody>
+                  <div className='d-flex w-100 gap-3 justify-content-end p-3'>
+                    <input type="file"
+                      onChange={handleFileSelect}
+                      multiple
+                      accept=".xlsx, .xls" />
+                    <CButton onClick={() => handleUploadUserImport()} disabled={!selectedFile}>Upload</CButton>
+                  </div>
+                  {userFileFormat && <p className='text-danger text-center'>{multiLang?.Upload_Header_Error}</p>}
+                  {fileSize && <p className='text-danger text-center'>{multiLang?.Upload_File_Size_Error}</p>}
+
+                  <div className='p-1'>
+                    {/* <p>Download Sample File</p> */}
+                    <CButton className='btn btn-primary' onClick={() => sampleUserExportFile()}>{multiLang?.Sample_File}</CButton>
+                  </div>
+
+                </CModalBody>
+              </CModal>
+              <button className='btn btn-light  me-3' onClick={() => setOrgImportVisible(!orgImportVisible)}>{multiLang?.Org_Import}</button>
+              <CModal
+                backdrop="static"
+                alignment="center"
+                visible={orgImportVisible}
+                onClose={() => setOrgImportVisible(false)}
+                aria-labelledby="LiveDemoExampleLabel">
+                <CModalHeader onClose={() => setOrgImportVisible(false)}>
+                  <CModalTitle>{multiLang?.Excel_File_Upload}</CModalTitle>
+                </CModalHeader>
+                <CModalBody>
+                  <div className='d-flex w-100 gap-3 justify-content-end p-3'>
+                    <input type="file"
+                      onChange={handleFileSelect}
+                      multiple
+                      accept=".xlsx, .xls" />
+                    <CButton onClick={() => handleOrgUpload()} disabled={!selectedFile}>{multiLang?.Upload}</CButton>
+                  </div>
+                  {fileFormat && <p className='text-danger text-center'>{multiLang?.Upload_Header_Error}</p>}
+                  {fileSize && <p className='text-danger text-center'>{multiLang?.Upload_File_Size_Error}</p>}
+
+                  <div className='p-1'>
+                    {/* <p>Download Sample File</p> */}
+                    <CButton className='btn btn-primary' onClick={() => sampleOrgExportFile()}>{multiLang?.Sample_File}</CButton>
+                  </div>
+                </CModalBody>
+              </CModal>
+
+              <button className='btn btn-light  me-3' onClick={() => checkExportSelectid(!exportSelectid)}>{multiLang?.Export}</button>
+              <CModal
+                backdrop="static"
+                alignment="center"
+                visible={exportSelectid}
+                onClose={() => checkExportSelectid(false)}
+                aria-labelledby="LiveDemoExampleLabel">
+                <CModalHeader onClose={() => checkExportSelectid(false)}>
+                  <CModalTitle>{multiLang?.Export_Data}</CModalTitle>
+                </CModalHeader>
+                <CModalBody>
+                  {dataIds?.length > 0 ? <p>{multiLang?.Selected_User_Data}</p> : <p>{multiLang?.All_User_Data}</p>}
+
+                  <div className='d-flex justify-content-end'>
+                    <CButton onClick={() => getUserListExport()} >{multiLang?.Export}</CButton>
+                  </div>
+                  {fileFormat && <p className='text-danger text-center'>{multiLang?.Upload_Header_Error}</p>}
+
+                </CModalBody>
+              </CModal>
+              <CDropdown className='dropDownbackground drpDBtn align-items-center'>
+                <label>{multiLang?.Show}</label>
+                <CDropdownToggle color="white" className='mx-2 filterbtn' >{itemsPerPage}</CDropdownToggle>
+                <CDropdownMenu >
+                  {perPageValue.map((option, index) => (
+                    <CDropdownItem role="button" key={index} onClick={() => perPagehandleSelect(option)}>
+                      {option}
+                    </CDropdownItem>
+                  ))}
+                </CDropdownMenu>
+                <label>{multiLang?.Lists}</label>
+              </CDropdown>
+            </div>
+          </div>
+        </div>
+        <div>
+
+          <ReactTable columns={columns} data={userListData} totalCount={10} onSelectionChange={handleSelectionChange} />
           <div>
-            <CModal
-              backdrop="static"
-              alignment="center"
-              size="lg"
-              visible={importVisible}
-              onClose={() => setImportVisible(false)}
-              aria-labelledby="LiveDemoExampleLabel">
-              <CModalHeader onClose={() => setImportVisible(false)}>
-                <CModalTitle>Import History</CModalTitle>
-              </CModalHeader>
-              <CModalBody>
-                <div className='d-flex w-100 gap-3 justify-content-end'>
-                  <p>Total: {totalImport} </p>
-                  <div className='d-flex p-2 gap-3'>
-                    <DatePicker value={startDate} onChange={handleStartDateChange} />
-                    <DatePicker value={endDate} onChange={handleEndDateChange} />
-                  </div>
-                  <div>
-                    <div className="d-flex form-inline w-100">
-                      <input className="form-control mr-sm-10 me-2" onChange={handleImportInputChange} type="search" placeholder="Search" aria-label="Search" />
-                      <button className="btn btn-primary my-2 my-sm-0" disabled={searchImportInput == ''} type="submit" onClick={() => { handleImportInputvalue() }}>Search</button>
-                    </div>
-                  </div>
+            {userListData.length > 0 &&
+              <div className='userlist-pagination'>
+                <div className='userlist-pagination dataTables_paginate'>
+                  <ReactPaginate
+                    breakLabel={'...'}
+                    marginPagesDisplayed={1}
+                    previousLabel={<button>{multiLang?.Previous}</button>}
+                    nextLabel={<button>{multiLang?.Next}</button>}
+                    pageCount={totalPages}
+                    onPageChange={handlePageChange}
+                    forcePage={currentPage}
+                    renderOnZeroPageCount={null}
+                    pageRangeDisplayed={1}
+                  />
                 </div>
-                <div>
-                  <ReactTable showCheckbox={false} columns={importHistoryColumns} data={importHistoryData} totalCount={10} onSelectionChange={handleSelectionChange} />
-                  {importHistoryData.length > 0 &&
-                    <div className='userlist-pagination'>
-                      <div className='userlist-pagination dataTables_paginate'>
-                        <ReactPaginate
-                          breakLabel={'...'}
-                          marginPagesDisplayed={1}
-                          previousLabel={<button>Previous</button>}
-                          nextLabel={<button>Next</button>}
-                          pageCount={totalImportPages}
-                          onPageChange={handleImportHistoryPageChange}
-                          forcePage={currentImportHistoryPage - 1}
-                          renderOnZeroPageCount={null}
-                          pageRangeDisplayed={1}
-                        />
+              </div>
+            }
+
+            <div>
+              <button className='btn btn-success mb-3' onClick={() => { setImportVisible(!importVisible); getImportHistoryData(1) }}>{multiLang?.Import_History}</button>
+            </div>
+            <div>
+              <CModal
+                backdrop="static"
+                alignment="center"
+                size="lg"
+                visible={importVisible}
+                onClose={() => setImportVisible(false)}
+                aria-labelledby="LiveDemoExampleLabel">
+                <CModalHeader onClose={() => setImportVisible(false)}>
+                  <CModalTitle>{multiLang?.Import_History}</CModalTitle>
+                </CModalHeader>
+                <CModalBody>
+                  <div className='d-flex w-100 gap-3 justify-content-end'>
+                    <p>{multiLang?.Total}: {totalImport} </p>
+                    <div className='d-flex p-2 gap-3'>
+                      <DatePicker value={startDate} onChange={handleStartDateChange} />
+                      <DatePicker value={endDate} onChange={handleEndDateChange} />
+                    </div>
+                    <div>
+                      <div className="d-flex form-inline w-100">
+                        <input className="form-control mr-sm-10 me-2" onChange={handleImportInputChange} type="search" placeholder={multiLang?.Search} aria-label="Search" />
+                        <button className="btn btn-primary my-2 my-sm-0" disabled={searchImportInput == ''} type="submit" onClick={() => { handleImportInputvalue() }}>{multiLang?.Search}</button>
                       </div>
                     </div>
-                  }
+                  </div>
+                  <div>
+                    <ReactTable showCheckbox={false} columns={importHistoryColumns} data={importHistoryData} totalCount={10} onSelectionChange={handleSelectionChange} />
+                    {importHistoryData.length > 0 &&
+                      <div className='userlist-pagination'>
+                        <div className='userlist-pagination dataTables_paginate'>
+                          <ReactPaginate
+                            breakLabel={'...'}
+                            marginPagesDisplayed={1}
+                            previousLabel={<button>{multiLang?.Previous}</button>}
+                            nextLabel={<button>{multiLang?.Next}</button>}
+                            pageCount={totalImportPages}
+                            onPageChange={handleImportHistoryPageChange}
+                            forcePage={currentImportHistoryPage - 1}
+                            renderOnZeroPageCount={null}
+                            pageRangeDisplayed={1}
+                          />
+                        </div>
+                      </div>
+                    }
 
-                </div>
-              </CModalBody>
-              {/* <CModalFooter>
+                  </div>
+                </CModalBody>
+                {/* <CModalFooter>
                 <CButton color="secondary">Close</CButton>
                 <CButton color="primary">Save changes</CButton>
               </CModalFooter> */}
-            </CModal>
+              </CModal>
+            </div>
           </div>
         </div>
       </div>
-    </div>
     </>
   )
 }
