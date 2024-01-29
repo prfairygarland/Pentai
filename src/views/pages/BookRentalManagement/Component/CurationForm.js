@@ -1,5 +1,4 @@
 import { CButton, CFormCheck, CFormInput, CFormSelect, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle } from '@coreui/react'
-import { CButton, CFormCheck, CFormInput, CFormSelect, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle } from '@coreui/react'
 import { enqueueSnackbar } from 'notistack'
 import React, { useEffect, useState } from 'react'
 import DatePicker from 'react-date-picker'
@@ -30,7 +29,6 @@ const CurationForm = ({ setStateUpdate, setCuration, curation, setCategories, ca
         visibility: false
     })
     const [deleteVisible, setdeleteVisible] = useState(false)
-    const [deleteVisible, setdeleteVisible] = useState(false)
 
     console.log('curationData', data)
     console.log('curationType', curation)
@@ -59,7 +57,6 @@ const CurationForm = ({ setStateUpdate, setCuration, curation, setCategories, ca
             categoryDetails?.startDateTime ? setBannerStartDate(categoryDetails?.startDateTime) : setBannerStartDate('')
             categoryDetails?.endDateTime ? setBannerEndDate(categoryDetails?.endDateTime) : setBannerEndDate('')
         }
-        else {
         else {
             setData({
                 curationType: curation,
@@ -268,223 +265,183 @@ const CurationForm = ({ setStateUpdate, setCuration, curation, setCategories, ca
 
     return (
         <div className='col-md-8'>
-        <div className='col-md-8'>
-            {/* <h1>Curation form</h1> */}
-            <div style={{ width: '100%', borderRadius: '0' }}>
-                <div className="card p-2">
-                    <div className="dropdown-container">
-                        {/* <label className="me-3">Curation</label> */}
-                        {/* <label className="me-3">Curation</label> */}
-                    </div>
-                    <div className='clearfix '>
-                        <CButton onClick={() => setdeleteVisible(true)} className='float-end'>Delete</CButton>
-                        <CButton onClick={() => setdeleteVisible(true)} className='float-end'>Delete</CButton>
-                    </div>
-                    <div className="card-body">
-                        <div className="formWraper">
-                            <div className="form-outline form-white   d-flex ">
-                                <div className="formWrpLabel">
-                                    <label className="fw-bolder ">
-                                        Curation Type
-                                    </label>
+        {/* <h1>Curation form</h1> */}
+        <div style={{ width: '100%', borderRadius: '0' }}>
+            <div className="card p-2">
+                <div className="dropdown-container">
+                    {/* <label className="me-3">Curation</label> */}
+                </div>
+                <div className='clearfix '>
+                    <CButton onClick={() => setdeleteVisible(true)} className='float-end'>Delete</CButton>
+                </div>
+                <div className="card-body">
+                    <div className="formWraper">
+                        <div className="form-outline form-white   d-flex ">
+                            <div className="formWrpLabel">
+                                <label className="fw-bolder ">
+                                    Curation Type
+                                </label>
+                            </div>
+                            <div className="formWrpInpt">
+                                <div className="d-flex formradiogroup mb-2 gap-3">
+                                    <CFormSelect
+                                        type="text"
+                                        placeholder="Library"
+                                        name="title"
+                                        value={data?.curationType}
+                                        options={[
+                                            { label: 'Individual', value: 'individual' },
+                                            { label: 'series', value: 'series' },
+                                        ]}
+                                        onChange={handleCurationType}
+                                    />
                                 </div>
-                                <div className="formWrpInpt">
-                                    <div className="d-flex formradiogroup mb-2 gap-3">
-                                        <CFormSelect
-                                            type="text"
-                                            placeholder="Library"
-                                            name="title"
-                                            value={data?.curationType}
-                                            options={[
-                                                { label: 'Individual', value: 'individual' },
-                                                { label: 'series', value: 'series' },
-                                            ]}
-                                            onChange={handleCurationType}
+                            </div>
+                        </div>
+                        <div className="form-outline form-white   d-flex ">
+                            <div className="formWrpLabel">
+                                <label className="fw-bolder ">
+                                    Title
+                                </label>
+                            </div>
+                            <div className="formWrpInpt">
+                                <div className="d-flex formradiogroup mb-2 gap-3">
+                                    <CFormInput
+                                        type="text"
+                                        placeholder=""
+                                        name="code"
+                                        value={data.title}
+                                        onChange={handleChangeTitle}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        <div className="form-outline form-white  d-flex ">
+                            <div className="formWrpLabel">
+                                <label className="fw-bolder ">Display Period</label>
+                            </div>
+                            <div className="p-2">
+                                <div style={data.isExpired ? { pointerEvents: 'none', opacity: 0.4 } : null} >
+                                    <div>
+                                        <DatePicker
+                                            value={bannerStartDate}
+                                            minDate={new Date()}
+                                            onChange={(event) => handleBannerStartDate(event)}
+                                            dateFormat="yyyy-MM-dd h:mm aa"
+                                        />
+                                         <input
+                                            type="time"
+                                            name="time"
+                                            id="time"
+                                            className="time-picker"
+                                            value={`${bannerStartHours}:${bannerStartMins}`}
+                                            onChange={(e) => bannerStartTimeHandler(e)}
+                                        />
+                                    </div>
+                                   
+                                    -&nbsp;&nbsp;
+                                    <div>
+                                        <DatePicker
+                                            value={bannerEndDate}
+                                            minDate={new Date()}
+                                            onChange={(event) => handleBannerEndDate(event)}
+                                            dateFormat="yyyy-MM-dd h:mm aa"
+                                        />
+                                   
+                                        <input
+                                            type="time"
+                                            name="time"
+                                            id="time"
+                                            className="time-picker"
+                                            value={`${bannerEndHours}:${bannerEndMins}`}
+                                            onChange={(e) => bannerEndTimeHandler(e)}
                                         />
                                     </div>
                                 </div>
-                            </div>
-                            <div className="form-outline form-white   d-flex ">
-                                <div className="formWrpLabel">
-                                    <label className="fw-bolder ">
-                                        Title
-                                    </label>
-                                </div>
-                                <div className="formWrpInpt">
-                                    <div className="d-flex formradiogroup mb-2 gap-3">
-                                        <CFormInput
-                                            type="text"
-                                            placeholder=""
-                                            name="code"
-                                            value={data.title}
-                                            onChange={handleChangeTitle}
-                                        />
-                                    </div>
+                                <div style={{ display: 'flex', gap: 10, marginTop: '5%' }}>
+                                    <CFormCheck
+                                        type="checkbox"
+                                        defaultChecked={data.isExpired}
+                                        // checked={data.isExpired}
+                                        value={data.isExpired}
+                                        onChange={handleChangeExpire}
+                                    />
+                                    <p>No Expiration Date
+                                    </p>
                                 </div>
                             </div>
-                            <div className="form-outline form-white  d-flex ">
+                        </div>
+                        <div className="d-flex ">
+                            <div className="form-outline form-white d-flex w-100">
                                 <div className="formWrpLabel">
-                                    <label className="fw-bolder ">Display Period</label>
+                                    <label className="fw-bolder ">Link Menu</label>
                                 </div>
-                                <div className="p-2">
-                                    <div style={data.isExpired ? { pointerEvents: 'none', opacity: 0.4 } : null} >
-                                <div className="p-2">
-                                    <div style={data.isExpired ? { pointerEvents: 'none', opacity: 0.4 } : null} >
-                                        <div>
-                                            <DatePicker
-                                                value={bannerStartDate}
-                                                minDate={new Date()}
-                                                onChange={(event) => handleBannerStartDate(event)}
-                                                dateFormat="yyyy-MM-dd h:mm aa"
-                                            />
-                                             <input
-                                             <input
-                                                type="time"
-                                                name="time"
-                                                id="time"
-                                                className="time-picker"
-                                                value={`${bannerStartHours}:${bannerStartMins}`}
-                                                onChange={(e) => bannerStartTimeHandler(e)}
-                                            />
-                                        </div>
-                                       
-                                       
-                                        -&nbsp;&nbsp;
-                                        <div>
-                                            <DatePicker
-                                                value={bannerEndDate}
-                                                minDate={new Date()}
-                                                onChange={(event) => handleBannerEndDate(event)}
-                                                dateFormat="yyyy-MM-dd h:mm aa"
-                                            />
-                                       
-                                       
-                                            <input
-                                                type="time"
-                                                name="time"
-                                                id="time"
-                                                className="time-picker"
-                                                value={`${bannerEndHours}:${bannerEndMins}`}
-                                                onChange={(e) => bannerEndTimeHandler(e)}
-                                            />
-                                        </div>
-                                    </div>
-                                    <div style={{ display: 'flex', gap: 10, marginTop: '5%' }}>
+                                <div  className='w-100 p-3'>
+
+                                    <div style={{ width: '100%' }} className="push-notification-container pt-2 pb-2 gap-3">
                                         <CFormCheck
                                             type="checkbox"
-                                            defaultChecked={data.isExpired}
-                                            // checked={data.isExpired}
-                                            value={data.isExpired}
-                                            defaultChecked={data.isExpired}
-                                            // checked={data.isExpired}
-                                            value={data.isExpired}
-                                            onChange={handleChangeExpire}
+                                            name="isVisible"
+                                            checked={data.noLink}
+                                            onChange={handleChangeNoLink}
+                                            value={data.noLink}
                                         />
-                                        <p>No Expiration Date
-                                        </p>
+                                        <p>None</p>
                                     </div>
-                                </div>
-                            </div>
-                            <div className="d-flex ">
-                                <div className="form-outline form-white d-flex w-100">
-                            <div className="d-flex ">
-                                <div className="form-outline form-white d-flex w-100">
-                                    <div className="formWrpLabel">
-                                        <label className="fw-bolder ">Link Menu</label>
-                                    </div>
-                                    <div  className='w-100 p-3'>
-                                    <div  className='w-100 p-3'>
-
-                                        <div style={{ width: '100%' }} className="push-notification-container pt-2 pb-2 gap-3">
-                                        <div style={{ width: '100%' }} className="push-notification-container pt-2 pb-2 gap-3">
+                                    <div style={data.noLink ? { pointerEvents: 'none', opacity: 0.4 } : null} className='gap-3'>
+                                        <div className='push-notification-container pt-2 pb-2 gap-3'>
                                             <CFormCheck
                                                 type="checkbox"
                                                 name="isVisible"
-                                                checked={data.noLink}
-                                                onChange={handleChangeNoLink}
-                                                value={data.noLink}
                                             />
-                                            <p>None</p>
+                                            <p>Link (Max 2 link)</p>
                                         </div>
-                                        <div style={data.noLink ? { pointerEvents: 'none', opacity: 0.4 } : null} className='gap-3'>
-                                            <div className='push-notification-container pt-2 pb-2 gap-3'>
-                                            <div className='push-notification-container pt-2 pb-2 gap-3'>
-                                                <CFormCheck
-                                                    type="checkbox"
-                                                    name="isVisible"
-                                                />
-                                                <p>Link (Max 2 link)</p>
-                                            </div>
-                                            <div className='w-100' style={{  display: 'flex', flexDirection: 'column', gap: 10 }}>
-                                            <div className='w-100' style={{  display: 'flex', flexDirection: 'column', gap: 10 }}>
-                                                <CFormInput type='text' value={data.link1Name} onChange={handleLinkName1} placeholder='Enter title' />
-                                                <CFormInput type='text' value={data.link1} onChange={handleLink1} placeholder='Enter URL'  />
-                                          
-                                                <CFormInput type='text' value={data.link1} onChange={handleLink1} placeholder='Enter URL'  />
-                                          
-                                                <CFormInput type='text' value={data.link2Name} onChange={handleLinkName2} placeholder='Enter title' />
-                                                <CFormInput type='text' value={data.link2} onChange={handleLink2} placeholder='Enter URL' />
-                                            </div>
+                                        <div className='w-100' style={{  display: 'flex', flexDirection: 'column', gap: 10 }}>
+                                            <CFormInput type='text' value={data.link1Name} onChange={handleLinkName1} placeholder='Enter title' />
+                                            <CFormInput type='text' value={data.link1} onChange={handleLink1} placeholder='Enter URL'  />
+                                      
+                                            <CFormInput type='text' value={data.link2Name} onChange={handleLinkName2} placeholder='Enter title' />
+                                            <CFormInput type='text' value={data.link2} onChange={handleLink2} placeholder='Enter URL' />
+                                        </div>
 
-                                        </div>
                                     </div>
                                 </div>
-                                {/* <div className="form-outline form-white d-flex col-md-6">
-                                </div> */}
                             </div>
+                            {/* <div className="form-outline form-white d-flex col-md-6">
+                            </div> */}
                         </div>
                     </div>
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '5%', gap: 10 }}>
-                    <CButton onClick={() => setCategories('AllCuration')} style={{ marginRight: '2%', background: '#ccc', border: 'none' }}>Cancel</CButton>
-                    <CButton onClick={categoryID ? handleUpdateCategories : handleCreateCategories}>Save</CButton>
-                    <CButton onClick={categoryID ? handleUpdateCategories : handleCreateCategories}>Save</CButton>
-                </div>
-                <CModal
-                    backdrop="static"
-                    visible={deleteVisible}
-                    onClose={() => setdeleteVisible(false)}
-                    aria-labelledby="StaticBackdropExampleLabel"
-                >
-                    <CModalHeader>
-                        <CModalTitle id="StaticBackdropExampleLabel">Delete</CModalTitle>
-                    </CModalHeader>
-                    <CModalBody>
-                        <p>Are you sure you want to delete this category?
-                            <br />
-                            All categories and items belonging will be deleted.</p>
-                    </CModalBody>
-                    <CModalFooter>
-                        <CButton onClick={handleDeleteCategory} color="primary">Delete</CButton>
-                        <CButton onClick={() => setdeleteVisible(false)} color="secondary">
-                            Cancel
-                        </CButton>
-                    </CModalFooter>
-                </CModal>
-                <CModal
-                    backdrop="static"
-                    visible={deleteVisible}
-                    onClose={() => setdeleteVisible(false)}
-                    aria-labelledby="StaticBackdropExampleLabel"
-                >
-                    <CModalHeader>
-                        <CModalTitle id="StaticBackdropExampleLabel">Delete</CModalTitle>
-                    </CModalHeader>
-                    <CModalBody>
-                        <p>Are you sure you want to delete this category?
-                            <br />
-                            All categories and items belonging will be deleted.</p>
-                    </CModalBody>
-                    <CModalFooter>
-                        <CButton onClick={handleDeleteCategory} color="primary">Delete</CButton>
-                        <CButton onClick={() => setdeleteVisible(false)} color="secondary">
-                            Cancel
-                        </CButton>
-                    </CModalFooter>
-                </CModal>
             </div>
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '5%', gap: 10 }}>
+                <CButton onClick={() => setCategories('AllCuration')} style={{ marginRight: '2%', background: '#ccc', border: 'none' }}>Cancel</CButton>
+                <CButton onClick={categoryID ? handleUpdateCategories : handleCreateCategories}>Save</CButton>
+            </div>
+            <CModal
+                backdrop="static"
+                visible={deleteVisible}
+                onClose={() => setdeleteVisible(false)}
+                aria-labelledby="StaticBackdropExampleLabel"
+            >
+                <CModalHeader>
+                    <CModalTitle id="StaticBackdropExampleLabel">Delete</CModalTitle>
+                </CModalHeader>
+                <CModalBody>
+                    <p>Are you sure you want to delete this category?
+                        <br />
+                        All categories and items belonging will be deleted.</p>
+                </CModalBody>
+                <CModalFooter>
+                    <CButton onClick={handleDeleteCategory} color="primary">Delete</CButton>
+                    <CButton onClick={() => setdeleteVisible(false)} color="secondary">
+                        Cancel
+                    </CButton>
+                </CModalFooter>
+            </CModal>
         </div>
+    </div>
+
     )
-}
+        }
 
 export default CurationForm

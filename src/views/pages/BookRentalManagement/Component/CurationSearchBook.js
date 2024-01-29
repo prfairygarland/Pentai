@@ -70,10 +70,6 @@ const CurationSearchBook = ({ searchBooks, setSearchBookId, SearchBookList, sear
                         }
                     </tbody>
                 </table>
-                            ))
-                        }
-                    </tbody>
-                </table>
 
             </div>
         </div >

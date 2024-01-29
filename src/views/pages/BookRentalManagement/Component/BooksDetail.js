@@ -6,7 +6,6 @@ import Loader from 'src/components/common/Loader'
 import { deleteApi, getApi, postApi, putApi } from 'src/utils/Api'
 import { API_ENDPOINT } from 'src/utils/config'
 import { imageUrl } from '../BookRentalStatus'
-import { imageUrl } from '../BookRentalStatus'
 
 const BooksDetail = ({ bookId, genreId, setIconSet, setSideBarId, setFilteredData, setDeleted, bookDisplay, setCategories }) => {
 
@@ -119,7 +118,7 @@ const BooksDetail = ({ bookId, genreId, setIconSet, setSideBarId, setFilteredDat
             description: bookData?.bookdesr,
             image: image ? image : bookData?.image,
             visibility: bookData?.visibility === true ? 'visible' : 'hide',
-            associatedItem: bookData.AssociatedItem ? bookData.AssociatedItem : 0
+            associatedItem: bookData.AssociatedItem ? bookData.AssociatedItem : 0,
             visibility: bookData?.visibility === true ? 'visible' : 'hide',
             associatedItem: bookData.AssociatedItem ? bookData.AssociatedItem : 0
             // availabilityCount: bookDisplay.availabilityCount ? bookDisplay.availabilityCount : '',
