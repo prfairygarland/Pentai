@@ -164,8 +164,8 @@ export let API_ENDPOINT = {
   reservation_details: ALL_CONSTANTS.API_URL + "/admin/meeting/reservationDetail",
   get_all_meeting_rooms: ALL_CONSTANTS.API_URL + "/admin/meeting/roomList",
   create_meeting_floor: ALL_CONSTANTS.API_URL + "/admin/meeting/floor/create",
-  
-  
+
+
 
   //{ Supply Rental Management}
 
@@ -206,6 +206,12 @@ export let API_ENDPOINT = {
   update_item: ALL_CONSTANTS.API_URL + "/admin/supplies/updateSupplyItem",
   upload_image: ALL_CONSTANTS.API_URL + "/admin/bookRental/imageUpload",
   delete_item: ALL_CONSTANTS.API_URL + "/admin/supplies/deleteSupplyItem",
+
+
+
+  // Live Management
+
+  getLiveStreams: ALL_CONSTANTS.API_URL + "/api/admin/lounge/getLiveStreams"
 
 
 

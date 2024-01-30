@@ -164,7 +164,6 @@ const AllSupplies = () => {
       Cell: ({ row }) => (
         <p className="text-center">{`${row.original.modalName ? row.original.modalName : '-'}`}</p>
       )
-
     },
     {
       Header: 'Item Number',
@@ -183,12 +182,9 @@ const AllSupplies = () => {
     {
       Header: 'Action',
       Cell: ({ row }) => <div className='d-flex gap-4'>
-        <CButton onClick={() => { handleSetModal('addItem'); setItemIds(row.original.id) }} >Modify</CButton>
-        <CButton onClick={() => setDeleteVisible(true)} className='btn-black'>Delete</CButton>
-
+        <CButton onClick={() => { handleSetModal('addItem'); setItemIds(row.original.id) }} >{multiLang?.modify}</CButton>
+        <CButton onClick={() => setDeleteVisible(true)} className='btn-black'>{multiLang?.delete}</CButton>
       </div>
-
-
     }
 
   ])
@@ -465,7 +461,7 @@ const AllSupplies = () => {
               <CButton className='text-center btn-sm' style={{
                 whiteSpace: 'nowrap',
                 textOverflow: 'ellipsis',
-              }} onClick={() => handleSetModal('addSupplyType', 'add')}>{multiLang?.addSub}</CButton>
+              }} onClick={() => handleSetModal('addSupplyType', 'add')}>{multiLang?.addSupply}</CButton>
             </CSidebarBrand>
             <CSidebarNav style={{ color: 'black', padding: '3px', maxHeight: '500px', overflow: 'auto' }}>
               {mainCategoryData.map((tab) => (
@@ -479,7 +475,7 @@ const AllSupplies = () => {
                           <p role='button' onClick={() => (setIds(tab.id), handleSetModal('addSupplyType'))}>{tab.name}</p>
                         </div>
                         <div>
-                          <CButton className='btn-sm' onClick={() => { setSuppyId(tab.id); handleSetModal('addCategory', 'add') }}>{multiLang?.addSub}</CButton>
+                          <CButton className='btn-sm' onClick={() => { setSuppyId(tab.id); handleSetModal('addCategory', 'add') }}>{multiLang?.addCategory}</CButton>
                         </div>
                       </div>
                       <div>
@@ -494,7 +490,7 @@ const AllSupplies = () => {
                                     <p role='button' onClick={() => (setSuppyId(tab.id), setCatIds(catTab.id), handleSetModal('addCategory'))}>{catTab.name}</p>
                                   </div>
                                   <div>
-                                    <CButton className='btn-sm' onClick={() => { setCatId(catTab.id); handleSetModal('addSubCategory', 'add') }}>{multiLang?.addSub}</CButton>
+                                    <CButton className='btn-sm' onClick={() => { setCatId(catTab.id); handleSetModal('addSubCategory', 'add') }}>{multiLang?.addSubCategory}</CButton>
                                   </div>
                                 </div>
                                 <div>
@@ -509,7 +505,7 @@ const AllSupplies = () => {
                                               <p role='button' onClick={() => (setCatId(catTab.id), setSubCatIds(subCatTab.id), handleSetModal('addSubCategory'))}>{subCatTab.name}</p>
                                             </div>
                                             <div>
-                                              <CButton className='btn-sm' onClick={() => { setModalId(subCatTab.id); handleSetModal('addModal', 'add') }}>{multiLang?.addSub}</CButton>
+                                              <CButton className='btn-sm' onClick={() => { setModalId(subCatTab.id); handleSetModal('addModal', 'add') }}>{multiLang?.addModel}</CButton>
                                             </div>
                                           </div>
                                           {sideModelId === subCatTab.id &&
@@ -524,7 +520,7 @@ const AllSupplies = () => {
                                                       <p role='button' onClick={() => (setModalId(subCatTab.id), setModalIds(modalTab.id), handleSetModal('addModal'))}>{modalTab.name}</p>
                                                     </div>
                                                     <div>
-                                                      <CButton className='btn-sm' onClick={() => { setCategoryId(catTab.id); setSubCategoryId(subCatTab.id); setMainID(tab.id); setItemName(modalTab.name); setGetModalId(modalTab.id); handleSetModal('addItem', 'add') }}>{multiLang?.addSub}</CButton>
+                                                      <CButton className='btn-sm' onClick={() => { setCategoryId(catTab.id); setSubCategoryId(subCatTab.id); setMainID(tab.id); setItemName(modalTab.name); setGetModalId(modalTab.id); handleSetModal('addItem', 'add') }}>{multiLang?.addItem}</CButton>
                                                     </div>
                                                   </div>
                                                   {sideItemId === modalTab.id &&
@@ -672,21 +668,21 @@ const AllSupplies = () => {
         </CModal>
 
         {getModal === 'addSupplyType' &&
-          
+
             <AddSupplyType Modal={setModal} getId={ids} removeIds={setIds} />
-         
+
         }
 
         {getModal === 'addCategory' &&
-          
+
             <AddCategory setModal={setState} getMod={getState} Modal={setModal} getMainCatId={suppyId} getCatId={catIds} removeCatIds={setCatIds} />
-          
+
         }
 
         {getModal === 'addSubCategory' &&
-        
+
             <AddSubCategory setModal={setState} getMod={getState} Modal={setModal} getMainSubCatId={catId} getSubCatId={subCatIds} removeSubCatIds={setSubCatIds} />
-         
+
         }
 
         {getModal === 'addModal' &&
