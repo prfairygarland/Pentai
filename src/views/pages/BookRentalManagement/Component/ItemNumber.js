@@ -285,7 +285,7 @@ const ItemNumber = ({ bookItemDetail, bookDisplay, setFilteredData, bookItemId, 
     }
 
     return (
-        <div>
+        <div className='col-md-8'>
             {/* <h1>Item Number</h1> */}
             <div>
                 {isLoading && <Loader />}
@@ -337,8 +337,8 @@ const ItemNumber = ({ bookItemDetail, bookDisplay, setFilteredData, bookItemId, 
                                 </div>
                             </div>
 
-                            <div className="form-outline form-white d-flex gap-3">
-                                <div className='d-flex'>
+                            <div className="form-outline form-white d-flex ">
+                                <div className='d-flex w-100'>
                                     <div className="formWrpLabel" >
                                         <label className="fw-bolder ">
                                             Book Title
@@ -356,7 +356,7 @@ const ItemNumber = ({ bookItemDetail, bookDisplay, setFilteredData, bookItemId, 
                                         </div>
                                     </div>
                                 </div>
-                                <div className='d-flex'>
+                                <div className='d-flex  w-100'>
                                     <div className="formWrpLabel" >
                                         <label className="fw-bolder ">
                                             Author
@@ -564,7 +564,7 @@ const ItemNumber = ({ bookItemDetail, bookDisplay, setFilteredData, bookItemId, 
                     </CModalFooter>
                 </CModal>
             </div>
-        </div>
+       </div>
     )
 }
 

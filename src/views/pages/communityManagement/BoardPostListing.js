@@ -514,10 +514,13 @@ const BoardPostListing = () => {
   return (
     <>
       {isLoading && <Loader />}
-      <main>    
+      <main>  
+      <div className="pageTitle mb-3 pb-2">
+          <h2>{multiLangObj?.bulletinBoardInfo}</h2>
+        </div>
         <div>
-          <div className="d-flex justify-content-between align-items-center">
-            <p>{multiLangObj?.bulletinBoardInfo}</p>
+          <div className="d-flex justify-content-end align-items-center">
+            
             <CButton onClick={createPostHandler}>{multiLangObj?.createPost}</CButton>
           </div>
           <div className="d-flex p-3 justify-content-between h-100 w-100 bg-light rounded mt-2">
@@ -575,11 +578,12 @@ const BoardPostListing = () => {
                   value={filterData?.searchstring}
                   onChange={handleDepartmentSearchChange}
                   id="inputPassword2"
+                  placeholder='Search'
                 />
               </div>
               <div className="d-flex align-items-center">
                 <label className="me-3 fw-medium">{multiLangObj?.date}</label>
-                <div className="d-flex p-2 gap-3">
+                <div className="d-flex p-2 gap-3 ">
                   <DatePicker value={startDate} onChange={handleStartDate} />
                   <DatePicker value={endDate} onChange={handleEndDate} />
                 </div>
@@ -623,9 +627,9 @@ const BoardPostListing = () => {
                 />
               </div>
             </div>
-            <div className="d-flex gap-3 mt-3">
+            <div className="d-flex gap-3 mt-3 justify-content-end">
               <CButton onClick={handleSearchfilter}>{multiLangObj?.search}</CButton>
-              <CButton onClick={resetFilter}>{multiLangObj?.reset}</CButton>
+              <CButton onClick={resetFilter} className='btn-black'>{multiLangObj?.reset}</CButton>
             </div>
           </div>
           <div className="d-flex flex-column mt-3 p-3">

@@ -258,21 +258,21 @@ p:empty {
 }
 
  ::-webkit-input-placeholder {
-    color: var(--primary-color) !important;
+    color: ($gray5) !important;
 }
 
 ::-moz-placeholder {
-    color: var(--primary-color) !important;
+    color: ($gray5) !important;
     opacity: 1;
 }
 
 :-moz-placeholder {
-    color: var(--primary-color)!important;
+    color: ($gray5) !important;
     opacity: 1;
 }
 
 :-ms-input-placeholder {
-    color: var(--primary-color) !important;
+    color: ($gray5) !important;
 }
 
 input:-moz-placeholder {
@@ -288,7 +288,12 @@ button:active,
 button:focus {
     outline: none;
 }
-
+.btn{
+    font-size: 14px;
+    height: 38px;
+  border-radius: 0;
+  padding: 6px 20px;
+  }
 .btn-success{
     background: ($green);
 }

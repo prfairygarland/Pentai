@@ -361,17 +361,19 @@ const UserDetails = () => {
 
                       <div className='d-flex col-md-12'>
                         <div className="form-outline form-white d-flex col-md-6">
-                          <div className="form-outline form-white d-flex ">
+                          <div className=" d-flex w-100">
                             <div className='formWrpLabel'>
                               <label className="fw-bolder ">{multiLang?.Rental_Info}
                               </label>
                             </div>
                             <div className='formWrpInpt d-flex gap-5'>
-                              <div className='d-flex gap-2'>
+                              <div className='d-flex gap-2 align-items-center'>
                                 <p>{multiLang?.Supplies_Rental}: </p>
-                                <p >
+                              <strong>
+                              <a>
                                   {userDetails[0]?.supplyCount == 0 ? 0 : <Link onClick={() => { setSuppliesRentalVisible(!suppliesRentalVisible); getSupplyRentallistData(1) }}>{userDetails[0]?.supplyCount}</Link>}
-                                </p>
+                                </a>
+                              </strong>
                                 <CModal
                                   backdrop="static"
                                   alignment="center"
@@ -400,21 +402,23 @@ const UserDetails = () => {
                                       />
                                     </div>
                                   </CModalBody>
-                                  <CModalFooter>
+                                  {/* <CModalFooter>
                                     <CButton className='btn btn-black' onClick={() => setSuppliesRentalVisible(false)}>
                                       {multiLang?.Close}
                                     </CButton>
-                                  </CModalFooter>
+                                  </CModalFooter> */}
                                 </CModal>
                               </div>
-                              <div className='d-flex gap-2'>
+                              <div className='d-flex gap-2 align-items-center'>
                                 <p>{multiLang?.Book_Rental}: </p>
-                                <p>
+                               <strong>
+                               <a>
                                   {
                                     userDetails[0]?.bookCount == 0 ? 0 :
                                       <Link onClick={() => { setBookRentalVisible(!bookRentalVisible); getBookRentallistData(1) }}>{userDetails[0]?.bookCount}</Link>
                                   }
-                                </p>
+                                </a>
+                               </strong>
                                 <CModal
                                   backdrop="static"
                                   alignment="center"
@@ -444,11 +448,11 @@ const UserDetails = () => {
                                       />
                                     </div>
                                   </CModalBody>
-                                  <CModalFooter>
+                                  {/* <CModalFooter>
                                     <CButton className='btn btn-black' onClick={() => setBookRentalVisible(false)}>
                                       {multiLang?.Close}
                                     </CButton>
-                                  </CModalFooter>
+                                  </CModalFooter> */}
                                 </CModal>
                               </div>
                             </div>
@@ -471,15 +475,17 @@ const UserDetails = () => {
                           </label>
                         </div>
                         <div className='formWrpInpt'>
-                          <div className='d-flex gap-2'>
+                          <div className='d-flex gap-2 align-items-center'>
                             <p>{multiLang?.Operation_Club}: </p>
 
-                            <p >
+                          <strong>
+                          <a>
                               {
                                 userDetails[0]?.clubCount == 0 ? 0 :
                                   <Link onClick={() => { setOperationClubVisible(!operationClubVisible); getOprationClublistData(1) }}>{userDetails[0]?.clubCount}</Link>
                               }
-                            </p>
+                            </a>
+                          </strong>
                             <CModal
                               backdrop="static"
                               alignment="center"
@@ -510,11 +516,11 @@ const UserDetails = () => {
                                   />
                                 </div>
                               </CModalBody>
-                              <CModalFooter>
+                              {/* <CModalFooter>
                                 <CButton className='btn btn-black' onClick={() => setOperationClubVisible(false)}>
                                   {multiLang?.Close}
                                 </CButton>
-                              </CModalFooter>
+                              </CModalFooter> */}
                             </CModal>
                           </div>
                         </div>

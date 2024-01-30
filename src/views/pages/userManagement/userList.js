@@ -91,7 +91,7 @@ const UserList = () => {
       Header: multiLang?.English_Name,
       accessor: 'englishName',
       // Cell: ({ row }) => <Link to={`/UserDetails/${row.original.id}`}>{row.original.englishName}</Link>
-      Cell: ({ row }) => <p role='button' onClick={() => viewDetailsHandler(row.original.id)} className='text-center'>{row.original.englishName}</p>
+      Cell: ({ row }) => <a role='button' onClick={() => viewDetailsHandler(row.original.id)} className='text-center'>{row.original.englishName}</a>
 
     },
     {
@@ -121,7 +121,7 @@ const UserList = () => {
     {
       Header: multiLang?.Status,
       accessor: 'Status',
-      Cell: ({ row }) => <p>{row.original.Status == 1 ? 'Active' : 'Inactive'}</p>
+      Cell: ({ row }) => <p className={row.original.Status == 1 ? 'greenTxt' : 'primTxt'}>{row.original.Status == 1 ? 'Active' : 'Inactive'}</p>
     },
 
   ], [currentPage, itemsPerPage, t])
@@ -604,7 +604,12 @@ const UserList = () => {
   }
 
   return (
+
+
     <>
+    <div className='pageTitle mb-3 pb-2'>
+      <h2>User List</h2>
+    </div>
       {isLoading && <Loader />}
       <div>
         <div className='container bg-light p-3 mb-3'>

@@ -320,3 +320,19 @@ margin-left: 15px;
     }
   }
 }
+
+.pageTitle{
+  border-bottom: 1px solid ($primGray);
+  h2{
+    font-size: 20px;
+  }
+}
+.greenTxt{
+  color: ($green);
+}
+.blueTxt{
+  color: ($blue);
+}
+.primTxt{
+  color: ($primary);
+}

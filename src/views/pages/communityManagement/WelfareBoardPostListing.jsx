@@ -482,7 +482,9 @@ const WelfareBoardPostListing = () => {
         Header: multiLangObj?.views,
         accessor: 'views',
         Cell: ({ row }) => (
-          <p className="text-center">{`${row.original.views ? row.original.views : 0}`}</p>
+          <a className="text-dark text-center">{`${
+            row.original.views ? row.original.views : 0
+          }`}</a>
         ),
       },
       {
@@ -497,13 +499,12 @@ const WelfareBoardPostListing = () => {
       {
         Header: multiLangObj?.history,
         Cell: ({ row }) => (
-          <p
-            role="button"
+          <Link
             onClick={() => viewPostHistoryHandler(row.original.postId)}
-            className="text-center"
+            className="blueTxt text-center"
           >
             {multiLangObj?.view}
-          </p>
+          </Link>
         ),
       },
       {
@@ -511,7 +512,7 @@ const WelfareBoardPostListing = () => {
         Cell: ({ row }) => (
           <Link
             onClick={(e) => modifyPostHandler(e, row)}
-            className="text-dark text-center"
+            className="greenTxt text-center"
             style={{ curser: 'pointer' }}
           >
             {multiLangObj?.edit}
@@ -534,9 +535,11 @@ const WelfareBoardPostListing = () => {
     <>
       {isLoading && <Loader />}
       <main>
+        <div className="pageTitle mb-3 pb-2">
+          <h2>{multiLangObj?.welfareBoardMgmt}</h2>
+        </div>
         <div>
-          <div className="d-flex justify-content-between align-items-center">
-            <p>{multiLangObj?.welfareBoardMgmt}</p>
+          <div className="d-flex justify-content-end align-items-center">
             <CButton onClick={createPostHandler}>{multiLangObj?.createPost}</CButton>
           </div>
           <div className="d-flex p-3 h-100 w-100 bg-light rounded mt-2">
@@ -545,7 +548,6 @@ const WelfareBoardPostListing = () => {
                 {multiLangObj?.category}
               </p>
               <CFormSelect
-                className="mb-2"
                 aria-label="Default select example"
                 options={boardSelectOptions}
                 onChange={(e) => handleSelectBoardChange(e)}
@@ -574,6 +576,7 @@ const WelfareBoardPostListing = () => {
                   value={filterData?.searchstring}
                   onChange={handleDepartmentSearchChange}
                   id="inputPassword2"
+                  placeholder="Search"
                 />
               </div>
               <div className="d-flex align-items-center">
@@ -618,7 +621,7 @@ const WelfareBoardPostListing = () => {
                 />
               </div>
             </div>
-            <div className="d-flex gap-3 mt-3">
+            <div className="d-flex gap-3 mt-3 justify-content-end">
               <CButton onClick={handleSearchfilter}>{multiLangObj?.search}</CButton>
               <CButton onClick={resetFilter} className="btn-black">
                 {multiLangObj?.reset}
