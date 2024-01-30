@@ -44,10 +44,6 @@ const BookRentalBanner = () => {
 
     }
 
-    console.log('bannerSetting', bannerSetting)
-    console.log('isExp', isExpiration)
-
-
     async function urlToBlob(url) {
         const response = await fetch(url)
         const blob = await response.blob()
@@ -104,44 +100,54 @@ const BookRentalBanner = () => {
         try {
             let url = `${API_ENDPOINT.get_bannerDetails}?id=${id}`
             const res = await getApi(url)
-            console.log('resss', res.data)
             if (res?.status === 200) {
                 setBannerTitle(res?.data?.title)
-                const startTime = new Date(res?.data?.startDateTime)
-                let month = '' + (startTime.getMonth() + 1),
-                    day = '' + startTime.getDate(),
-                    year = startTime.getFullYear()
-                if (month.length < 2) month = '0' + month
-                if (day.length < 2) day = '0' + day
-                setBannerStartDate([year, month, day].join('-'))
-                if (startTime.getHours() + 1 < 10) {
-                    setBannerStartHours('0' + startTime.getHours())
-                } else {
-                    setBannerStartHours(startTime.getHours())
+                if(res.data.isExpired === 'no'){
+                    const startTime = new Date(res?.data?.startDateTime)
+                    let month = '' + (startTime.getMonth() + 1),
+                        day = '' + startTime.getDate(),
+                        year = startTime.getFullYear()
+                    if (month.length < 2) month = '0' + month
+                    if (day.length < 2) day = '0' + day
+                    setBannerStartDate([year, month, day].join('-'))
+                    if (startTime.getHours() + 1 < 10) {
+                        setBannerStartHours('0' + startTime.getHours())
+                    } else {
+                        setBannerStartHours(startTime.getHours())
+                    }
+                    if (startTime.getMinutes() < 10) {
+                        setBannerStartMins('0' + startTime.getMinutes())
+                    } else {
+                        setBannerStartMins(startTime.getMinutes())
+                    }
+    
+                    const endTime = new Date(res?.data?.endDateTime)
+                    month = '' + (endTime.getMonth() + 1)
+                    day = '' + endTime.getDate()
+                    year = endTime.getFullYear()
+                    if (month.length < 2) month = '0' + month
+                    if (day.length < 2) day = '0' + day
+                    setBannerEndDate([year, month, day].join('-'))
+                    if (endTime.getHours() + 1 < 10) {
+                        setBannerEndHours('0' + endTime.getHours())
+                    } else {
+                        setBannerEndHours(endTime.getHours())
+                    }
+                    if (endTime.getMinutes() < 10) {
+                        setBannerEndMins('0' + endTime.getMinutes())
+                    } else {
+                        setBannerEndMins(endTime.getMinutes())
+                    }
                 }
-                if (startTime.getMinutes() < 10) {
-                    setBannerStartMins('0' + startTime.getMinutes())
-                } else {
-                    setBannerStartMins(startTime.getMinutes())
+                else{
+                    setBannerStartDate('')
+                    setBannerStartHours('')
+                    setBannerStartMins('')
+                    setBannerEndDate('')
+                    setBannerEndHours('')
+                    setBannerEndMins('')
                 }
-
-                const endTime = new Date(res?.data?.endDateTime)
-                month = '' + (endTime.getMonth() + 1)
-                day = '' + endTime.getDate()
-                year = endTime.getFullYear()
-                if (month.length < 2) month = '0' + month
-                if (day.length < 2) day = '0' + day
-                setBannerEndDate([year, month, day].join('-'))
-                if (endTime.getHours() + 1 < 10) {
-                    setBannerEndHours('0' + endTime.getHours())
-                } else {
-                    setBannerEndHours(endTime.getHours())
-                }
-                if (endTime.getMinutes() < 10) {
-                    setBannerEndMins('0' + endTime.getMinutes())
-                } else {
-                    setBannerEndMins(endTime.getMinutes())
-                }
+                setIsExpiration(res?.data?.isExpired === 'no' ? false : true)
 
                 const bannerImage = await urlsToFiles(res?.data?.image)
                 setUploadedBannerImage(bannerImage)
@@ -157,55 +163,6 @@ const BookRentalBanner = () => {
         }
     }
 
-    const validateClubBannerHandler = () => {
-        if (bannerTitle.trim() === '') {
-            enqueueSnackbar('Please enter title', { variant: 'error' })
-            return false
-        } else if (bannerStartDate === '') {
-            enqueueSnackbar('Please select start date', { variant: 'error' })
-            return false
-        } else if (bannerStartHours === '00' && bannerStartMins === '00') {
-            enqueueSnackbar('Please select start time', { variant: 'error' })
-            return false
-        } else if (!bannerUpdateId && new Date() > new Date(bannerStartDate + 'T' + bannerStartHours + ':' + bannerStartMins)) {
-            enqueueSnackbar('Start time cannot be earlier than current time', { variant: 'error' })
-            return false
-        } else if (bannerEndDate === '') {
-            enqueueSnackbar('Please select end date', { variant: 'error' })
-            return false
-        } else if (bannerEndHours === '00' && bannerEndMins === '00') {
-            enqueueSnackbar('Please select end time', { variant: 'error' })
-            return false
-        } else if (!bannerUpdateId && new Date(bannerStartDate + 'T' + bannerStartHours + ':' + bannerStartMins) > new Date(bannerEndDate + 'T' + bannerEndHours + ':' + bannerEndMins)) {
-            enqueueSnackbar('End time cannot be earlier than start time', { variant: 'error' })
-            return false
-        } else if (uploadedBannerImage === '') {
-            enqueueSnackbar('Please upload a banner image', { variant: 'error' })
-            return false
-        } else if (imageType === 'linkTo' && linkToUrl === '') {
-            enqueueSnackbar('Please enter URL for Link to post', { variant: 'error' })
-            return false
-        } else if (imageType === 'popUpImage' && popupImage === '') {
-            enqueueSnackbar('Please add pop-up image for banner', { variant: 'error' })
-            return false
-        } else {
-            confirmationSaveClubBannerModalHandler(true)
-        }
-    }
-
-    const confirmationSaveClubBannerModalHandler = (isOpen) => {
-        setModalProps({
-            isModalOpen: isOpen,
-            title: 'Confirmation',
-            content: 'Are you sure you want to save?',
-            cancelBtn: 'No',
-            cancelBtnHandler: cancelConfirmation,
-            successBtn: 'Yes',
-            successBtnHandler: () => saveClubBannerHandler(),
-            modalCloseHandler: confirmationSaveClubBannerModalHandler,
-        })
-    }
-
     const saveClubBannerHandler = async () => {
         try {
             const formData = new FormData()
@@ -215,7 +172,7 @@ const BookRentalBanner = () => {
             formData.append('type', imageType)
             formData.append('imageOrder', 1)
             formData.append('isExpired', isExpiration === true ? 'yes' : 'no')
-            if(isExpiration === 'no'){
+            if (!isExpiration) {
                 formData.append('startDateTime', new Date(bannerStartDate + 'T' + bannerStartHours + ':' + bannerStartMins))
                 formData.append('endDateTime', new Date(bannerEndDate + 'T' + bannerEndHours + ':' + bannerEndHours))
             }
@@ -225,18 +182,34 @@ const BookRentalBanner = () => {
             if (imageType === 'popUpImage') {
                 formData.append('popUpImage', popupImage)
             }
+            if (uploadedBannerImage === '') {
+                enqueueSnackbar('Please upload a banner image', { variant: 'error' })
+                return false
+            }
+            if (bannerTitle.trim() === '') {
+                enqueueSnackbar('Please enter title', { variant: 'error' })
+                return false
+            }
+             if(!isExpiration){
+                 if (bannerStartDate === '') {
+                   enqueueSnackbar('Please select start date', { variant: 'error' })
+                   return false
+               }  if (bannerEndDate === '') {
+                enqueueSnackbar('Please select end date', { variant: 'error' })
+                return false
+            } 
+            } 
+             
 
             let res = ''
-            let body = formData
-            console.log('id', bannerUpdateId)
             if (bannerUpdateId) {
                 formData.append('id', bannerUpdateId)
-                res = await putApi(API_ENDPOINT.update_banner, formData)
+                res = await putApi(API_ENDPOINT.update_bannerDetails, formData)
             } else {
                 res = await postApi(API_ENDPOINT.create_banner, formData)
             }
             if (res.status === 200) {
-                if (res?.data?.status === 409) {
+                if (res?.data?.status === 400) {
                     enqueueSnackbar(res?.data?.msg, { variant: 'error' })
                 } else if (res?.data?.status !== 200) {
                     enqueueSnackbar(res?.data?.error, { variant: 'error' })
@@ -315,34 +288,6 @@ const BookRentalBanner = () => {
         setBannerEndMins(e.target.value.split(':')[1])
     }
 
-
-    const cancelClubBannerModalHandler = (isOpen) => {
-        setModalProps({
-            isModalOpen: isOpen,
-            title: 'Confirmation',
-            content: 'Are you sure you want to close?',
-            cancelBtn: 'No',
-            cancelBtnHandler: cancelConfirmation,
-            successBtn: 'Yes',
-            successBtnHandler: () => cancelBannerModalHandler(),
-            modalCloseHandler: cancelClubBannerModalHandler,
-        })
-    }
-
-    const confirmDeleteBannerHandler = (isOpen, id) => {
-        // alert('hello')
-        setModalProps({
-            isModalOpen: isOpen,
-            title: 'Confirmation',
-            content: 'Are you sure to delete banner?',
-            cancelBtn: 'No',
-            cancelBtnHandler: cancelConfirmation,
-            successBtn: 'Yes',
-            successBtnHandler: () => deleteBannerHandler(id),
-            modalCloseHandler: confirmDeleteBannerHandler,
-        })
-    }
-
     const deleteBannerHandler = async (id) => {
         try {
             let url = `${API_ENDPOINT.delete_banner}?id=`
@@ -413,7 +358,7 @@ const BookRentalBanner = () => {
         {
             Header: 'Title',
             accessor: 'title',
-            Cell: ({ row }) => <p onClick={() => editClubBannerHandler(row.original.id)}>{row.original.title}</p>
+            Cell: ({ row }) => <p style={{cursor:'pointer'}} onClick={() => editClubBannerHandler(row.original.id)}>{row.original.title}</p>
         },
         {
             Header: 'Posting Period',

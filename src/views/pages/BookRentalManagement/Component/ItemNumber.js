@@ -8,7 +8,8 @@ import { deleteApi, postApi, putApi } from 'src/utils/Api'
 import { API_ENDPOINT } from 'src/utils/config'
 import { boolean } from 'yup'
 
-const ItemNumber = ({ bookItemDetail, bookDisplay, setFilteredData, bookItemId, setDeleted, setCategories, bookId }) => {
+const ItemNumber = ({ bookItemDetail, setIconSubSet, setIconSubBookSet, setSideSubBookBarId, setSideBarId, setIconSet, bookDisplay, setFilteredData, bookItemId, setDeleted, setCategories, bookId }) => {
+
     const [isLoading, setIsLoading] = useState(false)
     const [image, setImage] = useState(null);
     const [postImage, setPostImage] = useState(null)
@@ -29,25 +30,22 @@ const ItemNumber = ({ bookItemDetail, bookDisplay, setFilteredData, bookItemId, 
         customSetting: false
     })
 
-    console.log('bookItemDetails',bookItemDetail)
-    console.log('bookItemId', bookItemId)
-
     useEffect(() => {
         if (bookItemId) {
             setData({
                 id: bookItemDetail.id,
-                ISBN: bookItemDetail?.SIBNCode,
-                ItemNumber: bookItemDetail?.itemNumber,
-                title: bookItemDetail?.title,
-                author: bookItemDetail?.author,
-                itemStatus: bookItemDetail?.itemStatus,
-                itemRegDate: bookItemDetail.registeredDate,
-                itemImage: bookItemDetail?.image,
-                RentalDuration: bookItemDetail?.rentableDurationWeek,
-                ExtendDuration: bookItemDetail?.extendDurationWeek,
+                ISBN: bookItemDetail?.SIBNCode ?  bookItemDetail?.SIBNCode : '',
+                ItemNumber: bookItemDetail?.itemNumber ? bookItemDetail?.itemNumber : '',
+                title: bookItemDetail?.title ? bookItemDetail?.title : '',
+                author: bookItemDetail?.author ? bookItemDetail?.author : '',
+                itemStatus: bookItemDetail?.itemStatus ? bookItemDetail?.itemStatus : '',
+                itemRegDate: bookItemDetail.registeredDate ? bookItemDetail.registeredDate : '',
+                itemImage: bookItemDetail?.image ? bookItemDetail?.image : null,
+                RentalDuration: bookItemDetail?.rentableDurationWeek ? bookItemDetail?.rentableDurationWeek : '',
+                ExtendDuration: bookItemDetail?.extendDurationWeek ? bookItemDetail?.extendDurationWeek : '',
                 visibility: bookItemDetail?.visibility,
-                PointOfPickAndReturn: bookItemDetail?.pickUpAndReturn,
-                customSetting: bookItemDetail?.customSetting === true ? 'yes' : 'no'
+                PointOfPickAndReturn: bookItemDetail?.pickUpAndReturn ?  bookItemDetail?.pickUpAndReturn  : '' ,
+                customSetting: bookItemDetail?.customSetting === 'no' ? false : true
             })
         }
         else {
@@ -63,7 +61,7 @@ const ItemNumber = ({ bookItemDetail, bookDisplay, setFilteredData, bookItemId, 
                 RentalDuration: '',
                 ExtendDuration: '',
                 visibility: false,
-                PointOfPickAndReturn: '',
+                PointOfPickAndReturn: bookItemDetail?.pickUpAndReturn ?  bookItemDetail?.pickUpAndReturn  : '',
                 customSetting: false
             })
         }
@@ -178,9 +176,6 @@ const ItemNumber = ({ bookItemDetail, bookDisplay, setFilteredData, bookItemId, 
         })
     }
 
-    // console.log('itemData', data)
-
-
     const handleImageChange = (e) => {
         inputRef.current.click()
     }
@@ -208,7 +203,7 @@ const ItemNumber = ({ bookItemDetail, bookDisplay, setFilteredData, bookItemId, 
             id: data.id ? data.id : bookItemId,
             bookId: bookId,
             itemNumber: data?.ItemNumber,
-            registeredDate: data?.itemRegDate,
+            registeredDate: data?.itemRegDate ? data?.itemRegDate : '',
             itemStatus: data?.itemStatus ? data?.itemStatus : 'available',
             customSetting: data?.customSetting === true ? 'yes' : 'no',
             rentableDurationWeek: data?.RentalDuration,
@@ -221,15 +216,59 @@ const ItemNumber = ({ bookItemDetail, bookDisplay, setFilteredData, bookItemId, 
             image: data?.itemImage
         }
 
-        console.log('itemBody', body)
+
+        if(data.title.trim() === ''){
+            enqueueSnackbar('Please enter Book title', { variant: 'error' })
+            return false
+        }
+        if(data.ItemNumber === ''){
+            enqueueSnackbar('Please enter book item number', { variant: 'error' })
+            return false
+        }
+        if(data.author === ''){
+            enqueueSnackbar('Please enter author name', { variant: 'error' })
+            return false
+        }
+        if(data.itemStatus === ''){
+            enqueueSnackbar('Please enter item status', { variant: 'error' })
+            return false
+        }
+        if(data.itemRegDate === ''){
+            enqueueSnackbar('Please enter register date', { variant: 'error' })
+            return false
+        }
+        if(data.itemImage === null){
+            enqueueSnackbar('Please select item image', { variant: 'error' })
+            return false
+        }
+        if(data.customSetting){
+            if(data.RentalDuration < 1){
+                enqueueSnackbar('Please enter valid renatl weeks', { variant: 'error' })
+                return false
+            }
+            if(data.ExtendDuration < 1){
+                enqueueSnackbar('Please enter valid extend weeks', { variant: 'error' })
+                return false
+            }
+            if(data.PointOfPickAndReturn === ''){
+                enqueueSnackbar('Please enter point of pick and return', { variant: 'error' })
+                return false
+            }
+        }
 
         const filterbody = Object.fromEntries(Object.entries(body).filter(([key, value]) => (key !== 'id' && key !== 'title' && key !== 'author' && key !== 'SIBNCode' && key !== 'image')))
 
         if (bookItemId) {
-            const res = await putApi(updateurl, bookItemId, body)
+            const res = await putApi(updateurl, body)
             if (res?.data?.status === 200) {
                 enqueueSnackbar("BookItem updated successfully", { variant: "success" })
                 // setDeleted((prev) => prev + 1)
+                setCategories('AllBooks')
+                setIconSet(null)
+                setIconSubSet(null)
+                setIconSubBookSet(null)
+                setSideBarId(null)
+                setSideSubBookBarId(null)
             }
             else {
                 enqueueSnackbar("Failed to update", { variant: "error" })
@@ -241,12 +280,18 @@ const ItemNumber = ({ bookItemDetail, bookDisplay, setFilteredData, bookItemId, 
                 if (res?.data?.status === 200) {
                     enqueueSnackbar("BookItem created successfully", { variant: "success" })
                     setDeleted((prev) => prev + 1)
+                    setCategories('AllBooks')
+                    setIconSet(null)
+                    setIconSubSet(null)
+                    setIconSubBookSet(null)
+                    setSideBarId(null)
+                    setSideSubBookBarId(null)
                 }
                 else {
                     enqueueSnackbar("failed to create", { variant: "error" })
                 }
             } catch (error) {
-               console.log(error?.messgae)
+                console.log(error?.messgae)
             }
         }
     }
@@ -261,6 +306,12 @@ const ItemNumber = ({ bookItemDetail, bookDisplay, setFilteredData, bookItemId, 
                 enqueueSnackbar("BookItem deleted successfully", { variant: "success" })
                 setDeleted((prev) => prev + 1)
                 setdeleteVisible(false)
+                setCategories('AllBooks')
+                setIconSet(null)
+                setIconSubSet(null)
+                setIconSubBookSet(null)
+                setSideBarId(null)
+                setSideSubBookBarId(null)
             }
             else {
                 enqueueSnackbar("Failed to deleted", { variant: "error" })
@@ -282,6 +333,11 @@ const ItemNumber = ({ bookItemDetail, bookDisplay, setFilteredData, bookItemId, 
             visibility: '',
             status: ''
         })
+        setIconSet(null)
+        setIconSubSet(null)
+        setIconSubBookSet(null)
+        setSideBarId(null)
+        setSideSubBookBarId(null)
     }
 
     return (

@@ -13,11 +13,8 @@ const RentalHistory = ({ bookRentalId, setHistCurrentPage, HisCurrentPage, selec
 
     useEffect(() => {
         handleShowRentalHistory(selectedId)
-        console.log('render')
     }, [HisCurrentPage])
 
-    console.log('page', HisCurrentPage)
-    console.log('id', bookRentalId)
 
     const historyExportData = async () => {
         try {

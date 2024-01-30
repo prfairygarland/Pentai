@@ -23,30 +23,18 @@ import CurationRegisterBook from './Component/CurationRegisterBook'
 import CurationBookDetails from './Component/CurationBookDetails'
 import moment from 'moment/moment'
 
-const initialData = {
-    title: '',
-    bookGenre: '',
-    itemStatus: '',
-    visibility: '',
-    status: ''
-}
-
 const BookCuration = () => {
 
     const [itemsPerPage, setItemsPerPage] = useState(5)
     const [currentPage, setCurrentPage] = useState(0)
-    const [filterData, setFilteredData] = useState(initialData)
     const [Genre, setGenre] = useState()
     const [AllCurationList, setAllCurationList] = useState([])
     const [totalCount, setTotalCount] = useState(0)
     const [totalPages, setTotalPages] = useState(0)
-    const [items, setItems] = useState([])
     const [Curationbook, setCurationBook] = useState('Curationsearch')
     const [categories, setCategories] = useState('AllCuration')
     const [searchBooks, setSearchBooks] = useState([])
     const [searchBookFilter, setSearchBookFilter] = useState({ title: '' })
-    const [CategoryId, setCategoryId] = useState(null)
-    const [modalOpen, setModalOpen] = useState(false)
     const [AllGenreData, setSubAllGenreData] = useState([])
     const [genreBooks, setGenreBooks] = useState([])
     const [iconSet, setIconSet] = useState(null)
@@ -77,7 +65,7 @@ const BookCuration = () => {
     ]);
     const [searchBookId, setSearchBookId] = useState(null)
     const [searchCurationBookDetail, setCurationSearchBookDetail] = useState({})
-    const [searchItemPerPage, setItemPerPage] = useState(3)
+    const [searchItemPerPage, setItemSearchPerPage] = useState(3)
     const [currentSearchPage, setSearchCurrentPage] = useState(0)
     const [totalSearchPage, setSearchtotalPage] = useState(0)
 
@@ -141,6 +129,8 @@ const BookCuration = () => {
             const res = await getApi(url)
             if (res?.status === 200) {
                 setSearchBooks(res?.data)
+                console.log('totle', res?.totalItems)
+                setSearchtotalPage(Math.ceil(res?.totalItems / Number(searchItemPerPage)))
             }
             else{
                 setSearchBooks([])
@@ -150,6 +140,12 @@ const BookCuration = () => {
         }
 
     }
+
+    useEffect(() => {
+        SearchBookList()
+    }, [currentSearchPage, searchItemPerPage])
+    
+
 
 
     useEffect(() => {
@@ -236,7 +232,7 @@ const BookCuration = () => {
             setCategoryDetails(res.data)
         }
         else {
-            alert('error')
+            console.log('error')
         }
     }
 
@@ -310,48 +306,6 @@ const BookCuration = () => {
 
     }, []);
 
-
-
-
-    const handleChangeInput = (e) => {
-        const value = e.target.value
-        setFilteredData((prev) => {
-            return {
-                ...prev,
-                title: value
-            }
-        })
-    }
-
-    const handleItemChange = (e) => {
-        const id = e.target.value
-        setFilteredData((prev) => {
-            return {
-                ...prev,
-                bookGenre: id
-            }
-        })
-    }
-
-    const handleStatusChange = (e) => {
-        const value = e.target.value
-        setFilteredData((prev) => {
-            return {
-                ...prev,
-                status: value
-            }
-        })
-    }
-
-    const handleVisibilityChange = (e) => {
-        const value = e.target.value
-        setFilteredData((prev) => {
-            return {
-                ...prev,
-                visibility: value === 'Hidden' ? 'hide' : value
-            }
-        })
-    }
 
     const handlePageChange = (selectedPage) => {
         setCurrentPage(selectedPage.selected)
@@ -456,9 +410,6 @@ const BookCuration = () => {
     }
 
     //get books by genreId
-
-    // console.log('categoryId', categoryID)
-    // console.log('categoryId', categoryID)
 
 
     useEffect(() => {
@@ -627,7 +578,7 @@ const BookCuration = () => {
         
         <div className='col-md-8' style={{ padding: 5, minHeight: '100%' }}>
             <div>
-                <p style={{ fontSize: 'medium', padding: 5, marginTop: '10%' }}>Total: {AllCurationList?.length}</p>
+                <p style={{ fontSize: 'medium', padding: 5, marginTop: '10%' }}>Total: {totalCount ? totalCount : '0'}</p>
             </div>  
             <div>
                 <ReactTable columns={columns} data={AllCurationList} showCheckbox={false} onSelectionChange={handleSelectionChange} />
@@ -685,8 +636,8 @@ const BookCuration = () => {
                 </div>
             </div>
             {categories === 'indvBook' && (<div>
-                {Curationbook === 'Curationsearch' && <CurationSearchBook setSearchBookId={setSearchBookId} setCurationBook={setCurationBook} searchBookFilter={searchBookFilter} setSearchBookFilter={setSearchBookFilter} searchBooks={searchBooks} SearchBookList={SearchBookList} />}
-                {Curationbook === 'CurationRegister' && <CurationRegisterBook setSideBarId={setSideBarId} setIconSet={setIconSet} setCategoryID={setCategoryID} categoryID={categoryID} subCategoryID={subCategoryID} searchBookId={searchBookId} setCurationSearchBookDetail={setCurationSearchBookDetail} searchCurationBookDetail={searchCurationBookDetail} setCategories={setCategories} setCurationBook={setCurationBook} setDeleted={setDeleted} setSearchBooks={setSearchBooks} searchBooks={searchBooks} />}
+                {Curationbook === 'Curationsearch' && <CurationSearchBook setItemSearchPerPage={setItemSearchPerPage} currentSearchPage={currentSearchPage} totalSearchPage={totalSearchPage} setSearchCurrentPage={setSearchCurrentPage} setSearchBookId={setSearchBookId} setCurationBook={setCurationBook} searchBookFilter={searchBookFilter} setSearchBookFilter={setSearchBookFilter} searchBooks={searchBooks} SearchBookList={SearchBookList} />}
+                {Curationbook === 'CurationRegister' && <CurationRegisterBook setSearchBookFilter={setSearchBookFilter} setSearchCurrentPage={setSearchCurrentPage} setSideBarId={setSideBarId} setIconSet={setIconSet} setCategoryID={setCategoryID} categoryID={categoryID} subCategoryID={subCategoryID} searchBookId={searchBookId} setCurationSearchBookDetail={setCurationSearchBookDetail} searchCurationBookDetail={searchCurationBookDetail} setCategories={setCategories} setCurationBook={setCurationBook} setDeleted={setDeleted} setSearchBooks={setSearchBooks} searchBooks={searchBooks} />}
             </div>)}
 
         </div>}

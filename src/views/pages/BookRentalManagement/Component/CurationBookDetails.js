@@ -27,8 +27,6 @@ const CurationBookDetails = ({ bookId, setIconSet, setSideBarId,  setDeleted, ca
     const [deleteVisible, setdeleteVisible] = useState(false)
     const [image, setImage] = useState(null);
 
-    // console.log('bookData', bookDisplay)
-
     useEffect(() => {
         if (subCategoryBookID) {
             setBookData({
@@ -94,7 +92,6 @@ const CurationBookDetails = ({ bookId, setIconSet, setSideBarId,  setDeleted, ca
 
     const deleteSingleBook = async () => {
         const url = `${API_ENDPOINT.delete_book}?id=`
-        console.log('bookId', subCategoryBookID)
         try {
             const res = await deleteApi(url, subCategoryBookID)
             setdeleteVisible(false)
@@ -133,6 +130,26 @@ const CurationBookDetails = ({ bookId, setIconSet, setSideBarId,  setDeleted, ca
 
         const filterbody = Object.fromEntries(Object.entries(body).filter(([key, value]) => (value !== '')))
 
+        if(bookData.ISBN === ''){
+            enqueueSnackbar('Please enter Book ISBN number', { variant: 'error' })
+            return false
+        }
+        if(bookData.title.trim() === ''){
+            enqueueSnackbar('Please enter Book title', { variant: 'error' })
+            return false
+        }
+        if(bookData.author === ''){
+            enqueueSnackbar('Please enter author name', { variant: 'error' })
+            return false
+        }
+        if(bookData.image === null){
+            enqueueSnackbar('Please select Book cover image', { variant: 'error' })
+            return false
+        }
+        if(bookData.bookdesr === ''){
+            enqueueSnackbar('Please enter Book description', { variant: 'error' })
+            return false
+        }
 
         try {
             const res = await putApi(url, filterbody)

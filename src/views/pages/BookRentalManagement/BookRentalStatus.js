@@ -1,4 +1,4 @@
-import { CButton, CFormSelect, CImage, CModal, CModalBody, CModalHeader, CModalTitle } from '@coreui/react';
+import { CButton, CFormSelect, CImage, CModal, CModalHeader, CModalTitle } from '@coreui/react';
 import moment from 'moment/moment';
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import DatePicker from 'react-date-picker';
@@ -32,8 +32,6 @@ const BookRentalStatus = () => {
     const [endDate, setEndDate] = useState('')
     const [totalPages, setTotalPages] = useState(0)
     const [userInfoPopup, setUserInfoPopup] = useState(false)
-    const [RentalDetailsPopup, setRenatlDetailsPopup] = useState(false)
-    const [RentalHistoryPopup, setRentalHistoryPopup] = useState(false)
     const [popUp, setPopUp] = useState('')
     const [userInfoData, setUserInfoData] = useState({})
     const [RentalStatusData, setRentalStatusData] = useState({})
@@ -115,6 +113,11 @@ const BookRentalStatus = () => {
                     Cell: ({ row }) => <p>{row.original.SIBNCode}</p>
                 },
                 {
+                    Header: 'Item Number',
+                    accessor: '',
+                    Cell: ({ row }) => <p>{row.original.itemNumber}</p>
+                },
+                {
                     Header: 'Rental Status',
                     accessor: 'status',
                     Cell: ({ row }) => <p>{row.original.status}</p>,
@@ -123,7 +126,6 @@ const BookRentalStatus = () => {
                 {
                     Header: 'User Name',
                     accessor: 'userName',
-                    // Cell: ({ row }) => <p>{moment(row.original.createdAt).format("YYYY-MM-DD HH:mm:ss")} </p>,
                     Cell: ({ row }) => <Link onClick={() => { handleShowUserInfo(row.original.userId); setPopUp('userDetails') }} style={{ cursor: 'pointer' }}>{row.original.userName} </Link>,
                 },
                 {
@@ -162,8 +164,8 @@ const BookRentalStatus = () => {
             }
         }
         getBookGenreData()
-        // handleShowRentalDetails(473)
     }, [])
+
     const getData = async (id) => {
         let url = `${API_ENDPOINT.get_book_list}?offset=${currentPage + 1}&limit=${itemsPerPage}`
         if (filterData?.title) {
@@ -186,12 +188,19 @@ const BookRentalStatus = () => {
         const res = await getApi(url)
         if (res?.status === 200) {
             setBookList(res?.data)
-            setTotalPages(Math.ceil(res.totalCount / Number(itemsPerPage)))
+            setTotalPages(Math.ceil(res?.totalCount / Number(itemsPerPage)))
         }
         else{
             setBookList([])
         }
     }
+
+    useEffect(() => {
+      if(filterData.title===''){
+        getData()
+      }
+    }, [filterData.title])
+    
 
 
     const getUserListExport = async () => {
@@ -216,8 +225,8 @@ const BookRentalStatus = () => {
         const res = await getUserListExportData(url)
         console.log('res =>', res);
     
-        if (res.filePath) {
-          const downloadLink = res.filePath;
+        if (res?.filePath) {
+          const downloadLink = res?.filePath;
           const link = document.createElement('a');
           link.href = 'https://ptkapi.experiencecommerce.com/' + downloadLink;
           link.setAttribute('download', `exported_data_${new Date().getTime()}.xlsx`);
