@@ -207,6 +207,12 @@
   "supplyRentalManagementAllSupplies": {
     "categoryHierarchy": "Category Hierarchy",
     "allSupplies": "All Supplies",
+    "addSupply": "Add Supply",
+    "addCategory": "Add Category",
+    "addSubCategory": "Add Subcategory",
+    "addModel": "Add Model",
+    "addItem": "Add Item",
+    "modify": "Modify",
     "addSub": "Add sub",
     "export": "Export",
     "search": "Search",
