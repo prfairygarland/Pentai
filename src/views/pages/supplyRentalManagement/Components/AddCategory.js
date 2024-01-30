@@ -6,7 +6,7 @@ import Loader from 'src/components/common/Loader';
 import { deleteApi, getApi, postApi, putApi } from 'src/utils/Api';
 import { API_ENDPOINT } from 'src/utils/config';
 
-const AddCategory = ({ setModal, getMod, Modal, getMainCatId, getCatId, removeCatIds, getVal }) => {
+const AddCategory = ({ setModal, getMod, Modal, getMainCatId, getCatId, removeCatIds, getVal, setCat }) => {
   console.log('get Id =>', getMainCatId);
 
   const { t, i18n } = useTranslation();
@@ -64,6 +64,7 @@ const AddCategory = ({ setModal, getMod, Modal, getMainCatId, getCatId, removeCa
         enqueueSnackbar('Delete succefully', { variant: 'success' })
         removeCatIds(null)
         getVal(null)
+        setCat(null)
         // Modal('allList')
         setModal(!getMod)
       }
@@ -124,6 +125,7 @@ const AddCategory = ({ setModal, getMod, Modal, getMainCatId, getCatId, removeCa
           setIsLoading(false)
           removeCatIds(null)
           getVal(null)
+          setCat(null)
           // Modal('allList')
           setModal(!getMod)
           //
@@ -146,6 +148,7 @@ const AddCategory = ({ setModal, getMod, Modal, getMainCatId, getCatId, removeCa
         setIsLoading(false)
         removeCatIds(null)
         getVal(null)
+        setCat(null)
         // Modal('allList')
         setModal(!getMod)
       } catch (error) {
