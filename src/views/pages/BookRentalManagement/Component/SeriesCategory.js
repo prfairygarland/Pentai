@@ -10,9 +10,6 @@ const SeriesCategory = ({ subCategoryID, setSideBarId, setIconSet, setStateUpdat
     const [title, setTitle] = useState('')
     const [deleteVisible, setdeleteVisible] = useState(false)
 
-    console.log('subCategoryDetail', subCategoryDetail)
-
-
     useEffect(() => {
         if (subCategoryID) {
             setTitle(subCategoryDetail?.name)
@@ -24,10 +21,6 @@ const SeriesCategory = ({ subCategoryID, setSideBarId, setIconSet, setStateUpdat
 
 
 
-    console.log('subCategoryID', categoryID)
-
-
-
     const CreateSubCategories = async () => {
         let url = API_ENDPOINT.create_subCategories
 
@@ -36,18 +29,19 @@ const SeriesCategory = ({ subCategoryID, setSideBarId, setIconSet, setStateUpdat
             name: title
         }
 
-
+        if (title.trim() === '') {
+            enqueueSnackbar('Please enter the title', { variant: 'error' })
+            return false
+        }
         const res = await postApi(url, body)
         if (res?.data?.status === 200) {
             setStateUpdate((prev) => prev + 1)
             enqueueSnackbar('series created successfully', { variant : 'success'})
-            console.log('created sucessfull')
             setCategories('AllCuration')
             setIconSet(null)
             setSideBarId(null)
         }
         else {
-            console.log('failed to create')
             enqueueSnackbar('Failed to create series', { variant : 'error'})
         }
     }
@@ -59,14 +53,12 @@ const SeriesCategory = ({ subCategoryID, setSideBarId, setIconSet, setStateUpdat
         if (res?.data?.status === 200) {
             setStateUpdate((prev) => prev + 1)
             enqueueSnackbar('Deleted successfully', { variant : 'success'})
-            console.log('delete sucessfull')
             setCategories('AllCuration')
             setIconSet(null)
             setSideBarId(null)
         }
         else {
             enqueueSnackbar('Failed to delete', { variant : 'error'})
-            console.log('failed to delete')
         }
 
     }
@@ -82,11 +74,12 @@ const SeriesCategory = ({ subCategoryID, setSideBarId, setIconSet, setStateUpdat
 
         const res = await putApi(url, body)
         if(res?.data?.status===200){
-            // alert('updated')
             enqueueSnackbar('updated successfully', { variant: 'success'})
             setStateUpdate((prev) => prev + 1)
             setCategories('AllCuration')
             setdeleteVisible(false)
+            setIconSet(null)
+            setSideBarId(null)
         }
         else{
             enqueueSnackbar('failed to update category', { variant: 'error'})
@@ -96,6 +89,8 @@ const SeriesCategory = ({ subCategoryID, setSideBarId, setIconSet, setStateUpdat
     const handleCancel  = () =>{
         setCategories('AllCuration')
         setTitle('')
+        setIconSet(null)
+       setSideBarId(null)
     }
 
 

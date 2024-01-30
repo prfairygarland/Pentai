@@ -1,10 +1,20 @@
-import { CButton } from '@coreui/react'
+import { CButton, CFormSelect } from '@coreui/react'
 import React, { useEffect } from 'react'
 import ReactPaginate from 'react-paginate'
 import ReactTable from 'src/components/common/ReactTable'
 import { API_ENDPOINT } from 'src/utils/config'
+import { paginationItemPerPageOptions } from 'src/utils/constant'
 
-const SearchBooks = ({ searchBooks, totalSearchPage, currentSearchPage,setSearchCurrentPage, setSearchBookId, searchBookFilter, SearchBookList, setSearchBookFilter, setBook }) => {
+const SearchBooks = ({ searchBooks,
+    totalSearchPage,
+    setItemSearchPerPage,
+    currentSearchPage,
+    setSearchCurrentPage,
+    setSearchBookId,
+    searchBookFilter,
+    SearchBookList,
+    setSearchBookFilter,
+    setBook }) => {
 
     const handleChange = (e) => {
         const value = e.target.value
@@ -16,32 +26,32 @@ const SearchBooks = ({ searchBooks, totalSearchPage, currentSearchPage,setSearch
         })
     }
 
-    console.log('searchBooks', searchBooks.length)
-
     const PostData = (id) => {
         setBook('Register')
-        setSearchBookFilter({
-            title: ''
-        })
 
         setSearchBookId(id)
     }
 
+
     const handlePageChange = (selectedPage) => {
-        // setCurrentPage(selectedPage.selected)
-        setSearchCurrentPage(selectedPage)
+        setSearchCurrentPage(selectedPage.selected)
     }
 
+    const paginationsearch = [
+        { label: '3', value: 3 },
+        { label: '6', value: 6 },
+        { label: '9', value: 9 },
+    ]
+
     return (
-        <div>
+        <div style={{ width: '100%' }}>
             <div>
-                <input className='px-3 py-1 m-3' onChange={handleChange} value={searchBookFilter.title} />
-                <CButton onClick={SearchBookList}>search</CButton>
+                <input className='px-3 py-1 m-3' value={searchBookFilter.title} onChange={handleChange} />
+                <CButton onClick={SearchBookList} >search</CButton>
             </div>
             <div>
 
-
-              <table border="1" className="table table-bordered" >
+                <table border="1" className="table table-bordered">
                     {searchBooks.length > 0 && <thead>
                         <tr>
                             <th>Book Cover Image</th>
@@ -51,9 +61,9 @@ const SearchBooks = ({ searchBooks, totalSearchPage, currentSearchPage,setSearch
                     </thead>}
                     <tbody>
                         {
-                            searchBooks?.map((item, index) => (
-                                <tr key={index}>
-                                    <td> <img src={item?.imageLinks?.thumbnail} />  </td>
+                            searchBooks?.map((item, i) => (
+                                <tr key={i}>
+                                    <td> <img src={item?.imageLinks?.thumbnail} /></td>
                                     <td>
                                         <table className="table table-bordered">
                                             <tr>
@@ -61,7 +71,6 @@ const SearchBooks = ({ searchBooks, totalSearchPage, currentSearchPage,setSearch
                                                 <td>{item?.industryIdentifiers ? item?.industryIdentifiers[0]?.identifier : 'NA'}</td>
                                             </tr>
                                             <tr>
-                                                <td>Book Title</td>
                                                 <td>Book Title</td>
                                                 <td>{item?.title ? item?.title : ''}</td>
                                             </tr>
@@ -71,33 +80,50 @@ const SearchBooks = ({ searchBooks, totalSearchPage, currentSearchPage,setSearch
                                             </tr>
                                         </table>
                                     </td>
-                                    <td><CButton onClick={() => PostData(index)}>Add</CButton></td>
+                                    <td><CButton onClick={() => PostData(i)}>Add</CButton></td>
                                 </tr>
+
                             ))
                         }
-                    
-
                     </tbody>
                 </table>
-                {searchBooks.length > 0 &&
-                    <div className='userlist-pagination'>
-                        <div className='userlist-pagination dataTables_paginate'>
-                            <ReactPaginate
-                                breakLabel={'...'}
-                                marginPagesDisplayed={1}
-                                previousLabel={<button>Previous</button>}
-                                nextLabel={<button>Next</button>}
-                                pageCount={totalSearchPage}
-                                onPageChange={handlePageChange}
-                                forcePage={currentSearchPage}
-                                // renderOnZeroPageCount={null}
-                                pageRangeDisplayed={3}
-                            />
+                <div className='d-flex w-100 justify-content-center gap-3'>
+                    {searchBooks.length > 0 &&
+                        <div className='userlist-pagination'>
+                            <div className='userlist-pagination dataTables_paginate'>
+                                <ReactPaginate
+                                    breakLabel={'...'}
+                                    marginPagesDisplayed={1}
+                                    previousLabel={<button>Previous</button>}
+                                    nextLabel={<button>Next</button>}
+                                    pageCount={totalSearchPage}
+                                    onPageChange={handlePageChange}
+                                    forcePage={currentSearchPage}
+                                    // renderOnZeroPageCount={null}
+                                    pageRangeDisplayed={4}
+                                />
+                            </div>
+
                         </div>
 
-                    </div> }               
-         </div >
-         </div >
+                    }
+                    {searchBooks.length > 0 && <div className='d-flex align-items-center gap-2 mt-2'>
+                        <label>Show</label>
+                        <CFormSelect
+                            className=''
+                            aria-label=""
+                            options={paginationsearch}
+                            onChange={(event) => {
+                                setItemSearchPerPage(parseInt(event?.target?.value));
+                                setSearchCurrentPage(0)
+                            }}
+                        />
+                        <label>Lists</label>
+                    </div>}
+                </div>
+
+            </div>
+        </div >
     )
 }
 

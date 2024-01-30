@@ -6,7 +6,7 @@ import { imageUrl } from '../BookRentalStatus';
 import { useCallback } from 'react';
 import { enqueueSnackbar } from 'notistack';
 
-const RegisterBook = ({ setDeleted, setBook, setSearchBookId, searchBookId, searchBookDetail, setSearchBookDetail, searchBooks, genreId, setFilteredData, setSearchBooks, setCategories }) => {
+const RegisterBook = ({ setDeleted,  setSearchBookFilter, setSearchCurrentPage, setBook, setSearchBookId, searchBookId, searchBookDetail, setSearchBookDetail, searchBooks, genreId, setFilteredData, setSearchBooks, setCategories }) => {
     const [RegisteredData, setRegisteredData] = useState({
         bookgenre: '',
         ISBN: '',
@@ -17,15 +17,6 @@ const RegisterBook = ({ setDeleted, setBook, setSearchBookId, searchBookId, sear
         description: '',
         image: null
     })
-
-    console.log('genreid', searchBookDetail)
-
-    console.log('details', RegisteredData)
-
-
-    console.log('genreid', searchBookDetail)
-
-    console.log('details', RegisteredData)
 
     const [image, setImage] = useState(null);
     const inputRef = useRef(null)
@@ -38,7 +29,7 @@ const RegisterBook = ({ setDeleted, setBook, setSearchBookId, searchBookId, sear
 
 
     useEffect(() => {
-        if (searchBookId) {
+        if (searchBookDetail) {
             setRegisteredData({
                 bookgenre: RegisteredData.bookgenre,
                 categoryID: RegisteredData.categoryID,
@@ -165,9 +156,6 @@ const RegisterBook = ({ setDeleted, setBook, setSearchBookId, searchBookId, sear
         }
     }
 
-    console.log('reg', RegisteredData)
-
-    console.log('reg', RegisteredData)
 
 
     useEffect(() => {
@@ -191,7 +179,6 @@ const RegisterBook = ({ setDeleted, setBook, setSearchBookId, searchBookId, sear
         // FilterBookData()
     }, [genreId])
 
-    console.log(genre)
 
     useEffect(() => {
         subCategoryList()
@@ -209,17 +196,13 @@ const RegisterBook = ({ setDeleted, setBook, setSearchBookId, searchBookId, sear
             status: ''
         })
         setBook('search')
-        setDeleted((prev) => prev + 1)
-        setFilteredData({
-            title: '',
-            bookGenre: '',
-            itemStatus: '',
-            visibility: '',
-            status: ''
-        })
         setSearchBooks([])
         setSearchBookDetail({})
         setSearchBookId(null)
+        setSearchCurrentPage(0)
+        setSearchBookFilter({
+            title: ''
+        })
     }
 
     useEffect(() => {
@@ -238,13 +221,6 @@ const RegisterBook = ({ setDeleted, setBook, setSearchBookId, searchBookId, sear
                         categoryID: categorydata[0]?.value?.toString()
                     }
                 })
-                setRegisteredData((prev) => {
-                    return {
-                        ...prev,
-                        categoryID: categorydata[0]?.value?.toString()
-                    }
-                })
-
             }
         }
         BookCategoryList()
@@ -292,20 +268,42 @@ const RegisterBook = ({ setDeleted, setBook, setSearchBookId, searchBookId, sear
             if (RegisteredData.subCategoryID != '') {
                 body['subCategoryId'] = RegisteredData.subCategoryID
             }
-            else {
+            if(RegisteredData.categoryID===''){
+                enqueueSnackbar('Please select category', { variant:'error'})
+                return false
+            }
+            if(RegisteredData.ISBN===''){
+                enqueueSnackbar('Please enter ISBN', { variant:'error'})
+                return false
+            }
+            if(RegisteredData.title.trim()===''){
+                enqueueSnackbar('Please enter title', { variant:'error'})
+                return false
+            }
+            if(RegisteredData.Author===''){
+                enqueueSnackbar('Please enter author name', { variant:'error'})
+                return false
+            }
+            if(RegisteredData.description===''){
+                enqueueSnackbar('Please enter description', { variant:'error'})
+                return false
+            }
+            if(RegisteredData.image===null){
+                enqueueSnackbar('Please add book Image', { variant:'error'})
+                return false
+            }
                 const res = await postApi(url, body)
-                console.log('body', body)
                 if (res?.data?.status === 200) {
                     enqueueSnackbar("Book created successfully", { variant: "success" })
-                    console.log('sucessfully updated')
                     setCategories('AllBooks')
                     setSearchBooks([])
                     setDeleted((prev) => prev + 1)
                     setBook('search')
+                    setSearchCurrentPage(0)
+                    setSearchBookFilter({title:''})
                 }
                 else {
                     enqueueSnackbar("Failed to create book", { variant: "error" })
-                }
             }
 
 

@@ -9,12 +9,8 @@ import { imageUrl } from '../BookRentalStatus';
 import moment from 'moment/moment';
 
 const RentalStatus = ({ RentalStatusData, setRentalStatusData, setUserInfoPopup }) => {
-    const [name, setName] = useState('Ak')
     const [visible, setVisible] = useState(false)
 
-    function myFunction() {
-        setName('NA')
-    }
 
     const handleChangeRentalStatus = () => {
         setRentalStatusData((prev) => {

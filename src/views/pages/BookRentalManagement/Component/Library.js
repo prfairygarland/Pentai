@@ -29,33 +29,6 @@ const Library = ({ library, CategoryId, setCategories, libraryDetails }) => {
        })
     }, [libraryDetails])
 
-    console.log('details', libraryDetails)
-    console.log('data', data)
-
-    const updateGenre = async () =>{
-       let url = `${API_ENDPOINT.update_Genre}?id=${CategoryId}`
-       const body = {
-        id:CategoryId,
-        name:data.title ?  data.title : '',
-        associatedItem:data.AssociiatedItems ? data.AssociiatedItems : '',
-        visibility: data.isVisible === true ? 'visible' : 'hide',
-        rentableDurationWeek:data.rentableDurationWeek ?  data.rentableDurationWeek : '',
-        extendDurationWeek: data.extendDurationWeek ?  data.extendDurationWeek : '',
-        pickUpAndReturn: data.pickUpAndReturn ? data.pickUpAndReturn : ''
-       }
-
-       console.log('body', body)
-       const res = await putApi(url, CategoryId, body)
-       if(res.status === 200){
-        console.log('res', res.data)
-       }
-       else{
-        console.log('Api fail')
-       }
-    }
-
-    console.log('libr', libraryDetails)
-
     const updateLibrary = async () =>{
         const body = {
          id:libraryDetails.id,
@@ -66,15 +39,34 @@ const Library = ({ library, CategoryId, setCategories, libraryDetails }) => {
          extendDurationWeek: data.extendDurationWeek ?  data.extendDurationWeek : '',
          pickUpAndReturn: data.pickUpAndReturn ? data.pickUpAndReturn : ''
         }
+
+        if(data.title.trim() === ''){
+            enqueueSnackbar('Please enter library name', { variant: 'error' })
+            return false
+        }
+        if(data.AssociiatedItems < 0){
+            enqueueSnackbar('Please enter valid associate Item', { variant: 'error' })
+            return false
+        }
+        if(data.rentableDurationWeek < 1){
+            enqueueSnackbar('Please enter valid rental weeks', { variant: 'error' })
+            return false
+        }
+        if(data.extendDurationWeek < 1){
+            enqueueSnackbar('Please enter valid extend weeks', { variant: 'error' })
+            return false
+        }
+        if(data.pickUpAndReturn === ''){
+            enqueueSnackbar('Please enter point of pick up and return', { variant: 'error' })
+            return false
+        }
  
-        console.log('body', body)
         const res = await putApi(API_ENDPOINT.update_libraries, body)
-        if(res.data.status === 200){
+        if(res?.data?.status === 200){
             enqueueSnackbar("Library updates successfully", { variant: "success" })
             setCategories('AllBooks')
         }
         else{
-         console.log('Api fail')
          enqueueSnackbar("Failed to update library", { variant: "error" })
         }
      }
@@ -128,7 +120,6 @@ const Library = ({ library, CategoryId, setCategories, libraryDetails }) => {
         })
     }
 
-    // console.log('data', data)
 
     return (
         <div style={{ width: '100%', borderRadius: '0' }}>

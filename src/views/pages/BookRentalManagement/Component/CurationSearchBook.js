@@ -1,9 +1,10 @@
-import { CButton } from '@coreui/react'
+import { CButton, CFormSelect } from '@coreui/react'
 import React, { useEffect } from 'react'
+import ReactPaginate from 'react-paginate'
 import ReactTable from 'src/components/common/ReactTable'
 import { API_ENDPOINT } from 'src/utils/config'
 
-const CurationSearchBook = ({ searchBooks, setSearchBookId, SearchBookList, searchBookFilter, setCurationBook, setSearchBookFilter }) => {
+const CurationSearchBook = ({ searchBooks, setItemSearchPerPage, currentSearchPage, totalSearchPage, setSearchCurrentPage, setSearchBookId, SearchBookList, searchBookFilter, setCurationBook, setSearchBookFilter }) => {
 
     const handleChange = (e) => {
         const value = e.target.value
@@ -24,7 +25,16 @@ const CurationSearchBook = ({ searchBooks, setSearchBookId, SearchBookList, sear
         setSearchBookId(id)
     }
 
-    console.log('curSearch', searchBooks)
+    const handlePageChange = (selectedPage) => {
+        setSearchCurrentPage(selectedPage.selected)
+    }
+
+    const paginationsearch =  [
+        { label: '3', value: 3},
+        { label: '6', value: 6 },
+        { label: '9', value: 9 },
+    ]
+
 
     return (
         <div style={{ width: '100%' }}>
@@ -70,7 +80,40 @@ const CurationSearchBook = ({ searchBooks, setSearchBookId, SearchBookList, sear
                         }
                     </tbody>
                 </table>
+                <div className='d-flex w-100 justify-content-center gap-3'>
+                        {searchBooks.length > 0 &&
+                            <div className='userlist-pagination'>
+                                <div className='userlist-pagination dataTables_paginate'>
+                                    <ReactPaginate
+                                        breakLabel={'...'}
+                                        marginPagesDisplayed={1}
+                                        previousLabel={<button>Previous</button>}
+                                        nextLabel={<button>Next</button>}
+                                        pageCount={totalSearchPage}
+                                        onPageChange={handlePageChange}
+                                        forcePage={currentSearchPage}
+                                        // renderOnZeroPageCount={null}
+                                        pageRangeDisplayed={4}
+                                    />
+                                </div>
 
+                            </div>
+
+                        }
+                        {searchBooks.length > 0 && <div className='d-flex align-items-center gap-2 mt-2'>
+                            <label>Show</label>
+                            <CFormSelect
+                                className=''
+                                aria-label=""
+                                options={paginationsearch}
+                                onChange={(event) => {
+                                    setItemSearchPerPage(parseInt(event?.target?.value));
+                                    // setCurrentPage(0)
+                                }}
+                            />
+                            <label>Lists</label>
+                        </div>}
+                    </div>
             </div>
         </div >
     )

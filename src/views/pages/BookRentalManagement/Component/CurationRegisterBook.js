@@ -6,7 +6,7 @@ import { imageUrl } from '../BookRentalStatus';
 import { useCallback } from 'react';
 import { enqueueSnackbar } from 'notistack';
 
-const CurationRegisterBook = ({setDeleted, setIconSet, setSideBarId, setCategoryID, searchBookId, categoryID, subCategoryID, setCurationSearchBookDetail, searchCurationBookDetail, setCategories, searchBooks, setCurationBook, setSearchBooks }) => {
+const CurationRegisterBook = ({ setDeleted, setSearchBookFilter, setSearchCurrentPage, setIconSet, setSideBarId, setCategoryID, searchBookId, categoryID, subCategoryID, setCurationSearchBookDetail, searchCurationBookDetail, setCategories, searchBooks, setCurationBook, setSearchBooks }) => {
     const [RegisteredData, setRegisteredData] = useState({
         bookgenre: '',
         ISBN: '',
@@ -15,9 +15,9 @@ const CurationRegisterBook = ({setDeleted, setIconSet, setSideBarId, setCategory
         categoryID: '',
         subCategoryID: '',
         description: '',
-        image:null,
+        image: null,
         description: '',
-        image:null
+        image: null
     })
     const [image, setImage] = useState(null);
     const inputRef = useRef(null)
@@ -27,40 +27,34 @@ const CurationRegisterBook = ({setDeleted, setIconSet, setSideBarId, setCategory
     const [postImage, setPostImage] = useState(null)
     const [filterBook, setFilterBook] = useState()
 
-    console.log('s', categoryID)
-    console.log('s1', subCategoryID)
 
+    useEffect(() => {
+        if (searchCurationBookDetail) {
+            setRegisteredData({
+                bookgenre: RegisteredData.bookgenre,
+                categoryID: RegisteredData.categoryID,
+                subCategoryID: RegisteredData.subCategoryID,
+                title: searchCurationBookDetail?.title,
+                Author: searchCurationBookDetail?.authors ? searchCurationBookDetail?.authors[0] : '',
+                ISBN: searchCurationBookDetail?.industryIdentifiers ? searchCurationBookDetail?.industryIdentifiers[0].identifier.replace('/[^0-9]/g', '') : '',
+                description: searchCurationBookDetail?.description ? searchCurationBookDetail.description : '',
+                image: searchCurationBookDetail?.imageLinks ? searchCurationBookDetail?.imageLinks.thumbnail : null,
+            })
+        }
+        else {
+            setRegisteredData({
+                bookgenre: '',
+                ISBN: '',
+                title: '',
+                Author: '',
+                categoryID: '',
+                subCategoryID: '',
+                description: '',
+                image: null
+            })
+        }
+    }, [searchCurationBookDetail])
 
-        useEffect(() => {
-            if(searchCurationBookDetail){
-                    setRegisteredData({
-                        bookgenre: RegisteredData.bookgenre,
-                        categoryID: RegisteredData.categoryID,
-                        subCategoryID: RegisteredData.subCategoryID,
-                        title: searchCurationBookDetail?.title,
-                        Author: searchCurationBookDetail?.authors ? searchCurationBookDetail?.authors[0] : '',
-                        ISBN: searchCurationBookDetail?.industryIdentifiers ? searchCurationBookDetail?.industryIdentifiers[0].identifier.replace('/[^0-9]/g', '') : '',
-                        description: searchCurationBookDetail?.description ? searchCurationBookDetail.description : '',
-                        image: searchCurationBookDetail?.imageLinks ? searchCurationBookDetail?.imageLinks.thumbnail : null,
-                        // availabilityCount: 5,
-                        // address: 'PTK 17s'
-                    })
-            }
-            else{
-                setRegisteredData({
-                    bookgenre: '',
-                    ISBN: '',
-                    title: '',
-                    Author: '',
-                    categoryID: '',
-                    subCategoryID: '',
-                    description: '',
-                    image:null
-                })
-            }
-        }, [searchCurationBookDetail])
-
-        console.log('reg', RegisteredData)
 
 
     const hanldleGenreSelect = (e) => {
@@ -147,7 +141,7 @@ const CurationRegisterBook = ({setDeleted, setIconSet, setSideBarId, setCategory
             setRegisteredData((prev) => {
                 return {
                     ...prev,
-                    subCategoryID: (subCategoryID && categoryID )? subCategoryID.toString() : Subcategorydata[0].value.toString()
+                    subCategoryID: (subCategoryID && categoryID) ? subCategoryID.toString() : Subcategorydata[0].value.toString()
                 }
             })
 
@@ -183,8 +177,6 @@ const CurationRegisterBook = ({setDeleted, setIconSet, setSideBarId, setCategory
         }
         getBookGenreData()
 
-        // console.log('hello')
-        // console.log('hello')
 
     }, [])
 
@@ -192,16 +184,18 @@ const CurationRegisterBook = ({setDeleted, setIconSet, setSideBarId, setCategory
         subCategoryList(categoryID)
     }, [categoryID])
 
-    const handleCancel = () =>{
-        setCategories('AllCuration')
+    const handleCancel = () => {
         setCategories('AllCuration')
         setCurationBook('Curationsearch')
-        setSearchBooks([])
         setSearchBooks([])
         setCurationSearchBookDetail({})
         setCategoryID(null)
         setIconSet(null)
         setSideBarId(null)
+        setSearchCurrentPage(0)
+        setSearchBookFilter({
+            title: ''
+        })
     }
 
 
@@ -269,49 +263,50 @@ const CurationRegisterBook = ({setDeleted, setIconSet, setSideBarId, setCategory
             if (RegisteredData.subCategoryID != '') {
                 body['subCategoryId'] = RegisteredData.subCategoryID
             }
+            if (RegisteredData.ISBN === '') {
+                enqueueSnackbar('Please enter ISBN', { variant: 'error' })
+                return false
+            }
+            if (RegisteredData.title.trim() === '') {
+                enqueueSnackbar('Please enter title', { variant: 'error' })
+                return false
+            }
+            if (RegisteredData.Author === '') {
+                enqueueSnackbar('Please enter author name', { variant: 'error' })
+                return false
+            }
+            if (RegisteredData.description === '') {
+                enqueueSnackbar('Please enter description', { variant: 'error' })
+                return false
+            }
+            if (RegisteredData.image === null) {
+                enqueueSnackbar('Please add book Image', { variant: 'error' })
+                return false
+            }
 
             const res = await postApi(url, body)
-            console.log('body', body)
             if (res?.data?.status === 200) {
-                enqueueSnackbar("book created successfully",{ variant: 'success' })
-            if (res?.data?.status === 200) {
-                enqueueSnackbar("book created successfully",{ variant: 'success' })
-                console.log('sucessfully updated')
+                enqueueSnackbar("book created successfully", { variant: 'success' })
                 setCategories('AllCuration')
                 setCurationBook('Curationsearch')
                 setIconSet(null)
                 setSideBarId(null)
-
                 // setBook('search')
                 // setSearchBooks([])
                 setDeleted((prev) => prev + 1)
-                
+                setSearchCurrentPage(0)
+                setSearchBookFilter({
+                    title: ''
+                })
+
             }
-            else{
-                enqueueSnackbar("failed to creat book",{ variant: 'error' })
+            else {
+                enqueueSnackbar("failed to creat book", { variant: 'error' })
             }
-        }
         } catch (error) {
             console.log(error)
         }
     }
-
-    // const cancelPostHandler = () => {
-    //     setRegisteredData({
-    //         genreId: '',
-    //         image: '',
-    //         availabilityCount: '',
-    //         address: '',
-    //         bookgenre: '',
-    //         ISBN: '',
-    //         title: '',
-    //         Author: '',
-    //         category: '',
-    //         subCategory: '',
-    //         description: ''
-    //     })
-    // }
-
 
 
 
@@ -329,7 +324,7 @@ const CurationRegisterBook = ({setDeleted, setIconSet, setSideBarId, setCategory
                         <td>
                             <div>
                                 <div style={{ width: '180px', overflow: 'hidden', marginBottom: '5%' }} >
-                                    {RegisteredData?.image!==null ? <img src={image ? image : RegisteredData?.image} style={{ height: '100%', width: '100%' }} /> : <img alt='' src='https://www.beelights.gr/assets/images/empty-image.png' style={{ height: '100%', width: '100%' }} />}
+                                    {RegisteredData?.image !== null ? <img src={image ? image : RegisteredData?.image} style={{ height: '100%', width: '100%' }} /> : <img alt='' src='https://www.beelights.gr/assets/images/empty-image.png' style={{ height: '100%', width: '100%' }} />}
                                     <input style={{ display: 'none' }} type="file" name="upload" accept=".png, .jpg, .jpeg, .gif" ref={inputRef} onChange={handleUpload} />
                                 </div>
                                 <button style={{ background: '#4f5d73', height: '40px', width: '80px', cursor: 'pointer', borderRadius: 8, color: 'white' }} onClick={handleImageChange}>Upload</button>
@@ -380,7 +375,7 @@ const CurationRegisterBook = ({setDeleted, setIconSet, setSideBarId, setCategory
                                 <tr>
                                     <td>ISBN</td>
                                     <td>
-                                        <input style={{ border: '1px solid #ccc', width: '98%', margin: 5 }} value={ RegisteredData.ISBN ?  RegisteredData.ISBN : filterBook?.SIBNCode} onChange={hanldleChangeISBN} />
+                                        <input style={{ border: '1px solid #ccc', width: '98%', margin: 5 }} value={RegisteredData.ISBN ? RegisteredData.ISBN : filterBook?.SIBNCode} onChange={hanldleChangeISBN} />
                                     </td>
                                 </tr>
                                 <tr>
@@ -392,7 +387,7 @@ const CurationRegisterBook = ({setDeleted, setIconSet, setSideBarId, setCategory
                                 <tr>
                                     <td>Author </td>
                                     <td>
-                                        <input style={{ border: '1px solid #ccc', width: '98%', margin: 5 }} value={RegisteredData.Author ? RegisteredData.Author :  filterBook?.author} onChange={hanldleChangeAuthor} />
+                                        <input style={{ border: '1px solid #ccc', width: '98%', margin: 5 }} value={RegisteredData.Author ? RegisteredData.Author : filterBook?.author} onChange={hanldleChangeAuthor} />
                                     </td>
                                 </tr>
                                 <tr>

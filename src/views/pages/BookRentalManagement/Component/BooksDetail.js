@@ -7,7 +7,7 @@ import { deleteApi, getApi, postApi, putApi } from 'src/utils/Api'
 import { API_ENDPOINT } from 'src/utils/config'
 import { imageUrl } from '../BookRentalStatus'
 
-const BooksDetail = ({ bookId, genreId, setIconSet, setSideBarId, setFilteredData, setDeleted, bookDisplay, setCategories }) => {
+const BooksDetail = ({ bookId, genreId, setBookId, setIconSet, setSideBarId, setFilteredData, setDeleted, bookDisplay, setCategories }) => {
 
     const [bookData, setBookData] = useState({
         bookgenre: '',
@@ -26,19 +26,8 @@ const BooksDetail = ({ bookId, genreId, setIconSet, setSideBarId, setFilteredDat
     const [postImage, setPostImage] = useState(null)
     const inputRef = useRef(null)
     const [image, setImage] = useState(null);
-    console.log('genreId', genreId)
-    console.log('bookId', bookId)
-
-    console.log(bookDisplay)
-
-    console.log('serverImage', postImage)
-
-    console.log('bookData', bookData)
-
-    console.log('img', bookData.image)
 
     useEffect(() => {
-
         setBookData({
             bookgenre: genre?.filter((ele) => ele?.label === bookDisplay?.genreName)[0]?.value?.toString(),
             title: bookDisplay.title,
@@ -52,8 +41,6 @@ const BooksDetail = ({ bookId, genreId, setIconSet, setSideBarId, setFilteredDat
 
         })
         // setImage(bookDisplay.image)
-
-
     }, [bookDisplay, bookId])
 
     useEffect(() => {
@@ -65,10 +52,17 @@ const BooksDetail = ({ bookId, genreId, setIconSet, setSideBarId, setFilteredDat
 
                 })
                 setGenre(data)
+                let val = data?.filter((ele) => ele?.label === bookDisplay?.genreName)[0]?.value?.toString()
+                setBookData((prev) =>{
+                    return {
+                        ...prev,
+                        bookgenre: val
+                    }
+                })
             }
         }
         getBookGenreData()
-    }, [])
+    }, [bookId, bookDisplay])
 
     const handleChange = (e) => {
         setBookData((prev) => {
@@ -121,8 +115,32 @@ const BooksDetail = ({ bookId, genreId, setIconSet, setSideBarId, setFilteredDat
             associatedItem: bookData.AssociatedItem ? bookData.AssociatedItem : 0,
             visibility: bookData?.visibility === true ? 'visible' : 'hide',
             associatedItem: bookData.AssociatedItem ? bookData.AssociatedItem : 0
-            // availabilityCount: bookDisplay.availabilityCount ? bookDisplay.availabilityCount : '',
-            // address: bookDisplay.address ? bookDisplay.address : ''
+        }
+         
+         
+        if(bookData.ISBN === ''){
+            enqueueSnackbar('Please enter Book ISBN number', { variant: 'error' })
+            return false
+        }
+        if(bookData.title.trim() === ''){
+            enqueueSnackbar('Please enter Book title', { variant: 'error' })
+            return false
+        }
+        if(bookData.author === ''){
+            enqueueSnackbar('Please enter author name', { variant: 'error' })
+            return false
+        }
+        if(bookData.image === null){
+            enqueueSnackbar('Please select Book cover image', { variant: 'error' })
+            return false
+        }
+        if(bookData.bookdesr === ''){
+            enqueueSnackbar('Please enter Book description', { variant: 'error' })
+            return false
+        }
+        if(bookData.AssociatedItem < 0){
+            enqueueSnackbar('Please enter valid associate Item', { variant: 'error' })
+            return false
         }
 
         try {
@@ -133,6 +151,7 @@ const BooksDetail = ({ bookId, genreId, setIconSet, setSideBarId, setFilteredDat
                 setCategories('AllBooks')
                 setIconSet(null)
                 setSideBarId(null)
+                setBookId(null)
             }
             else {
                 enqueueSnackbar('failed to update book', { variant: 'error' })
@@ -155,10 +174,6 @@ const BooksDetail = ({ bookId, genreId, setIconSet, setSideBarId, setFilteredDat
         }
 
     }
-
-    console.log('image', image)
-
-    console.log('image', image)
 
     const handleIsbnChange = (e) => {
         setBookData((prev) => {
@@ -222,6 +237,7 @@ const BooksDetail = ({ bookId, genreId, setIconSet, setSideBarId, setFilteredDat
         })
         setIconSet(null)
         setSideBarId(null)
+        setBookId(null)
     }
 
 
@@ -248,8 +264,8 @@ const BooksDetail = ({ bookId, genreId, setIconSet, setSideBarId, setFilteredDat
                                 <div className="formWrpInpt d-flex">
                                     <div className="d-flex formradiogroup mb-2 gap-3">
                                         <CFormSelect
-                                            className='mx-4'
-                                            style={{ width: '170px' }}
+                                            // className='mx-4'
+                                            style={{ width: '190px' }}
                                             name='itemStatus'
                                             options={genre}
                                             onChange={handleChange}
@@ -258,7 +274,7 @@ const BooksDetail = ({ bookId, genreId, setIconSet, setSideBarId, setFilteredDat
                                     </div>
                                 </div>
                             </div>
-                            <div className="form-outline form-white   d-flex ">
+                            <div className="form-outline form-white d-flex ">
                                 <div className="formWrpLabel" >
                                     <label className="fw-bolder ">
                                         ISBN
@@ -275,7 +291,6 @@ const BooksDetail = ({ bookId, genreId, setIconSet, setSideBarId, setFilteredDat
                             </div>
 
                             <div className="form-outline form-white d-flex gap-3">
-                                <div className='d-flex'>
                                     <div className="formWrpLabel" >
                                         <label className="fw-bolder ">
                                             Book Title
@@ -288,11 +303,9 @@ const BooksDetail = ({ bookId, genreId, setIconSet, setSideBarId, setFilteredDat
                                                 onChange={handleTitleChange}
                                             />
                                         </div>
-                                    </div>
                                 </div>
                             </div>
                             <div className="form-outline form-white d-flex gap-3">
-                                <div className='d-flex'>
                                     <div className="formWrpLabel" >
                                         <label className="fw-bolder ">
                                             Author
@@ -305,7 +318,6 @@ const BooksDetail = ({ bookId, genreId, setIconSet, setSideBarId, setFilteredDat
                                                 onChange={handleAuthorChange}
                                             />
                                         </div>
-                                    </div>
                                 </div>
                             </div>
                             <div className="form-outline form-white   d-flex ">
@@ -363,14 +375,12 @@ const BooksDetail = ({ bookId, genreId, setIconSet, setSideBarId, setFilteredDat
                                                 defaultChecked={bookData.visibility}
                                                 onClick={() => setBookData((prev) => ({ ...prev, visibility: true }))}
                                                 value={true}
-                                            // checked={bookData.visibility}
-                                            // value={bookData.visibility}
+                                        
                                             />
                                             <CFormCheck type="radio" name="visibility" id="exampleRadios2" label="Hide"
                                                 defaultChecked={!bookData.visibility}
                                                 onClick={() => setBookData((prev) => ({ ...prev, visibility: false }))}
                                                 value={false}
-                                            //  checked={bookData.visibility}
                                             />
                                         </div>
                                     </div>
