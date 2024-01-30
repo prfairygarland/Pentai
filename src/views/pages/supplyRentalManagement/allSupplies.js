@@ -669,19 +669,19 @@ const AllSupplies = () => {
 
         {getModal === 'addSupplyType' &&
 
-            <AddSupplyType Modal={setModal} getId={ids} removeIds={setIds} />
+          <AddSupplyType setModal={setState} getMod={getState} Modal={setModal} getId={ids} removeIds={setIds} getVal={setIcon} />
 
         }
 
         {getModal === 'addCategory' &&
 
-            <AddCategory setModal={setState} getMod={getState} Modal={setModal} getMainCatId={suppyId} getCatId={catIds} removeCatIds={setCatIds} />
+          <AddCategory setModal={setState} getMod={getState} Modal={setModal} getMainCatId={suppyId} getCatId={catIds} removeCatIds={setCatIds} getVal={setIcon} />
 
         }
 
         {getModal === 'addSubCategory' &&
 
-            <AddSubCategory setModal={setState} getMod={getState} Modal={setModal} getMainSubCatId={catId} getSubCatId={subCatIds} removeSubCatIds={setSubCatIds} />
+          <AddSubCategory setModal={setState} getMod={getState} Modal={setModal} getMainSubCatId={catId} getSubCatId={subCatIds} removeSubCatIds={setSubCatIds} getVal={setIcon} setCat={setCatIcon} />
 
         }
 
