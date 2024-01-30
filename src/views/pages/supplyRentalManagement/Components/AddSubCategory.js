@@ -6,7 +6,7 @@ import Loader from 'src/components/common/Loader'
 import { deleteApi, getApi, postApi, putApi } from 'src/utils/Api'
 import { API_ENDPOINT } from 'src/utils/config'
 
-const AddSubCategory = ({ setModal, getMod, Modal, getMainSubCatId, getSubCatId, removeSubCatIds, getVal, setCat }) => {
+const AddSubCategory = ({ setModal, getMod, Modal, getMainSubCatId, getSubCatId, removeSubCatIds, getVal, setCat, setSubIcon }) => {
 
 
   const { t, i18n } = useTranslation();
@@ -117,6 +117,7 @@ const AddSubCategory = ({ setModal, getMod, Modal, getMainSubCatId, getSubCatId,
           removeSubCatIds(null)
           getVal(null)
           setCat(null)
+          setSubIcon(null)
           // Modal('allList')
           setModal(!getMod)
           //
@@ -140,6 +141,7 @@ const AddSubCategory = ({ setModal, getMod, Modal, getMainSubCatId, getSubCatId,
         removeSubCatIds(null)
         getVal(null)
         setCat(null)
+        setSubIcon(null)
         // Modal('allList')
         setModal(!getMod)
       } catch (error) {
@@ -161,6 +163,7 @@ const AddSubCategory = ({ setModal, getMod, Modal, getMainSubCatId, getSubCatId,
         removeSubCatIds(null)
         getVal(null)
         setCat(null)
+        setSubIcon(null)
         // Modal('allList')
         setModal(!getMod)
       }

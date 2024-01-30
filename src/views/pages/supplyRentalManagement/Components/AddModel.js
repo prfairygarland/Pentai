@@ -6,7 +6,7 @@ import Loader from 'src/components/common/Loader';
 import { deleteApi, getApi, postApi, putApi } from 'src/utils/Api';
 import { API_ENDPOINT } from 'src/utils/config';
 
-const AddModel = ({ setModal, getMod, Modal, getMainModalId, getModalId, removeModalIds, getVal, setCat, setSubIcon }) => {
+const AddModel = ({ setModal, getMod, Modal, getMainModalId, getModalId, removeModalIds, getVal, setCat, setSubIcon, setModalIcon }) => {
 
   const { t, i18n } = useTranslation();
   const translationObject = i18n.getDataByLanguage(i18n.language);
@@ -119,6 +119,7 @@ const AddModel = ({ setModal, getMod, Modal, getMainModalId, getModalId, removeM
           getVal(null)
           setCat(null)
           setSubIcon(null)
+          setModalIcon(null)
           // Modal('allList')
           setModal(!getMod)
           //
@@ -143,6 +144,7 @@ const AddModel = ({ setModal, getMod, Modal, getMainModalId, getModalId, removeM
         getVal(null)
         setCat(null)
         setSubIcon(null)
+        setModalIcon(null)
         // Modal('allList')
         setModal(!getMod)
       } catch (error) {
@@ -165,6 +167,7 @@ const AddModel = ({ setModal, getMod, Modal, getMainModalId, getModalId, removeM
         getVal(null)
         setCat(null)
         setSubIcon(null)
+        setModalIcon(null)
         // Modal('allList')
         setModal(!getMod)
       }
