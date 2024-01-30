@@ -499,13 +499,13 @@ const ClubBoardListing = () => {
         Header: <p className="text-center">{multiLangObj?.history}</p>,
         accessor: 'history',
         Cell: ({ row }) => (
-          <p
+          <Link
             role="button"
             onClick={() => viewPostHistoryHandler(row.original.postId)}
-            className="text-center"
+            className="blueTxt text-center"
           >
             {multiLangObj?.view}
-          </p>
+          </Link>
         ),
       },
     ],
@@ -585,9 +585,10 @@ const ClubBoardListing = () => {
         accessor: 'views',
         Cell: ({ row }) => (
           <p className="text-center">
+            {' '}
             <Link
               onClick={(e) => clubViewHandler(row.original.clubId)}
-              className="text-dark text-center"
+              className="blueTxt "
               style={{ cursor: 'pointer' }}
             >
               {multiLangObj?.view}
@@ -642,10 +643,10 @@ const ClubBoardListing = () => {
     <>
       {isLoading && <Loader />}
       <main>
+        <div className="pageTitle mb-3 pb-2">
+          <h2>{multiLangObj?.clubBoardManagement}</h2>
+        </div>
         <div>
-          <div className="d-flex justify-content-between align-items-center">
-            <p>{multiLangObj?.clubBoardManagement}</p>
-          </div>
           <div className="d-flex p-3 h-100 w-100 bg-light rounded mt-2">
             <div className="d-flex align-items-center w-25 ms-2 align-items-center">
               <p className="fw-medium me-3" style={{ 'white-space': 'nowrap' }}>
@@ -714,7 +715,7 @@ const ClubBoardListing = () => {
                     />
                   </div>
                 </div>
-                <div className="d-flex gap-3 mt-3">
+                <div className="d-flex gap-3 mt-3 justify-content-end">
                   <CButton onClick={handleSearchfilter}>{multiLangObj?.search}</CButton>
                   <CButton onClick={resetFilter} className="btn-black">
                     {multiLangObj?.reset}

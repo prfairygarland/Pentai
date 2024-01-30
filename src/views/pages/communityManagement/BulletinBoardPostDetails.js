@@ -904,13 +904,13 @@ const BulletinBoardPostDetails = () => {
                                   </div>
                                 </div>
 
-                                <div className="d-flex">
-                                  <div className="form-outline form-white  d-flex ">
+                                <div className="form-outline d-flex">
+                                  <div className=" form-white  d-flex w-50 ">
                                     <div className="formWrpLabel">
                                       <label className="fw-bolder ">{multiLangObj?.pushNotification}</label>
                                     </div>
-                                    <div className="formWrpInpt">
-                                      <div className="d-flex formradiogroup mb-2 gap-3">
+                                    <div className="formWrpInpt d-flex align-items-center">
+                                      <div className=" formradiogroup d-flex align-items-center  gap-3">
                                         <CFormCheck
                                           type="radio"
                                           name="club_board"
@@ -933,13 +933,13 @@ const BulletinBoardPostDetails = () => {
                                     </div>
                                   </div>
 
-                                  <div className="form-outline form-white  d-flex ">
+                                  <div className=" form-white  d-flex  w-50">
                                     <div className="formWrpLabel">
                                       <label className="fw-bolder ">{multiLangObj?.addAsNotice}</label>
                                     </div>
-                                    <div className="formWrpInpt">
+                                    <div className="formWrpInpt d-flex align-items-center">
                                       <div
-                                        className="d-flex formradiogroup mb-2 gap-3"
+                                        className="d-flex align-items-center formradiogroup gap-3"
                                         aria-readonly
                                       >
                                         <CFormCheck

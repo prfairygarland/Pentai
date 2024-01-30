@@ -91,6 +91,7 @@
     margin-right: 10px;
     .nav-link {
       border-radius: 6px;
+      color: ($black);
       &.active{
         background:($primary);
         color: ($white);
@@ -178,4 +179,7 @@
    }
   }
    
+  }
+  .card{
+    border-radius: 0;
   }

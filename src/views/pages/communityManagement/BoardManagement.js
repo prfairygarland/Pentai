@@ -20,6 +20,9 @@ const BoardManagement = () => {
     return (
         <>
             <main>
+            <div className='pageTitle mb-3 pb-2'>
+      <h2>Board Management</h2>
+    </div>
                 <div className='container p-3 mb-3'>
                     <div>
                         <div className='camp-tab-cont d-flex'>
