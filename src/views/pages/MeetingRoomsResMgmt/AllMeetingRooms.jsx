@@ -24,6 +24,7 @@ import AddFloor from './AddFloor'
 import CIcon from '@coreui/icons-react'
 import { cibZeit } from '@coreui/icons'
 import { useTranslation } from 'react-i18next'
+import AddRoom from './AddRoom'
 
 const AllMeetingRooms = () => {
   const initialData = {
@@ -49,6 +50,8 @@ const AllMeetingRooms = () => {
   const [sideSubBarId, setSideSubbarId] = useState(null)
   const [buildingId, setBuildingId] = useState(null)
   const [buildingName, setBuildingName] = useState(null)
+  const [floorId, setFloorId] = useState(null)
+  const [roomId, setRoomId] = useState(null)
   const [subCatIds, setSubCatIds] = useState(null)
   const [subItemIds, setItemIds] = useState(null)
   const [getState, setState] = useState(false)
@@ -326,13 +329,24 @@ const AllMeetingRooms = () => {
     } else if (type === 'addBuilding') {
       if (add === 'add') {
         setIds(null)
+      } else {
+        setBuildingId(add)
       }
       setModal('addBuilding')
     } else if (type === 'addFloor') {
       if (add === 'add') {
         setIds(null)
+      } else {
+        setFloorId(add)
       }
       setModal('addFloor')
+    } else if (type === 'addRoom') {
+      if (add === 'add') {
+        setIds(null)
+      } else {
+        setRoomId(add)
+      }
+      setModal('addRoom')
     }
   }
 
@@ -400,7 +414,9 @@ const AllMeetingRooms = () => {
                           )}
                           <p
                             role="button"
-                            onClick={() => (setIds(tab?.id), handleSetModal('addBuilding'))}
+                            onClick={() => (
+                              setIds(tab?.id), handleSetModal('addBuilding', tab?.id)
+                            )}
                           >
                             {tab?.name}
                           </p>
@@ -449,10 +465,7 @@ const AllMeetingRooms = () => {
                                     <p
                                       role="button"
                                       onClick={() => (
-                                        setBuildingId(tab?.id),
-                                        setBuildingName(tab?.name),
-                                        handleSetModal('addFloor', 'add'),
-                                        setBuildingId(catTab?.id)
+                                        setIds(catTab?.id), handleSetModal('addFloor', catTab?.id)
                                       )}
                                     >
                                       {catTab?.name}
@@ -461,9 +474,11 @@ const AllMeetingRooms = () => {
                                   <div>
                                     <CButton
                                       className="btn-sm"
-                                      onClick={() => {
-                                        handleSetModal('addSubCategory', 'add')
-                                      }}
+                                      onClick={() => (
+                                        setBuildingId(tab?.id),
+                                        handleSetModal('addRoom', 'add'),
+                                        setFloorId(catTab?.id)
+                                      )}
                                     >
                                       {multiLangObj?.addRoom}
                                     </CButton>
@@ -479,8 +494,9 @@ const AllMeetingRooms = () => {
                                               <p
                                                 role="button"
                                                 onClick={() => (
-                                                  setSubCatIds(subCatTab?.id),
-                                                  handleSetModal('addSubCategory')
+                                                  setBuildingId(tab?.id),
+                                                  handleSetModal('addRoom', subCatTab?.id),
+                                                  setFloorId(catTab?.id)
                                                 )}
                                               >
                                                 {subCatTab?.name}
@@ -625,6 +641,7 @@ const AllMeetingRooms = () => {
             getMod={getState}
             Modal={setModal}
             getId={ids}
+            buildingId={buildingId}
             removeIds={setIds}
             getVal={setIcon}
           />
@@ -634,11 +651,23 @@ const AllMeetingRooms = () => {
             setModal={setState}
             getMod={getState}
             Modal={setModal}
-            getId={ids}
             buildingId={buildingId}
             buildingName={buildingName}
             removeIds={setIds}
             getVal={setIcon}
+            floorId={floorId}
+          />
+        )}
+        {getModal === 'addRoom' && (
+          <AddRoom
+            setModal={setState}
+            getMod={getState}
+            Modal={setModal}
+            buildingId={buildingId}
+            removeIds={setIds}
+            getVal={setIcon}
+            floorId={floorId}
+            roomId={roomId}
           />
         )}
       </div>

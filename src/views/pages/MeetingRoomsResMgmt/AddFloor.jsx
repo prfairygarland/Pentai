@@ -21,11 +21,11 @@ const AddFloor = ({
   setModal,
   getMod,
   Modal,
-  getId,
   removeIds,
   buildingId,
   buildingName,
   getVal,
+  floorId,
 }) => {
   const [deleteVisible, setDeleteVisible] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -36,8 +36,8 @@ const AddFloor = ({
   })
 
   useEffect(() => {
-    if (getId !== null) {
-      getData(getId)
+    if (floorId !== null) {
+      getData(floorId)
     } else {
       setAddBuildingData({
         name: '',
@@ -45,17 +45,16 @@ const AddFloor = ({
         visibility: true,
       })
     }
-  }, [getId])
+  }, [floorId])
 
   const getData = async (id) => {
     try {
-      let url = API_ENDPOINT.get_supply_type_details + `?id=${id}`
+      let url = API_ENDPOINT.get_meeting_floor_details + `?id=${id}`
       const response = await getApi(url)
 
       if (response?.status === 200) {
         setAddBuildingData({
           name: response.data.name,
-          associatedItem: response.data.associatedItem,
           visibility: response.data.visibility === 'visible' ? true : false,
         })
       }
@@ -64,10 +63,10 @@ const AddFloor = ({
     }
   }
 
-  const deleteBuilding = async () => {
+  const deleteFloor = async () => {
     try {
-      let url = API_ENDPOINT.delete_supply_type
-      const response = await deleteApi(url, `?id=${getId}`)
+      let url = API_ENDPOINT.delete_meeting_floor
+      const response = await deleteApi(url, `?id=${floorId}`)
       if (response?.status === 200) {
         enqueueSnackbar('Delete succefully', { variant: 'success' })
         removeIds(null)
@@ -84,91 +83,96 @@ const AddFloor = ({
     const keyName = e.target.name
     let value = e.target.value
     if (keyName === 'name') {
-      value = value.substring(0, 26)
+      value = value.substring(0, 7)
     }
     setAddBuildingData((prev) => ({ ...prev, [keyName]: value }))
   }
 
-  const saveFloor = async (type) => {
-    if (type === 'save') {
-      if (addBuildingData.name === '') {
-        enqueueSnackbar('Please enter name', { variant: 'error' })
-        return false
-      }
-      if (addBuildingData.associatedItem < 1) {
-        enqueueSnackbar('Please enter valid associate Item', { variant: 'error' })
-        return false
-      }
-      if (addBuildingData.rentalDuration < 1) {
-        enqueueSnackbar('Please enter valid Rental Duration', { variant: 'error' })
-        return false
+  const saveFloor = async () => {
+    if (addBuildingData.name === '') {
+      enqueueSnackbar('Please enter name', { variant: 'error' })
+      return false
+    }
+    if (addBuildingData.associatedItem < 1) {
+      enqueueSnackbar('Please enter valid associate Item', { variant: 'error' })
+      return false
+    }
+    if (addBuildingData.rentalDuration < 1) {
+      enqueueSnackbar('Please enter valid Rental Duration', { variant: 'error' })
+      return false
+    }
+
+    if (addBuildingData.pickUpAndReturn === '') {
+      enqueueSnackbar('Please enter Point of pick and return', { variant: 'error' })
+      return false
+    }
+
+    if (addBuildingData.reasonRemarks === '') {
+      enqueueSnackbar('Please enter Reason remarks guide text', { variant: 'error' })
+      return false
+    }
+    setIsLoading(true)
+    try {
+      let data = {
+        name: addBuildingData.name,
+        visibility: addBuildingData.visibility === true ? 'visible' : 'hide',
       }
 
-      if (addBuildingData.pickUpAndReturn === '') {
-        enqueueSnackbar('Please enter Point of pick and return', { variant: 'error' })
-        return false
+      let res
+
+      if (floorId) {
+        data['id'] = floorId
+        res = await putApi(API_ENDPOINT.update_meeting_floor, data)
+      } else {
+        data['buildingId'] = buildingId
+        res = await postApi(API_ENDPOINT.create_meeting_floor, data)
       }
 
-      if (addBuildingData.reasonRemarks === '') {
-        enqueueSnackbar('Please enter Reason remarks guide text', { variant: 'error' })
-        return false
-      }
-      setIsLoading(true)
-      try {
-        let data = {
-          name: addBuildingData.name,
-          buildingId: buildingId,
-          visibility: addBuildingData.visibility === true ? 'visible' : 'hide',
-        }
-
-        let res
-
-        if (getId) {
-          data['id'] = getId
-          res = await putApi(API_ENDPOINT.update_supply_type, data)
-        } else {
-          res = await postApi(API_ENDPOINT.create_meeting_floor, data)
-        }
-
-        if (res.status === 200) {
-          setAddBuildingData({
-            name: '',
-            associatedItem: 1,
-            visibility: true,
-          })
-          if (res.data.status === 409) {
-            enqueueSnackbar(`${res?.data?.msg}`, { variant: 'error' })
-          } else {
-            enqueueSnackbar(`It has been saved`, { variant: 'success' })
-          }
-          setIsLoading(false)
-          removeIds(null)
-          getVal(null)
-          // Modal('allList')
-          setModal(!getMod)
-        } else {
-          enqueueSnackbar(`${res?.data?.msg}`, { variant: 'error' })
-          setIsLoading(false)
-        }
-      } catch (error) {
-        setIsLoading(false)
-        console.log(error)
-      }
-    } else {
-      try {
+      if (res.status === 200) {
         setAddBuildingData({
           name: '',
-          associatedItem: 0,
+          associatedItem: 1,
           visibility: true,
         })
+        if (res.data.status === 409) {
+          enqueueSnackbar(`${res?.data?.msg}`, { variant: 'error' })
+        } else {
+          enqueueSnackbar(`It has been saved`, { variant: 'success' })
+        }
         setIsLoading(false)
         removeIds(null)
         getVal(null)
+        // Modal('allList')
         setModal(!getMod)
-      } catch (error) {
+      } else {
+        enqueueSnackbar(`${res?.data?.msg}`, { variant: 'error' })
         setIsLoading(false)
-        console.log(error)
       }
+    } catch (error) {
+      setIsLoading(false)
+      console.log(error)
+    }
+  }
+
+  const cancelHandler = () => {
+    try {
+      setAddBuildingData({
+        name: '',
+        associatedItem: 0,
+        rentalDuration: 0,
+        providedOption: true,
+        pickUpAndReturn: '',
+        reasonRemarks: '',
+        rentalGuideDescription: '',
+        visibility: true,
+      })
+      setIsLoading(false)
+      removeIds(null)
+      getVal(null)
+      setModal(!getMod)
+    } catch (error) {
+      setIsLoading(false)
+      console.log(error)
     }
   }
 
@@ -176,7 +180,7 @@ const AddFloor = ({
     <div className="col-md-9">
       {isLoading && <Loader />}
       <div>
-        {getId && (
+        {floorId && (
           <div className="d-flex justify-content-end">
             <CButton onClick={() => setDeleteVisible(true)}>Delete</CButton>
           </div>
@@ -202,9 +206,7 @@ const AddFloor = ({
                     }}
                   />
                 </div>
-                <span className="txt-byte-information">
-                  {addBuildingData.name.length} / 26 byte
-                </span>
+                <span className="txt-byte-information">{addBuildingData.name.length} / 7 byte</span>
               </div>
             </div>
             <div className="form-outline form-white   d-flex ">
@@ -219,9 +221,7 @@ const AddFloor = ({
                     name="associatedRooms"
                     min={0}
                     value={addBuildingData.associatedRooms}
-                    onChange={(e) => {
-                      handleInputChange(e)
-                    }}
+                    disabled={true}
                   />
                 </div>
               </div>
@@ -265,13 +265,13 @@ const AddFloor = ({
           gap: 10,
         }}
       >
-        {/* <CButton
-          onClick={() => saveBuilding('cancle')}
+        <CButton
+          onClick={() => cancelHandler()}
           style={{ marginRight: '2%', background: '#ccc', border: 'none' }}
         >
           Cancel
-        </CButton> */}
-        <CButton onClick={() => saveFloor('save')}>Save</CButton>
+        </CButton>
+        <CButton onClick={() => saveFloor()}>{floorId ? 'Update' : 'Save'}</CButton>
       </div>
 
       <CModal
@@ -285,13 +285,13 @@ const AddFloor = ({
         </CModalHeader>
         <CModalBody>
           <p>
-            Are you sure you want to delete this category?
+            Are you sure you want to delete this floor?
             <br />
-            All categories and items belonging will be deleted.
+            All rooms belonging will be deleted.
           </p>
         </CModalBody>
         <CModalFooter>
-          <CButton color="primary" onClick={() => deleteBuilding()}>
+          <CButton color="primary" onClick={() => deleteFloor()}>
             Delete
           </CButton>
           <CButton color="secondary" onClick={() => setDeleteVisible(false)}>

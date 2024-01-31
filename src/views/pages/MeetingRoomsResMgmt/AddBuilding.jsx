@@ -17,7 +17,7 @@ import Loader from 'src/components/common/Loader'
 import { deleteApi, getApi, postApi, putApi } from 'src/utils/Api'
 import { API_ENDPOINT } from 'src/utils/config'
 
-const AddBuilding = ({ setModal, getMod, Modal, getId, removeIds, getVal }) => {
+const AddBuilding = ({ setModal, getMod, Modal, removeIds, buildingId, getVal }) => {
   const [deleteVisible, setDeleteVisible] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [addBuildingData, setAddBuildingData] = useState({
@@ -27,36 +27,25 @@ const AddBuilding = ({ setModal, getMod, Modal, getId, removeIds, getVal }) => {
   })
 
   useEffect(() => {
-    if (getId !== null) {
-      getData(getId)
+    if (buildingId !== null) {
+      getData(buildingId)
     } else {
       setAddBuildingData({
         name: '',
-        associatedItem: 1,
-        rentalDuration: 1,
-        providedOption: true,
-        pickUpAndReturn: '',
-        reasonRemarks: '',
-        rentalGuideDescription: '',
+        associatedRooms: 1,
         visibility: true,
       })
     }
-  }, [getId])
+  }, [buildingId])
 
   const getData = async (id) => {
     try {
-      let url = API_ENDPOINT.get_supply_type_details + `?id=${id}`
+      let url = API_ENDPOINT.get_meeting_building_details + `?id=${id}`
       const response = await getApi(url)
 
       if (response?.status === 200) {
         setAddBuildingData({
           name: response.data.name,
-          associatedItem: response.data.associatedItem,
-          rentalDuration: response.data.rentalDuration,
-          providedOption: response.data.providedOption === 'visible' ? true : false,
-          pickUpAndReturn: response.data.pickUpAndReturn,
-          reasonRemarks: response.data.reasonRemarks,
-          rentalGuideDescription: response.data.rentalGuideDescription,
           visibility: response.data.visibility === 'visible' ? true : false,
         })
       }
@@ -67,8 +56,8 @@ const AddBuilding = ({ setModal, getMod, Modal, getId, removeIds, getVal }) => {
 
   const deleteBuilding = async () => {
     try {
-      let url = API_ENDPOINT.delete_supply_type
-      const response = await deleteApi(url, `?id=${getId}`)
+      let url = API_ENDPOINT.delete_meeting_building
+      const response = await deleteApi(url, `?id=${buildingId}`)
       if (response?.status === 200) {
         enqueueSnackbar('Delete succefully', { variant: 'success' })
         removeIds(null)
@@ -100,101 +89,72 @@ const AddBuilding = ({ setModal, getMod, Modal, getId, removeIds, getVal }) => {
     setAddBuildingData((prev) => ({ ...prev, [keyName]: value }))
   }
 
-  const saveBuilding = async (type) => {
-    if (type === 'save') {
-      if (addBuildingData.name === '') {
-        enqueueSnackbar('Please enter name', { variant: 'error' })
-        return false
-      }
-      if (addBuildingData.associatedItem < 1) {
-        enqueueSnackbar('Please enter valid associate Item', { variant: 'error' })
-        return false
-      }
-      if (addBuildingData.rentalDuration < 1) {
-        enqueueSnackbar('Please enter valid Rental Duration', { variant: 'error' })
-        return false
+  const saveBuilding = async () => {
+    if (addBuildingData.name === '') {
+      enqueueSnackbar('Please enter name', { variant: 'error' })
+      return false
+    }
+    setIsLoading(true)
+    try {
+      let data = {
+        name: addBuildingData.name,
+        visibility: addBuildingData.visibility === true ? 'visible' : 'hide',
       }
 
-      if (addBuildingData.pickUpAndReturn === '') {
-        enqueueSnackbar('Please enter Point of pick and return', { variant: 'error' })
-        return false
+      if (buildingId) {
+        data.id = buildingId
+      }
+      let res
+      if (buildingId) {
+        res = await putApi(API_ENDPOINT.update_meeting_building, data)
+      } else {
+        res = await postApi(API_ENDPOINT.create_meeting_building, data)
       }
 
-      if (addBuildingData.reasonRemarks === '') {
-        enqueueSnackbar('Please enter Reason remarks guide text', { variant: 'error' })
-        return false
-      }
-      setIsLoading(true)
-      try {
-        let data = {
-          name: addBuildingData.name,
-          associatedItem: addBuildingData.associatedItem,
-          rentalDuration: addBuildingData.rentalDuration,
-          providedOption: addBuildingData.providedOption === true ? 'visible' : 'hide',
-          pickUpAndReturn: addBuildingData.pickUpAndReturn,
-          reasonRemarks: addBuildingData.reasonRemarks,
-          rentalGuideDescription: addBuildingData.rentalGuideDescription,
-          visibility: addBuildingData.visibility === true ? 'visible' : 'hide',
-        }
-
-        let res
-
-        if (getId) {
-          data['id'] = getId
-          res = await putApi(API_ENDPOINT.update_supply_type, data)
-        } else {
-          res = await postApi(API_ENDPOINT.add_supply_type, data)
-        }
-
-        if (res.status === 200) {
-          setAddBuildingData({
-            name: '',
-            associatedItem: 1,
-            rentalDuration: 1,
-            providedOption: true,
-            pickUpAndReturn: '',
-            reasonRemarks: '',
-            rentalGuideDescription: '',
-            visibility: true,
-          })
-          if (res.data.status === 409) {
-            enqueueSnackbar(`${res?.data?.msg}`, { variant: 'error' })
-          } else {
-            enqueueSnackbar(`It has been saved`, { variant: 'success' })
-          }
-          setIsLoading(false)
-          removeIds(null)
-          getVal(null)
-          // Modal('allList')
-          setModal(!getMod)
-        } else {
-          enqueueSnackbar(`${res?.data?.msg}`, { variant: 'error' })
-          setIsLoading(false)
-        }
-      } catch (error) {
-        setIsLoading(false)
-        console.log(error)
-      }
-    } else {
-      try {
+      if (res.status === 200) {
         setAddBuildingData({
           name: '',
-          associatedItem: 0,
-          rentalDuration: 0,
-          providedOption: true,
-          pickUpAndReturn: '',
-          reasonRemarks: '',
-          rentalGuideDescription: '',
+          associatedItem: 1,
           visibility: true,
         })
+        if (res.data.status === 409) {
+          enqueueSnackbar(`${res?.data?.msg}`, { variant: 'error' })
+        } else {
+          enqueueSnackbar(`It has been saved`, { variant: 'success' })
+        }
         setIsLoading(false)
         removeIds(null)
         getVal(null)
         setModal(!getMod)
-      } catch (error) {
+      } else {
+        enqueueSnackbar(`${res?.data?.msg}`, { variant: 'error' })
         setIsLoading(false)
-        console.log(error)
       }
+    } catch (error) {
+      setIsLoading(false)
+      console.log(error)
+    }
+  }
+
+  const cancelHandler = () => {
+    try {
+      setAddBuildingData({
+        name: '',
+        associatedItem: 0,
+        rentalDuration: 0,
+        providedOption: true,
+        pickUpAndReturn: '',
+        reasonRemarks: '',
+        rentalGuideDescription: '',
+        visibility: true,
+      })
+      setIsLoading(false)
+      removeIds(null)
+      getVal(null)
+      setModal(!getMod)
+    } catch (error) {
+      setIsLoading(false)
+      console.log(error)
     }
   }
 
@@ -202,7 +162,7 @@ const AddBuilding = ({ setModal, getMod, Modal, getId, removeIds, getVal }) => {
     <div className="col-md-9">
       {isLoading && <Loader />}
       <div>
-        {getId && (
+        {buildingId && (
           <div className="d-flex justify-content-end">
             <CButton onClick={() => setDeleteVisible(true)}>Delete</CButton>
           </div>
@@ -245,9 +205,7 @@ const AddBuilding = ({ setModal, getMod, Modal, getId, removeIds, getVal }) => {
                     name="associatedRooms"
                     min={0}
                     value={addBuildingData.associatedRooms}
-                    onChange={(e) => {
-                      handleInputChange(e)
-                    }}
+                    disabled={true}
                   />
                 </div>
               </div>
@@ -361,12 +319,12 @@ const AddBuilding = ({ setModal, getMod, Modal, getId, removeIds, getVal }) => {
         }}
       >
         <CButton
-          onClick={() => saveBuilding('cancle')}
+          onClick={() => cancelHandler()}
           style={{ marginRight: '2%', background: '#ccc', border: 'none' }}
         >
           Cancel
         </CButton>
-        <CButton onClick={() => saveBuilding('save')}>Save</CButton>
+        <CButton onClick={() => saveBuilding()}>{buildingId ? 'Update' : 'Save'}</CButton>
       </div>
 
       <CModal
@@ -380,9 +338,9 @@ const AddBuilding = ({ setModal, getMod, Modal, getId, removeIds, getVal }) => {
         </CModalHeader>
         <CModalBody>
           <p>
-            Are you sure you want to delete this category?
+            Are you sure you want to delete this building?
             <br />
-            All categories and items belonging will be deleted.
+            All floors and rooms belonging will be deleted.
           </p>
         </CModalBody>
         <CModalFooter>
