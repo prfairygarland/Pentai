@@ -312,10 +312,10 @@ const CurationRegisterBook = ({ setDeleted, setSearchBookFilter, setSearchCurren
 
     return (
         <div style={{ marginTop: '2%' }}>
-            <table border="1" className="table table-bordered">
+            <table border="1" className="table table-bordered mt-3">
                 <thead>
                     <tr>
-                        <th>Book Cover Image</th>
+                        <th width="150">Book Cover Image</th>
                         <th>Book Information</th>
                     </tr>
                 </thead>
@@ -403,9 +403,9 @@ const CurationRegisterBook = ({ setDeleted, setSearchBookFilter, setSearchCurren
                 </tbody>
             </table>
 
-            <div style={{ margin: '10%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <CButton onClick={handleCancel} className="btn save-cancel-btn" style={{ marginRight: '2%', background: '#ccc', border: 'none' }}>Cancel</CButton>
-                <CButton className="btn save-cancel-btn" color="dark" onClick={PostData}>Add</CButton>
+            <div className='d-flex justify-content-center align-items-center my-3'>
+                <CButton onClick={handleCancel} className="btn btn-black" >Cancel</CButton>
+                <CButton className="btn "  onClick={PostData}>Add</CButton>
             </div>
         </div>
     )

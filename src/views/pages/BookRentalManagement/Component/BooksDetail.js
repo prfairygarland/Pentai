@@ -422,8 +422,8 @@ const BooksDetail = ({ bookId, genreId, setBookId, setIconSet, setSideBarId, set
                             All categories and items belonging will be deleted.</p>
                     </CModalBody>
                     <CModalFooter>
-                        <CButton onClick={deleteSingleBook} color="primary">Delete</CButton>
-                        <CButton onClick={() => setdeleteVisible(false)} color="secondary">
+                        <CButton onClick={deleteSingleBook}  className='btn-black'>Delete</CButton>
+                        <CButton onClick={() => setdeleteVisible(false)} className='btn-black'>
                             Cancel
                         </CButton>
                     </CModalFooter>

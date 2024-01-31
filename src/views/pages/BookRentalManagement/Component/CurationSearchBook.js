@@ -38,16 +38,16 @@ const CurationSearchBook = ({ searchBooks, setItemSearchPerPage, currentSearchPa
 
     return (
         <div style={{ width: '100%' }}>
-            <div>
-                <input className='px-3 py-1 m-3' value={searchBookFilter.title} onChange={handleChange} />
+            <div className='d-flex w-50 mt-3 gap-3 '>
+                <input placeholder='Search' className='form-control py-1 ' value={searchBookFilter.title} onChange={handleChange} />
                 <CButton onClick={SearchBookList} >search</CButton>
             </div>
             <div>
 
-                <table border="1" className="table table-bordered">
+                <table border="1" className="table table-bordered mt-3">
                   {searchBooks.length > 0 &&  <thead>
                         <tr>
-                            <th>Book Cover Image</th>
+                            <th width="150">Book Cover Image</th>
                             <th>Book Information</th>
                             <th>Action</th>
                         </tr>
@@ -80,7 +80,7 @@ const CurationSearchBook = ({ searchBooks, setItemSearchPerPage, currentSearchPa
                         }
                     </tbody>
                 </table>
-                <div className='d-flex w-100 justify-content-center gap-3'>
+                <div className='d-flex w-100 justify-content-center my-3 gap-3'>
                         {searchBooks.length > 0 &&
                             <div className='userlist-pagination'>
                                 <div className='userlist-pagination dataTables_paginate'>
@@ -100,7 +100,7 @@ const CurationSearchBook = ({ searchBooks, setItemSearchPerPage, currentSearchPa
                             </div>
 
                         }
-                        {searchBooks.length > 0 && <div className='d-flex align-items-center gap-2 mt-2'>
+                        {searchBooks.length > 0 && <div className='d-flex align-items-center gap-2 '>
                             <label>Show</label>
                             <CFormSelect
                                 className=''

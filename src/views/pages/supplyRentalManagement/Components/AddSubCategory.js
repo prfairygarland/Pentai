@@ -179,13 +179,12 @@ const AddSubCategory = ({ setModal, getMod, Modal, getMainSubCatId, getSubCatId,
       {isLoading && <Loader />}
       <div>
         {getSubCatId !== null &&
-        <div className='d-flex justify-content-end'>
+        <div className='d-flex justify-content-between align-items-center mb-3'>
+        <h4 className="me-3">{multiLang?.subCategory}</h4>
             <CButton onClick={() => setDeleteVisible(true)}  className='btn-black'>{multiLang?.delete}</CButton>
         </div>
         }
-        <div className="dropdown-container mb-2">
-          <h5 className="me-3">{multiLang?.subCategory}</h5>
-        </div>
+        
         <div className="card-body">
           <div className="formWraper">
             <div className="form-outline form-white   d-flex ">

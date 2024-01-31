@@ -184,13 +184,12 @@ const AddModel = ({ setModal, getMod, Modal, getMainModalId, getModalId, removeM
       {isLoading && <Loader />}
       <div>
         {getModalId !== null &&
-        <div className='d-flex justify-content-end'>
+        <div className='d-flex justify-content-between align-items-center mb-3'>
+        <h4 className="me-3">{multiLang?.modelName}</h4>
             <CButton onClick={() => setDeleteVisible(true)} className='btn-black'>{multiLang?.delete}</CButton>
         </div>
         }
-        <div className="dropdown-container mb-2">
-          <h5 className="me-3">{multiLang?.modelName}</h5>
-        </div>
+      
         <div className="card-body">
           <div className="formWraper">
             <div className="form-outline form-white   d-flex ">

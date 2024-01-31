@@ -620,13 +620,12 @@ const BookCuration = () => {
                         </div>
                     </div>}
                 {categories === "indvBook" && <div className='w-100 px-2'>
-                    <div className='d-flex justify-content-between'>
-                        <div>
-                            <p>Book (ISBN)</p>
-                        </div>
-                        <div className='clearfix'>
-                            <CButton className='float-end'>Delete</CButton>
-                        </div>
+                    <div className='d-flex justify-content-between mb-2'>
+                       
+                            <h4>Book (ISBN)</h4>
+                       
+                            <CButton className='btn-black'>Delete</CButton>
+                       
                     </div>
                     <div style={{ width: '40%', display: 'flex', justifyContent: 'space-between', marginLeft: '5%' }}>
                         <div onClick={() => setCurationBook('Curationsearch')} style={{ textDecoration: Curationbook === 'search' ? 'underline' : '', textUnderlinePosition: 'under', textUnderlineOffset: '5px' }}>

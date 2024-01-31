@@ -428,17 +428,16 @@ const AddItem = ({ getVal, setCat, setSubIcon, setModalIcon, setModal, getMod, m
 
   return (
 
-    <div className='8'>
+    <div className='col-md-8'>
       {isLoading && <Loader />}
       <div className='addItemWrp'>
         {getItemId !== null &&
-          <div className='d-flex justify-content-end'>
+          <div className='d-flex justify-content-between align-items-center mb-3'>
+          <h4 className="me-3">{multiLang?.itemNumber}</h4>
             <CButton onClick={() => setDeleteVisible(true)} className='btn-black'>{multiLang?.delete}</CButton>
           </div>
         }
-        <div className="dropdown-container mb-2">
-          <h5 className="me-3">{multiLang?.itemNumber}</h5>
-        </div>
+       
         <div className="card-body">
           <div className="formWraper">
             <div className="form-outline form-white   d-flex ">
@@ -530,7 +529,7 @@ const AddItem = ({ getVal, setCat, setSubIcon, setModalIcon, setModal, getMod, m
                     <li>{multiLang?.imageSize} : 00</li>
                     <li>{multiLang?.fileType} : {multiLang?.imageFileType}</li>
                   </ul>
-                  <button className='mt-2' style={{ background: '#4f5d73', height: '40px', width: '80px', cursor: 'pointer', borderRadius: 8, color: 'white' }} onClick={handleImageChangeNew}>{multiLang?.upload}</button>
+                  <button className='mt-2 btn btn-primary'  onClick={handleImageChangeNew}>{multiLang?.upload}</button>
                 </div>
               </div>
             </div>
@@ -674,8 +673,8 @@ const AddItem = ({ getVal, setCat, setSubIcon, setModalIcon, setModal, getMod, m
           </div>
         </div>
       </div>
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '5%', gap: 10 }}>
-        <CButton onClick={() => saveSupplyType('cancle')} style={{ marginRight: '2%', background: '#ccc', border: 'none' }}>{multiLang?.cancel}</CButton>
+      <div className='d-flex justify-content-center align-items-center gap-3 my-3'>
+        <CButton onClick={() => saveSupplyType('cancle')}  className='btn-black'>{multiLang?.cancel}</CButton>
         <CButton onClick={() => saveSupplyType('save')}>{multiLang?.save}</CButton>
       </div>
       <CModal
@@ -691,8 +690,8 @@ const AddItem = ({ getVal, setCat, setSubIcon, setModalIcon, setModal, getMod, m
           <p>{multiLang?.deleteItem}</p>
         </CModalBody>
         <CModalFooter>
-          <CButton color="primary" onClick={() => deleteSupplyType()}>{multiLang?.delete}</CButton>
-          <CButton color="secondary" onClick={() => setDeleteVisible(false)}>
+          <CButton className='btn-black' onClick={() => deleteSupplyType()}>{multiLang?.delete}</CButton>
+          <CButton  onClick={() => setDeleteVisible(false)}>
             {multiLang?.cancel}
           </CButton>
         </CModalFooter>

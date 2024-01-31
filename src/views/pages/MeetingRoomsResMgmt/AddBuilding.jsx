@@ -218,17 +218,18 @@ const AddBuilding = ({ setModal, getMod, Modal, removeIds, buildingId, getVal })
   }
 
   return (
-    <div className="col-md-9">
+    <div className="col-md-8 ps-4">
       {isLoading && <Loader />}
       <div>
         {buildingId && (
-          <div className="d-flex justify-content-end">
-            <CButton onClick={() => setDeleteVisible(true)}>Delete</CButton>
+          <div className="d-flex justify-content-between align-items-center mb-3">
+            <h5 className="me-3">Location</h5>
+            <CButton onClick={() => setDeleteVisible(true)} className="btn-black">
+              Delete
+            </CButton>
           </div>
         )}
-        <div className="dropdown-container mb-2">
-          <h5 className="me-3">Location</h5>
-        </div>
+
         <div className="card-body">
           <div className="formWraper">
             <div className="form-outline form-white   d-flex ">
@@ -306,7 +307,7 @@ const AddBuilding = ({ setModal, getMod, Modal, removeIds, buildingId, getVal })
                       )}
                     </CCol>
                     <CCol xs="auto">
-                      <CButton type="submit" onClick={addNewEquipment} className="mb-3 btn-dark">
+                      <CButton type="submit" onClick={() => {}} className="mb-3 btn-primary">
                         Add
                       </CButton>
                     </CCol>
@@ -327,11 +328,7 @@ const AddBuilding = ({ setModal, getMod, Modal, removeIds, buildingId, getVal })
                     </div>
                     <div className="d-flex justify-content-end mt-2">
                       <CCol xs="auto">
-                        <CButton
-                          type="submit"
-                          onClick={() => removeEquipment()}
-                          className="mb-3 btn-dark"
-                        >
+                        <CButton type="submit" onClick={() => {}} className="mb-3 btn-black">
                           Delete All
                         </CButton>
                       </CCol>
@@ -385,19 +382,8 @@ const AddBuilding = ({ setModal, getMod, Modal, removeIds, buildingId, getVal })
           </p>
         </div>
       </div>
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          margin: '5%',
-          gap: 10,
-        }}
-      >
-        <CButton
-          onClick={() => cancelHandler()}
-          style={{ marginRight: '2%', background: '#ccc', border: 'none' }}
-        >
+      <div className="d-flex justify-content-center gap-3 my-3">
+        <CButton onClick={() => saveBuilding('cancle')} className="btn-black">
           Cancel
         </CButton>
         <CButton onClick={() => saveBuilding()}>{buildingId ? 'Update' : 'Save'}</CButton>

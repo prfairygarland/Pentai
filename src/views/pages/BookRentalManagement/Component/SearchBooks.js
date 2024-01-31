@@ -45,16 +45,16 @@ const SearchBooks = ({ searchBooks,
 
     return (
         <div style={{ width: '100%' }}>
-            <div>
-                <input className='px-3 py-1 m-3' value={searchBookFilter.title} onChange={handleChange} />
+            <div className='d-flex gap-3 mt-4 w-50'>
+                <input className='form-control py-1 ' value={searchBookFilter.title} onChange={handleChange} />
                 <CButton onClick={SearchBookList} >search</CButton>
             </div>
             <div>
 
-                <table border="1" className="table table-bordered">
+                <table border="1" className="table table-bordered mt-3">
                     {searchBooks.length > 0 && <thead>
                         <tr>
-                            <th>Book Cover Image</th>
+                            <th width="150">Book Cover Image</th>
                             <th>Book Information</th>
                             <th>Action</th>
                         </tr>
@@ -87,7 +87,7 @@ const SearchBooks = ({ searchBooks,
                         }
                     </tbody>
                 </table>
-                <div className='d-flex w-100 justify-content-center gap-3'>
+                <div className='d-flex w-100 justify-content-center gap-3 my-3'>
                     {searchBooks.length > 0 &&
                         <div className='userlist-pagination'>
                             <div className='userlist-pagination dataTables_paginate'>
@@ -107,7 +107,7 @@ const SearchBooks = ({ searchBooks,
                         </div>
 
                     }
-                    {searchBooks.length > 0 && <div className='d-flex align-items-center gap-2 mt-2'>
+                    {searchBooks.length > 0 && <div className='d-flex align-items-center gap-2'>
                         <label>Show</label>
                         <CFormSelect
                             className=''

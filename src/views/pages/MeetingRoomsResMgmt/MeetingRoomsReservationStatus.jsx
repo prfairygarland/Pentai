@@ -85,7 +85,9 @@ const MeetingRoomsReservationStatus = () => {
           onClose={() => setShowBookMeetingRoom(false)}
           aria-labelledby="LiveDemoExampleLabel"
         >
-          <CModalHeader onClose={() => setShowBookMeetingRoom(false)} />
+          <CModalHeader onClose={() => setShowBookMeetingRoom(false)}>
+            <CModalTitle id="StaticBackdropExampleLabel">Booking Meeting Rooms</CModalTitle>
+          </CModalHeader>
           <CModalBody>
             <div className="card-body">
               <div className="formWraper">

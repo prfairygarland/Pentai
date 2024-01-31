@@ -546,7 +546,7 @@ const AllBook = () => {
                                                 <div>
                                                     {category?.subcategories?.map((subcategory) => (
                                                         <CNavItem style={{ marginTop: '20px' }} key={subcategory.id}>
-                                                            <div className='d-flex justify-content-between ms-2 mt-2'>
+                                                            <div className='d-flex justify-content-between ms-2 mt-2 gap-2'>
                                                                 <div className='d-flex align-items-center gap-1'>
                                                                     {iconSubSet !== subcategory.id && <CIcon icon={cilCaretRight} size="sm" onClick={() => { handleAddBook(category.id, subcategory.id); handleChangeIconSUb(subcategory.id); setGenreId(subcategory.id) }} />}
                                                                     {iconSubSet === subcategory.id && <CIcon icon={cilCaretBottom} size="sm" onClick={() => handleChangeIconSUb(null)} />}
@@ -562,7 +562,7 @@ const AllBook = () => {
                                                                     <div>
                                                                         {subcategory?.books?.map((book, index) => (
                                                                             <CNavItem style={{ marginTop: '20px' }} key={book.id}>
-                                                                                <div className='d-flex justify-content-between ms-3 mt-2'>
+                                                                                <div className='d-flex justify-content-between ms-3 mt-2 gap-2'>
                                                                                     <div className='d-flex align-items-center gap-1'>
                                                                                         {iconSubBookSet !== book.id && <CIcon icon={cilCaretRight} size="sm" onClick={() => { handleAddSubBook(category.id, subcategory.id, book.id); handleChangeIconSubBook(book.id) }} />}
                                                                                         {iconSubBookSet === book.id && <CIcon icon={cilCaretBottom} size="sm" onClick={() => handleChangeIconSubBook(null)} />}
