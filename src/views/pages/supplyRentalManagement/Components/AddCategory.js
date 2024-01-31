@@ -182,12 +182,13 @@ const AddCategory = ({ setModal, getMod, Modal, getMainCatId, getCatId, removeCa
       {isLoading && <Loader />}
       <div>
         {getCatId !== null &&
-          <div className='d-flex justify-content-end'>
-            <CButton onClick={() => setDeleteVisible(true)}>{multiLang?.delete}</CButton>
+          <div className='d-flex justify-content-between align-items-center mb-3'>
+          <h4 className="me-3">{multiLang?.category}</h4>
+            <CButton onClick={() => setDeleteVisible(true)} className='btn-black'>{multiLang?.delete}</CButton>
           </div>
         }
         <div className="dropdown-container mb-2">
-          <h5 className="me-3">{multiLang?.category}</h5>
+          
         </div>
         <div className="card-body">
           <div className="formWraper">

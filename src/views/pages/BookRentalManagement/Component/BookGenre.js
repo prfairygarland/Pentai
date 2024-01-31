@@ -207,13 +207,12 @@ const BookGenre = ({ library, libraryDetails, setIconSet, setDeleted, getALLBook
     return (
         <div  style={{ width: '100%', borderRadius: '0' }}>
             <div className="card p-2">
-                <div className="dropdown-container">
-                    <label className="me-3">Book Genre</label>
+                
+                <div className=' w-100 d-flex justify-content-between align-item-center'>
+                <h4 className="me-3">Book Genre</h4>
+                    <CButton onClick={() => setdeleteVisible(true)} className=' btn-black'>Delete</CButton>
                 </div>
-                <div className='clearfix '>
-                    <CButton onClick={() => setdeleteVisible(true)} className='float-end'>Delete</CButton>
-                </div>
-                <div className="card-body">
+                <div className="card-body px-0">
                     <div className="formWraper">
                         <div className="form-outline form-white   d-flex ">
                             <div className="formWrpLabel">
@@ -298,8 +297,8 @@ const BookGenre = ({ library, libraryDetails, setIconSet, setDeleted, getALLBook
                     </div>
                 </div>
             </div>
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '5%', gap: 10 }}>
-                <CButton onClick={handleCancel} style={{ marginRight: '2%', background: '#ccc', border: 'none' }}>Cancel</CButton>
+            <div className='d-flex justify-content-center gap-3 my-3'>
+                 <CButton onClick={handleCancel} className='btn-black'>Cancel</CButton>
                 <CButton onClick={genreId ? handleUpdateGenre : handleCreateGenre}>Save</CButton>
             </div>
             <CModal

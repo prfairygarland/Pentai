@@ -68,6 +68,10 @@ padding: 10px;
   .form-control{
     border-radius: 0 !important;
     height: 38px;
+    
+  }
+  textarea.form-control{
+    height: auto;
   }
   .form-control:focus{
     box-shadow: none;

@@ -125,7 +125,7 @@ const Library = ({ library, CategoryId, setCategories, libraryDetails }) => {
         <div style={{ width: '100%', borderRadius: '0' }}>
             <div className="card p-2">
                 <div className="dropdown-container">
-                    <label className="me-3">Library</label>
+                    <h4 className="me-3">Library</h4>
                 </div>
                 <div className="card-body">
                     <div className="formWraper">
@@ -155,7 +155,7 @@ const Library = ({ library, CategoryId, setCategories, libraryDetails }) => {
                             </div>
                             <div className="formWrpInpt">
                                 <div className="d-flex formradiogroup mb-2 gap-3">
-                                    <input type='number' value={data.AssociiatedItems} onChange={handleAssociatedItem} />
+                                    <input type='number' className='form-control' style={{width:100}} value={data.AssociiatedItems} onChange={handleAssociatedItem} />
                                 </div>
                             </div>
                         </div>
@@ -169,7 +169,7 @@ const Library = ({ library, CategoryId, setCategories, libraryDetails }) => {
                                 </label>
                             </div>
                             <div className="formWrpInpt">
-                                <div className="d-flex formradiogroup mb-2 align-items-center  justify-content-center gap-5">
+                                <div className="d-flex formradiogroup mb-2 align-items-center   gap-5">
                                     <p>
                                         Rentable weeks
                                     </p>
@@ -187,7 +187,7 @@ const Library = ({ library, CategoryId, setCategories, libraryDetails }) => {
                                 </label>
                             </div>
                             <div className="formWrpInpt">
-                                <div className="d-flex formradiogroup mb-2 align-items-center  justify-content-center gap-5">
+                                <div className="d-flex formradiogroup mb-2 align-items-center  gap-5">
                                     <p>
                                         Rentable weeks
                                     </p>
@@ -251,8 +251,8 @@ const Library = ({ library, CategoryId, setCategories, libraryDetails }) => {
                     </div>
                 </div>
             </div>
-            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '5%', gap: 10 }}>
-                <CButton onClick={() => setCategories('AllBooks')} style={{ marginRight: '2%', background: '#ccc', border: 'none' }}>Cancel</CButton>
+            <div className='d-flex justify-content-center gap-3 my-3'>
+                <CButton onClick={() => setCategories('AllBooks')} className='btn-black'>Cancel</CButton>
                 <CButton onClick={updateLibrary}>Save</CButton>
             </div>
         </div>

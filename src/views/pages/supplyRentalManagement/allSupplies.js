@@ -452,6 +452,9 @@ const AllSupplies = () => {
 
   return (
     <div>
+    <div className="pageTitle mb-3 pb-2">
+    <h2>All Supplies</h2>
+    </div>
     <div className='d-flex justify-content-between  mb-4'>
       {isLoading && <Loader />}
       <div className='col-md-4'>

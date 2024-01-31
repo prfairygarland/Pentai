@@ -330,7 +330,7 @@ const RegisterBook = ({ setDeleted,  setSearchBookFilter, setSearchCurrentPage, 
                                     {(RegisteredData?.image || image) ? <img src={image ? image : RegisteredData?.image} style={{ height: '100%', width: '100%' }} /> : <img alt='' src='https://www.beelights.gr/assets/images/empty-image.png' style={{ height: '100%', width: '100%' }} />}
                                     <input style={{ display: 'none' }} type="file" name="upload" accept=".png, .jpg, .jpeg, .gif" ref={inputRef} onChange={handleUpload} />
                                 </div>
-                                <button style={{ background: '#4f5d73', height: '40px', width: '80px', cursor: 'pointer', borderRadius: 8, color: 'white' }} onClick={handleImageChange}>Upload</button>
+                                <button className='btn btn-primary mb-2' onClick={handleImageChange}>Upload</button>
                                 <div className="file-information">
                                     <ul>
                                         <li>Maximum File Size : 00</li>
@@ -405,9 +405,9 @@ const RegisterBook = ({ setDeleted,  setSearchBookFilter, setSearchCurrentPage, 
                 </tbody>
             </table>
 
-            <div style={{ margin: '10%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <CButton onClick={handleCancel} className="btn save-cancel-btn" style={{ marginRight: '2%', background: '#ccc', border: 'none' }}>Cancel</CButton>
-                <CButton className="btn save-cancel-btn" color="dark" onClick={PostData}>Add</CButton>
+            <div className='d-flex justify-content-center align-items-center gap-3 my-3'>
+                <CButton onClick={handleCancel} className="btn btn-black" >Cancel</CButton>
+                <CButton className="btn"  onClick={PostData}>Add</CButton>
             </div>
         </div>
     )

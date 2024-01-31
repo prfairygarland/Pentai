@@ -178,15 +178,17 @@ const AddFloor = ({
   }
 
   return (
-    <div className="col-md-9">
+    <div className="col-md-8 ps-3">
       {isLoading && <Loader />}
       <div>
         {floorId && (
           <div className="d-flex justify-content-end">
-            <CButton onClick={() => setDeleteVisible(true)}>Delete</CButton>
+            <CButton onClick={() => setDeleteVisible(true)} className="btn-black">
+              Delete
+            </CButton>
           </div>
         )}
-        <div className="dropdown-container mb-2">
+        <div className="dropdown-container mb-2 ms-0">
           <h5 className="me-3">Add floor for : {buildingName}</h5>
         </div>
         <div className="card-body">

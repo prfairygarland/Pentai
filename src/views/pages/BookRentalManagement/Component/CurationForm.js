@@ -368,7 +368,7 @@ const CurationForm = ({ setStateUpdate, setCuration, curation, setCategories, ca
                     <div className='clearfix '>
                         <CButton onClick={() => setdeleteVisible(true)} className='float-end btn-black'>Delete</CButton>
                     </div>
-                    <div className="card-body">
+                    <div className="card-body px-0">
                         <div className="formWraper">
                             <div className="form-outline form-white   d-flex ">
                                 <div className="formWrpLabel">
@@ -507,8 +507,8 @@ const CurationForm = ({ setStateUpdate, setCuration, curation, setCategories, ca
                         </div>
                     </div>
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '5%', gap: 10 }}>
-                    <CButton onClick={() => setCategories('AllCuration')} style={{ marginRight: '2%', background: '#ccc', border: 'none' }}>Cancel</CButton>
+                <div className='d-flex justify-content-center gap-3 my-3'>
+                    <CButton onClick={() => setCategories('AllCuration')} className='btn-black'>Cancel</CButton>
                     <CButton onClick={categoryID ? handleUpdateCategories : handleCreateCategories}>Save</CButton>
                 </div>
                 <CModal

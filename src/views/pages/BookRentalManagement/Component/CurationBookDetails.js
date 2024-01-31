@@ -240,12 +240,13 @@ const CurationBookDetails = ({ bookId, setIconSet, setSideBarId,  setDeleted, ca
 
     return (
         <div style={{ width: '100%' }}>
-            <h1>Books details</h1>
+           
             <div>
                 {isLoading && <Loader />}
                 <div>
-                    <div className='d-flex justify-content-end'>
-                        <CButton onClick={() => setdeleteVisible(true)}>Delete</CButton>
+                    <div className='d-flex justify-content-between'>
+                    <h4>Books details</h4>
+                        <CButton onClick={() => setdeleteVisible(true)} className='btn-black'>Delete</CButton>
                     </div>
                     <div className="dropdown-container mb-2">
                         {/* <h5 className="me-3">Item Number</h5> */}
@@ -261,7 +262,7 @@ const CurationBookDetails = ({ bookId, setIconSet, setSideBarId,  setDeleted, ca
                                 <div className="formWrpInpt d-flex">
                                     <div className="d-flex formradiogroup mb-2 gap-3">
                                         <CFormSelect
-                                            className='mx-4'
+                                            
                                             style={{ width: '170px' }}
                                             name='itemStatus'
                                             // value={addItemData.itemStatus}
@@ -288,14 +289,14 @@ const CurationBookDetails = ({ bookId, setIconSet, setSideBarId,  setDeleted, ca
                             </div>
 
                             <div className="form-outline form-white d-flex gap-3">
-                                <div className='d-flex'>
+                                <div className='d-flex w-100'>
                                     <div className="formWrpLabel" >
                                         <label className="fw-bolder ">
                                             Book Title
                                         </label>
                                     </div>
-                                    <div className="formWrpInpt d-flex">
-                                        <div className="d-flex formradiogroup mb-2 gap-3">
+                                    <div className="formWrpInpt d-flex ">
+                                        <div className="d-flex formradiogroup mb-2 gap-3 w-100">
                                             <CFormInput
                                                 value={bookData.title}
                                                 onChange={handleTitleChange}
@@ -305,14 +306,14 @@ const CurationBookDetails = ({ bookId, setIconSet, setSideBarId,  setDeleted, ca
                                 </div>
                             </div>
                             <div className="form-outline form-white d-flex gap-3">
-                                <div className='d-flex'>
+                                <div className='d-flex w-100'>
                                     <div className="formWrpLabel" >
                                         <label className="fw-bolder ">
                                             Author
                                         </label>
                                     </div>
                                     <div className="formWrpInpt d-flex">
-                                        <div className="d-flex formradiogroup mb-2 gap-3">
+                                        <div className="d-flex formradiogroup mb-2 gap-3 w-100">
                                             <CFormInput
                                                 value={bookData.author}
                                                 onChange={handleAuthorChange}
@@ -338,7 +339,7 @@ const CurationBookDetails = ({ bookId, setIconSet, setSideBarId,  setDeleted, ca
                                             <li>Maximum File Size : 00</li>
                                             <li>File type : png , jpg , jpeg , gif</li>
                                         </ul>
-                                        <button className='mt-2' style={{ background: '#4f5d73', height: '40px', width: '80px', cursor: 'pointer', borderRadius: 8, color: 'white' }} onClick={handleImageChange}>Upload</button>
+                                        <button className='mt-2 btn btn-primary'  onClick={handleImageChange}>Upload</button>
                                     </div>
                                 </div>
                             </div>
@@ -405,8 +406,8 @@ const CurationBookDetails = ({ bookId, setIconSet, setSideBarId,  setDeleted, ca
                         </div>
                     </div>
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '5%', gap: 10 }}>
-                    <CButton onClick={handleCancel} style={{ marginRight: '2%', background: '#ccc', border: 'none' }}>Cancel</CButton>
+                <div className='d-flex justify-content-center gap-3 my-3'>
+                    <CButton onClick={handleCancel}  className='btn-black'>Cancel</CButton>
                     <CButton onClick={UpdateBook}>Save</CButton>
                 </div>
                 <CModal
