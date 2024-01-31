@@ -156,6 +156,11 @@ export let API_ENDPOINT = {
   create_banner: ALL_CONSTANTS.API_URL + "/admin/bookRental/createBanner",
   update_bannerDetails: ALL_CONSTANTS.API_URL + "/admin/bookRental/updateBanner",
   update_bannerCategory: ALL_CONSTANTS.API_URL + "/admin/bookRental/updateBannerCategory",
+
+
+
+  //{ Meeting Room Management}
+
   meeting_lists: ALL_CONSTANTS.API_URL + "/admin/meeting/list",
   building_lists: ALL_CONSTANTS.API_URL + "/admin/meeting/building/list",
   floor_lists: ALL_CONSTANTS.API_URL + "/admin/meeting/floor/list",
@@ -163,9 +168,22 @@ export let API_ENDPOINT = {
   meeting_details: ALL_CONSTANTS.API_URL + "/admin/meeting/meetingDetail",
   reservation_details: ALL_CONSTANTS.API_URL + "/admin/meeting/reservationDetail",
   get_all_meeting_rooms: ALL_CONSTANTS.API_URL + "/admin/meeting/roomList",
+  
+  create_meeting_building: ALL_CONSTANTS.API_URL + "/admin/meeting/building/create",
+  get_meeting_building_details: ALL_CONSTANTS.API_URL + "/admin/meeting/buildingDetail",
+  update_meeting_building: ALL_CONSTANTS.API_URL + "/admin/meeting/buildingUpdate",
+  delete_meeting_building: ALL_CONSTANTS.API_URL + "/admin/meeting/deleteBuilding",
+
   create_meeting_floor: ALL_CONSTANTS.API_URL + "/admin/meeting/floor/create",
+  get_meeting_floor_details: ALL_CONSTANTS.API_URL + "/admin/meeting/floorDetail",
+  update_meeting_floor: ALL_CONSTANTS.API_URL + "/admin/meeting/floorUpdate",
+  delete_meeting_floor: ALL_CONSTANTS.API_URL + "/admin/meeting/deleteFloor",
 
-
+  create_meeting_room: ALL_CONSTANTS.API_URL + "/admin/meeting/room/create",
+  get_meeting_room_details: ALL_CONSTANTS.API_URL + "/admin/meeting/roomDetail",
+  delete_meeting_room: ALL_CONSTANTS.API_URL + "/admin/meeting/deleteRoom",
+  
+  
 
   //{ Supply Rental Management}
 
