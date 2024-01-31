@@ -56,6 +56,7 @@ const AddFloor = ({
         setAddBuildingData({
           name: response.data.name,
           visibility: response.data.visibility === 'visible' ? true : false,
+          associatedRooms: response.data.associatedItem,
         })
       }
     } catch (error) {

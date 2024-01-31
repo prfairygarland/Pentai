@@ -17,7 +17,7 @@ import ReactPaginate from 'react-paginate'
 import Loader from 'src/components/common/Loader'
 import ReactTable from 'src/components/common/ReactTable'
 import { getApi, getUserListExportData } from 'src/utils/Api'
-import { API_ENDPOINT } from 'src/utils/config'
+import { ALL_CONSTANTS, API_ENDPOINT } from 'src/utils/config'
 import { paginationItemPerPageOptions } from 'src/utils/constant'
 import AddBuilding from './AddBuilding'
 import AddFloor from './AddFloor'
@@ -109,7 +109,7 @@ const AllMeetingRooms = () => {
       accessor: 'location',
       Cell: ({ row }) => (
         <p className="text-center">{`${
-          row.original.supplyType ? row.original.supplyType : '-'
+          row.original.buildingName ? row.original.buildingName : '-'
         }`}</p>
       ),
     },
@@ -117,16 +117,16 @@ const AllMeetingRooms = () => {
       Header: multiLangObj?.floor,
       accessor: 'subCategoryName',
       Cell: ({ row }) => (
-        <p className="text-center">{`${
-          row.original.subCategoryName ? row.original.subCategoryName : '-'
-        }`}</p>
+        <p className="text-center">{`${row.original.floorName ? row.original.floorName : '-'}`}</p>
       ),
     },
     {
       Header: multiLangObj?.meetingRoomName,
       accessor: 'modalName',
       Cell: ({ row }) => (
-        <p className="text-center">{`${row.original.modalName ? row.original.modalName : '-'}`}</p>
+        <p className="text-center">{`${
+          row.original.meetingRoomName ? row.original.meetingRoomName : '-'
+        }`}</p>
       ),
     },
     {
@@ -134,7 +134,7 @@ const AllMeetingRooms = () => {
       accessor: 'itemNumber',
       Cell: ({ row }) => (
         <p className="text-center">{`${
-          row.original.itemNumber ? row.original.itemNumber : '-'
+          row.original.meetingCode ? row.original.meetingCode : '-'
         }`}</p>
       ),
     },
@@ -218,7 +218,9 @@ const AllMeetingRooms = () => {
   const handleAllMeetingData = async () => {
     setIsLoading(true)
     try {
-      let url = API_ENDPOINT.get_all_supplies + `?offset=${currentPage + 1}&limit=${itemsPerPage}`
+      let url =
+        API_ENDPOINT.get_all_meeting_rooms_records +
+        `?offset=${currentPage + 1}&limit=${itemsPerPage}`
 
       if (filterData?.search) {
         url = url + `&search=${filterData?.search}`
@@ -231,13 +233,12 @@ const AllMeetingRooms = () => {
       }
 
       const res = await getApi(url)
-
       if (res?.status === 200) {
         setAllMeetingData(res?.data)
         setTotalCount(res?.totalCount)
         setTotalPages(Math.ceil(res.totalCount / Number(itemsPerPage)))
         setIsLoading(false)
-      } else if (res?.status === 404) {
+      } else {
         setAllMeetingData(res?.data)
         setTotalCount(res?.totalCount)
         setIsLoading(false)
@@ -288,7 +289,8 @@ const AllMeetingRooms = () => {
     setIsLoading(true)
     try {
       let url =
-        API_ENDPOINT.get_all_supplies_export + `?offset=${currentPage + 1}&limit=${itemsPerPage}`
+        API_ENDPOINT.get_all_meeting_rooms_export +
+        `?offset=${currentPage + 1}&limit=${itemsPerPage}`
 
       if (filterData?.search) {
         url = url + `&search=${filterData?.search}`
@@ -305,7 +307,7 @@ const AllMeetingRooms = () => {
       if (res.filePath) {
         const downloadLink = res.filePath
         const link = document.createElement('a')
-        link.href = 'https://ptkapi.experiencecommerce.com/' + downloadLink
+        link.href = ALL_CONSTANTS.BASE_URL + '/' + downloadLink
         link.setAttribute('download', `exported_data_${new Date().getTime()}.xlsx`)
 
         link.click()
@@ -552,11 +554,11 @@ const AllMeetingRooms = () => {
                     { label: 'All', value: 'All' },
                     {
                       label: 'Available',
-                      value: 'Available',
+                      value: 'available',
                     },
                     {
                       label: 'Unavailable',
-                      value: 'Unavailable',
+                      value: 'unAvailable',
                     },
                   ]}
                   onChange={handleAllMeetingStatusChange}
