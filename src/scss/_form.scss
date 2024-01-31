@@ -65,7 +65,47 @@ padding: 10px;
     overflow-x: hidden;
     overflow-y: auto;
   }
+  .form-control{
+    border-radius: 0 !important;
+    height: 38px;
+  }
   .form-control:focus{
     box-shadow: none;
     border:var(--cui-border-width) solid var(--cui-input-border-color, var(--cui-border-color)) ;
   }
+.form-check-label{
+  cursor: pointer;
+}
+.form-select{
+  border-radius: 0 !important;
+  cursor: pointer;
+}
+.form-select:focus{
+  box-shadow: none;
+  border:var(--cui-border-width) solid var(--cui-input-border-color, var(--cui-border-color)) ;
+}
+.react-date-picker{
+  cursor: pointer;
+}
+.react-date-picker__calendar-button{
+  position: relative;
+  svg{
+    display: none !important;
+  }
+&::after{
+  content: '\e92d';
+  font-family: 'icomoon';
+  font-size: 20px;
+}
+}
+
+select{
+  option{
+    cursor: pointer;
+  }
+}
+.time-picker{
+  height: 38px !important;
+  border:var(--cui-border-width) solid var(--cui-input-border-color, var(--cui-border-color)) ;
+  padding: 0 10px;
+}

@@ -108,12 +108,12 @@ const SupplyRentalStatus = () => {
     {
       Header: multiLang?.rentalDetails,
       accessor: '',
-      Cell: ({ row }) => <button onClick={() => { setUserInfoPopup(true); setPopUp('RentalD'); handleShowRentalDetails(row.original.id) }} className='mx-3 px-3 py-2 rounded border-1'>{multiLang?.view}</button>
+      Cell: ({ row }) => <a onClick={() => { setUserInfoPopup(true); setPopUp('RentalD'); handleShowRentalDetails(row.original.id) }} className='mx-3 px-3 py-2 blueTxt'>{multiLang?.view}</a>
     },
     {
       Header: multiLang?.rentalHistory,
       accessor: '',
-      Cell: ({ row }) => <button onClick={() => { handleRentalHistoryClick(row.original?.suppliesRentalId, row.original?.id) }} className='mx-3 px-3 py-2 rounded border-1'>{multiLang?.view}</button>
+      Cell: ({ row }) => <a onClick={() => { handleRentalHistoryClick(row.original?.suppliesRentalId, row.original?.id) }} className='mx-3 px-3 py-2 blueTxt'>{multiLang?.view}</a>
     }
 
   ], [])
@@ -716,213 +716,199 @@ const SupplyRentalStatus = () => {
 
 
   return (
-    <div className='mb-5'>
-      {isLoading && <Loader />}
-      <main>
-        <div className='mb-2'>
-          <CNav variant="underline" className='d-flex gap3 tabNav'>
-            <CNavItem >
-              <CNavLink role='button' className={activeTab === '' ? 'active' : ''} onClick={() => handleTabClick('')}>
-                {multiLang?.all}
-              </CNavLink>
-            </CNavItem>
-            <CNavItem>
-              <CNavLink role='button' className={activeTab === 'rentalRequest' ? 'active' : ''} onClick={() => handleTabClick('rentalRequest')}>{multiLang?.rentalRequest}</CNavLink>
-            </CNavItem>
-            <CNavItem >
-              <CNavLink role='button' className={activeTab === 'returnRequest' ? 'active' : ''} onClick={() => handleTabClick('returnRequest')}>{multiLang?.returnRequest}</CNavLink>
-            </CNavItem>
-          </CNav>
-        </div>
-        <div className='clearfix'>
-          <CButton className='float-end mx-2' onClick={() => exportData()}>{multiLang?.export}</CButton>
-        </div>
-        <div className='d-flex justify-content-between align-items-center my-4'>
-          <div className='mx-1 d-flex'>
-            <input className='px-4 me-3' value={filterData.search} onChange={handleSearch} />
-            <CButton onClick={handleSupplyRenatalData}>{multiLang?.search}</CButton>
+    <><div className="pageTitle mb-3 pb-2">
+      <h2>Supply Rental Status</h2>
+    </div><div className='mb-5'>
+        {isLoading && <Loader />}
+        <main>
+          <div className='mb-2'>
+            <CNav variant="underline" className='d-flex gap3 tabNav'>
+              <CNavItem>
+                <CNavLink role='button' className={activeTab === '' ? 'active' : ''} onClick={() => handleTabClick('')}>
+                  {multiLang?.all}
+                </CNavLink>
+              </CNavItem>
+              <CNavItem>
+                <CNavLink role='button' className={activeTab === 'rentalRequest' ? 'active' : ''} onClick={() => handleTabClick('rentalRequest')}>{multiLang?.rentalRequest}</CNavLink>
+              </CNavItem>
+              <CNavItem>
+                <CNavLink role='button' className={activeTab === 'returnRequest' ? 'active' : ''} onClick={() => handleTabClick('returnRequest')}>{multiLang?.returnRequest}</CNavLink>
+              </CNavItem>
+            </CNav>
           </div>
-          <div className='d-flex me-5 gap-1'>
-            <CFormSelect
-              className='mx-4'
-              style={{ width: '170px' }}
-              value={filterData?.rentalStatus}
-              options={[
-                { label: multiLang?.all, value: 'All' },
-                {
-                  label: multiLang?.rentalRequested, value: 'Rental Request'
-                },
-                {
-                  label: multiLang?.renting, value: 'Renting'
-                },
-                { label: multiLang?.rentingProvided, value: 'Renting (Provided)' },
-                { label: multiLang?.rentingOverdue, value: 'renting (Overdue)' },
-                { label: multiLang?.returnedRequested, value: 'Return Request' },
-                { label: multiLang?.returned, value: 'returned' }
-
-              ]}
-              onChange={handleRentalStatusChange}
-            />
-            <CFormSelect
-              style={{ width: '170px' }}
-              options={suppliesType}
-              value={filterData?.supplyType}
-              onChange={handleSupplyType}
-            />
+          <div className='clearfix'>
+            <CButton className='btn-success float-end mx-2' onClick={() => exportData()}>{multiLang?.export}</CButton>
           </div>
-          <div className='d-flex p-2 gap-3'>
-            <DatePicker value={filterData.startDate} onChange={handleStartDate} />
-            <DatePicker value={filterData.endDate} onChange={handleEndDate} />
-          </div>
-        </div>
-        <div>
-          {activeTab === '' &&
-            <div>
-              <ReactTable showCheckbox={false} columns={AllSupplyRentalColumns} data={supplyRentalAllData} totalCount={10} onSelectionChange={handleSelectionChange} />
+          <div className='d-flex justify-content-between align-items-center my-4'>
+            <div className='mx-1 d-flex'>
+              <input className='form-control  me-3' placeholder='Search' value={filterData.search} onChange={handleSearch} />
+              <CButton onClick={handleSupplyRenatalData}>{multiLang?.search}</CButton>
             </div>
-          }
-          {activeTab === 'rentalRequest' &&
-            <ReactTable showCheckbox={false} columns={RentalRequestSupplyColumns} data={supplyRentalRequestData} totalCount={10} onSelectionChange={handleSelectionChange} />
-          }
-          {activeTab === 'returnRequest' &&
-            <ReactTable showCheckbox={false} columns={ReturnRequestSupplyColumns} data={supplyReturnRequestData} totalCount={10} onSelectionChange={handleSelectionChange} />
-          }
-        </div>
-
-        <div className='d-flex w-100 justify-content-center gap-3'>
-          {(supplyRentalAllData.length > 0 || supplyRentalRequestData.length > 0 || supplyReturnRequestData.length > 0) &&
-            <div className='d-flex gap-3'>
-              <div className='userlist-pagination'>
-                <div className='userlist-pagination dataTables_paginate'>
-                  <ReactPaginate
-                    breakLabel={'...'}
-                    marginPagesDisplayed={1}
-                    previousLabel={<button>{multiLang?.previous}</button>}
-                    nextLabel={<button>{multiLang?.next}</button>}
-                    pageCount={totalPages}
-                    onPageChange={handlePageChange}
-                    forcePage={currentPage}
-                    // renderOnZeroPageCount={null}
-                    pageRangeDisplayed={4}
-                  />
-                </div>
-
-              </div>
-              <div className='d-flex align-items-center gap-2 mt-2'>
-                <label>{multiLang?.show}</label>
-                <CFormSelect
-                  className=''
-                  aria-label=""
-                  value={itemsPerPage}
-                  options={paginationItemPerPageOptions}
-                  onChange={(event) => {
-                    setItemsPerPage(parseInt(event?.target?.value));
-                    setCurrentPage(0)
-                  }}
-                />
-                <label>{multiLang?.lists}</label>
-              </div>
+            <div className='d-flex me-5 gap-1'>
+              <CFormSelect
+                className='mx-4'
+                style={{ width: '170px' }}
+                value={filterData?.rentalStatus}
+                options={[
+                  { label: multiLang?.all, value: 'All' },
+                  {
+                    label: multiLang?.rentalRequested, value: 'Rental Request'
+                  },
+                  {
+                    label: multiLang?.renting, value: 'Renting'
+                  },
+                  { label: multiLang?.rentingProvided, value: 'Renting (Provided)' },
+                  { label: multiLang?.rentingOverdue, value: 'renting (Overdue)' },
+                  { label: multiLang?.returnedRequested, value: 'Return Request' },
+                  { label: multiLang?.returned, value: 'returned' }
+                ]}
+                onChange={handleRentalStatusChange} />
+              <CFormSelect
+                style={{ width: '170px' }}
+                options={suppliesType}
+                value={filterData?.supplyType}
+                onChange={handleSupplyType} />
             </div>
-          }
-        </div>
-        <CModal
-          alignment="center"
-          visible={userInfoPopup}
-          size='lg'
-          onClose={() => {
-            setUserInfoPopup(false)
-            setUserInfoData({})
-            setRentalDetailsData({})
-            setGetsupplyIdAndid({ supplyRentalId: null, id: null })
-          }}
-          backdrop="static"
-          aria-labelledby="LiveDemoExampleLabel">
-          <CModalHeader onClose={() => {
-            setUserInfoPopup(false)
-            setUserInfoData({})
-            setRentalDetailsData({})
-            setGetsupplyIdAndid({ supplyRentalId: null, id: null })
-          }}>
-            {popUp === 'userDetails' && <CModalTitle className='p-1'>{multiLang?.userInformation}</CModalTitle>}
-            {popUp === 'RentalD' && <CModalTitle className='p-1'>{multiLang?.rentalDetails}</CModalTitle>}
-            {popUp === 'RenatlH' && <CModalTitle className='p-1'>{multiLang?.rentalHistory}</CModalTitle>}
-
-
-
-          </CModalHeader>
-          <CModalBody>
-          {popUp === 'userDetails' ?
-            <SupplyRentalUserDetals userInfoData={userInfoData} type={'supply'} />
-            : ''}
-          {
-            popUp === 'RentalD' ?
-              <SupplyRentalDetails endModal={setUserInfoPopup} RentalStatusData={RentalDetailsData} setRentalDetailsData={setRentalDetailsData} setUserInfoPopup={setUserInfoPopup} type={'supplyRentDetalils'} /> : ''
-          }
-          {
-            popUp === 'RenatlH' ?
-              // <SupplyRentalHistory setCurrentPage={setCurrentPage} currentPage={currentPage} handleShowRentalHistory={handleShowRentalHistory} RentalHistoryData={supplyRentalHistoryData} page={page} setPage={setPage} RentalStatusData={RentalDetailsData} totalCount={totalCount} HistotalPages={HistotalPages} />
-
+            <div className='d-flex p-2 gap-3'>
+              <DatePicker value={filterData.startDate} format='DD/MM/YYYY' onChange={handleStartDate} />
+              <DatePicker value={filterData.endDate} format='DD/MM/YYYY' onChange={handleEndDate} />
+            </div>
+          </div>
+          <div>
+            {activeTab === '' &&
               <div>
-                <div className='p-md-4'>
-                  <div className='d-flex align-content-center g-2'>
-                    <p style={{ fontSize: 'medium' }}>{multiLang?.modelName}:</p>
-                    <p style={{ fontSize: 'medium', paddingLeft: 5, fontWeight: '600' }}>{RentalDetailsData?.modelName}</p>
+                <ReactTable showCheckbox={false} columns={AllSupplyRentalColumns} data={supplyRentalAllData} totalCount={10} onSelectionChange={handleSelectionChange} />
+              </div>}
+            {activeTab === 'rentalRequest' &&
+              <ReactTable showCheckbox={false} columns={RentalRequestSupplyColumns} data={supplyRentalRequestData} totalCount={10} onSelectionChange={handleSelectionChange} />}
+            {activeTab === 'returnRequest' &&
+              <ReactTable showCheckbox={false} columns={ReturnRequestSupplyColumns} data={supplyReturnRequestData} totalCount={10} onSelectionChange={handleSelectionChange} />}
+          </div>
+
+          <div className='d-flex w-100 justify-content-center my-3 gap-3 mb-3'>
+            {(supplyRentalAllData.length > 0 || supplyRentalRequestData.length > 0 || supplyReturnRequestData.length > 0) &&
+              <div className='d-flex gap-3 mb-3'>
+                <div className='userlist-pagination'>
+                  <div className='userlist-pagination dataTables_paginate'>
+                    <ReactPaginate
+                      breakLabel={'...'}
+                      marginPagesDisplayed={1}
+                      previousLabel={<button>{multiLang?.previous}</button>}
+                      nextLabel={<button>{multiLang?.next}</button>}
+                      pageCount={totalPages}
+                      onPageChange={handlePageChange}
+                      forcePage={currentPage}
+                      // renderOnZeroPageCount={null}
+                      pageRangeDisplayed={4} />
                   </div>
-                  <div className='d-flex align-content-center g-2'>
-                    <p>{multiLang?.itemNumber}: </p>
-                    <p style={{ fontSize: 'medium', paddingLeft: 5, fontWeight: '600' }}>{RentalDetailsData?.itemNumber}</p>
-                  </div>
-                  <div className='d-flex justify-content-between py-md-3 '>
-                    <p style={{ fontSize: 'medium' }}>{multiLang?.total}: {totalCount > 0 ? totalCount : '-'}</p>
-                    <button className='mx-3 px-3 py-2 rounded border-1' onClick={() => historyExportData(getsupplyIdAndid.supplyRentalId, currentHistoryPage)}>{multiLang?.export}</button>
-                  </div>
+
                 </div>
-                <ReactTable columns={columns} data={supplyRentalHistoryData} showCheckbox={false} onSelectionChange={handleSelectionChange} />
-                {supplyRentalHistoryData.length > 0 &&
-                  <div className='userlist-pagination py-3'>
-                    <div className='userlist-pagination dataTables_paginate'>
-                      <ReactPaginate
-                        breakLabel={'...'}
-                        marginPagesDisplayed={1}
-                        previousLabel={<button>{multiLang?.previous}</button>}
-                        nextLabel={<button>{multiLang?.next}</button>}
-                        pageCount={HistotalPages}
-                        onPageChange={handleHistoryPageChange}
-                        forcePage={currentHistoryPage - 1}
-                        // renderOnZeroPageCount={null}
-                        pageRangeDisplayed={4}
-                      />
+                <div className='d-flex align-items-center gap-2 '>
+                  <label>{multiLang?.show}</label>
+                  <CFormSelect
+                    className=''
+                    aria-label=""
+                    value={itemsPerPage}
+                    options={paginationItemPerPageOptions}
+                    onChange={(event) => {
+                      setItemsPerPage(parseInt(event?.target?.value));
+                      setCurrentPage(0);
+                    } } />
+                  <label>{multiLang?.lists}</label>
+                </div>
+              </div>}
+          </div>
+          <CModal
+            alignment="center"
+            visible={userInfoPopup}
+            size='lg'
+            onClose={() => {
+              setUserInfoPopup(false);
+              setUserInfoData({});
+              setRentalDetailsData({});
+              setGetsupplyIdAndid({ supplyRentalId: null, id: null });
+            } }
+            backdrop="static"
+            aria-labelledby="LiveDemoExampleLabel">
+            <CModalHeader onClose={() => {
+              setUserInfoPopup(false);
+              setUserInfoData({});
+              setRentalDetailsData({});
+              setGetsupplyIdAndid({ supplyRentalId: null, id: null });
+            } }>
+              {popUp === 'userDetails' && <CModalTitle className='p-1'>{multiLang?.userInformation}</CModalTitle>}
+              {popUp === 'RentalD' && <CModalTitle className='p-1'>{multiLang?.rentalDetails}</CModalTitle>}
+              {popUp === 'RenatlH' && <CModalTitle className='p-1'>{multiLang?.rentalHistory}</CModalTitle>}
+
+
+
+            </CModalHeader>
+            <CModalBody>
+              {popUp === 'userDetails' ?
+                <SupplyRentalUserDetals userInfoData={userInfoData} type={'supply'} />
+                : ''}
+              {popUp === 'RentalD' ?
+                <SupplyRentalDetails endModal={setUserInfoPopup} RentalStatusData={RentalDetailsData} setRentalDetailsData={setRentalDetailsData} setUserInfoPopup={setUserInfoPopup} type={'supplyRentDetalils'} /> : ''}
+              {popUp === 'RenatlH' ?
+                // <SupplyRentalHistory setCurrentPage={setCurrentPage} currentPage={currentPage} handleShowRentalHistory={handleShowRentalHistory} RentalHistoryData={supplyRentalHistoryData} page={page} setPage={setPage} RentalStatusData={RentalDetailsData} totalCount={totalCount} HistotalPages={HistotalPages} />
+                <div>
+                  <div className='p-md-4'>
+                    <div className='d-flex align-content-center g-2'>
+                      <p style={{ fontSize: 'medium' }}>{multiLang?.modelName}:</p>
+                      <p style={{ fontSize: 'medium', paddingLeft: 5, fontWeight: '600' }}>{RentalDetailsData?.modelName}</p>
                     </div>
-
+                    <div className='d-flex align-content-center g-2'>
+                      <p>{multiLang?.itemNumber}: </p>
+                      <p style={{ fontSize: 'medium', paddingLeft: 5, fontWeight: '600' }}>{RentalDetailsData?.itemNumber}</p>
+                    </div>
+                    <div className='d-flex justify-content-between py-md-3 '>
+                      <p style={{ fontSize: 'medium' }}>{multiLang?.total}: {totalCount > 0 ? totalCount : '-'}</p>
+                      <button className='mx-3 px-3 py-2 rounded border-1' onClick={() => historyExportData(getsupplyIdAndid.supplyRentalId, currentHistoryPage)}>{multiLang?.export}</button>
+                    </div>
                   </div>
-                }
-              </div>
+                  <ReactTable columns={columns} data={supplyRentalHistoryData} showCheckbox={false} onSelectionChange={handleSelectionChange} />
+                  {supplyRentalHistoryData.length > 0 &&
+                    <div className='userlist-pagination py-3 mb-3'>
+                      <div className='userlist-pagination dataTables_paginate'>
+                        <ReactPaginate
+                          breakLabel={'...'}
+                          marginPagesDisplayed={1}
+                          previousLabel={<button>{multiLang?.previous}</button>}
+                          nextLabel={<button>{multiLang?.next}</button>}
+                          pageCount={HistotalPages}
+                          onPageChange={handleHistoryPageChange}
+                          forcePage={currentHistoryPage - 1}
+                          // renderOnZeroPageCount={null}
+                          pageRangeDisplayed={4} />
+                      </div>
 
-              : ''
-          }
-          </CModalBody>
-        </CModal >
-      </main>
+                    </div>}
+                </div>
 
-      <div>
-        <CModal
-          visible={detailsPage}
-          onClose={() => (setConfirmId(''), setDetailPage(false))}
-          aria-labelledby="LiveDemoExampleLabel"
-        >
-          <CModalHeader onClose={() => (setConfirmId(''), setDetailPage(false))}>
-            <CModalTitle id="LiveDemoExampleLabel">{multiLang?.rentalConfirm}</CModalTitle>
-          </CModalHeader>
-          <CModalBody>
-            <p>{multiLang?.rentalConfirmPopUp}</p>
-          </CModalBody>
-          <CModalFooter>
-            <CButton onClick={() => { setUserInfoPopup(true); setPopUp('RentalD'); handleShowRentalDetails(confirmId) }} color="primary">{multiLang?.goToRentalDetails}</CButton>
-          </CModalFooter>
-        </CModal>
-      </div>
+                : ''}
+            </CModalBody>
+          </CModal>
+        </main>
 
-    </div>
+        <div>
+          <CModal
+            visible={detailsPage}
+            onClose={() => (setConfirmId(''), setDetailPage(false))}
+            aria-labelledby="LiveDemoExampleLabel"
+          >
+            <CModalHeader onClose={() => (setConfirmId(''), setDetailPage(false))}>
+              <CModalTitle id="LiveDemoExampleLabel">{multiLang?.rentalConfirm}</CModalTitle>
+            </CModalHeader>
+            <CModalBody>
+              <p>{multiLang?.rentalConfirmPopUp}</p>
+            </CModalBody>
+            <CModalFooter>
+              <CButton onClick={() => { setUserInfoPopup(true); setPopUp('RentalD'); handleShowRentalDetails(confirmId); } } color="primary">{multiLang?.goToRentalDetails}</CButton>
+            </CModalFooter>
+          </CModal>
+        </div>
+
+      </div></>
   )
 }
 

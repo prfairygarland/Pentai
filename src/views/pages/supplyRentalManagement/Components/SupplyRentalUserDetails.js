@@ -27,20 +27,22 @@ const SupplyRentalUserDetals = ({ userInfoData, type }) => {
               <div className='formWraper'>
                 <div className="form-outline form-white  d-flex ">
                   <div className='formWrpLabel'>
-                    <label className="fw-bolder ">{multiLang?.profileImage}</label>
+                    <label className="fw-bolder ">{multiLang?.profileImage} </label>
                   </div>
                   <div className='formWrpInpt'>
+                  <div className='profileImg'>
                     {userInfoData?.userImage != null ?
-                      <CImage alt='NA' rounded crossorigin="anonymous" src={imageUrl + userInfoData?.userImage} width={150} height={150} />
+                      <CImage alt='NA'  crossorigin="anonymous" src={imageUrl + userInfoData?.userImage} width={150} height={150} />
                       : '-'
                     }
                     {/* <CImage alt='NA' rounded crossorigin="anonymous" src={imageUrl + userInfoData?.userImage} width={150} height={150} /> */}
+                    </div>
                   </div>
                 </div>
 
                 <div className="form-outline form-white  d-flex ">
                   <div className='formWrpLabel'>
-                    <label className="fw-bolder ">{multiLang?.employeeNo}</label>
+                    <label className="fw-bolder ">{multiLang?.employeeNo} </label>
                   </div>
                   <div className='formWrpInpt'>{userInfoData?.employeeCode ? userInfoData?.employeeCode : ''}</div>
                 </div>

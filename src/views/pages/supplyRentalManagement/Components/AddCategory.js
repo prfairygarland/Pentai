@@ -178,7 +178,7 @@ const AddCategory = ({ setModal, getMod, Modal, getMainCatId, getCatId, removeCa
 
   return (
 
-    <div className='col-md-9'>
+    <div className='col-md-8'>
       {isLoading && <Loader />}
       <div>
         {getCatId !== null &&
@@ -251,8 +251,8 @@ const AddCategory = ({ setModal, getMod, Modal, getMainCatId, getCatId, removeCa
           </div>
         </div>
       </div>
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '5%', gap: 10 }}>
-        <CButton onClick={() => saveCategory('cancle')} style={{ marginRight: '2%', background: '#ccc', border: 'none' }}>{multiLang?.cancel}</CButton>
+      <div className='d-flex justify-content-center my-3 gap-4' >
+        <CButton onClick={() => saveCategory('cancle')} className='btn-black'>{multiLang?.cancel}</CButton>
         <CButton onClick={() => saveCategory('save')}>{multiLang?.save}</CButton>
       </div>
       <CModal

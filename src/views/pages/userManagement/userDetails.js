@@ -249,10 +249,12 @@ const UserDetails = () => {
                           <label className="fw-bolder ">{multiLang?.Profile_Image}</label>
                         </div>
                         <div className='formWrpInpt'>
-                          {userDetails[0]?.imageUrl != null ?
-                            <CImage alt='NA' rounded crossorigin="anonymous" src={ALL_CONSTANTS.API_URL + userDetails[0]?.imageUrl} width={200} height={200} />
+                         <div className='useDetailImgWrp'>
+                         {userDetails[0]?.imageUrl != null ?
+                            <CImage alt='NA'  crossorigin="anonymous" src={ALL_CONSTANTS.API_URL + userDetails[0]?.imageUrl} width={200} height={200} />
                             : '-'
                           }
+                         </div>
                         </div>
                       </div>
 

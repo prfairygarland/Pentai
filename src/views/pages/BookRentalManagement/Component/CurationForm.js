@@ -366,7 +366,7 @@ const CurationForm = ({ setStateUpdate, setCuration, curation, setCategories, ca
                         {/* <label className="me-3">Curation</label> */}
                     </div>
                     <div className='clearfix '>
-                        <CButton onClick={() => setdeleteVisible(true)} className='float-end'>Delete</CButton>
+                        <CButton onClick={() => setdeleteVisible(true)} className='float-end btn-black'>Delete</CButton>
                     </div>
                     <div className="card-body">
                         <div className="formWraper">
@@ -457,9 +457,9 @@ const CurationForm = ({ setStateUpdate, setCuration, curation, setCategories, ca
                                             // checked={data.isExpired}
                                             value={data.isExpired}
                                             onChange={handleChangeExpire}
+                                            label="No Expiration Date"
                                         />
-                                        <p>No Expiration Date
-                                        </p>
+                                        
                                     </div>
                                 </div>
                             </div>
@@ -470,23 +470,25 @@ const CurationForm = ({ setStateUpdate, setCuration, curation, setCategories, ca
                                     </div>
                                     <div className='w-100 p-3'>
 
-                                        <div style={{ width: '100%' }} className="push-notification-container pt-2 pb-2 gap-3">
+                                        <div style={{ width: '100%' }} className="push-notification-container  gap-3 p-0 pb-2">
                                             <CFormCheck
                                                 type="checkbox"
                                                 name="isVisible"
                                                 checked={data.noLink}
                                                 onChange={handleChangeNoLink}
-                                                value={data.noLink}
+                                                value={data.noLink} 
+                                                label="None"
                                             />
-                                            <p>None</p>
+                                         
                                         </div>
                                         <div style={data.noLink ? { pointerEvents: 'none', opacity: 0.4 } : null} className='gap-3'>
-                                            <div className='push-notification-container pt-2 pb-2 gap-3'>
+                                            <div className='push-notification-container p-0 pb-2 gap-3'>
                                                 <CFormCheck
                                                     type="checkbox"
                                                     name="isVisible"
+                                                    label="Link (Max 2 link)"
                                                 />
-                                                <p>Link (Max 2 link)</p>
+                                                
                                             </div>
                                             <div className='w-100' style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                                                 <CFormInput type='text' value={data.link1Name} onChange={handleLinkName1} placeholder='Enter title' />

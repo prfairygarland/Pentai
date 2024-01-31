@@ -695,19 +695,19 @@ const BulletinBoardPostDetails = () => {
         <div className="container bg-light p-3 mb-3">
           <div className="d-flex mb-3 gap-5">
             <div className="d-flex gap-3 align-items-center">
-              <h6>{multiLangObj?.bulletinBoard}</h6>
+              <h6>{multiLangObj?.bulletinBoard}:</h6>
               <p>{bulletinBoardPostDetail[0]?.boardName}</p>
             </div>
             <div className="d-flex gap-3 align-items-center">
-              <h6>{multiLangObj?.classification}</h6>
+              <h6>{multiLangObj?.classification}:</h6>
               <p>{bulletinBoardPostDetail[0]?.status}</p>
             </div>
             <div className="d-flex gap-3 align-items-center">
-              <h6>{multiLangObj?.reportedPost}</h6>
+              <h6>{multiLangObj?.reportedPost}:</h6>
               <p>{bulletinBoardPostDetail[0]?.isReported == 0 ? 'N' : 'Y'}</p>
             </div>
             <div className="d-flex gap-3 align-items-center">
-              <h6>{multiLangObj?.type}</h6>
+              <h6>{multiLangObj?.type}:</h6>
               <p>{bulletinBoardPostDetail[0]?.type}</p>
             </div>
           </div>
@@ -773,7 +773,7 @@ const BulletinBoardPostDetails = () => {
 
                                     {(bulletinBoardPostDetail[0]?.type == 'recruit' ||
                                       bulletinBoardPostDetail[0]?.type == 'raffle') && (
-                                      <div className="container p-3 mb-3 mt-4">
+                                      <div className="  mb-3 mt-4">
                                         <div className="d-flex gap-2">
                                           <p>{multiLangObj?.date}:</p>
                                           <p>

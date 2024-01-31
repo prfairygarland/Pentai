@@ -16,10 +16,10 @@ const UserProfile = ({ userInfoData }) => {
     return (
         <div className=''>
             <section className="d-flex flex-row align-items-center">
-                <div className='container'>
-                    <div className="row justify-content-center">
-                        {/* <div className="row justify-content-center"> */}
-                        <div className='col-md-12' >
+               
+                    <div className=" w-100">
+                      
+                       
                             <div className="card p-2">
                                 <div className='card-body p-0'>
                                     <div className='formWraper'>
@@ -28,8 +28,9 @@ const UserProfile = ({ userInfoData }) => {
                                                 <label className="fw-bolder ">Profile Image</label>
                                             </div>
                                             <div className='formWrpInpt'>
-                                                { }
-                                                <CImage alt='NA' rounded crossorigin="anonymous" src={imageUrl + userInfoData?.userImage} width={150} height={150} />
+                                            <div className='profileImg'>
+                                                <CImage alt='NA' crossorigin="anonymous" src={imageUrl + userInfoData?.userImage} />
+                                                </div>
                                             </div>
                                         </div>
 
@@ -120,38 +121,38 @@ const UserProfile = ({ userInfoData }) => {
                                             </div>
                                         </div>
 
-                                        <div className="form-outline d-flex">
+                                        <div className="form-outline d-flex w-100">
                                             <div className='formWrpLabel'>
                                                 <label className="fw-bolder ">Rental Info.
                                                 </label>
                                             </div>
-                                            <div className='d-flex'>
-                                                <div className=''>
+                                            <div className='d-flex w-100'>
+                                                <div className='w-100'>
                                                     <div className='formWrpLabel' style={{maxWidth:'100%'}}>
                                                         <label className="fw-bolder">Supply Rental :{userInfoData.suppliesCount ? userInfoData.suppliesCount : 'NA'} </label>
                                                     </div>
                                                     <div className="border-end px-1">
                                                         {userInfoData.suppliesInfo?.map((data, i) => (
                                                             <div className='d-flex justify-content-between py-1' key={i}>
-                                                                <li className=''>{data.name ? data?.name : 'NA'}</li>
-                                                                <li className='w-50 text-center'> {data?.startDateTime ? `${moment(data?.startDateTime).format("YYYY-MM-DD")} 
+                                                                <p className=''>{data.name ? data?.name : 'NA'}</p>
+                                                                <p className='w-50 text-center'> {data?.startDateTime ? `${moment(data?.startDateTime).format("YYYY-MM-DD")} 
                                                                   ${moment(data?.endDateTime).format("YYYY-MM-DD")}`
-                                                                    : 'NA'}</li>
+                                                                    : 'NA'}</p>
                                                             </div>
 
                                                         ))}
                                                     </div>
                                                 </div>
-                                                <div className='    '>
+                                                <div className='w-100'>
                                                     <div className='formWrpLabel' style={{maxWidth:'100%'}}>
                                                         <label className="fw-bolder">Book Renatl :{userInfoData.bookRentalCount ? userInfoData.bookRentalCount : 'NA'} </label>
                                                     </div>
                                                     <div className="border-start px-1">
                                                         {userInfoData.bookRentalInfo?.map((data, i) => (
                                                             <div className='d-flex justify-content-between py-1' key={i}>
-                                                                <li className='text-center w-50'>{data.title ? data?.title : 'NA'}</li>
-                                                                <li className='w-50 text-center'> {data?.startDateTime ? `${moment(data?.startDateTime).format("YYYY-MM-DD")} ${moment(data?.endDateTime).format("YYYY-MM-DD")}`
-                                                                    : 'NA'}</li>
+                                                                <p className='text-center w-50'>{data.title ? data?.title : 'NA'}</p>
+                                                                <p className='w-50 text-center'> {data?.startDateTime ? `${moment(data?.startDateTime).format("YYYY-MM-DD")} ${moment(data?.endDateTime).format("YYYY-MM-DD")}`
+                                                                    : 'NA'}</p>
                                                             </div>
                                                         ))}
                                                     </div>
@@ -164,10 +165,10 @@ const UserProfile = ({ userInfoData }) => {
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        {/* </div> */}
+                      
+                      
                     </div>
-                </div>
+                
             </section>
         </div>
     )

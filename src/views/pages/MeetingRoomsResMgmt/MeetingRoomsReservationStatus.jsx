@@ -35,15 +35,18 @@ const MeetingRoomsReservationStatus = () => {
   return (
     <>
       <main>
-        <div className="container p-3 mb-3">
+        <div className="mb-3">
           <div>
-            <div>{multiLangObj?.meetingRoomReservationStatus}</div>
-            <div>
+            <div className="pageTitle mb-3 pb-2">
+              <h2>{multiLangObj?.meetingRoomReservationStatus}</h2>
+            </div>
+
+            <div className="d-flex justify-content-end mb-2">
               <CButton onClick={() => setShowBookMeetingRoom(true)}>
                 {multiLangObj?.btnBookMeetingRooms}
               </CButton>
             </div>
-            <div className="camp-tab-cont d-flex">
+            <div className="camp-tab-cont d-flex mb-3">
               <div className="nav nav-tabs" id="nav-tab" role="tablist">
                 <button
                   className={`primary-btn ${currentTab == 'All Reservation' && 'active'}`}

@@ -115,8 +115,8 @@ const ChangePassword = () => {
                               </div>
                             </div>
 
-                            <div className="form-outline form-white  d-flex ">
-                              <div className='formWrpLabel'>
+                            <div className="form-outline form-white  d-flex  ">
+                              <div className='formWrpLabel gap-2'>
                                 <label className="fw-bolder ">{multiLang?.New_Password}</label>
                                 <CTooltip style={vars}
                                   content={multiLang?.Password_info}

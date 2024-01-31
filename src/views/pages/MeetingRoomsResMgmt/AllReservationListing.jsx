@@ -132,14 +132,14 @@ const AllReservationListing = () => {
         Header: 'View',
         accessor: 'view',
         Cell: ({ row }) => (
-          <button
+          <a
             onClick={() => {
               showMeetingReservationInfoHandler(row.original.id)
             }}
-            className="mx-3 px-3 py-2 rounded border-1"
+            className="  blueTxt"
           >
             View
-          </button>
+          </a>
         ),
       },
     ],
@@ -218,7 +218,7 @@ const AllReservationListing = () => {
   }, [])
   return (
     <>
-      <div style={{ display: 'flex', justifyContent: 'end' }}>
+      <div className="mb-3 d-flex justify-content-end">
         <DatePicker
           value={filterObj?.searchStartDate}
           onChange={(event) => handleDateChange(event, 'searchStartDate')}
@@ -229,10 +229,9 @@ const AllReservationListing = () => {
           onChange={(event) => handleDateChange(event, 'searchEndDate')}
         />
       </div>
-      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+      <div className="mb-3 d-flex justify-content-between">
         <div style={{ width: '30%', display: 'flex' }}>
           <CFormInput
-            style={{ width: '70%' }}
             type="text"
             placeholder="Search"
             value={searchTxt}
@@ -241,7 +240,7 @@ const AllReservationListing = () => {
           &nbsp;&nbsp;
           <CButton onClick={() => alert('WIP')}>Search</CButton>
         </div>
-        <div style={{ width: '60%', display: 'flex' }}>
+        <div style={{ width: '70%', display: 'flex' }}>
           <CFormSelect
             style={{ width: '23%' }}
             size="sm"
@@ -310,7 +309,9 @@ const AllReservationListing = () => {
           </CFormSelect>
         </div>
       </div>
-      {totalDataCount > 0 && <p style={{ margin: 0 }}>Total&nbsp;:&nbsp; {totalDataCount}</p>}
+      <div className="mb-2">
+        {totalDataCount > 0 && <p style={{ margin: 0 }}>Total&nbsp;:&nbsp; {totalDataCount}</p>}
+      </div>
       {meetingData && (
         <ReactTable
           columns={meetingColumns}
@@ -319,7 +320,7 @@ const AllReservationListing = () => {
           onSelectionChange={() => {}}
         />
       )}
-      <div className="d-flex w-100 justify-content-center gap-3">
+      <div className="d-flex w-100 justify-content-center align-items-center my-3 gap-3">
         {meetingData.length > 0 && (
           <div className="userlist-pagination">
             <div className="userlist-pagination dataTables_paginate">
@@ -338,7 +339,7 @@ const AllReservationListing = () => {
           </div>
         )}
         {meetingData.length > 0 && (
-          <div className="d-flex align-items-center gap-2 mt-2">
+          <div className="d-flex align-items-center gap-2">
             <label>Show</label>
             <CFormSelect
               className=""

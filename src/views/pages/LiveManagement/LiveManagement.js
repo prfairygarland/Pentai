@@ -230,9 +230,14 @@ const LiveManagement = () => {
   }
 
   return (
+    
     <div className='mb-5'>
+   
       {isLoading && <Loader />}
       <main>
+      <div className="pageTitle mb-3 pb-2">
+      <h2>Live Management</h2>
+      </div>
         <div className='d-flex justify-content-between mb-2'>
           <div>
             <CNav variant="underline" className='d-flex gap3 tabNav'>
@@ -256,13 +261,13 @@ const LiveManagement = () => {
             </CNav>
           </div>
           <div>
-            <NavLink to='./LiveRegistration'><CButton>{multiLang?.LiveManagement?.Registration}</CButton></NavLink>
+            <NavLink to='./LiveRegistration'><CButton className='btn-success'>{multiLang?.LiveManagement?.Registration}</CButton></NavLink>
           </div>
         </div>
         <div className='d-flex justify-content-between mb-2 mt-3'>
 
           <div className='mx-1 d-flex'>
-            <input className='px-4 me-3' value={filterData.search} onChange={handleSearch} />
+            <input className='form-control me-3' placeholder='Search' value={filterData.search} onChange={handleSearch} />
             <CButton onClick={getLiveStreamsData}>{multiLang?.LiveManagement?.Search}</CButton>
           </div>
 
@@ -274,7 +279,7 @@ const LiveManagement = () => {
         <ReactTable showCheckbox={false} columns={columns} data={liveStreamsData} totalCount={10} onSelectionChange={handleSelectionChange} />
 
         {liveStreamsData.length > 0 &&
-        <div className='d-flex w-100 justify-content-center gap-3'>
+        <div className='d-flex w-100 justify-content-center my-3 gap-3'>
           <div className='d-flex gap-3'>
             <div className='userlist-pagination'>
               <div className='userlist-pagination dataTables_paginate'>
@@ -292,7 +297,7 @@ const LiveManagement = () => {
               </div>
 
             </div>
-            <div className='d-flex align-items-center gap-2 mt-2'>
+            <div className='d-flex align-items-center gap-2 '>
               <label>{multiLang?.LiveManagement?.Show}</label>
               <CFormSelect
                 className=''

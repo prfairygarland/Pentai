@@ -148,7 +148,7 @@ const RentalStatus = ({ RentalStatusData, setRentalStatusData, setUserInfoPopup 
                                                 <label className="fw-bolder ">End Rental</label>
                                             </div>
                                             <div className='formWrpInpt clearfix'>
-                                                <button onClick={() => setVisible(!visible)} className='mx-2 px-3 py-2 rounded border-1 float-end'>confirm</button>
+                                                <button onClick={() => setVisible(!visible)} className='btn btn-primary'>confirm</button>
                                             </div>
                                         </div>
                                     </div>

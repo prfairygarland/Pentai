@@ -530,17 +530,19 @@ const ClubBoardListing = () => {
         Header: <p className="text-center">{multiLangObj?.club}</p>,
         accessor: 'clubName',
         Cell: ({ row }) => (
-          <p
-            className={
-              row.original.clubStatus === 'Active'
-                ? 'active-club'
-                : row.original.clubStatus === 'Inactive'
-                ? 'inactive-club'
-                : 'deleted-club'
-            }
-            onClick={() => redirectToClubDetailHandler(row.original.clubId)}
-          >
-            {row.original.clubName}{' '}
+          <p className="text-center">
+            <a
+              className={
+                row.original.clubStatus === 'Active'
+                  ? 'active-club'
+                  : row.original.clubStatus === 'Inactive'
+                  ? 'inactive-club'
+                  : 'deleted-club'
+              }
+              onClick={() => redirectToClubDetailHandler(row.original.clubId)}
+            >
+              {row.original.clubName}{' '}
+            </a>
           </p>
         ),
       },
@@ -548,11 +550,13 @@ const ClubBoardListing = () => {
         Header: <p className="text-center">{multiLangObj?.host}</p>,
         accessor: 'host',
         Cell: ({ row }) => (
-          <p
-            className="text-center club-host-name"
-            onClick={() => redirectToUserDetailHandler(row.original.createdBy)}
-          >
-            {row.original.englishName}
+          <p className="text-center">
+            <a
+              className="text-center club-host-name"
+              onClick={() => redirectToUserDetailHandler(row.original.createdBy)}
+            >
+              {row.original.englishName}
+            </a>
           </p>
         ),
       },
@@ -691,6 +695,7 @@ const ClubBoardListing = () => {
                       value={filterData?.searchstring}
                       onChange={handleDepartmentSearchChange}
                       id="inputPassword2"
+                      placeholder="Search"
                     />
                   </div>
                   <div className="d-flex align-items-center">
@@ -723,16 +728,16 @@ const ClubBoardListing = () => {
                 </div>
               </div>
               <div className="d-flex flex-column mt-3 p-3">
-                <div className="d-flex justify-content-end gap-3 mt-3">
+                <div className="d-flex justify-content-between align-items-center gap-3 mt-3 mb-3">
+                  {totalDataCount > 0 && (
+                    <p style={{ margin: 0 }}>
+                      {multiLangObj?.total}&nbsp;:&nbsp; {totalDataCount}
+                    </p>
+                  )}
                   <CButton onClick={deleteHandler} className="btn-black">
                     {multiLangObj?.delete}
                   </CButton>
                 </div>
-                {totalDataCount > 0 && (
-                  <p style={{ margin: 0 }}>
-                    {multiLangObj?.total}&nbsp;:&nbsp; {totalDataCount}
-                  </p>
-                )}
                 <div className="clubTable">
                   <ReactTable
                     columns={clubDatacolumns}
@@ -741,7 +746,7 @@ const ClubBoardListing = () => {
                     onSelectionChange={handleSelectionChange}
                   />
                 </div>
-                <div className="d-flex w-100 justify-content-center gap-3">
+                <div className="d-flex w-100 justify-content-center align-items-center my-3 gap-3">
                   {clubData.length > 0 && (
                     <div className="userlist-pagination">
                       <div className="userlist-pagination dataTables_paginate">
@@ -760,7 +765,7 @@ const ClubBoardListing = () => {
                     </div>
                   )}
                   {clubData.length > 0 && (
-                    <div className="d-flex align-items-center gap-2 mt-2">
+                    <div className="d-flex align-items-center gap-2 ">
                       <label>{multiLangObj?.show}</label>
                       <CFormSelect
                         className=""

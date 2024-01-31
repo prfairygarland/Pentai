@@ -247,7 +247,7 @@ const ClubDetails = () => {
         Header: <p className="text-center">{multiLangObj?.host}</p>,
         accessor: 'englishname',
         Cell: ({ row }) => (
-          <Link className="text-dark text-center" style={{ curser: 'pointer' }}>
+          <Link className=" text-center" style={{ curser: 'pointer' }}>
             {row.original.englishname ? row.original.englishname : <p>{'-'}</p>}
           </Link>
         ),
@@ -487,7 +487,7 @@ const ClubDetails = () => {
               <p>
                 <Link
                   onClick={(e) => clubViewHandler(clubData?.clubId)}
-                  className="text-dark text-center"
+                  className=" text-center"
                   style={{ cursor: 'pointer' }}
                 >
                   {multiLangObj?.view}

@@ -322,8 +322,8 @@ const SupplyRentalDetails = ({ endModal, RentalStatusData, setRentalStatusData, 
             </CModal>
           </div>
         </div>
-      </section >
-    </div >
+      </section>
+    </div>
   )
 }
 

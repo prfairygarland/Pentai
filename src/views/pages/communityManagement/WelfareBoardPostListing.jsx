@@ -416,7 +416,7 @@ const WelfareBoardPostListing = () => {
         Header: multiLangObj?.title,
         accessor: 'PostTitle',
         Cell: ({ row }) => (
-          <div className="d-flex gap-1">
+          <div className="d-flex gap-1 align-items-center">
             {row.original.isAnnouncement > 0 && <i className="icon-announce"></i>}
             <Link
               to={`/BulletinBoardPostDetails/${row.original.postId}/${row.original.boardId}`}
@@ -429,7 +429,7 @@ const WelfareBoardPostListing = () => {
             >
               {row.original.PostTitle}
             </Link>
-            <div className="d-flex gap-1">
+            <div className="d-flex gap-1 align-items-center">
               {row.original.attachments != null ? (
                 <CIcon style={{ width: '10px' }} icon={cilFile} size="lg" />
               ) : (
@@ -452,7 +452,7 @@ const WelfareBoardPostListing = () => {
         Cell: ({ row }) => (
           <Link
             onClick={() => handleShowWritterInfo(row.original.userId)}
-            className="text-dark text-center"
+            className="text-center"
             style={{ curser: 'pointer' }}
           >
             {row.original.englishName ? row.original.englishName : <p>{'-'}</p>}
@@ -482,9 +482,7 @@ const WelfareBoardPostListing = () => {
         Header: multiLangObj?.views,
         accessor: 'views',
         Cell: ({ row }) => (
-          <a className="text-dark text-center">{`${
-            row.original.views ? row.original.views : 0
-          }`}</a>
+          <a className=" text-center">{`${row.original.views ? row.original.views : 0}`}</a>
         ),
       },
       {
@@ -628,19 +626,21 @@ const WelfareBoardPostListing = () => {
               </CButton>
             </div>
           </div>
-          <div className="d-flex flex-column mt-3 p-3">
-            {totalDataCount > 0 && (
-              <p style={{ margin: 0, marginBottom: 5 }}>
-                {multiLangObj?.total}&nbsp;:&nbsp; {totalDataCount}
-              </p>
-            )}
+          <div className="d-flex flex-column mt-3 ">
+            <div className="mb-3">
+              {totalDataCount > 0 && (
+                <p>
+                  {multiLangObj?.total}&nbsp;:&nbsp; {totalDataCount}
+                </p>
+              )}
+            </div>
             <ReactTable
               columns={columns}
               data={postData}
               showCheckbox={false}
               onSelectionChange={handleSelectionChange}
             />
-            <div className="d-flex w-100 justify-content-center gap-3">
+            <div className="d-flex w-100 justify-content-center align-items-center my-3 gap-3">
               {postData.length > 0 && (
                 <div className="userlist-pagination">
                   <div className="userlist-pagination dataTables_paginate">
@@ -659,7 +659,7 @@ const WelfareBoardPostListing = () => {
                 </div>
               )}
               {postData.length > 0 && (
-                <div className="d-flex align-items-center gap-2 mt-2">
+                <div className="d-flex align-items-center gap-2">
                   <label>{multiLangObj?.show}</label>
                   <CFormSelect
                     className=""

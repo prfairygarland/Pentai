@@ -1,5 +1,6 @@
 import {
   CButton,
+  CFooter,
   CForm,
   CFormCheck,
   CFormInput,
@@ -7,6 +8,7 @@ import {
   CFormSwitch,
   CModal,
   CModalBody,
+  CModalFooter,
   CModalHeader,
   CModalTitle,
 } from '@coreui/react'
@@ -215,49 +217,49 @@ const ClubBoard = () => {
         Header: <p className="text-center">{multiLangObj?.headerMinPartiLimit}</p>,
         accessor: 'minPart',
         Cell: ({ row }) => (
-          <p role="button" className="text-center">
+          <a role="button" className="text-center">
             {row.original.minParticipants}
-          </p>
+          </a>
         ),
       },
       {
         Header: <p className="text-center">{multiLangObj?.headerMaxSameGrpLimit}</p>,
         accessor: 'maxLimit',
         Cell: ({ row }) => (
-          <p role="button" className="text-center">
+          <a role="button" className="text-center">
             {row.original.maxParticipantsPerGroup}
-          </p>
+          </a>
         ),
       },
       {
         Header: <p className="text-center">{multiLangObj?.headerNoOdClubActs}</p>,
         accessor: 'clubAct',
         Cell: ({ row }) => (
-          <p role="button" className="text-center">
+          <a role="button" className="text-center">
             -
-          </p>
+          </a>
         ),
       },
       {
         Header: <p className="text-center">{multiLangObj?.headerTotalNoOfPart}</p>,
         accessor: 'totNoOfPart',
         Cell: ({ row }) => (
-          <p role="button" className="text-center">
+          <a role="button" className="text-center">
             -
-          </p>
+          </a>
         ),
       },
       {
         Header: <p className="text-center">{multiLangObj?.headerClubActList}</p>,
         accessor: 'clubActList',
         Cell: ({ row }) => (
-          <p
+          <a
             role="button"
             onClick={() => viewActivityList(row.original.id)}
-            className="text-center"
+            className="blueTxt text-center"
           >
             View
-          </p>
+          </a>
         ),
       },
     ],
@@ -621,14 +623,10 @@ const ClubBoard = () => {
         Header: <p className="text-center">{multiLangObj?.action}</p>,
         accessor: 'maxLimit',
         Cell: ({ row }) => (
-          <p className="text-center">
-            <CIcon
-              icon={icon.cilTrash}
-              size="s"
-              style={{ cursor: 'pointer' }}
-              onClick={() => confirmDeleteBannerHandler(true, row.original.id)}
-            />
-          </p>
+          <a className='primTxt text-center' onClick={() => confirmDeleteBannerHandler(true, row.original.id)}>
+          
+            Delete
+          </a>
         ),
       },
     ],
@@ -924,12 +922,12 @@ const ClubBoard = () => {
       {showClubPeriod && <div>
         <CForm className="d-flex">
           <CFormInput className="me-sm-2" placeholder="Search" size="sm" value={searchTxt} onChange={(e) => setSearchTxt(e.target.value)}/>
-          <CButton color="dark" className="my-2 my-sm-0" type="button" onClick={getClubRegistrationPeriodsBySearch}>
+          <CButton  className="my-2 my-sm-0 " type="button" onClick={getClubRegistrationPeriodsBySearch}>
             Search
           </CButton>
         </CForm>
         <CForm className="d-flex justify-content-end mt-2">
-          <CButton color="dark" className="my-2 my-sm-0 ps-3 pe-4" type="button" onClick={addNewClubPeriodHandler}>
+          <CButton className="my-2 my-sm-0 ps-3 pe-4" type="button" onClick={addNewClubPeriodHandler}>
             Add
           </CButton>
         </CForm>
@@ -940,7 +938,7 @@ const ClubBoard = () => {
           showCheckbox={false}
           onSelectionChange={() => {}}
         />
-        <div className="d-flex w-100 justify-content-center gap-3">
+        <div className="d-flex w-100 justify-content-center mt-3 mb-4 gap-3">
           {clubPeriodData?.length > 0 && (
             <div className="userlist-pagination">
               <div className="userlist-pagination dataTables_paginate">
@@ -959,7 +957,7 @@ const ClubBoard = () => {
             </div>
           )}
           {clubPeriodData?.length > 0 && (
-            <div className="d-flex align-items-center gap-2 mt-2">
+            <div className="d-flex align-items-center gap-2 ">
               <label>Show</label>
               <CFormSelect
                 className=""
@@ -976,6 +974,7 @@ const ClubBoard = () => {
         </div>
         <CModal className='modal-lg'
           alignment="center"
+          scrollable
           visible={clubActivityListPopup}
           onClose={() => {
             setClubActivityListPopup(false)
@@ -999,7 +998,7 @@ const ClubBoard = () => {
               }}
               showCheckbox={false}
             />}
-            <div className="d-flex w-100 justify-content-center gap-3">
+            <div className="d-flex w-100 justify-content-center gap-3 align-items-center mt-3">
           {clubActivityListData?.length > 0 && (
             <div className="userlist-pagination">
               <div className="userlist-pagination dataTables_paginate">
@@ -1018,7 +1017,7 @@ const ClubBoard = () => {
             </div>
           )}
           {clubActivityListData?.length > 0 && (
-            <div className="d-flex align-items-center gap-2 mt-2">
+            <div className="d-flex align-items-center gap-2">
               <label>Show</label>
               <CFormSelect
                 className=""
@@ -1033,16 +1032,19 @@ const ClubBoard = () => {
             </div>
           )}
         </div>
+            <p className='text-center'>
             {clubActivityListData.length === 0 && <>No Data Available</>}
+            </p>
           </CModalBody>
         </CModal>
-        <CModal className='modal-lg'
+        <CModal className='modal-md'
           alignment="center"
           visible={addModifyClubPeriodModal}
           onClose={() => {
             setAddModifyClubPeriodModal(false)
           }}
           backdrop="static"
+          scrollable
           aria-labelledby="LiveDemoExampleLabel"
         >
           <CModalHeader
@@ -1056,88 +1058,91 @@ const ClubBoard = () => {
               <CFormInput
                 type="text"
                 placeholder="Enter Title Here"
-                className="txt-poll-title"
+                className="txt-poll-title mb-2"
                 name="pollTitle"
+                
                 value={clubTitle}
                 onChange={(e) => {
                   setClubTitle(e.target.value)
                 }}
               />
-              <div className="deadline-container">
+              <div className="deadline-container align-items-center">
                   <h5>Club Period Setting</h5>
               </div>
-              <div className="deadline-container">
-                <div className="deadline-label">Registration Period</div>
-                <div>
+              <div className="deadline-container mb-1">
+                <div className="deadline-label w-50">Registration Period</div>
+               
+              </div>
+              <div className='d-flex align-items-center w-100 gap-2  mb-3' >
                   <DatePicker
                     value={registrationStart}
                     onChange={(event) => handleRegistrationStartChange(event)}
                   />
-                </div>
-                <div>
+                
                   <DatePicker
                     value={registrationEnd}
                     onChange={(event) => handleRegistrationEndChange(event)}
                   />
-                </div>
-                <div>
-                  <div>{multiLangObj?.firstDeadline}</div>
-                  <div>{multiLangObj?.yyyyMmDd}</div>
-                </div>
-              </div>
-            <div className="deadline-container">
-              <div className="deadline-label">Recruitment Period</div>
-              <div>
+                
+                 {multiLangObj?.firstDeadline}
+                  {multiLangObj?.yyyyMmDd}
+                  </div>
+            <div className="deadline-container align-items-center mb-1">
+              <div className="deadline-label w-50">Recruitment Period</div>
+            
+            </div>
+            <div className='d-flex align-items-center w-100 gap-2 mb-3'>
                   <DatePicker
                     value={recruitmentStart}
                     onChange={(event) => handleRecruitStartChange(event)}
                   />
-                </div>
-                <div>
+               
                   <DatePicker
                     value={recruitmentEnd}
                     onChange={(event) => handleRecruitEndChange(event)}
                   />
-                </div>
-              <div>
-                <div>last Deadline</div>
-                <div>YYYY.MM.DD</div>
+               
+                last Deadline
+               YYYY.MM.DD
+               
               </div>
-            </div>
               <div className="deadline-container">
                   <h5>No. of Participants Setting</h5>
               </div>
-              <div className="deadline-container">
-                <div className="deadline-label">Min. participant limit</div>
-                <div className="">Over</div>
-                <div>
-                  <CFormSelect
-                        className='mx-4'
-                        options={[
-                            { label: '1', value: '1' },
-                            { label: '2', value: '2' },
-                            { label: '3', value: '3' },
-                            { label: '4', value: '4' },
-                            { label: '5', value: '5' },
-                            { label: '6', value: '6' },
-                            { label: '7', value: '7' },
-                            { label: '8', value: '8' },
-                            { label: '9', value: '9' },
-                            { label: '10', value: '10' },
-                        ]}
-                        value={minParticipants}
-                        onChange={(e) => setMinParticipants(e.target.value)}
-                    />
+              <div className="deadline-container align-items-center justify-content-between w-100">
+                <div className="deadline-label w-50">Min. participant limit</div>
+                <div className='d-flex justify-content-between align-items-center w-50'>
+                <h5 style={{flex:1}}>Over</h5>
+               
+               <CFormSelect
+               className='ms-2'
+                     style={{width:100}}
+                     options={[
+                         { label: '1', value: '1' },
+                         { label: '2', value: '2' },
+                         { label: '3', value: '3' },
+                         { label: '4', value: '4' },
+                         { label: '5', value: '5' },
+                         { label: '6', value: '6' },
+                         { label: '7', value: '7' },
+                         { label: '8', value: '8' },
+                         { label: '9', value: '9' },
+                         { label: '10', value: '10' },
+                     ]}
+                     value={minParticipants}
+                     onChange={(e) => setMinParticipants(e.target.value)}
+                 />
                 </div>
+              
               </div>
-              <div className="deadline-container">
-                <div className="deadline-label">Max. same group limit</div>
-                <div>
-                  No More Than
-                </div>
-                <div>
+              <div className="deadline-container justify-content-between  align-items-center  w-100">
+                <div className="deadline-label w-50">Max. same group limit</div>
+                <div  className='d-flex justify-content-between align-items-center  w-50'>
+                 <h5 style={{flex:1}}> No More Than</h5>
+               
                   <CFormSelect
-                        className='mx-2'
+                        className='ms-2'
+                        style={{width:100}}
                         options={[
                             { label: '10', value: '10' },
                             { label: '20', value: '20' },
@@ -1155,31 +1160,38 @@ const ClubBoard = () => {
                     />
                 </div>
               </div>
-              <div className="d-flex justify-content-evenly">
-                <CButton onClick={cancelPeriodModalHandler}>Cancel</CButton>
-                <CButton onClick={validateClubPeriodHandler}>{periodId ? 'Update' : 'Save'}</CButton>
-              </div>
+            
           </CModalBody>
+          <CModalFooter className="d-flex justify-content-center gap-2">
+          
+                <CButton onClick={cancelPeriodModalHandler} className='btn-black'>Cancel</CButton>
+                <CButton onClick={validateClubPeriodHandler}>{periodId ? 'Update' : 'Save'}</CButton>
+              
+          </CModalFooter>
         </CModal>
       </div>}
       <div className='toggleContainer'>
         <div>Club Banner</div>
         <div><CFormSwitch id="club_banner" className="cFormSwitch" onClick={handleShowClubBannerToggle} defaultChecked={showClubBanner}/></div>
       </div>
-      {showClubBanner && <div>
-        <CForm className="d-flex justify-content-end mt-2">
-          <CButton color="dark" className="my-2 my-sm-0 ps-3 pe-4" type="button" onClick={addNewClubBannerHandler}>
+      {showClubBanner &&
+       <div>
+      <div className='d-flex justify-content-between align-items-center w-100 mb-3'>
+      {totalclubBannerDataCount > 0 && <p style={{ margin: 0 }}>Total&nbsp;:&nbsp; {totalclubBannerDataCount}</p>}
+      <CForm className=" mt-2">
+          <CButton  className="my-2 my-sm-0 ps-3 pe-4" type="button" onClick={addNewClubBannerHandler}>
             Add
           </CButton>
         </CForm>
-        {totalclubBannerDataCount > 0 && <p style={{ margin: 0 }}>Total&nbsp;:&nbsp; {totalclubBannerDataCount}</p>}
+      
+      </div>
         <ReactTable
           columns={clubBannerDataColumns}
           data={clubBannerData}
           showCheckbox={false}
           onSelectionChange={() => {}}
         />
-        <div className="d-flex w-100 justify-content-center gap-3">
+        <div className="d-flex w-100 justify-content-center gap-3 align-items-center mt-3">
           {clubBannerData?.length > 0 && (
             <div className="userlist-pagination">
               <div className="userlist-pagination dataTables_paginate">
@@ -1198,7 +1210,7 @@ const ClubBoard = () => {
             </div>
           )}
           {clubPeriodData?.length > 0 && (
-            <div className="d-flex align-items-center gap-2 mt-2">
+            <div className="d-flex align-items-center gap-2 ">
               <label>Show</label>
               <CFormSelect
                 className=""
@@ -1257,44 +1269,44 @@ const ClubBoard = () => {
                   <div className="formWrpLabel">
                     <label className="fw-bolder ">Posting Period</label>
                   </div>
-                  <div className="upload-image-main-container">
-                    <div className="upload-img-btn-and-info">
-                      <div>
+                  <div className="upload-image-main-container flex-row align-items-center gap-2">
+                   
+                      <div className='d-flex align-items-center gap-2'>
                         <DatePicker
                           value={bannerStartDate}
                           minDate={new Date()}
                           onChange={(event) => handleBannerStartDate(event)}
+                          style={{width:100}}
                         />
-                      </div>
-                      <div>
+                     
                         <input
                           type="time"
                           name="time"
                           id="time"
-                          className="time-picker"
+                          className="time-picker m-0 p-1"
                           value={`${bannerStartHours}:${bannerStartMins}`}
                           onChange={(e) => bannerStartTimeHandler(e)}
                         />
                       </div>
-                      -&nbsp;&nbsp;
-                      <div>
+                      -
+                      <div  className='d-flex align-items-center gap-2'>
                         <DatePicker
                           value={bannerEndDate}
                           minDate={new Date()}
                           onChange={(event) => handleBannerEndDate(event)}
+                          style={{width:100}}
                         />
-                      </div>
-                      <div>
+                     
                         <input
                           type="time"
                           name="time"
                           id="time"
-                          className="time-picker"
+                          className="time-picker  m-0 p-1"
                           value={`${bannerEndHours}:${bannerEndMins}`}
                           onChange={(e) => bannerEndTimeHandler(e)}
                         />
                       </div>
-                    </div>
+                    
                   </div>
                 </div>
                 <div className="form-outline form-white  d-flex ">
@@ -1304,8 +1316,8 @@ const ClubBoard = () => {
                   <div className="upload-image-main-container">
                     <div className="upload-img-btn-and-info">
                       <div className="upload-container-btn">
-                        <label className="label-btn" color="dark" htmlFor="imageFiles">
-                          Upload
+                        <label className="btn btn-primary" style={{paddingLeft:20}}  htmlFor="imageFiles">
+                        Upload
                           <input
                             type="file"
                             name="imageFiles"
@@ -1315,6 +1327,7 @@ const ClubBoard = () => {
                             onChange={(e) => setUploadedBannerImage(e.target.files[0])}
                           />
                         </label>
+                       
                       </div>
                       {uploadedBannerImage && <div className="upload-images-container uploadImgWrap">
                           <div className='thubmnail-img-container'>
@@ -1329,7 +1342,7 @@ const ClubBoard = () => {
                     <label className="fw-bolder ">Banner Type</label>
                   </div>
                   <div className="upload-image-main-container">
-                  <div className="push-notification-container gap-3">
+                  <div className="push-notification-container gap-3 px-0 py-2">
                     <CFormCheck
                       type="radio"
                       name="imageType"
@@ -1339,8 +1352,9 @@ const ClubBoard = () => {
                       value={true}
                     />
                   </div>
-                  <div className="push-notification-container gap-3">
-                    <CFormCheck
+                  <div className="push-notification-container gap-3 align-items-center  px-0 py-2">
+                   <div className='text-nowrap'>
+                   <CFormCheck
                       type="radio"
                       name="imageType"
                       defaultChecked={imageType === 'linkTo'}
@@ -1348,6 +1362,7 @@ const ClubBoard = () => {
                       label="Link To"
                       value={false}
                     />
+                   </div>
                     <CFormInput
                         type="text"
                         placeholder="Enter URL"
@@ -1359,7 +1374,7 @@ const ClubBoard = () => {
                         }}
                       />
                   </div>
-                  <div className="push-notification-container gap-3">
+                  <div className="push-notification-container gap-3  px-0 py-2">
                     <CFormCheck
                       type="radio"
                       name="imageType"
@@ -1368,7 +1383,7 @@ const ClubBoard = () => {
                       label="Pop-up Image"
                       value={false}
                     />
-                    <label className="label-btn" color="dark" htmlFor="popupImg" style={{display: `${imageType === 'popUpImage' ? '' : 'none'}`}}>
+                    <label className="btn btn-primary " htmlFor="popupImg" style={{display: `${imageType === 'popUpImage' ? '' : 'none'}`}}>
                           Upload
                           <input
                             type="file"
@@ -1389,8 +1404,8 @@ const ClubBoard = () => {
                 </div>
               </div>
             </div>
-            <div className="d-flex justify-content-evenly">
-              <CButton onClick={cancelBannerModalHandler}>Cancel</CButton>
+            <div className="d-flex justify-content-center mt-3 gap-2">
+              <CButton onClick={cancelBannerModalHandler} className='btn-black'>Cancel</CButton>
               <CButton onClick={validateClubBannerHandler}>{periodId ? 'Update' : 'Save'}</CButton>
             </div>
           </CModalBody>

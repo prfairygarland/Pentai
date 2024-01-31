@@ -347,7 +347,7 @@ const ItemNumber = ({ bookItemDetail, setIconSubSet, setIconSubBookSet, setSideS
                 {isLoading && <Loader />}
                 <div>
                     <div className='d-flex justify-content-end'>
-                        <CButton onClick={() => setdeleteVisible(true)}>Delete</CButton>
+                        <CButton onClick={() => setdeleteVisible(true)} className='btn-black'>Delete</CButton>
                     </div>
                     <div className="dropdown-container mb-2">
                         <h5 className="me-3">Item Number</h5>
@@ -403,8 +403,8 @@ const ItemNumber = ({ bookItemDetail, setIconSubSet, setIconSubBookSet, setSideS
                                     <div className="formWrpInpt d-flex">
                                         <div className="d-flex formradiogroup mb-2 gap-3">
                                             <CFormInput
-                                                className='mx-4'
-                                                style={{ width: '170px' }}
+                                                // className='mx-4'
+                                                // style={{ width: '170px' }}
                                                 type='text'
                                                 value={data.title}
                                                 onChange={handleChangeTitle}
@@ -428,18 +428,18 @@ const ItemNumber = ({ bookItemDetail, setIconSubSet, setIconSubBookSet, setSideS
                                     </div>
                                 </div>
                             </div>
-                            <div className="form-outline form-white d-flex gap-3">
-                                <div className='d-flex'>
+                            <div className="form-outline form-white d-flex ">
+                                <div className='d-flex w-100'>
                                     <div className="formWrpLabel" >
                                         <label className="fw-bolder ">
                                             Item Status
                                         </label>
                                     </div>
                                     <div className="formWrpInpt d-flex">
-                                        <div className="d-flex formradiogroup mb-2 gap-3">
+                                        <div className="d-flex formradiogroup mb-2 gap-3 w-100">
                                             <CFormSelect
-                                                className='mx-4'
-                                                style={{ width: '170px' }}
+                                                
+                                                // style={{ width: '170px' }}
                                                 name='itemStatus'
                                                 value={data.itemStatus}
                                                 options={[
@@ -456,15 +456,15 @@ const ItemNumber = ({ bookItemDetail, setIconSubSet, setIconSubBookSet, setSideS
                                         </div>
                                     </div>
                                 </div>
-                                <div className='d-flex'>
+                                <div className='d-flex w-100'>
                                     <div className="formWrpLabel" >
                                         <label className="fw-bolder ">
                                             Item Registered Date
                                         </label>
                                     </div>
                                     <div className="formWrpInpt d-flex">
-                                        <div className="d-flex formradiogroup mb-2 gap-3">
-                                            <DatePicker
+                                        <div className="d-flex formradiogroup mb-2 gap-3 w-100">
+                                            <DatePicker 
                                                 value={data.itemRegDate}
                                                 minDate={new Date()}
                                                 onChange={handleChangeItemRegDate}
@@ -515,7 +515,7 @@ const ItemNumber = ({ bookItemDetail, setIconSubSet, setIconSubBookSet, setSideS
                                         </label>
                                     </div>
                                     <div className="formWrpInpt">
-                                        <div className="d-flex formradiogroup mb-2 align-items-center  justify-content-center gap-5">
+                                        <div className="d-flex formradiogroup mb-2 align-items-center   gap-5">
                                             <p>
                                                 Max. Rentable Weeks
                                             </p>
@@ -536,7 +536,7 @@ const ItemNumber = ({ bookItemDetail, setIconSubSet, setIconSubBookSet, setSideS
                                         </label>
                                     </div>
                                     <div className="formWrpInpt">
-                                        <div className="d-flex formradiogroup mb-2 align-items-center  justify-content-center gap-5">
+                                        <div className="d-flex formradiogroup mb-2 align-items-center   gap-5">
                                             <p>
                                                 Max. Rentable Weeks
                                             </p>
@@ -594,8 +594,8 @@ const ItemNumber = ({ bookItemDetail, setIconSubSet, setIconSubBookSet, setSideS
                         </div>
                     </div>
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '5%', gap: 10 }}>
-                    <CButton onClick={handleCancel} style={{ marginRight: '2%', background: '#ccc', border: 'none' }}>Cancel</CButton>
+                <div className='d-flex justify-content-center gap-4 my-3'>
+                    <CButton onClick={handleCancel} className='btn-black'>Cancel</CButton>
                     <CButton onClick={handleUpdateBookItem}>Save</CButton>
                 </div>
                 <CModal
@@ -613,8 +613,8 @@ const ItemNumber = ({ bookItemDetail, setIconSubSet, setIconSubBookSet, setSideS
                             All categories and items belonging will be deleted.</p>
                     </CModalBody>
                     <CModalFooter>
-                        <CButton color="primary" onClick={deleteBookItem}>Delete</CButton>
-                        <CButton onClick={() => setdeleteVisible(false)} color="secondary" >
+                        <CButton className='btn-black' onClick={deleteBookItem}>Delete</CButton>
+                        <CButton className='btn-black' onClick={() => setdeleteVisible(false)} color="secondary" >
                             Cancel
                         </CButton>
                     </CModalFooter>
