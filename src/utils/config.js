@@ -168,7 +168,9 @@ export let API_ENDPOINT = {
   meeting_details: ALL_CONSTANTS.API_URL + "/admin/meeting/meetingDetail",
   reservation_details: ALL_CONSTANTS.API_URL + "/admin/meeting/reservationDetail",
   get_all_meeting_rooms: ALL_CONSTANTS.API_URL + "/admin/meeting/roomList",
-  
+  get_all_meeting_rooms_records: ALL_CONSTANTS.API_URL + "/admin/meeting/allMeetingRoom", 
+  get_all_meeting_rooms_export: ALL_CONSTANTS.API_URL + "/admin/meeting/allExport", 
+   
   create_meeting_building: ALL_CONSTANTS.API_URL + "/admin/meeting/building/create",
   get_meeting_building_details: ALL_CONSTANTS.API_URL + "/admin/meeting/buildingDetail",
   update_meeting_building: ALL_CONSTANTS.API_URL + "/admin/meeting/buildingUpdate",
@@ -182,6 +184,9 @@ export let API_ENDPOINT = {
   create_meeting_room: ALL_CONSTANTS.API_URL + "/admin/meeting/room/create",
   get_meeting_room_details: ALL_CONSTANTS.API_URL + "/admin/meeting/roomDetail",
   delete_meeting_room: ALL_CONSTANTS.API_URL + "/admin/meeting/deleteRoom",
+
+  get_all_equipments: ALL_CONSTANTS.API_URL + "/admin/meeting/equipment/list",
+  add_new_equipment: ALL_CONSTANTS.API_URL + "/admin/meeting/equipment/create",
   
   
 

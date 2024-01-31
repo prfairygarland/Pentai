@@ -20,10 +20,13 @@ import { API_ENDPOINT } from 'src/utils/config'
 const AddBuilding = ({ setModal, getMod, Modal, removeIds, buildingId, getVal }) => {
   const [deleteVisible, setDeleteVisible] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [searchTxt, setSearchTxt] = useState('')
+  const [filteredEquipments, setFilteredEquipments] = useState([])
   const [addBuildingData, setAddBuildingData] = useState({
     name: '',
     associatedRooms: 1,
     visibility: true,
+    allEquipments: [],
   })
 
   useEffect(() => {
@@ -35,8 +38,77 @@ const AddBuilding = ({ setModal, getMod, Modal, removeIds, buildingId, getVal })
         associatedRooms: 1,
         visibility: true,
       })
+      getAllEquipments()
     }
   }, [buildingId])
+
+  const getAllEquipments = async (searchTxtArg = '') => {
+    try {
+      setSearchTxt(searchTxtArg)
+      let url = API_ENDPOINT.get_all_equipments
+      if (searchTxtArg) {
+        url += '?search=' + searchTxtArg
+      }
+      const response = await getApi(url)
+
+      console.log(response)
+      if (response?.status === 200) {
+        if (!searchTxtArg) {
+          setAddBuildingData((prev) => ({ ...prev, allEquipments: response?.data }))
+          setFilteredEquipments([])
+        } else {
+          setFilteredEquipments(response?.data)
+        }
+      }
+      if (response?.status === 204 && searchTxtArg !== '') {
+        setFilteredEquipments([{ id: 'new', name: 'No Equipment Found!' }])
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  const setEquipmentsHandler = (obj) => {
+    const alreadyAddEquipments = addBuildingData?.allEquipments.filter((item) => item.id === obj.id)
+    if (alreadyAddEquipments.length > 0) {
+      enqueueSnackbar('Already Added', { variant: 'success' })
+    } else {
+      if (obj.id !== 'new') {
+        setAddBuildingData((prev) => ({
+          ...prev,
+          allEquipments: [...addBuildingData?.allEquipments, obj],
+        }))
+      }
+    }
+  }
+
+  const addNewEquipment = async () => {
+    try {
+      const res = await postApi(API_ENDPOINT.add_new_equipment, {
+        name: searchTxt,
+        visibility: 'visible',
+      })
+      if (res.status === 200) {
+        setSearchTxt('')
+        getAllEquipments()
+      } else {
+        enqueueSnackbar(`${res?.data?.msg}`, { variant: 'error' })
+        setIsLoading(false)
+      }
+    } catch (error) {
+      setIsLoading(false)
+      console.log(error)
+    }
+  }
+
+  const removeEquipment = (id = '') => {
+    if (id) {
+      const remainingEquipments = addBuildingData?.allEquipments.filter((item) => item.id !== id)
+      setAddBuildingData((prev) => ({ ...prev, allEquipments: remainingEquipments }))
+    } else {
+      setAddBuildingData((prev) => ({ ...prev, allEquipments: [] }))
+    }
+  }
 
   const getData = async (id) => {
     try {
@@ -47,6 +119,7 @@ const AddBuilding = ({ setModal, getMod, Modal, removeIds, buildingId, getVal })
         setAddBuildingData({
           name: response.data.name,
           visibility: response.data.visibility === 'visible' ? true : false,
+          associatedRooms: response.data.associatedItem,
         })
       }
     } catch (error) {
@@ -71,22 +144,7 @@ const AddBuilding = ({ setModal, getMod, Modal, removeIds, buildingId, getVal })
   }
 
   const handleInputChange = (e) => {
-    const keyName = e.target.name
-    let value = e.target.value
-    if (keyName === 'name') {
-      value = value.substring(0, 26)
-    } else if (keyName === 'associatedItem') {
-      value = value
-    } else if (keyName === 'rentalDuration') {
-      value = value
-    } else if (keyName === 'pickUpAndReturn') {
-      value = value.substring(0, 25)
-    } else if (keyName === 'reasonRemarks') {
-      value = value.substring(0, 100)
-    } else if (keyName === 'rentalGuideDescription') {
-      value = value
-    }
-    setAddBuildingData((prev) => ({ ...prev, [keyName]: value }))
+    setAddBuildingData((prev) => ({ ...prev, name: e.target.value }))
   }
 
   const saveBuilding = async () => {
@@ -99,6 +157,7 @@ const AddBuilding = ({ setModal, getMod, Modal, removeIds, buildingId, getVal })
       let data = {
         name: addBuildingData.name,
         visibility: addBuildingData.visibility === true ? 'visible' : 'hide',
+        equipments: JSON.stringify(addBuildingData?.allEquipments),
       }
 
       if (buildingId) {
@@ -228,13 +287,26 @@ const AddBuilding = ({ setModal, getMod, Modal, removeIds, buildingId, getVal })
                       <CFormInput
                         type="text"
                         id="inputPassword2"
-                        onChange={(e) => alert(e.target.value)}
+                        onChange={(e) => getAllEquipments(e.target.value)}
                         placeholder="Please enter equipment name"
-                        value=""
+                        value={searchTxt}
                       />
+                      {filteredEquipments.length > 0 && (
+                        <ul className="p-2">
+                          {filteredEquipments.map((item) => (
+                            <li
+                              className="p-2"
+                              key={item.id}
+                              onClick={() => setEquipmentsHandler(item)}
+                            >
+                              <strong> {item.name}</strong>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
                     </CCol>
                     <CCol xs="auto">
-                      <CButton type="submit" onClick={() => {}} className="mb-3 btn-dark">
+                      <CButton type="submit" onClick={addNewEquipment} className="mb-3 btn-dark">
                         Add
                       </CButton>
                     </CCol>
@@ -242,20 +314,24 @@ const AddBuilding = ({ setModal, getMod, Modal, removeIds, buildingId, getVal })
                   <div className="d-flex w-100 mt-4 flex-column">
                     <div className="prowordsection">
                       <div className="d-flex flex-wrap">
-                        {/* {prohabitedWords &&
-                          prohabitedWords.map((word, index) => ( */}
-                        <div className="prohibitword m-2" key={0}>
-                          <p>Word&nbsp;&nbsp;&nbsp;</p>
-                          <button onClick={() => alert(0)}>
-                            <i className="icon-close"></i>
-                          </button>
-                        </div>
-                        {/* ))} */}
+                        {addBuildingData?.allEquipments &&
+                          addBuildingData?.allEquipments.map((equipDetails, index) => (
+                            <div className="prohibitword m-2" key={0}>
+                              <p>{equipDetails?.name}&nbsp;&nbsp;&nbsp;</p>
+                              <button onClick={() => removeEquipment(equipDetails?.id)}>
+                                <i className="icon-close"></i>
+                              </button>
+                            </div>
+                          ))}
                       </div>
                     </div>
                     <div className="d-flex justify-content-end mt-2">
                       <CCol xs="auto">
-                        <CButton type="submit" onClick={() => {}} className="mb-3 btn-dark">
+                        <CButton
+                          type="submit"
+                          onClick={() => removeEquipment()}
+                          className="mb-3 btn-dark"
+                        >
                           Delete All
                         </CButton>
                       </CCol>
