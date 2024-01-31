@@ -88,7 +88,7 @@ const AppHeader = () => {
         <CHeaderBrand className="mx-auto d-md-none" to="/">
           {/* <CIcon icon={logo} height={48} alt="Logo" /> */}
         </CHeaderBrand>
-        <CHeaderNav className="ms-3">
+        <CHeaderNav className="ms-3 align-items-center">
           <CNavItem>
             <CNavLink to='/changepassword' component={NavLink}>
               {/* <p>Change Password</p> */}
@@ -121,8 +121,8 @@ const AppHeader = () => {
             </CModal>
 
           </CNavItem>
-          <CDropdown component="li" className="ms-3" variant="nav-item">
-            <CDropdownToggle>{i18n.language == 'en' ? 'English' : 'Korean'}</CDropdownToggle>
+          <CDropdown component="li" className="ms-3 p-0" variant="nav-item">
+            <CDropdownToggle className='p-0'>{i18n.language == 'en' ? 'English' : 'Korean'}</CDropdownToggle>
             <CDropdownMenu role='button'>
               <CDropdownItem onClick={() => changeLanguage('en')}>English</CDropdownItem>
               <CDropdownItem onClick={() => changeLanguage('ko')}>Korean</CDropdownItem>

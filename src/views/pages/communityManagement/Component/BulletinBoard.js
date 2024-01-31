@@ -274,7 +274,7 @@ const BulletinBoard = () => {
                   onChange={handleSearchChange}
                 />
                 {searchData.length > 0 && (
-                  <ul className="p-2">
+                  <ul className="p-2 sidebarMenuLink">
                     {filteredData.map((item) => (
                       <li className="p-2" key={item.id} onClick={() => handleItemClick(item)} draggable={true}>
                         <strong> {item.name}</strong>
@@ -298,7 +298,7 @@ const BulletinBoard = () => {
                               <label className="fw-bolder ">{translationObject?.translation?.communityBoardManagement?.usageStatus}</label>
                             </div>
                             <div className="formWrpInpt">
-                              <div className="d-flex formradiogroup mb-2 gap-3">
+                              <div className="d-flex formradiogroup  gap-3">
                                 <CFormCheck
                                   type="radio"
                                   name="boardStatuses"
@@ -413,16 +413,19 @@ const BulletinBoard = () => {
                             <div className="formWrpLabel" style={{ minWidth: '140px' }}>
                               <label className="fw-bolder ">{translationObject?.translation?.communityBoardManagement?.pointSettings}</label>
                             </div>
-                            <div>
+                            <div className='w-100'>
                               <div className="formWrpInpt">
                                 <div className="d-flex formradiogroup gap-3 align-items-center">
-                                  <CFormCheck
+                                 <div className='lblwidth'>
+                                 <CFormCheck
                                     id="flexCheckDefault"
-                                    className="text-center"
+                                    className="gap-2"
                                     label={translationObject?.translation?.communityBoardManagement?.pointsPerPost}
                                     checked={pointsData?.pointsPerPostenabled}
                                     onChange={handlePointsPerPostCheckbox}
+                                    
                                   />
+                                 </div>
                                   <CFormInput
                                     type="number"
                                     className="h-25 w-25 "
@@ -445,18 +448,20 @@ const BulletinBoard = () => {
                               </div>
                               <div className="formWrpInpt">
                                 <div className="d-flex formradiogroup gap-3 align-items-center">
-                                  <CFormCheck
+                                 <div className='lblwidth'>
+                                 <CFormCheck
                                     id="flexCheckDefault"
-                                    className="text-center"
+                                    className="gap-2"
                                     label={translationObject?.translation?.communityBoardManagement?.pointsPerComment}
                                     checked={pointsData?.pointsPerCommentenabled}
                                     onChange={handlePointsPerCommentCheckbox}
                                   />
+                                 </div>
                                   <CFormInput
                                     type="number"
                                     max={999}
                                     min={1}
-                                    className="h-25 w-25 me-2"
+                                    className="h-25 w-25 "
                                     id="inputPassword2"
                                     placeholder="1~999"
                                     value={pointsData?.pointsPerComment}

@@ -643,7 +643,11 @@ const CreatePost = () => {
                 <div className="upload-image-main-container">
                   <div className="upload-img-btn-and-info">
                     <div className="upload-container-btn">
-                      <label className="label-btn" color="dark" htmlFor="imageFiles">
+                      <label
+                        className="btn btn-primary"
+                        style={{ paddingLeft: 20 }}
+                        htmlFor="imageFiles"
+                      >
                         {multiLangObj?.upload}
                         <input
                           type="file"
@@ -699,10 +703,10 @@ const CreatePost = () => {
                       <label
                         className={
                           recruitData?.recruitmentStatus === 'closed'
-                            ? `label-btn disabled`
-                            : `label-btn`
+                            ? `btn btn-primary  disabled`
+                            : `btn btn-primary `
                         }
-                        color="dark"
+                        style={{ paddingLeft: 20 }}
                         htmlFor="files"
                       >
                         {multiLangObj?.upload}
@@ -827,21 +831,17 @@ const CreatePost = () => {
             </div>
           </div>
         </div>
-        <div className="save-cancel-btn-container">
-          <CButton className="btn save-cancel-btn" color="dark" onClick={cancelPostHandler}>
+        <div className="save-cancel-btn-container gap-3 my-3">
+          <CButton className="btn btn-black" color="dark" onClick={cancelPostHandler}>
             {multiLangObj?.cancel}
           </CButton>
           {location?.state?.postId && (
-            <CButton
-              className="btn save-cancel-btn"
-              color="dark"
-              onClick={() => validate('update')}
-            >
+            <CButton className="btn " color="dark" onClick={() => validate('update')}>
               {multiLangObj?.update}
             </CButton>
           )}
           {!location?.state?.postId && (
-            <CButton className="btn save-cancel-btn" color="dark" onClick={() => validate('save')}>
+            <CButton className="btn " onClick={() => validate('save')}>
               {multiLangObj?.save}
             </CButton>
           )}

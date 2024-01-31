@@ -1,23 +1,26 @@
-.modal-header{
-  background-color: ($primary);
-    position: relative;
-    padding-right: 35px;
-  .modal-title{
-    color: ($white);
-    
-  }
-  .btn-close{
-    position: absolute;
-    top: 0;
-    right: 5px;
-    margin: 0 !important;
-    color: ($white);
-    background: none !important;
-    opacity: 1;
-    &::after{
-      content:'\e917';
-      font-family: 'icomoon';
-      color:($white);
+
+.modal-content{
+  border-radius: 0 !important;
+  .modal-header{
+    background-color: ($white);
+      position: relative;
+      padding-right: 35px;
+    .modal-title{
+      color: ($primary); 
+    }
+    .btn-close{
+      position: absolute;
+      top: 0;
+      right: 5px;
+      margin: 0 !important;
+      
+      background: none !important;
+      opacity: 1;
+      &::after{
+        content:'\e917';
+        font-family: 'icomoon';
+        color:($primary);
+      }
     }
   }
 }

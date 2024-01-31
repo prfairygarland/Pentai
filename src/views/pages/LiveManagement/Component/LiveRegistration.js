@@ -610,7 +610,9 @@ const LiveRegistration = () => {
       {isLoading && <Loader />}
       <ConfirmationModal modalProps={modalProps} />
       <main>
-
+      <div className="pageTitle mb-3 pb-2">
+      <h2>Live Registration</h2>
+      </div>
         {/* edit only  */}
 
 
@@ -620,7 +622,7 @@ const LiveRegistration = () => {
           </div>
           <div className='d-flex gap-3'>
             <CButton >{multiLang?.LiveManagementRegistrationLive?.console}  <CIcon icon={cilAudio}></CIcon> </CButton>
-            <CButton >{multiLang?.LiveManagementRegistrationLive?.liveCancel}</CButton>
+            <CButton className='btn-black'>{multiLang?.LiveManagementRegistrationLive?.liveCancel}</CButton>
           </div>
 
         </div>
@@ -716,9 +718,9 @@ const LiveRegistration = () => {
                             </label>
                           </div>
                           <div>
-                            <div className="formWrpInpt d-flex w-100">
+                            <div className="formWrpInpt d-flex w-100 flex-column">
                               <div className="d-flex formradiogroup mb-2 gap-1 w-100">
-                                <DatePicker value={liveRegisterStartDate}
+                                <DatePicker value={liveRegisterStartDate} format='DD/MM/YYYY'
                                   onChange={(event) => handleLiveRegisterStartDate(event)}
                                 />
                                 <input
@@ -730,8 +732,7 @@ const LiveRegistration = () => {
                                   onChange={(e) => liveRegisterStartTimeHandler(e)}
                                 />
                               </div>
-                            </div>
-                            <div>
+                            
                               <p>{multiLang?.LiveManagementRegistrationLive?.Scheduled_start_time_msg}</p>
                             </div>
                           </div>
@@ -744,10 +745,10 @@ const LiveRegistration = () => {
                               {multiLang?.LiveManagementRegistrationLive?.Scheduled_end_time}
                             </label>
                           </div>
-                          <div>
-                            <div className="formWrpInpt d-flex w-100">
+                          <div className='w-100'>
+                            <div className="formWrpInpt d-flex w-100 flex-column">
                               <div className="d-flex formradiogroup mb-2 gap-1 w-100">
-                                <DatePicker value={liveRegisterEndDate}
+                                <DatePicker value={liveRegisterEndDate} format='DD/MM/YYYY'
                                   onChange={(event) => handleLiveRegisterEndDate(event)} />
                                 <input
                                   type="time"
@@ -758,8 +759,7 @@ const LiveRegistration = () => {
                                   onChange={(e) => liveRegisterEndTimeHandler(e)}
                                 />
                               </div>
-                            </div>
-                            <div>
+                           
                               <p>{multiLang?.LiveManagementRegistrationLive?.Scheduled_end_time_msg}</p>
                             </div>
                           </div>
@@ -867,7 +867,7 @@ const LiveRegistration = () => {
                         </div>
                       </div>
                       <div className="form-outline form-white d-flex align-items-center">
-                        <div className='d-flex col-md-6'>
+                        <div className='d-flex col-md-12'>
                           <div className="formWrpLabel" >
                             <label className="fw-bolder ">
                               {multiLang?.LiveManagementRegistrationLive?.Secret}
@@ -883,17 +883,17 @@ const LiveRegistration = () => {
                               onChange={() => handleSecretToggle()}
                             />
                             {secretToggle === true &&
-                              <div className='d-flex'>
+                              <div className='d-flex w-100 gap-3'>
                                 <CFormInput
-                                  className='w-50'
+                                  className='w-25'
                                   type="text"
                                   placeholder={multiLang?.LiveManagementRegistrationLive?.Enter_number}
                                   name='Points'
                                   value={secret}
                                   onChange={(e) => handleChange(e, 'secret')}
                                 />
-                                <div className='d-flex align-items-center'>
-                                  <p className='w-50'>{secret?.length} / 4</p>
+                                <div className='d-flex align-items-center gap-5'>
+                                  <p >{secret?.length} / 4</p>
                                   <p>{multiLang?.LiveManagementRegistrationLive?.Secret_description}</p>
                                 </div>
                               </div>
@@ -905,9 +905,9 @@ const LiveRegistration = () => {
                   </div>
                 </div>
               </div>
-              <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '5%', gap: 10 }}>
-                <CButton onClick={() => navigateToList()} style={{ marginRight: '2%', background: '#ccc', border: 'none' }}>{multiLang?.LiveManagementRegistrationLive?.list}</CButton>
-                <CButton onClick={confirmationCloseModalHandler} style={{ marginRight: '2%', background: '#ccc', border: 'none' }}>{multiLang?.LiveManagementRegistrationLive?.Cancel}</CButton>
+              <div className='d-flex justify-content-center gap-3 my-3'>
+                <CButton onClick={() => navigateToList()} >{multiLang?.LiveManagementRegistrationLive?.list}</CButton>
+                <CButton onClick={confirmationCloseModalHandler} className='btn-black'>{multiLang?.LiveManagementRegistrationLive?.Cancel}</CButton>
                 <CButton onClick={validateLiveRegister}>{multiLang?.LiveManagementRegistrationLive?.Save}</CButton>
               </div>
             </div>
@@ -1212,7 +1212,7 @@ const LiveRegistration = () => {
                                 {uploadedImages.length < 4 &&
                                   <div className="formWrpInpt mt-2 mb-2">
                                     <div className="upload-container-btn">
-                                      <label className="label-btn" color="dark" htmlFor="imageFiles">
+                                      <label className="btn btn-primary " color="dark" htmlFor="imageFiles">
                                         {multiLang?.LiveManagementRegistrationQuiz?.Create_Answer} +
                                         <input
                                           type="file"

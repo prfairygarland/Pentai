@@ -226,7 +226,11 @@ td {
     text-align: left;
     padding: 10px;
 }
-
+a{
+    color: ($black);
+    cursor: pointer;
+    text-decoration: underline ;
+}
 .clear {
     clear: both;
 }
@@ -296,12 +300,16 @@ button:focus {
   }
 .btn-success{
     background: ($green);
+    color: ($white);
 }
 .btn-primary,.btn-primary:hover,.btn.btn-primary:disabled,.btn-primary:active{
-    color: ($white);
+    color: ($white) !important;
   }
   .btn-black,.btn-black:hover,.btn-black:active,.btn-black:disabled{
     color: ($white);
     background: ($black);
     border-color: ($black);
+  }
+.btn-success:hover,.btn.btn-success:disabled,.btn-success:active{
+    color: ($white);
   }

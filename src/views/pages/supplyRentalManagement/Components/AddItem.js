@@ -428,12 +428,12 @@ const AddItem = ({ getVal, setCat, setSubIcon, setModalIcon, setModal, getMod, m
 
   return (
 
-    <div className='col-md-9'>
+    <div className='8'>
       {isLoading && <Loader />}
       <div className='addItemWrp'>
         {getItemId !== null &&
           <div className='d-flex justify-content-end'>
-            <CButton onClick={() => setDeleteVisible(true)}>{multiLang?.delete}</CButton>
+            <CButton onClick={() => setDeleteVisible(true)} className='btn-black'>{multiLang?.delete}</CButton>
           </div>
         }
         <div className="dropdown-container mb-2">

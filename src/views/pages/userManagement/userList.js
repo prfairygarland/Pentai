@@ -702,7 +702,7 @@ const UserList = () => {
             </div>
           </div>
           <div className='d-flex justify-content-end mt-3'>
-            <CButton className='btn btn-primary' onClick={() => clearAllFilters()}>{multiLang?.Clear}</CButton>
+            <CButton className='btn btn-black' onClick={() => clearAllFilters()}>{multiLang?.Clear}</CButton>
           </div>
         </div>
         <div>
@@ -787,18 +787,7 @@ const UserList = () => {
 
                 </CModalBody>
               </CModal>
-              <CDropdown className='dropDownbackground drpDBtn align-items-center'>
-                <label>{multiLang?.Show}</label>
-                <CDropdownToggle color="white" className='mx-2 filterbtn' >{itemsPerPage}</CDropdownToggle>
-                <CDropdownMenu >
-                  {perPageValue.map((option, index) => (
-                    <CDropdownItem role="button" key={index} onClick={() => perPagehandleSelect(option)}>
-                      {option}
-                    </CDropdownItem>
-                  ))}
-                </CDropdownMenu>
-                <label>{multiLang?.Lists}</label>
-              </CDropdown>
+           
             </div>
           </div>
         </div>
@@ -806,7 +795,8 @@ const UserList = () => {
 
           <ReactTable columns={columns} data={userListData} totalCount={10} onSelectionChange={handleSelectionChange} />
           <div>
-            {userListData.length > 0 &&
+           <div className='d-flex justify-content-center align-items-center mt-3 mb-2 gap-3'>
+           {userListData.length > 0 &&
               <div className='userlist-pagination'>
                 <div className='userlist-pagination dataTables_paginate'>
                   <ReactPaginate
@@ -823,7 +813,19 @@ const UserList = () => {
                 </div>
               </div>
             }
-
+            <CDropdown className='dropDownbackground drpDBtn align-items-center'>
+                <label>{multiLang?.Show}</label>
+                <CDropdownToggle color="white" className='mx-2 filterbtn' >{itemsPerPage}</CDropdownToggle>
+                <CDropdownMenu >
+                  {perPageValue.map((option, index) => (
+                    <CDropdownItem role="button" key={index} onClick={() => perPagehandleSelect(option)}>
+                      {option}
+                    </CDropdownItem>
+                  ))}
+                </CDropdownMenu>
+                <label>{multiLang?.Lists}</label>
+              </CDropdown>
+           </div>
             <div>
               <button className='btn btn-success mb-3' onClick={() => { setImportVisible(!importVisible); getImportHistoryData(1) }}>{multiLang?.Import_History}</button>
             </div>
@@ -839,9 +841,9 @@ const UserList = () => {
                   <CModalTitle>{multiLang?.Import_History}</CModalTitle>
                 </CModalHeader>
                 <CModalBody>
-                  <div className='d-flex w-100 gap-3 justify-content-end'>
+                  <div className='d-flex w-100 gap-3 mb-3 justify-content-end align-items-center'>
                     <p>{multiLang?.Total}: {totalImport} </p>
-                    <div className='d-flex p-2 gap-3'>
+                    <div className='d-flex gap-3'>
                       <DatePicker value={startDate} onChange={handleStartDateChange} />
                       <DatePicker value={endDate} onChange={handleEndDateChange} />
                     </div>
@@ -854,7 +856,9 @@ const UserList = () => {
                   </div>
                   <div>
                     <ReactTable showCheckbox={false} columns={importHistoryColumns} data={importHistoryData} totalCount={10} onSelectionChange={handleSelectionChange} />
-                    {importHistoryData.length > 0 &&
+
+                   <div className='mt-3'>
+                   {importHistoryData.length > 0 &&
                       <div className='userlist-pagination'>
                         <div className='userlist-pagination dataTables_paginate'>
                           <ReactPaginate
@@ -871,6 +875,7 @@ const UserList = () => {
                         </div>
                       </div>
                     }
+                   </div>
 
                   </div>
                 </CModalBody>

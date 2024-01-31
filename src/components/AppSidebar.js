@@ -53,7 +53,7 @@ const AppSidebar = () => {
         <img src={logo}/>
         {/* <CIcon className="sidebar-brand-narrow" icon={sygnet} height={35} /> */}
       </CSidebarBrand>
-      <h5 className="sidebar-brand-cat mt-3 text-center">{multiLang?.Category_Menu}</h5>
+      <h4 className="sidebar-brand-cat mt-3 px-3">{multiLang?.Category_Menu}</h4>
       <CSidebarNav>
         {/* <h4 className="sidebar-brand-narrow">PTK APP Admin</h4> */}
         <SimpleBar>

@@ -21,7 +21,16 @@ min-width: 100px;
 .drpBtn button{
   text-align: left;
   border: 1px solid #ccc;
-  padding-right: 17px;
+  padding-right: 20px;
+  padding-left: 10px;
+  cursor: pointer;
+  &:hover{
+  border: 1px solid #ccc;
+border-radius: 0 ;
+  }
+  &:active{
+    border: 1px solid #ccc !important;
+  }
 }
 .drpBtn button::after{
   position: absolute;
@@ -31,17 +40,19 @@ min-width: 100px;
     font-family: "icomoon";
     border: none;
     font-size: 12px;
-    right: 5px;
+    right: 7px;
+    margin-left: 0;
 }
 .drpDBtn{
 min-width: 150px;
 
 }
-.drpDBtn button{
+.drpDBtn button,.drpDBtn button:hover{
   text-align: left;
   border: 1px solid #ccc;    
   height: 38px;
   padding-right: 17px;
+  padding-left: 10px;
 }
 .drpDBtn button::after{
   position: absolute;
@@ -69,7 +80,9 @@ color: ($white);
     font-size: 14px;
     white-space: nowrap;
     vertical-align: top;
-
+a{
+  text-decoration: underline !important;
+}
 }
 .ptk-table tbody tr{
   border-bottom: 1px solid #ccc !important;
@@ -99,7 +112,7 @@ border-left:none;
   align-items: center;
   justify-content: center;
   list-style: none;
-  margin-top: 15px;
+  // margin-top: 15px;
 }
 
 .userlist-pagination ul li.selected a,
@@ -112,13 +125,14 @@ border-left:none;
 .userlist-pagination ul li a {
   font-size: 13px;
   padding: 6px 12px;
-  min-width: 30px;
+  min-width: 38px;
   border: 1px solid #999;
   margin-right: 5px;
-  min-height: 30px;
+  min-height: 38px;
   display: inline-flex;
   align-items: center;
   text-decoration: none;
+  justify-content: center;
 }
 
 .userlist-pagination ul li a button {
@@ -301,7 +315,8 @@ margin-left: 15px;
   border: thin solid var(--cui-input-border-color, var(--cui-border-color)) !important;
   height: 38px;
   background: #fff;
-  border-radius: 5px;
+  border-radius: 0px;
+  padding-left: 5px;
 }
 .clubTable{
   table{
@@ -335,4 +350,12 @@ margin-left: 15px;
 }
 .primTxt{
   color: ($primary);
+}
+.dropdown-menu.show{
+  border-radius: 0;
+  padding: 0 !important;
+}
+.dropdown-item:hover, .dropdown-item:focus{
+  background: ($blue);
+  color: ($white);
 }

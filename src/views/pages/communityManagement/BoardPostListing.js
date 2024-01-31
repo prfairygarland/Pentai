@@ -391,7 +391,7 @@ const BoardPostListing = () => {
         Header: multiLangObj?.title,
         accessor: 'PostTitle',
         Cell: ({ row }) => (
-          <div className="d-flex gap-1">
+          <div className="d-flex gap-1 align-items-center">
             {row.original.isAnnouncement > 0 && <i className="icon-announce"></i>}
             <Link
               to={`/BulletinBoardPostDetails/${row.original.postId}/${row.original.boardId}`}
@@ -424,7 +424,7 @@ const BoardPostListing = () => {
         Cell: ({ row }) => (
           <Link
             onClick={() => handleShowWritterInfo(row.original.userId)}
-            className="text-dark text-center"
+            className=" text-center"
             style={{ curser: 'pointer' }}
           >
             {row.original.englishName ? row.original.englishName : <p>{'-'}</p>}
@@ -454,28 +454,28 @@ const BoardPostListing = () => {
         Header: multiLangObj?.views,
         accessor: 'views',
         Cell: ({ row }) => (
-          <p className="text-center">{`${row.original.views ? row.original.views : 0}`}</p>
+          <a className="text-center">{`${row.original.views ? row.original.views : 0}`}</a>
         ),
       },
       {
         Header: multiLangObj?.noOfReportedComments,
         accessor: 'reportsCommentsCount',
         Cell: ({ row }) => (
-          <p className="text-center">
+          <a className="text-center">
             {row.original.reportsCommentsCount ? row.original.reportsCommentsCount : 0}
-          </p>
+          </a>
         ),
       },
       {
         Header: multiLangObj?.history,
         Cell: ({ row }) => (
-          <p
+          <a
             role="button"
             onClick={() => viewPostHistoryHandler(row.original.postId)}
-            className="text-center"
+            className="blueTxt text-center"
           >
            {multiLangObj?.view}
-          </p>
+          </a>
         ),
       },
       {
@@ -483,7 +483,7 @@ const BoardPostListing = () => {
         Cell: ({ row }) => (
           <Link
             onClick={(e) => modifyPostHandler(e, row)}
-            className="text-dark text-center"
+            className="greenTxt   text-center"
             style={{ curser: 'pointer' }}
           >
             {multiLangObj?.edit}
@@ -529,7 +529,7 @@ const BoardPostListing = () => {
                 {multiLangObj?.board}
               </p>
               <CFormSelect
-                className="mb-2"
+                
                 aria-label="Default select example"
                 options={boardSelectOptions}
                 onChange={handleSelectBoardChange}
@@ -633,14 +633,16 @@ const BoardPostListing = () => {
             </div>
           </div>
           <div className="d-flex flex-column mt-3 p-3">
-            {totalDataCount > 0 && <p style={{ margin: 0 }}>{multiLangObj?.total}&nbsp;:&nbsp; {totalDataCount}</p>}
+           <div className='mb-3'>
+           {totalDataCount > 0 && <p style={{ margin: 0 }}>{multiLangObj?.total}&nbsp;:&nbsp; {totalDataCount}</p>}
+           </div>
             <ReactTable
               columns={columns}
               data={postData}
               showCheckbox={false}
               onSelectionChange={handleSelectionChange}
             />
-            <div className="d-flex w-100 justify-content-center gap-3">
+            <div className="d-flex w-100 justify-content-center align-items-center my-3 gap-3">
               {postData.length > 0 && (
                 <div className="userlist-pagination">
                   <div className="userlist-pagination dataTables_paginate">
@@ -659,7 +661,7 @@ const BoardPostListing = () => {
                 </div>
               )}
               {postData.length > 0 && (
-                <div className="d-flex align-items-center gap-2 mt-2">
+                <div className="d-flex align-items-center gap-2 ">
                   <label>{multiLangObj?.show}</label>
                   <CFormSelect
                     className=""

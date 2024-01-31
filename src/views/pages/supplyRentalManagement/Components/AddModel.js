@@ -180,12 +180,12 @@ const AddModel = ({ setModal, getMod, Modal, getMainModalId, getModalId, removeM
 
   return (
 
-    <div className='col-md-9'>
+    <div className='col-md-8'>
       {isLoading && <Loader />}
       <div>
         {getModalId !== null &&
         <div className='d-flex justify-content-end'>
-            <CButton onClick={() => setDeleteVisible(true)}>{multiLang?.delete}</CButton>
+            <CButton onClick={() => setDeleteVisible(true)} className='btn-black'>{multiLang?.delete}</CButton>
         </div>
         }
         <div className="dropdown-container mb-2">
@@ -255,8 +255,8 @@ const AddModel = ({ setModal, getMod, Modal, getMainModalId, getModalId, removeM
           </div>
         </div>
       </div>
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '5%', gap: 10 }}>
-        <CButton onClick={() => saveModal('cancle')} style={{ marginRight: '2%', background: '#ccc', border: 'none' }}>{multiLang?.cancel}</CButton>
+      <div className='d-flex justify-content-center my-3 gap-4'>
+        <CButton onClick={() => saveModal('cancle')} className='btn-black'>{multiLang?.cancel}</CButton>
         <CButton onClick={() => saveModal('save')}>{multiLang?.save}</CButton>
       </div>
       <CModal

@@ -199,9 +199,9 @@ const UsageSetting = (props) => {
                     : {}
                 }
               >
-                <label className="radiolabel" htmlFor="Bulletin board">
+                <h5 className="radiolabel" htmlFor="Bulletin board">
                 {translationObject?.translation?.communityBoardManagement?.bulletinBoard}
-                </label>
+                </h5>
                 <CFormCheck
                   type="radio"
                   name="BulletinBoard"
@@ -231,9 +231,9 @@ const UsageSetting = (props) => {
                   : {}
               }
             >
-              <label className="radiolabel" htmlFor="Club board">
+              <h5 className="radiolabel" htmlFor="Club board">
               {translationObject?.translation?.communityBoardManagement?.clubBoard}
-              </label>
+              </h5>
               <CFormCheck
                 type="radio"
                 name="ClubBoard"
@@ -262,9 +262,9 @@ const UsageSetting = (props) => {
                   : {}
               }
             >
-              <label className="radiolabel" htmlFor="Welfare board​">
+              <h5 className="radiolabel" htmlFor="Welfare board​">
               {translationObject?.translation?.communityBoardManagement?.welfareBoard}
-              </label>
+              </h5>
               <CFormCheck
                 type="radio"
                 name="WelfareBoard"
@@ -358,7 +358,7 @@ const UsageSetting = (props) => {
       <hr />
       <div className="d-flex justify-content-center">
         <CCol xs="auto">
-          <CButton type="submit" className="mb-3 btn-dark" onClick={confirmationSaveAllHandler}>
+          <CButton type="submit" className="mb-3 btn-primary" onClick={confirmationSaveAllHandler}>
           {translationObject?.translation?.communityBoardManagement?.saveProhibitedWords}
           </CButton>
         </CCol>

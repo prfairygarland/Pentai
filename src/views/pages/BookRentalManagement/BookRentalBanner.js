@@ -385,7 +385,7 @@ const BookRentalBanner = () => {
         {
             Header: 'Action',
             accessor: 'button',
-            Cell: ({ row }) => <CButton className='mx-3 rounded border-1 btn-black' onClick={() => { setDeleteId(row.original.id); setDeleteVisible(true) }}>Delete</CButton>
+            Cell: ({ row }) => <a className='mx-3 primTxt ' onClick={() => { setDeleteId(row.original.id); setDeleteVisible(true) }}>Delete</a>
 
         },
     ], [])
@@ -393,6 +393,10 @@ const BookRentalBanner = () => {
 
     return (
         <div>
+
+<div className="pageTitle mb-3 pb-2">
+      <h2>Book Rental Banner</h2>
+    </div>
             <header>
                 <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around', border: '1px', width: '100%', height: '20%', background: '#ccc' }}>
                     <div>
@@ -448,7 +452,7 @@ const BookRentalBanner = () => {
             <div className='clearfix my-4 '>
                 <CButton className='float-end ' onClick={handleNewBookBannaer}>New Banner</CButton>
             </div>
-            <div style={{ marginTop: '3%' }}>
+            <div className='my-3'>
                 <ReactTable columns={columns} data={bannerList} showCheckbox={false} onSelectionChange={handleSelectionChange} />
             </div>
             <CModal
@@ -478,7 +482,7 @@ const BookRentalBanner = () => {
                                 <div className="upload-image-main-container">
                                     <div className="upload-img-btn-and-info">
                                         <div className="upload-container-btn">
-                                            <label className="label-btn" color="dark" htmlFor="imageFiles">
+                                            <label className="btn btn-primary" style={{paddingLeft:20}} htmlFor="imageFiles">
                                                 Upload
                                                 <input
                                                     type="file"
@@ -524,32 +528,31 @@ const BookRentalBanner = () => {
                                 <div className="formWrpLabel">
                                     <label className="fw-bolder ">Display Period</label>
                                 </div>
-                                <div className="upload-image-main-container">
-                                    <div style={isExpiration ? { pointerEvents: 'none', opacity: '0.5' } : null} className="upload-img-btn-and-info">
-                                        <div>
+                                <div className="p-2">
+                                    <div className='d-flex align-items-center gap-1' style={isExpiration ? { pointerEvents: 'none', opacity: '0.5' } : null} >
+                                        <div className='d-flex' >
                                             <DatePicker
                                                 value={bannerStartDate}
                                                 onChange={(event) => handleBannerStartDate(event)}
                                             />
-                                        </div>
-                                        <div>
+                                        
                                             <input
                                                 type="time"
                                                 name="time"
                                                 id="time"
                                                 className="time-picker"
+                                                style={{marginRight:0}}
                                                 value={`${bannerStartHours}:${bannerStartMins}`}
                                                 onChange={(e) => bannerStartTimeHandler(e)}
                                             />
                                         </div>
-                                        -&nbsp;&nbsp;
-                                        <div>
+                                        -
+                                        <div  className='d-flex '>
                                             <DatePicker
                                                 value={bannerEndDate}
                                                 onChange={(event) => handleBannerEndDate(event)}
                                             />
-                                        </div>
-                                        <div>
+                                      
                                             <input
                                                 type="time"
                                                 name="time"
@@ -562,7 +565,7 @@ const BookRentalBanner = () => {
                                     </div>
                                     <div>
                                     </div>
-                                    <div className="push-notification-container gap-3">
+                                    <div className="push-notification-container gap-3 p-0 mt-2">
                                         <CFormCheck
                                             type="radio"
                                             name="noExpiration"
@@ -578,8 +581,8 @@ const BookRentalBanner = () => {
                                 <div className="formWrpLabel">
                                     <label className="fw-bolder ">Banner Type</label>
                                 </div>
-                                <div className="upload-image-main-container">
-                                    <div className="push-notification-container gap-3">
+                                <div className="d-flex flex-column w-100">
+                                    <div className="push-notification-container gap-3 p-2">
                                         <CFormCheck
                                             type="radio"
                                             name="imageType"
@@ -593,7 +596,7 @@ const BookRentalBanner = () => {
                                             value={true}
                                         />
                                     </div>
-                                    <div className="push-notification-container gap-3">
+                                    <div className="push-notification-container gap-3 p-2 align-items-center">
                                         <CFormCheck
                                             type="radio"
                                             name="imageType"
@@ -614,9 +617,10 @@ const BookRentalBanner = () => {
                                             onChange={(e) => {
                                                 setLinkToUrl(e.target.value)
                                             }}
+                                            style={{flex:1}}
                                         />
                                     </div>
-                                    <div className="push-notification-container gap-3">
+                                    <div className="push-notification-container gap-3 p-2">
                                         <CFormCheck
                                             type="radio"
                                             name="imageType"
@@ -656,13 +660,16 @@ const BookRentalBanner = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="d-flex justify-content-center gap-5 my-2 ">
-                        <CButton onClick={() => setAddModifyClubBannerModal(false)}>Cancel</CButton>
+                   
+                </CModalBody>
+                <CModalFooter>
+                <div className="d-flex justify-content-center gap-3 w-100 ">
+                        <CButton onClick={() => setAddModifyClubBannerModal(false)} className='btn-black'>Cancel</CButton>
                         <CButton onClick={saveClubBannerHandler}>
                             {bannerUpdateId ? 'Update' : 'Save'}
                         </CButton>
                     </div>
-                </CModalBody>
+                </CModalFooter>
             </CModal>
             <CModal
                 visible={deleteVisible}

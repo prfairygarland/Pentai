@@ -1,4 +1,4 @@
-import { CButton, CFormSelect, CImage, CModal, CModalHeader, CModalTitle } from '@coreui/react';
+import { CButton, CFormSelect, CImage, CModal, CModalBody, CModalHeader, CModalTitle } from '@coreui/react';
 import moment from 'moment/moment';
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import DatePicker from 'react-date-picker';
@@ -140,12 +140,12 @@ const BookRentalStatus = () => {
                 {
                     Header: 'Rental Details',
                     accessor: 'details',
-                    Cell: ({ row }) => <CButton onClick={() => { setUserInfoPopup(true); setPopUp('RentalD'); handleShowRentalDetails(row.original.id) }} className='mx-3 px-3 py-2 rounded border-1'>View</CButton>
+                    Cell: ({ row }) => <a onClick={() => { setUserInfoPopup(true); setPopUp('RentalD'); handleShowRentalDetails(row.original.id) }} className='mx-3 px-3 py-2 blueTxt'>View</a>
                 },
                 {
                     Header: 'Rental History',
                     accessor: 'history',
-                    Cell: ({ row }) => <CButton onClick={() => { setUserInfoPopup(true); setPopUp('RenatlH'); handleShowRentalHistory(row.original?.BookRentalId, row.original?.id) }} className='mx-3 px-3 py-2 rounded border-1'>View</CButton>
+                    Cell: ({ row }) => <a onClick={() => { setUserInfoPopup(true); setPopUp('RenatlH'); handleShowRentalHistory(row.original?.BookRentalId, row.original?.id) }} className='mx-3 px-3 py-2 blueTxt'>View</a>
 
                 },
             ], [])
@@ -322,12 +322,15 @@ const BookRentalStatus = () => {
 
     return (
         <div>
+        <div className="pageTitle mb-3 pb-2">
+      <h2>Book Rental Status</h2>
+    </div>
             <div className='clearfix'>
-                <CButton onClick={getUserListExport} className='float-end mx-2'>Export</CButton>
+                <CButton onClick={getUserListExport} className='float-end mx-2 btn-success'>Export</CButton>
             </div>
-            <div className='d-flex justify-content-between align-items-center my-4'>
+            <div className='d-flex justify-content-between align-items-center mb-4'>
                 <div className='mx-1 d-flex'>
-                    <input className='px-4 me-3 form-control' value={filterData.title} onChange={handleSearch} />
+                    <input className='me-3 form-control' placeholder='Search' value={filterData.title} onChange={handleSearch} />
                     <CButton onClick={getData}>Search</CButton>
                 </div>
                 <div className='d-flex me-5 gap-1'>
@@ -355,7 +358,7 @@ const BookRentalStatus = () => {
             <div>
                 <ReactTable columns={columns} data={bookList} showCheckbox={false} onSelectionChange={handleSelectionChange} />
             </div>
-            <div className='d-flex w-100 justify-content-center gap-3'>
+            <div className='d-flex w-100 justify-content-center gap-3 my-3'>
                 {bookList.length > 0 &&
                     <div className='userlist-pagination'>
                         <div className='userlist-pagination dataTables_paginate'>
@@ -375,7 +378,7 @@ const BookRentalStatus = () => {
                     </div>
 
                 }
-                {bookList.length > 0 && <div className='d-flex align-items-center gap-2 mt-2'>
+                {bookList.length > 0 && <div className='d-flex align-items-center gap-2'>
                     <label>Show</label>
                     <CFormSelect
                         className=''
@@ -393,6 +396,7 @@ const BookRentalStatus = () => {
                 alignment="center"
                 visible={userInfoPopup}
                 size='lg'
+                scrollable
                 onClose={() => {
                     setUserInfoPopup(false)
                     setHistCurrentPage(0)
@@ -406,7 +410,8 @@ const BookRentalStatus = () => {
                 }}>
                     <CModalTitle className='p-1'>{popUp === 'userDetails' ? 'User Information' : '' ||  popUp === 'RentalD' ? 'Rental Details' : '' || popUp === 'RenatlH' ? 'Rental History' : '' }</CModalTitle>
                 </CModalHeader>
-                {popUp === 'userDetails' ?
+               <CModalBody>
+               {popUp === 'userDetails' ?
                     <UserProfile userInfoData={userInfoData} />
                     : ''}
                 {
@@ -417,8 +422,9 @@ const BookRentalStatus = () => {
                     popUp === 'RenatlH' ?
                         <RentalHistory bookRentalId={bookRentalId}  itemsPerPage={itemsPerPage} selectedId={selectedId} setHistCurrentPage={setHistCurrentPage} HisCurrentPage={HisCurrentPage} handleShowRentalHistory={handleShowRentalHistory} RentalHistoryData={RentalHistoryData} RentalStatusData={RentalStatusData} totalCount={totalCount} HistotalPages={HistotalPages} /> : ''
                 }
-            </CModal >
-        </div >
+               </CModalBody>
+            </CModal>
+        </div>
     )
 }
 

@@ -219,7 +219,7 @@ const WelfareBoard = () => {
                   onChange={handleSearchChange}
                 />
                 {searchData.length > 0 && (
-                  <ul className="p-2">
+                  <ul className="p-2 sidebarMenuLink">
                     {filteredData.map((item) => (
                       <li className="p-2" key={item.id} onClick={() => handleItemClick(item)}>
                         <strong> {item.name}</strong>
@@ -242,8 +242,8 @@ const WelfareBoard = () => {
                             <div className="formWrpLabel" style={{ minWidth: '170px' }}>
                               <label className="fw-bolder ">{translationObject?.translation?.communityBoardManagement?.usageStatus}</label>
                             </div>
-                            <div className="formWrpInpt">
-                              <div className="d-flex formradiogroup mb-2 gap-3">
+                            <div className="formWrpInpt w-100">
+                              <div className="d-flex formradiogroup  gap-3">
                                 <CFormCheck
                                   type="radio"
                                   name="boardStatuses"
@@ -306,7 +306,7 @@ const WelfareBoard = () => {
 
         {addWelfareBoard && (
           <div className="save-cancel-btn-container">
-            <CButton className="btn save-cancel-btn" color="dark" onClick={() => validate()}>
+            <CButton className="btn "  onClick={() => validate()}>
             {translationObject?.translation?.communityBoardManagement?.save}
             </CButton>
           </div>

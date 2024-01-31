@@ -151,15 +151,18 @@ const AllMeetingRooms = () => {
       Header: 'Action',
       Cell: ({ row }) => (
         <div className="d-flex gap-4">
-          <CButton
+          <a
             onClick={() => {
               handleSetModal('addItem')
               setItemIds(row.original.id)
             }}
+            className="greenTxt"
           >
             Modify
-          </CButton>
-          <CButton onClick={() => setDeleteVisible(true)}>Delete</CButton>
+          </a>
+          <a onClick={() => setDeleteVisible(true)} className="primTxt">
+            Delete
+          </a>
         </div>
       ),
     },
@@ -352,16 +355,19 @@ const AllMeetingRooms = () => {
 
   return (
     <div>
-      <div className="d-flex justify-content-between gap-4 mb-4">
+      <div className="pageTitle mb-3 pb-2">
+        <h2>All Meeting Rooms</h2>
+      </div>
+      <div className="d-flex justify-content-between  mb-4">
         {isLoading && <Loader />}
-        <div className="col-md-3">
-          <CSidebar>
-            <CSidebarBrand
-              className=" black-text d-flex justify-content-start p-3"
+        <div className="col-md-4">
+          <CSidebar className="w-100">
+            {/* <CSidebarBrand
+              className=" black-text d-flex justify-content-start p-3 ps-0"
               style={{ color: 'black', background: 'none' }}
             >
               <h6>All Meetings</h6>
-            </CSidebarBrand>
+            </CSidebarBrand> */}
             <CSidebarBrand
               className=" black-text d-flex justify-content-between mb-2"
               style={{
@@ -521,15 +527,20 @@ const AllMeetingRooms = () => {
           </CSidebar>
         </div>
         {getModal === 'allList' && (
-          <div className="mb-4 col-md-9">
+          <div className="mb-4 ps-3 col-md-8">
             <div className="clearfix">
-              <CButton className="float-end mx-2 mb-2" onClick={exportData}>
+              <CButton className="float-end mx-2 mb-2 btn-success" onClick={exportData}>
                 {multiLangObj?.export}
               </CButton>
             </div>
             <div className="d-flex justify-content-between align-items-center my-4">
               <div className="mx-1 d-flex">
-                <input className="px-4 me-3" value={filterData.search} onChange={handleSearch} />
+                <input
+                  className="form-control me-3"
+                  value={filterData.search}
+                  onChange={handleSearch}
+                  placeholder="Search"
+                />
                 <CButton onClick={handleAllMeetingData}>Search</CButton>
               </div>
               <div className="d-flex me-5 gap-1">
@@ -578,39 +589,41 @@ const AllMeetingRooms = () => {
               totalCount={10}
               onSelectionChange={handleSelectionChange}
             />
-            {allMeetingData.length > 0 && (
-              <div className="d-flex gap-3">
-                <div className="userlist-pagination">
-                  <div className="userlist-pagination dataTables_paginate">
-                    <ReactPaginate
-                      breakLabel={'...'}
-                      marginPagesDisplayed={1}
-                      previousLabel={<button>Previous</button>}
-                      nextLabel={<button>Next</button>}
-                      pageCount={totalPages}
-                      onPageChange={handlePageChange}
-                      forcePage={currentPage}
-                      // renderOnZeroPageCount={null}
-                      pageRangeDisplayed={4}
+            <div className="my-3 d-flex justify-content-center align-items-center">
+              {allMeetingData.length > 0 && (
+                <div className="d-flex gap-3">
+                  <div className="userlist-pagination">
+                    <div className="userlist-pagination dataTables_paginate">
+                      <ReactPaginate
+                        breakLabel={'...'}
+                        marginPagesDisplayed={1}
+                        previousLabel={<button>Previous</button>}
+                        nextLabel={<button>Next</button>}
+                        pageCount={totalPages}
+                        onPageChange={handlePageChange}
+                        forcePage={currentPage}
+                        // renderOnZeroPageCount={null}
+                        pageRangeDisplayed={4}
+                      />
+                    </div>
+                  </div>
+                  <div className="d-flex align-items-center gap-2">
+                    <label>{multiLangObj?.show}</label>
+                    <CFormSelect
+                      className=""
+                      aria-label=""
+                      value={itemsPerPage}
+                      options={paginationItemPerPageOptions}
+                      onChange={(event) => {
+                        setItemsPerPage(parseInt(event?.target?.value))
+                        setCurrentPage(0)
+                      }}
                     />
+                    <label>{multiLangObj?.lists}</label>
                   </div>
                 </div>
-                <div className="d-flex align-items-center gap-2 mt-2">
-                  <label>{multiLangObj?.show}</label>
-                  <CFormSelect
-                    className=""
-                    aria-label=""
-                    value={itemsPerPage}
-                    options={paginationItemPerPageOptions}
-                    onChange={(event) => {
-                      setItemsPerPage(parseInt(event?.target?.value))
-                      setCurrentPage(0)
-                    }}
-                  />
-                  <label>{multiLangObj?.lists}</label>
-                </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         )}
         <CModal

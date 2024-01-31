@@ -223,12 +223,12 @@ const AddSupplyType = ({ setModal, getMod, Modal, getId, removeIds, getVal }) =>
 
 
   return (
-    <div className='col-md-9'>
+    <div className='col-md-8'>
       {isLoading && <Loader />}
       <div>
         {getId &&
           <div className='d-flex justify-content-end'>
-            <CButton onClick={() => setDeleteVisible(true)}>{multiLang?.delete}</CButton>
+            <CButton onClick={() => setDeleteVisible(true)} className='btn-black'>{multiLang?.delete}</CButton>
           </div>
         }
         <div className="dropdown-container mb-2">
@@ -286,7 +286,7 @@ const AddSupplyType = ({ setModal, getMod, Modal, getId, removeIds, getVal }) =>
                 </label>
               </div>
               <div className="formWrpInpt">
-                <div className="d-flex formradiogroup mb-2 align-items-center  justify-content-center gap-5">
+                <div className="d-flex formradiogroup mb-2 align-items-center   gap-5">
                   <p>
                     {multiLang?.maxRentableWeeks}
                   </p>
@@ -415,8 +415,8 @@ const AddSupplyType = ({ setModal, getMod, Modal, getId, removeIds, getVal }) =>
           <p>{multiLang?.defaultSettingsUpdateMsg}</p>
         </div>
       </div>
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', margin: '5%', gap: 10 }}>
-        <CButton onClick={() => saveSupplyType('cancle')} style={{ marginRight: '2%', background: '#ccc', border: 'none' }}>{multiLang?.cancel}</CButton>
+      <div className='d-flex justify-content-center my-3 gap-4' >
+        <CButton onClick={() => saveSupplyType('cancle')} className='btn-black'>{multiLang?.cancel}</CButton>
         <CButton onClick={() => saveSupplyType('save')}>{multiLang?.save}</CButton>
       </div>
 
@@ -427,7 +427,7 @@ const AddSupplyType = ({ setModal, getMod, Modal, getId, removeIds, getVal }) =>
         aria-labelledby="StaticBackdropExampleLabel"
       >
         <CModalHeader>
-          <CModalTitle id="StaticBackdropExampleLabel">{multiLang?.delete}</CModalTitle>
+          <CModalTitle id="StaticBackdropExampleLabel" className='btn-black'>{multiLang?.delete}</CModalTitle>
         </CModalHeader>
         <CModalBody>
           <p>{multiLang?.deletePopUp}

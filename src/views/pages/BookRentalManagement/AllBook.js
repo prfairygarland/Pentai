@@ -254,9 +254,9 @@ const AllBook = () => {
         {
             Header: 'Action',
             accessor: '',
-            Cell: ({ row }) => <div className='d-flex justify-content-center align-items-center  '>
-                <CButton onClick={() => { setCategories('BookDetail'); setBookId(row.original.id); DisplayBook(row.original.id) }} className='rounded border-1 mx-2'>Modify</CButton>
-                <CButton onClick={() => { setdeleteVisible(true); setDeleteBookId(row.original.id) }} className='rounded border-1 btn-black'>Delete</CButton>
+            Cell: ({ row }) => <div className='d-flex justify-content-center align-items-center gap-3'>
+                <a onClick={() => { setCategories('BookDetail'); setBookId(row.original.id); DisplayBook(row.original.id) }} className='greenTxt'>Modify</a>
+                <a onClick={() => { setdeleteVisible(true); setDeleteBookId(row.original.id) }} className='primTxt'>Delete</a>
             </div>
         },
     ], [])
@@ -514,13 +514,17 @@ const AllBook = () => {
 
 
     return (
+
+        <><div className="pageTitle mb-3 pb-2">
+            <h2>All Books</h2>
+        </div>
         <div style={{ display: 'flex', borderRadius: 10, padding: 5, width: '100%' }}>
             <div className='col-md-4'>
                 <CSidebar className='w-100 pe-3'>
                     <CSidebarBrand className=' black-text d-flex justify-content-start p-3' style={{ color: 'black', background: 'none' }}><h5 style={{ fontSize: '15px' }}>Category Hierarchy</h5></CSidebarBrand>
-                    <CSidebarBrand className=' black-text d-flex justify-content-between mb-2' style={{ color: 'black', borderBottom: '1px solid #000', background: 'none', alignItems: 'center' }}>
-                        <p onClick={() => setCategories('AllBooks')} role='button'>All Books</p>
-                    </CSidebarBrand>
+                    <div className=' black-text d-flex justify-content-between mb-2 p-2' style={{ color: 'black', borderBottom: '1px solid #000', background: 'none', alignItems: 'center' }}>
+                        <b onClick={() => setCategories('AllBooks')} role='button'>All Books</b>
+                    </div>
                     <CSidebarNav style={{ color: 'black', padding: '3px', maxHeight: '500px', overflow: 'auto' }}>
                         {library?.map((category) => (
                             <CNavItem className='mb-3' key={category.id} >
@@ -652,7 +656,7 @@ const AllBook = () => {
             {categories === 'AllBooks' &&
                 <div className='col-md-8' style={{ padding: 5, minHeight: '100%' }}>
                     <div className='d-flex justify-content-end m-1 '>
-                        <CButton onClick={getUserListExport}>Export</CButton>
+                        <CButton onClick={getUserListExport} className='btn-success'>Export</CButton>
                     </div>
                     <div className='d-flex justify-content-end px-4 py-2'>
                         <div className='d-flex'>
@@ -682,7 +686,7 @@ const AllBook = () => {
 
                     </div>
                     <div className='d-flex gap-3'>
-                        <input value={filterData.title} onChange={handleChangeInput} className='px-4' />
+                        <input value={filterData.title} placeholder='Search' onChange={handleChangeInput} className='form-control' />
                         <CButton onClick={getBookList}>Search</CButton>
                     </div>
                     <div>
@@ -691,7 +695,7 @@ const AllBook = () => {
                     {AllBookList.length > 0 ? <div>
                         <ReactTable columns={columns} data={AllBookList} showCheckbox={false} onSelectionChange={handleSelectionChange} />
                     </div> : <p style={{ textAlign: 'center', color: '#999', fontSize: '1.2rem' }}>No Search Result</p>}
-                    <div className='d-flex w-100 justify-content-center gap-3'>
+                    <div className='d-flex w-100 justify-content-center my-3 gap-3'>
                         {AllBookList.length > 0 &&
                             <div className='userlist-pagination'>
                                 <div className='userlist-pagination dataTables_paginate'>
@@ -711,7 +715,7 @@ const AllBook = () => {
                             </div>
 
                         }
-                        {AllBookList.length > 0 && <div className='d-flex align-items-center gap-2 mt-2'>
+                        {AllBookList.length > 0 && <div className='d-flex align-items-center gap-2 '>
                             <label>Show</label>
                             <CFormSelect
                                 className=''
@@ -770,27 +774,27 @@ const AllBook = () => {
                         searchBooks={searchBooks} />}
                 </div>)}
 
-            </div>}
-            <CModal
-                backdrop="static"
-                visible={deleteVisible}
-                onClose={() => setdeleteVisible(false)}
-                aria-labelledby="StaticBackdropExampleLabel"
-            >
-                <CModalHeader>
-                    <CModalTitle id="StaticBackdropExampleLabel">Delete</CModalTitle>
-                </CModalHeader>
-                <CModalBody>
-                    <p>Are you sure you want to delete this book</p>
-                </CModalBody>
-                <CModalFooter>
-                    <CButton color="primary" onClick={() => deleteBook(deletebookId)}>Delete</CButton>
-                    <CButton onClick={() => setdeleteVisible(false)} color="secondary" >
-                        Cancel
-                    </CButton>
-                </CModalFooter>
-            </CModal>
-        </div>
+                </div>}
+                <CModal
+                    backdrop="static"
+                    visible={deleteVisible}
+                    onClose={() => setdeleteVisible(false)}
+                    aria-labelledby="StaticBackdropExampleLabel"
+                >
+                    <CModalHeader>
+                        <CModalTitle id="StaticBackdropExampleLabel">Delete</CModalTitle>
+                    </CModalHeader>
+                    <CModalBody>
+                        <p>Are you sure you want to delete this book</p>
+                    </CModalBody>
+                    <CModalFooter>
+                        <CButton color="primary" onClick={() => deleteBook(deletebookId)}>Delete</CButton>
+                        <CButton onClick={() => setdeleteVisible(false)} color="secondary">
+                            Cancel
+                        </CButton>
+                    </CModalFooter>
+                </CModal>
+            </div></>
 
     )
 }
