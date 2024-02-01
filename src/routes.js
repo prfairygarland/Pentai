@@ -22,6 +22,7 @@ import LiveManagement from './views/pages/LiveManagement/LiveManagement'
 import LiveRegistration from './views/pages/LiveManagement/Component/LiveRegistration'
 import MeetingRoomsReservationStatus from './views/pages/MeetingRoomsResMgmt/MeetingRoomsReservationStatus'
 import AllMeetingRooms from './views/pages/MeetingRoomsResMgmt/AllMeetingRooms'
+import DataImport from './views/pages/BookRentalManagement/DataImport'
 
 const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
 
@@ -59,6 +60,7 @@ const routes = [
   { path: '/AllBooks', name: 'All Books', element: AllBook },
   { path: '/BookCuration', name: 'Book Curation', element: BookCuration },
   { path: '/BookBanner', name: 'Book Rental Banner', element: BookRentalBanner },
+  { path: '/DataImport', name: 'Data Import', element: DataImport },
 
   // { Supply Rental Management}
   { path: '/SupplyRentalStatus', name: 'Supply Rental Status', element: SupplyRentalStatus },

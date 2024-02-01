@@ -7,7 +7,7 @@ import { deleteApi, getApi, postApi, putApi } from 'src/utils/Api'
 import { API_ENDPOINT } from 'src/utils/config'
 import { imageUrl } from '../BookRentalStatus'
 
-const BooksDetail = ({ bookId, genreId, setBookId, setIconSet, setSideBarId, setFilteredData, setDeleted, bookDisplay, setCategories }) => {
+const BooksDetail = ({ bookId, genreId, setBookId, setSideSubBookBarId, setIconSubBookSet, setSideSubBarId, setIconSubSet, setIconSet, setSideBarId, setFilteredData, setDeleted, bookDisplay, setCategories }) => {
 
     const [bookData, setBookData] = useState({
         bookgenre: '',
@@ -26,6 +26,11 @@ const BooksDetail = ({ bookId, genreId, setBookId, setIconSet, setSideBarId, set
     const [postImage, setPostImage] = useState(null)
     const inputRef = useRef(null)
     const [image, setImage] = useState(null);
+
+    // setSideSubBookBarId = { setSideSubBookBarId }
+    // setIconSubBookSet = { setIconSubBookSet }
+    // setSideSubBarId = { setSideSubBarId }
+    // setIconSubSet = { setIconSubSet }
 
     useEffect(() => {
         setBookData({
@@ -53,7 +58,7 @@ const BooksDetail = ({ bookId, genreId, setBookId, setIconSet, setSideBarId, set
                 })
                 setGenre(data)
                 let val = data?.filter((ele) => ele?.label === bookDisplay?.genreName)[0]?.value?.toString()
-                setBookData((prev) =>{
+                setBookData((prev) => {
                     return {
                         ...prev,
                         bookgenre: val
@@ -116,29 +121,29 @@ const BooksDetail = ({ bookId, genreId, setBookId, setIconSet, setSideBarId, set
             visibility: bookData?.visibility === true ? 'visible' : 'hide',
             associatedItem: bookData.AssociatedItem ? bookData.AssociatedItem : 0
         }
-         
-         
-        if(bookData.ISBN === ''){
+
+
+        if (bookData.ISBN === '') {
             enqueueSnackbar('Please enter Book ISBN number', { variant: 'error' })
             return false
         }
-        if(bookData.title.trim() === ''){
+        if (bookData.title.trim() === '') {
             enqueueSnackbar('Please enter Book title', { variant: 'error' })
             return false
         }
-        if(bookData.author === ''){
+        if (bookData.author === '') {
             enqueueSnackbar('Please enter author name', { variant: 'error' })
             return false
         }
-        if(bookData.image === null){
+        if (bookData.image === null) {
             enqueueSnackbar('Please select Book cover image', { variant: 'error' })
             return false
         }
-        if(bookData.bookdesr === ''){
+        if (bookData.bookdesr === '') {
             enqueueSnackbar('Please enter Book description', { variant: 'error' })
             return false
         }
-        if(bookData.AssociatedItem < 0){
+        if (bookData.AssociatedItem < 0) {
             enqueueSnackbar('Please enter valid associate Item', { variant: 'error' })
             return false
         }
@@ -150,8 +155,12 @@ const BooksDetail = ({ bookId, genreId, setBookId, setIconSet, setSideBarId, set
                 setDeleted((prev) => prev + 1)
                 setCategories('AllBooks')
                 setIconSet(null)
+                setIconSubSet(null)
+                setSideSubBookBarId(null)
+                setIconSubBookSet(null)
                 setSideBarId(null)
                 setBookId(null)
+                setSideSubBarId(null)
             }
             else {
                 enqueueSnackbar('failed to update book', { variant: 'error' })
@@ -170,7 +179,7 @@ const BooksDetail = ({ bookId, genreId, setBookId, setIconSet, setSideBarId, set
             formData.append('images', e?.target?.files[0])
             let url = API_ENDPOINT.uploadImages
             const res = await postApi(url, formData)
-             setPostImage(res?.data?.processedImageUrls[0]?.imageUrl)
+            setPostImage(res?.data?.processedImageUrls[0]?.imageUrl)
         }
 
     }
@@ -236,8 +245,12 @@ const BooksDetail = ({ bookId, genreId, setBookId, setIconSet, setSideBarId, set
             status: ''
         })
         setIconSet(null)
+        setIconSubSet(null)
+        setSideSubBookBarId(null)
+        setIconSubBookSet(null)
         setSideBarId(null)
         setBookId(null)
+        setSideSubBarId(null)
     }
 
 
@@ -376,7 +389,7 @@ const BooksDetail = ({ bookId, genreId, setBookId, setIconSet, setSideBarId, set
                                                 defaultChecked={bookData.visibility}
                                                 onClick={() => setBookData((prev) => ({ ...prev, visibility: true }))}
                                                 value={true}
-                                        
+
                                             />
                                             <CFormCheck type="radio" name="visibility" id="exampleRadios2" label="Hide"
                                                 defaultChecked={!bookData.visibility}

@@ -26,6 +26,13 @@ const SearchBooks = ({ searchBooks,
         })
     }
 
+    useEffect(() => {
+        if(searchBooks.length === 0){
+            setSearchBookFilter({title:''})
+        }
+    }, [searchBooks])
+    
+
     const PostData = (id) => {
         setBook('Register')
 

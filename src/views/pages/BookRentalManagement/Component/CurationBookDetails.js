@@ -6,7 +6,7 @@ import Loader from 'src/components/common/Loader'
 import { deleteApi, getApi, postApi, putApi } from 'src/utils/Api'
 import { API_ENDPOINT } from 'src/utils/config'
 
-const CurationBookDetails = ({ bookId, setIconSet, setSideBarId,  setDeleted, categoryID, subCategoryBookID, subCategoryID, setStateUpdate, genreBooks, getBookList, bookDisplay, setCategories }) => {
+const CurationBookDetails = ({ bookId, setSideSubBookBarId, setIconSubBookSet, setSideSubBarId, setIconSubSet, setIconSet, setSideBarId, setDeleted, categoryID, subCategoryBookID, subCategoryID, setStateUpdate, genreBooks, getBookList, bookDisplay, setCategories }) => {
 
     const [bookData, setBookData] = useState({
         bookgenre: '',
@@ -100,7 +100,11 @@ const CurationBookDetails = ({ bookId, setIconSet, setSideBarId,  setDeleted, ca
                 setStateUpdate((prev) => prev + 1)
                 setCategories('AllCuration')
                 setIconSet(null)
+                setIconSubSet(null)
+                setSideSubBookBarId(null)
+                setIconSubBookSet(null)
                 setSideBarId(null)
+                setSideSubBarId(null)
             }
             else {
                 enqueueSnackbar('failed to delete book', { variant: 'error' })
@@ -130,23 +134,23 @@ const CurationBookDetails = ({ bookId, setIconSet, setSideBarId,  setDeleted, ca
 
         const filterbody = Object.fromEntries(Object.entries(body).filter(([key, value]) => (value !== '')))
 
-        if(bookData.ISBN === ''){
+        if (bookData.ISBN === '') {
             enqueueSnackbar('Please enter Book ISBN number', { variant: 'error' })
             return false
         }
-        if(bookData.title.trim() === ''){
+        if (bookData.title.trim() === '') {
             enqueueSnackbar('Please enter Book title', { variant: 'error' })
             return false
         }
-        if(bookData.author === ''){
+        if (bookData.author === '') {
             enqueueSnackbar('Please enter author name', { variant: 'error' })
             return false
         }
-        if(bookData.image === null){
+        if (bookData.image === null) {
             enqueueSnackbar('Please select Book cover image', { variant: 'error' })
             return false
         }
-        if(bookData.bookdesr === ''){
+        if (bookData.bookdesr === '') {
             enqueueSnackbar('Please enter Book description', { variant: 'error' })
             return false
         }
@@ -154,14 +158,18 @@ const CurationBookDetails = ({ bookId, setIconSet, setSideBarId,  setDeleted, ca
         try {
             const res = await putApi(url, filterbody)
             if (res?.data?.status === 200) {
-                enqueueSnackbar('book updated successfully', {variant:'success'})
+                enqueueSnackbar('book updated successfully', { variant: 'success' })
                 setCategories('AllCuration')
                 setIconSet(null)
+                setIconSubSet(null)
+                setSideSubBookBarId(null)
+                setIconSubBookSet(null)
                 setSideBarId(null)
+                setSideSubBarId(null)
                 setDeleted((prev) => prev + 1)
             }
             else {
-                enqueueSnackbar('failed to update', {variant:'error'})
+                enqueueSnackbar('failed to update', { variant: 'error' })
             }
         } catch (error) {
             console.log(error)
@@ -234,7 +242,11 @@ const CurationBookDetails = ({ bookId, setIconSet, setSideBarId,  setDeleted, ca
     const handleCancel = () => {
         setCategories('AllCuration')
         setIconSet(null)
+        setIconSubSet(null)
+        setSideSubBookBarId(null)
+        setIconSubBookSet(null)
         setSideBarId(null)
+        setSideSubBarId(null)
     }
 
 
@@ -330,7 +342,7 @@ const CurationBookDetails = ({ bookId, setIconSet, setSideBarId,  setDeleted, ca
                                 </div>
                                 <div className="formWrpInpt d-flex">
                                     <div style={{ width: '180px', overflow: 'hidden', marginBottom: '5%' }} >
-                                        {bookData.image !== null ? <img alt=''  src={image ? image : bookData.image} style={{ height: '100%', width: '100%' }} /> : <img alt='' src='https://www.beelights.gr/assets/images/empty-image.png' style={{ height: '100%', width: '100%' }} />}
+                                        {bookData.image !== null ? <img alt='' src={image ? image : bookData.image} style={{ height: '100%', width: '100%' }} /> : <img alt='' src='https://www.beelights.gr/assets/images/empty-image.png' style={{ height: '100%', width: '100%' }} />}
                                         <input style={{ display: 'none' }} type="file" name="upload" accept=".png, .jpg, .jpeg" ref={inputRef} onChange={handleUpload} />
                                     </div>
                                     <div className='ms-4'>
