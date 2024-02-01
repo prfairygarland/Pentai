@@ -4,7 +4,7 @@ import { CAccordion, CAccordionBody, CAccordionHeader, CAccordionItem, CBadge, C
 import { API_ENDPOINT } from 'src/utils/config'
 import { deleteApi, getApi, getUserListExportData } from 'src/utils/Api'
 import ReactTable from 'src/components/common/ReactTable'
-import { cilArrowThickRight, cilCaretBottom, cilCaretRight, cilList, cilPuzzle, cilSpeedometer } from '@coreui/icons'
+import { cibZeit, cilArrowThickRight, cilCaretBottom, cilCaretRight, cilList, cilPuzzle, cilSpeedometer } from '@coreui/icons'
 import CIcon from '@coreui/icons-react'
 import { paginationItemPerPageOptions } from 'src/utils/constant'
 import ReactPaginate from 'react-paginate'
@@ -484,11 +484,11 @@ const AllBook = () => {
 
 
     useEffect(() => {
-        const data = searchBooks[searchBookId]
+        // const data = searchBooks[searchBookId]
 
-        setSearchBookDetail(data)
+        setSearchBookDetail(searchBooks[searchBookId])
 
-    }, [searchBookId])
+    }, [searchBookId, book])
 
 
     useEffect(() => {
@@ -518,261 +518,291 @@ const AllBook = () => {
         <><div className="pageTitle mb-3 pb-2">
             <h2>All Books</h2>
         </div>
-        <div style={{ display: 'flex', borderRadius: 10, padding: 5, width: '100%' }}>
-            <div className='col-md-4'>
-                <CSidebar className='w-100 pe-3'>
-                    <CSidebarBrand className=' black-text d-flex justify-content-start p-3' style={{ color: 'black', background: 'none' }}><h5 style={{ fontSize: '15px' }}>Category Hierarchy</h5></CSidebarBrand>
-                    <div className=' black-text d-flex justify-content-between mb-2 p-2' style={{ color: 'black', borderBottom: '1px solid #000', background: 'none', alignItems: 'center' }}>
-                        <b onClick={() => setCategories('AllBooks')} role='button'>All Books</b>
-                    </div>
-                    <CSidebarNav style={{ color: 'black', padding: '3px', maxHeight: '500px', overflow: 'auto' }}>
-                        {library?.map((category) => (
-                            <CNavItem className='mb-3' key={category.id} >
-                                <div className='d-flex w-100'>
-                                    <div className='d-flex w-100 flex-column '>
-                                        <div className='d-flex w-100 justify-content-between'>
-                                            <div className='d-flex align-items-center gap-1'>
-                                                {iconSet !== category.id && <CIcon icon={cilCaretRight} size="sm" onClick={() => { handleChangeIcon(category?.id); handleAddSubcategory(category?.id) }} />}
-                                                {iconSet === category.id && <CIcon icon={cilCaretBottom} size="sm" onClick={() => handleChangeIcon(null)} />}
-                                                <p onClick={() => { setCategories('library'); getLibraryDetails(category.id); setLibraryId(category.id) }} role='button'>{category.name}</p>
+            <div style={{ display: 'flex', borderRadius: 10, padding: 5, width: '100%' }}>
+                <div className='col-md-4'>
+                    <CSidebar className='w-100 pe-3'>
+                        <CSidebarBrand className=' black-text d-flex justify-content-start p-3' style={{ color: 'black', background: 'none' }}><h5 style={{ fontSize: '15px' }}>Category Hierarchy</h5></CSidebarBrand>
+                        <div className=' black-text d-flex justify-content-between mb-2 p-2' style={{ color: 'black', borderBottom: '1px solid #000', background: 'none', alignItems: 'center' }}>
+                            <b onClick={() => setCategories('AllBooks')} role='button'>All Books</b>
+                        </div>
+                        <CSidebarNav style={{ color: 'black', padding: '3px', maxHeight: '500px', overflow: 'auto' }}>
+                            {library?.map((category) => (
+                                <CNavItem className='mb-3' key={category.id} >
+                                    <div className='d-flex w-100'>
+                                        <div className='d-flex w-100 flex-column '>
+                                            <div className='d-flex w-100 justify-content-between'>
+                                                <div className='d-flex align-items-center gap-1'>
+                                                    {iconSet !== category.id && <CIcon style={{ transform: 'rotate(90deg)' }} icon={cibZeit} size="sm" onClick={() => { handleChangeIcon(category?.id); handleAddSubcategory(category?.id) }} />}
+                                                    {iconSet === category.id && <CIcon style={{ transform: 'rotate(180deg)' }} icon={cibZeit} size="sm" onClick={() => handleChangeIcon(null)} />}
+                                                    <p onClick={() => { setCategories('library'); getLibraryDetails(category.id); setLibraryId(category.id) }} role='button'>{category.name}</p>
+                                                </div>
+                                                <div>
+                                                    <CButton onClick={() => { setCategories('bookgenre'); setGenreId(null) }} className='btn-sm' style={{ whiteSpace: 'nowrap' }}>Add sub</CButton>
+                                                </div>
                                             </div>
                                             <div>
-                                                <CButton onClick={() => { setCategories('bookgenre'); setGenreId(null) }} className='btn-sm' style={{ whiteSpace: 'nowrap' }}>Add sub</CButton>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            {
-                                                sideBarId === category.id &&
-                                                <div>
-                                                    {category?.subcategories?.map((subcategory) => (
-                                                        <CNavItem style={{ marginTop: '20px' }} key={subcategory.id}>
-                                                            <div className='d-flex justify-content-between ms-2 mt-2 gap-2'>
-                                                                <div className='d-flex align-items-center gap-1'>
-                                                                    {iconSubSet !== subcategory.id && <CIcon icon={cilCaretRight} size="sm" onClick={() => { handleAddBook(category.id, subcategory.id); handleChangeIconSUb(subcategory.id); setGenreId(subcategory.id) }} />}
-                                                                    {iconSubSet === subcategory.id && <CIcon icon={cilCaretBottom} size="sm" onClick={() => handleChangeIconSUb(null)} />}
-                                                                    <p onClick={() => { setGenreId(subcategory.id); setCategories('bookgenre'); setLibraryId(category.id) }} role='button' >{subcategory.name}</p>
+                                                {
+                                                    sideBarId === category.id &&
+                                                    <div>
+                                                        {category?.subcategories?.map((subcategory) => (
+                                                            <CNavItem style={{ marginTop: '20px' }} key={subcategory.id}>
+                                                                <div className='d-flex justify-content-between ms-2 mt-2 gap-2'>
+                                                                    <div className='d-flex align-items-center gap-1'>
+                                                                        {iconSubSet !== subcategory.id && <CIcon style={{ transform: 'rotate(90deg)' }} icon={cibZeit} size="sm" onClick={() => { handleAddBook(category.id, subcategory.id); handleChangeIconSUb(subcategory.id); setGenreId(subcategory.id) }} />}
+                                                                        {iconSubSet === subcategory.id && <CIcon style={{ transform: 'rotate(180deg)' }} icon={cibZeit} size="sm" onClick={() => handleChangeIconSUb(null)} />}
+                                                                        <p onClick={() => { setGenreId(subcategory.id); setCategories('bookgenre'); setLibraryId(category.id) }} role='button' >{subcategory.name}</p>
+                                                                    </div>
+                                                                    <div>
+                                                                        <CButton onClick={() => { setCategories('Sub'); setGenreId(subcategory.id); setSearchBooks([]); setSearchBookDetail([]) }} className='btn-sm' style={{ whiteSpace: 'nowrap' }}>Add sub</CButton>
+                                                                    </div>
                                                                 </div>
                                                                 <div>
-                                                                    <CButton onClick={() => { setCategories('Sub'); setGenreId(subcategory.id); setSearchBooks([]); setSearchBookDetail([]) }} className='btn-sm' style={{ whiteSpace: 'nowrap' }}>Add sub</CButton>
-                                                                </div>
-                                                            </div>
-                                                            <div>
-                                                                {
-                                                                    sideSubBarId === subcategory?.id &&
-                                                                    <div>
-                                                                        {subcategory?.books?.map((book, index) => (
-                                                                            <CNavItem style={{ marginTop: '20px' }} key={book.id}>
-                                                                                <div className='d-flex justify-content-between ms-3 mt-2 gap-2'>
-                                                                                    <div className='d-flex align-items-center gap-1'>
-                                                                                        {iconSubBookSet !== book.id && <CIcon icon={cilCaretRight} size="sm" onClick={() => { handleAddSubBook(category.id, subcategory.id, book.id); handleChangeIconSubBook(book.id) }} />}
-                                                                                        {iconSubBookSet === book.id && <CIcon icon={cilCaretBottom} size="sm" onClick={() => handleChangeIconSubBook(null)} />}
-                                                                                        <p onClick={() => { setCategories('BookDetail'); setBookId(book.id); DisplayBook(book.id) }} role='button'>{book.title}</p>
+                                                                    {
+                                                                        sideSubBarId === subcategory?.id &&
+                                                                        <div>
+                                                                            {subcategory?.books?.map((book, index) => (
+                                                                                <CNavItem style={{ marginTop: '20px' }} key={book.id}>
+                                                                                    <div className='d-flex justify-content-between ms-3 mt-2 gap-2'>
+                                                                                        <div className='d-flex align-items-center gap-1'>
+                                                                                            {iconSubBookSet !== book.id && <CIcon style={{ transform: 'rotate(90deg)' }} icon={cibZeit} size="sm" onClick={() => { handleAddSubBook(category.id, subcategory.id, book.id); handleChangeIconSubBook(book.id) }} />}
+                                                                                            {iconSubBookSet === book.id && <CIcon style={{ transform: 'rotate(180deg)' }} icon={cibZeit} size="sm" onClick={() => handleChangeIconSubBook(null)} />}
+                                                                                            <p onClick={() => { setCategories('BookDetail'); setBookId(book.id); DisplayBook(book.id) }} role='button'>{book.title}</p>
+                                                                                        </div>
+                                                                                        <div>
+                                                                                            <CButton onClick={() => { setCategories('itemNumber'); setBookItemId(null); DisplayBook(book.id) }} className='btn-sm' style={{ whiteSpace: 'nowrap' }}>Add sub</CButton>
+                                                                                        </div>
                                                                                     </div>
-                                                                                    <div>
-                                                                                        <CButton onClick={() => { setCategories('itemNumber'); setBookItemId(null); DisplayBook(book.id) }} className='btn-sm' style={{ whiteSpace: 'nowrap' }}>Add sub</CButton>
-                                                                                    </div>
-                                                                                </div>
-                                                                                {
-                                                                                    sideSubBookBarId === book.id &&
-                                                                                    <div>
-                                                                                        {book.subBook?.map((subBook, index) => (
-                                                                                            <CNavItem style={{ marginTop: '20px' }} key={subBook.id}>
-                                                                                                <div className='d-flex justify-content-between ms-4 mt-2'>
-                                                                                                    <div className='d-flex align-items-center gap-1'>
-                                                                                                        <p onClick={() => { setCategories('itemNumber'); getBookDetailItem(subBook.id) }} role='button' >{subBook?.itemNumber}</p>
+                                                                                    {
+                                                                                        sideSubBookBarId === book.id &&
+                                                                                        <div>
+                                                                                            {book.subBook?.map((subBook, index) => (
+                                                                                                <CNavItem style={{ marginTop: '20px' }} key={subBook.id}>
+                                                                                                    <div className='d-flex justify-content-between ms-4 mt-2'>
+                                                                                                        <div className='d-flex align-items-center gap-1'>
+                                                                                                            <p onClick={() => { setCategories('itemNumber'); getBookDetailItem(subBook.id) }} role='button' >{subBook?.itemNumber}</p>
+                                                                                                        </div>
                                                                                                     </div>
-                                                                                                </div>
-                                                                                            </CNavItem>
-                                                                                        ))}
-                                                                                    </div>
-                                                                                }
-                                                                            </CNavItem>
-                                                                        ))}
-                                                                    </div>
-                                                                }
-                                                            </div>
-                                                        </CNavItem>
-                                                    ))}
-                                                </div>
-                                            }
+                                                                                                </CNavItem>
+                                                                                            ))}
+                                                                                        </div>
+                                                                                    }
+                                                                                </CNavItem>
+                                                                            ))}
+                                                                        </div>
+                                                                    }
+                                                                </div>
+                                                            </CNavItem>
+                                                        ))}
+                                                    </div>
+                                                }
+                                            </div>
                                         </div>
+
+                                    </div>
+                                </CNavItem>
+                            ))}
+
+                        </CSidebarNav>
+
+                    </CSidebar>
+                </div>
+
+                {/* </div>   */}
+                {categories === 'library' && <Library
+                    setCategories={setCategories}
+                    libraryDetails={libraryDetails}
+                    CategoryId={CategoryId}
+                    library={library} />}
+                {categories === 'bookgenre' && <BookGenre
+                    libraryDetails={libraryDetails}
+                    setSideSubBarId={setSideSubBarId}
+                    setIconSubSet={setIconSubSet}
+                    setSideBarId={setSideBarId}
+                    setIconSet={setIconSet}
+                    setFilteredData={setFilteredData}
+                    setCategories={setCategories}
+                    setDeleted={setDeleted}
+                    genreId={genreId}
+                    getALLBookgenre={getALLBookgenre}
+                    library={library} />}
+                {categories === 'BookDetail' && <BooksDetail
+                    setSideSubBookBarId={setSideSubBookBarId}
+                    setIconSubBookSet={setIconSubBookSet}
+                    setSideSubBarId={setSideSubBarId}
+                    setIconSubSet={setIconSubSet}
+                    setBookId={setBookId}
+                    setSideBarId={setSideBarId}
+                    setIconSet={setIconSet}
+                    setFilteredData={setFilteredData}
+                    genreId={genreId}
+                    deleteSingleBook={deleteSingleBook}
+                    setDeleted={setDeleted}
+                    getBookList={getBookList}
+                    setCategories={setCategories}
+                    bookDisplay={bookDisplay}
+                    Genre={Genre}
+                    bookId={bookId}
+                    genreBooks={genreBooks}
+                    library={library} />}
+                {categories === 'itemNumber' && <ItemNumber
+                    setSideSubBookBarId={setSideSubBookBarId}
+                    setSideBarId={setSideBarId}
+                    setIconSubBookSet={setIconSubBookSet}
+                    setIconSubSet={setIconSubSet}
+                    setIconSet={setIconSet}
+                    setFilteredData={setFilteredData}
+                    setCategories={setCategories}
+                    bookDisplay={bookDisplay}
+                    bookItemDetail={bookItemDetail}
+                    setDeleted={setDeleted}
+                    Genre={Genre}
+                    bookId={bookId}
+                    bookItemId={bookItemId}
+                    genreBooks={genreBooks}
+                    library={library} />}
+                {categories === 'AllBooks' &&
+                    <div className='col-md-8' style={{ padding: 5, minHeight: '100%' }}>
+                        <div className='d-flex justify-content-end m-1 '>
+                            <CButton onClick={getUserListExport} className='btn-success'>Export</CButton>
+                        </div>
+                        <div className='d-flex justify-content-end px-4 py-2'>
+                            <div className='d-flex'>
+                                <CFormSelect
+                                    className='mx-3 px-8'
+                                    options={Genre}
+                                    onChange={handleItemChange}
+                                />
+                                <CFormSelect
+                                    className='me-3'
+                                    options={[
+                                        { label: 'All', value: 'All' },
+                                        { label: 'Available', value: 'available' },
+                                        { label: 'Unavailable', value: 'unAvailable' },
+                                    ]}
+                                    onChange={handleStatusChange}
+                                />
+                                <CFormSelect
+                                    options={[
+                                        { label: 'All', value: 'All' },
+                                        { label: 'visible', value: 'visible' },
+                                        { label: 'Hidden', value: 'Hidden' }
+                                    ]}
+                                    onChange={handleVisibilityChange}
+                                />
+                            </div>
+
+                        </div>
+                        <div className='d-flex gap-3'>
+                            <input value={filterData.title} placeholder='Search' onChange={handleChangeInput} className='form-control' />
+                            <CButton onClick={getBookList}>Search</CButton>
+                        </div>
+                        <div>
+                            <p style={{ fontSize: 'medium', padding: 5 }}>Total: {totalCount > 0 ? totalCount : '0'}</p>
+                        </div>
+
+                        <ReactTable columns={columns} data={AllBookList} showCheckbox={false} onSelectionChange={handleSelectionChange} />
+                        <div className='d-flex w-100 justify-content-center my-3 gap-3'>
+                            {AllBookList.length > 0 &&
+                                <div className='userlist-pagination'>
+                                    <div className='userlist-pagination dataTables_paginate'>
+                                        <ReactPaginate
+                                            breakLabel={'...'}
+                                            marginPagesDisplayed={1}
+                                            previousLabel={<button>Previous</button>}
+                                            nextLabel={<button>Next</button>}
+                                            pageCount={totalPages}
+                                            onPageChange={handlePageChange}
+                                            forcePage={currentPage}
+                                            // renderOnZeroPageCount={null}
+                                            pageRangeDisplayed={4}
+                                        />
                                     </div>
 
                                 </div>
-                            </CNavItem>
-                        ))}
 
-                    </CSidebarNav>
-
-                </CSidebar>
-            </div>
-
-            {/* </div>   */}
-            {categories === 'library' && <Library
-                setCategories={setCategories}
-                libraryDetails={libraryDetails}
-                CategoryId={CategoryId}
-                library={library} />}
-            {categories === 'bookgenre' && <BookGenre
-                libraryDetails={libraryDetails}
-                setIconSet={setIconSet}
-                setFilteredData={setFilteredData}
-                setCategories={setCategories}
-                setDeleted={setDeleted}
-                genreId={genreId}
-                getALLBookgenre={getALLBookgenre}
-                library={library} />}
-            {categories === 'BookDetail' && <BooksDetail
-                setBookId={setBookId}
-                setSideBarId={setSideBarId}
-                setIconSet={setIconSet}
-                setFilteredData={setFilteredData}
-                genreId={genreId}
-                deleteSingleBook={deleteSingleBook}
-                setDeleted={setDeleted}
-                getBookList={getBookList}
-                setCategories={setCategories}
-                bookDisplay={bookDisplay}
-                Genre={Genre}
-                bookId={bookId}
-                genreBooks={genreBooks}
-                library={library} />}
-            {categories === 'itemNumber' && <ItemNumber
-                setSideSubBookBarId={setSideSubBookBarId}
-                setSideBarId={setSideBarId}
-                setIconSubBookSet={setIconSubBookSet}
-                setIconSubSet={setIconSubSet}
-                setIconSet={setIconSet}
-                setFilteredData={setFilteredData}
-                setCategories={setCategories}
-                bookDisplay={bookDisplay}
-                bookItemDetail={bookItemDetail}
-                setDeleted={setDeleted}
-                Genre={Genre}
-                bookId={bookId}
-                bookItemId={bookItemId}
-                genreBooks={genreBooks}
-                library={library} />}
-            {categories === 'AllBooks' &&
-                <div className='col-md-8' style={{ padding: 5, minHeight: '100%' }}>
-                    <div className='d-flex justify-content-end m-1 '>
-                        <CButton onClick={getUserListExport} className='btn-success'>Export</CButton>
-                    </div>
-                    <div className='d-flex justify-content-end px-4 py-2'>
-                        <div className='d-flex'>
-                            <CFormSelect
-                                className='mx-3 px-8'
-                                options={Genre}
-                                onChange={handleItemChange}
-                            />
-                            <CFormSelect
-                                className='me-3'
-                                options={[
-                                    { label: 'All', value: 'All' },
-                                    { label: 'Available', value: 'available' },
-                                    { label: 'Unavailable', value: 'unAvailable' },
-                                ]}
-                                onChange={handleStatusChange}
-                            />
-                            <CFormSelect
-                                options={[
-                                    { label: 'All', value: 'All' },
-                                    { label: 'visible', value: 'visible' },
-                                    { label: 'Hidden', value: 'Hidden' }
-                                ]}
-                                onChange={handleVisibilityChange}
-                            />
+                            }
+                            {AllBookList.length > 0 && <div className='d-flex align-items-center gap-2 '>
+                                <label>Show</label>
+                                <CFormSelect
+                                    className=''
+                                    aria-label=""
+                                    options={paginationItemPerPageOptions}
+                                    onChange={(event) => {
+                                        setItemsPerPage(parseInt(event?.target?.value));
+                                        setCurrentPage(0)
+                                    }}
+                                />
+                                <label>Lists</label>
+                            </div>}
                         </div>
-
+                    </div>}
+                {categories === "Sub" && <div className='w-100 px-2'>
+                    <div className='d-flex justify-content-between'>
+                        <div>
+                            <p>Book (ISBN)</p>
+                        </div>
+                        <div className='clearfix'>
+                            <CButton className='float-end btn-black'>Delete</CButton>
+                        </div>
                     </div>
-                    <div className='d-flex gap-3'>
-                        <input value={filterData.title} placeholder='Search' onChange={handleChangeInput} className='form-control' />
-                        <CButton onClick={getBookList}>Search</CButton>
+                    <div className='camp-tab-cont'>
+                    <div
+                        className='nav nav-tabs'
+                        id='nav-tab'
+                        role='tablist'
+                    >
+                        <button
+                            className={`primary-btn ${book === 'search' && 'active'}`}
+                            id='edit-tab'
+                            data-bs-toggle='tab'
+                            data-bs-target='#edit'
+                            type='button'
+                            role='tab'
+                            aria-selected='true'
+                            onClick={() => setBook('search')}
+                        >
+                            Search Book
+                        </button>
+                        <button
+                            className={`primary-btn ${book === 'Register' && 'active'}`}
+                            id='review-tab'
+                            data-bs-toggle='tab'
+                            data-bs-target='#review'
+                            type='button'
+                            role='tab'
+                            aria-selected='false'
+                            onClick={() => setBook('Register')}
+                        >
+                            Register Book
+                        </button>
                     </div>
-                    <div>
-                        <p style={{ fontSize: 'medium', padding: 5 }}>Total: {totalCount > 0 ? totalCount : '0'}</p>
                     </div>
-                    {AllBookList.length > 0 ? <div>
-                        <ReactTable columns={columns} data={AllBookList} showCheckbox={false} onSelectionChange={handleSelectionChange} />
-                    </div> : <p style={{ textAlign: 'center', color: '#999', fontSize: '1.2rem' }}>No Search Result</p>}
-                    <div className='d-flex w-100 justify-content-center my-3 gap-3'>
-                        {AllBookList.length > 0 &&
-                            <div className='userlist-pagination'>
-                                <div className='userlist-pagination dataTables_paginate'>
-                                    <ReactPaginate
-                                        breakLabel={'...'}
-                                        marginPagesDisplayed={1}
-                                        previousLabel={<button>Previous</button>}
-                                        nextLabel={<button>Next</button>}
-                                        pageCount={totalPages}
-                                        onPageChange={handlePageChange}
-                                        forcePage={currentPage}
-                                        // renderOnZeroPageCount={null}
-                                        pageRangeDisplayed={4}
-                                    />
-                                </div>
-
-                            </div>
-
-                        }
-                        {AllBookList.length > 0 && <div className='d-flex align-items-center gap-2 '>
-                            <label>Show</label>
-                            <CFormSelect
-                                className=''
-                                aria-label=""
-                                options={paginationItemPerPageOptions}
-                                onChange={(event) => {
-                                    setItemsPerPage(parseInt(event?.target?.value));
-                                    setCurrentPage(0)
-                                }}
-                            />
-                            <label>Lists</label>
-                        </div>}
-                    </div>
-                </div>}
-            {categories === "Sub" && <div className='w-100 px-2'>
-                <div className='d-flex justify-content-between'>
-                    <div>
-                        <p>Book (ISBN)</p>
-                    </div>
-                    <div className='clearfix'>
-                        <CButton className='float-end btn-black'>Delete</CButton>
-                    </div>
-                </div>
-                <div style={{ width: '40%', display: 'flex', justifyContent: 'space-between', marginLeft: '5%' }}>
-                    <div onClick={() => setBook('search')} style={{ textDecoration: book === 'search' ? 'underline' : '', textUnderlinePosition: 'under', textUnderlineOffset: '5px' }} >
-                        <p>Search Book</p>
-                    </div>
-                    <div onClick={() => setBook('Register')} style={{ textDecoration: book === 'Register' ? 'underline' : '', textUnderlinePosition: 'under', textUnderlineOffset: '5px' }}>
-                        <p>Register Book</p>
-                    </div>
-                </div>
-                {categories === 'Sub' && (<div>
-                    {book === 'search' && <SearchBooks SearchBookList={SearchBookList}
-                        searchItemPerPage={searchItemPerPage}
-                        setItemSearchPerPage={setItemSearchPerPage}
-                        totalSearchPage={totalSearchPage}
-                        currentSearchPage={currentSearchPage}
-                        setSearchCurrentPage={setSearchCurrentPage}
-                        setSearchBookId={setSearchBookId}
-                        setBook={setBook}
-                        searchBookFilter={searchBookFilter}
-                        setSearchBookFilter={setSearchBookFilter}
-                        searchBooks={searchBooks} />}
-                    {book === 'Register' && <RegisterBook setSearchBookFilter={setSearchBookFilter}
-                        setSearchCurrentPage={setSearchCurrentPage}
-                        setSearchBookId={setSearchBookId}
-                        searchBookId={searchBookId}
-                        setSearchBookDetail={setSearchBookDetail}
-                        searchBookDetail={searchBookDetail}
-                        setFilteredData={setFilteredData}
-                        genreId={genreId}
-                        setCategories={setCategories}
-                        setDeleted={setDeleted}
-                        setBook={setBook}
-                        setSearchBooks={setSearchBooks}
-                        searchBooks={searchBooks} />}
-                </div>)}
+                    {categories === 'Sub' && (<div>
+                        {book === 'search' && <SearchBooks SearchBookList={SearchBookList}
+                            searchItemPerPage={searchItemPerPage}
+                            setItemSearchPerPage={setItemSearchPerPage}
+                            totalSearchPage={totalSearchPage}
+                            currentSearchPage={currentSearchPage}
+                            setSearchCurrentPage={setSearchCurrentPage}
+                            setSearchBookId={setSearchBookId}
+                            setBook={setBook}
+                            searchBookFilter={searchBookFilter}
+                            setSearchBookFilter={setSearchBookFilter}
+                            searchBooks={searchBooks} />}
+                        {book === 'Register' && <RegisterBook AllBookList={AllBookList} setSearchBookFilter={setSearchBookFilter}
+                            setSearchCurrentPage={setSearchCurrentPage}
+                            setSearchBookId={setSearchBookId}
+                            searchBookId={searchBookId}
+                            setSearchBookDetail={setSearchBookDetail}
+                            searchBookDetail={searchBookDetail}
+                            setFilteredData={setFilteredData}
+                            genreId={genreId}
+                            setCategories={setCategories}
+                            setDeleted={setDeleted}
+                            setBook={setBook}
+                            setSearchBooks={setSearchBooks}
+                            searchBooks={searchBooks} />}
+                    </div>)}
 
                 </div>}
                 <CModal

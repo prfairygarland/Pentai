@@ -5,7 +5,7 @@ import DatePicker from 'react-date-picker'
 import { deleteApi, postApi, putApi } from 'src/utils/Api'
 import { API_ENDPOINT } from 'src/utils/config'
 
-const CurationForm = ({ setStateUpdate, setCuration, curation, setCategories, categoryDetails, categoryID }) => {
+const CurationForm = ({ setStateUpdate, setSideSubBookBarId, setIconSubBookSet, setSideSubBarId, setIconSubSet, setIconSet, setSideBarId, setCuration, curation, setCategories, categoryDetails, categoryID }) => {
 
     const [bannerStartDate, setBannerStartDate] = useState('')
     const [bannerStartHours, setBannerStartHours] = useState('00')
@@ -258,7 +258,7 @@ const CurationForm = ({ setStateUpdate, setCuration, curation, setCategories, ca
                 return false
             }
         }
-        if (!data.noLink) {
+        if (data.noLink) {
             if (data.link1Name === '') {
                 enqueueSnackbar('Please enter link Name', { variant: 'error' })
                 return false
@@ -275,6 +275,13 @@ const CurationForm = ({ setStateUpdate, setCuration, curation, setCategories, ca
             enqueueSnackbar("Category created successfully", { variant: "success" })
             setStateUpdate((prev) => prev + 1)
             setCategories('AllCuration')
+            setIconSet(null)
+            setIconSubSet(null)
+            setSideSubBookBarId(null)
+            setIconSubBookSet(null)
+            setSideBarId(null)
+
+            setSideSubBarId(null)
         }
         else {
             enqueueSnackbar("Failed to create category", { variant: "error" })
@@ -290,6 +297,13 @@ const CurationForm = ({ setStateUpdate, setCuration, curation, setCategories, ca
             enqueueSnackbar('category deleted', { variant: 'success' })
             setdeleteVisible(false)
             setCategories('AllCuration')
+            setIconSet(null)
+            setIconSubSet(null)
+            setSideSubBookBarId(null)
+            setIconSubBookSet(null)
+            setSideBarId(null)
+
+            setSideSubBarId(null)
         }
         else {
             enqueueSnackbar('failed to deleted category', { variant: 'error' })
@@ -334,7 +348,7 @@ const CurationForm = ({ setStateUpdate, setCuration, curation, setCategories, ca
                 return false
             }
         }
-        if (!data.noLink) {
+        if (data.noLink) {
             if (data.link1Name === '') {
                 enqueueSnackbar('Please enter link Name', { variant: 'error' })
                 return false
@@ -351,10 +365,27 @@ const CurationForm = ({ setStateUpdate, setCuration, curation, setCategories, ca
             enqueueSnackbar("Category updated successfully", { variant: "success" })
             setStateUpdate((prev) => prev + 1)
             setCategories('AllCuration')
+            setIconSet(null)
+            setIconSubSet(null)
+            setSideSubBookBarId(null)
+            setIconSubBookSet(null)
+            setSideBarId(null)
+
+            setSideSubBarId(null)
         }
         else {
             enqueueSnackbar("Failed to update category", { variant: "error" })
         }
+    }
+
+    const handleCancel = () => {
+        setCategories('AllCuration')
+        setIconSet(null)
+        setIconSubSet(null)
+        setSideSubBookBarId(null)
+        setIconSubBookSet(null)
+        setSideBarId(null)
+        setSideSubBarId(null)
     }
 
     return (

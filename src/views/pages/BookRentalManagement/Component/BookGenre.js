@@ -4,7 +4,7 @@ import { API_ENDPOINT } from 'src/utils/config'
 import { deleteApi, getApi, postApi, putApi } from 'src/utils/Api'
 import { enqueueSnackbar } from 'notistack'
 
-const BookGenre = ({ library, libraryDetails, setIconSet, setDeleted, getALLBookgenre, setFilteredData, setCategories, genreId}) => {
+const BookGenre = ({ library, setSideBarId, setSideSubBarId, setIconSubSet, libraryDetails, setIconSet, setDeleted, getALLBookgenre, setFilteredData, setCategories, genreId }) => {
 
     const [data, setData] = useState({
         title: 'New',
@@ -18,24 +18,24 @@ const BookGenre = ({ library, libraryDetails, setIconSet, setDeleted, getALLBook
 
 
     //To get the particular genre by its Id
-    const getGenreById = async () =>{
-        if(genreId){
+    const getGenreById = async () => {
+        if (genreId) {
 
             let url = `${API_ENDPOINT.get_GenreDetails}?id=${genreId}`
-  
+
             const res = await getApi(url)
             console.log('res', res)
-            if(res?.status === 200){
-                setGenreDetails(res.data)   
-              setData({
-                  title: res?.data.name,
-                  code: res?.data.code ? res.data.code : '',
-                  AssociiatedItems: res?.data.associatedItem,
-                  isVisible: res.data.visibility === 'visible' ? true : false
-              })
+            if (res?.status === 200) {
+                setGenreDetails(res.data)
+                setData({
+                    title: res?.data.name,
+                    code: res?.data.code ? res.data.code : '',
+                    AssociiatedItems: res?.data.associatedItem,
+                    isVisible: res.data.visibility === 'visible' ? true : false
+                })
             }
         }
-        else{
+        else {
             setData({
                 title: 'New',
                 code: '',
@@ -43,22 +43,13 @@ const BookGenre = ({ library, libraryDetails, setIconSet, setDeleted, getALLBook
                 isVisible: true
             })
         }
-    
-  }
 
-  
-  useEffect(() =>{
-      getGenreById()
-    },[genreId])
-
-    const handleChange = (ev) => {
-        setData((prev) => {
-            return {
-                ...prev,
-                isVisible: ev.target.value
-            }
-        })
     }
+
+
+    useEffect(() => {
+        getGenreById()
+    }, [genreId])
 
 
 
@@ -97,19 +88,19 @@ const BookGenre = ({ library, libraryDetails, setIconSet, setDeleted, getALLBook
             code: data.code ? data.code : '',
             associatedItem: data.AssociiatedItems ? data.AssociiatedItems : '',
             visibility: data.isVisible === true ? 'visible' : 'hide',
-            bookLibraryId:1
+            bookLibraryId: 1
         }
         try {
 
-            if(data.title.trim() === ''){
+            if (data.title.trim() === '') {
                 enqueueSnackbar('Please enter genre name', { variant: 'error' })
                 return false
             }
-            if(data.code === ''){
+            if (data.code === '') {
                 enqueueSnackbar('Please enter genre code', { variant: 'error' })
                 return false
             }
-            if(data.AssociiatedItems < 0){
+            if (data.AssociiatedItems < 0) {
                 enqueueSnackbar('Please enter valid associate Item', { variant: 'error' })
                 return false
             }
@@ -117,13 +108,16 @@ const BookGenre = ({ library, libraryDetails, setIconSet, setDeleted, getALLBook
             const res = await postApi(url, body)
             if (res?.data?.status === 200) {
                 // getALLBookgenre()
-                enqueueSnackbar('Genre created successfully', {variant:'success'})
+                enqueueSnackbar('Genre created successfully', { variant: 'success' })
                 setDeleted((prev) => prev + 1)
                 setCategories('AllBooks')
                 setIconSet(null)
+                setSideBarId(null)
+                setIconSubSet(null)
+                setSideSubBarId(null)
             }
             else {
-                enqueueSnackbar('Failed to create Genre', {variant:'error'})
+                enqueueSnackbar('Failed to create Genre', { variant: 'error' })
             }
         } catch (error) {
             console.log(error)
@@ -132,19 +126,22 @@ const BookGenre = ({ library, libraryDetails, setIconSet, setDeleted, getALLBook
 
     //deleting the genre by Id
     const handleDelete = async () => {
-      let url = `${API_ENDPOINT.delete_genre}?id=`
+        let url = `${API_ENDPOINT.delete_genre}?id=`
 
-      const res = deleteApi(url, genreId)
-      if(res?.data?.status === 200){
-        enqueueSnackbar('Genre deleted successfully', {variant:'success'})
-        setDeleted((prev) => prev + 1)
-        setCategories('AllBooks')
-        setIconSet(null)
-      }
-      else{
-        enqueueSnackbar('Failed to delete Genre', {variant:'error'})
-      }
-    
+        const res = deleteApi(url, genreId)
+        if (res?.data?.status === 200) {
+            enqueueSnackbar('Genre deleted successfully', { variant: 'success' })
+            setDeleted((prev) => prev + 1)
+            setCategories('AllBooks')
+            setIconSet(null)
+            setSideBarId(null)
+            setIconSubSet(null)
+            setSideSubBarId(null)
+        }
+        else {
+            enqueueSnackbar('Failed to delete Genre', { variant: 'error' })
+        }
+
     }
 
     //updating the particular genre based on Id
@@ -160,30 +157,34 @@ const BookGenre = ({ library, libraryDetails, setIconSet, setDeleted, getALLBook
         }
         try {
 
-            if(data.title.trim() === ''){
+            if (data.title.trim() === '') {
                 enqueueSnackbar('Please enter genre name', { variant: 'error' })
                 return false
             }
-            if(data.code === ''){
+            if (data.code === '') {
                 enqueueSnackbar('Please enter genre code', { variant: 'error' })
                 return false
             }
-            if(data.AssociiatedItems < 1){
+            if (data.AssociiatedItems < 1) {
                 enqueueSnackbar('Please enter valid associate Item', { variant: 'error' })
                 return false
             }
             const res = await putApi(url, body)
-            
+
             if (res?.status === 200) {
                 console.log("Genre added Successfully")
-                enqueueSnackbar('Genre updated successfully', {variant:'success'})
+                enqueueSnackbar('Genre updated successfully', { variant: 'success' })
                 getALLBookgenre()
-                 setDeleted((prev) => prev + 1)
-                 setCategories('AllBooks')
+                setDeleted((prev) => prev + 1)
+                setCategories('AllBooks')
+                setIconSet(null)
+                setSideBarId(null)
+                setIconSubSet(null)
+                setSideSubBarId(null)
                 //
             }
             else {
-                enqueueSnackbar('Failed to update Genre', {variant:'error'})
+                enqueueSnackbar('Failed to update Genre', { variant: 'error' })
                 console.log("error")
             }
         } catch (error) {
@@ -202,10 +203,13 @@ const BookGenre = ({ library, libraryDetails, setIconSet, setDeleted, getALLBook
             status: ''
         })
         setIconSet(null)
+        setSideBarId(null)
+        setIconSubSet(null)
+        setSideSubBarId(null)
     }
 
     return (
-        <div  style={{ width: '100%', borderRadius: '0' }}>
+        <div style={{ width: '100%', borderRadius: '0' }}>
             <div className="card p-2">
                 
                 <div className=' w-100 d-flex justify-content-between align-item-center'>
@@ -302,26 +306,26 @@ const BookGenre = ({ library, libraryDetails, setIconSet, setDeleted, getALLBook
                 <CButton onClick={genreId ? handleUpdateGenre : handleCreateGenre}>Save</CButton>
             </div>
             <CModal
-                    backdrop="static"
-                      visible={deleteVisible}
-                      onClose={() => setdeleteVisible(false)}
-                    aria-labelledby="StaticBackdropExampleLabel"
-                >
-                    <CModalHeader>
-                        <CModalTitle id="StaticBackdropExampleLabel">Delete</CModalTitle>
-                    </CModalHeader>
-                    <CModalBody>
-                        <p>Are you sure you want to delete this category?
-                            <br />
-                            All categories and items belonging will be deleted.</p>
-                    </CModalBody>
-                    <CModalFooter>
-                        <CButton onClick={handleDelete} color="primary">Delete</CButton>
-                        <CButton onClick={() => setdeleteVisible(false)} color="secondary">
-                            Cancel
-                        </CButton>
-                    </CModalFooter>
-                </CModal>
+                backdrop="static"
+                visible={deleteVisible}
+                onClose={() => setdeleteVisible(false)}
+                aria-labelledby="StaticBackdropExampleLabel"
+            >
+                <CModalHeader>
+                    <CModalTitle id="StaticBackdropExampleLabel">Delete</CModalTitle>
+                </CModalHeader>
+                <CModalBody>
+                    <p>Are you sure you want to delete this category?
+                        <br />
+                        All categories and items belonging will be deleted.</p>
+                </CModalBody>
+                <CModalFooter>
+                    <CButton onClick={handleDelete} color="primary">Delete</CButton>
+                    <CButton onClick={() => setdeleteVisible(false)} color="secondary">
+                        Cancel
+                    </CButton>
+                </CModalFooter>
+            </CModal>
         </div>
     )
 }

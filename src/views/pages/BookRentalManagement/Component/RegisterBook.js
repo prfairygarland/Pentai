@@ -6,7 +6,7 @@ import { imageUrl } from '../BookRentalStatus';
 import { useCallback } from 'react';
 import { enqueueSnackbar } from 'notistack';
 
-const RegisterBook = ({ setDeleted,  setSearchBookFilter, setSearchCurrentPage, setBook, setSearchBookId, searchBookId, searchBookDetail, setSearchBookDetail, searchBooks, genreId, setFilteredData, setSearchBooks, setCategories }) => {
+const RegisterBook = ({ setDeleted, setSearchBookFilter, setSearchCurrentPage, setBook, setSearchBookId, searchBookId, searchBookDetail, setSearchBookDetail, searchBooks, genreId, setFilteredData, setSearchBooks, setCategories }) => {
     const [RegisteredData, setRegisteredData] = useState({
         bookgenre: '',
         ISBN: '',
@@ -25,6 +25,7 @@ const RegisterBook = ({ setDeleted,  setSearchBookFilter, setSearchCurrentPage, 
     const [Subcategory, setSubCategory] = useState()
     const [postImage, setPostImage] = useState(null)
     const [filterBook, setFilterBook] = useState()
+
 
 
 

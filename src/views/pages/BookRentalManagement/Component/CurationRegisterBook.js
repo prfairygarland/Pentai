@@ -27,14 +27,13 @@ const CurationRegisterBook = ({ setDeleted, setSearchBookFilter, setSearchCurren
     const [postImage, setPostImage] = useState(null)
     const [filterBook, setFilterBook] = useState()
 
-
     useEffect(() => {
         if (searchCurationBookDetail) {
             setRegisteredData({
                 bookgenre: RegisteredData.bookgenre,
                 categoryID: RegisteredData.categoryID,
                 subCategoryID: RegisteredData.subCategoryID,
-                title: searchCurationBookDetail?.title,
+                title: searchCurationBookDetail?.title ? searchCurationBookDetail?.title : '',
                 Author: searchCurationBookDetail?.authors ? searchCurationBookDetail?.authors[0] : '',
                 ISBN: searchCurationBookDetail?.industryIdentifiers ? searchCurationBookDetail?.industryIdentifiers[0].identifier.replace('/[^0-9]/g', '') : '',
                 description: searchCurationBookDetail?.description ? searchCurationBookDetail.description : '',
