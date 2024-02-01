@@ -675,5 +675,26 @@
     "meetingRoomCode": "Meeting Room Code",
     "roomStatus": "Room Status",
     "meetingRoomReservationStatus": "Meeting Room Reservation Status"
+  },
+  "RouletteeventManagementListing": {
+    "all": "All",
+    "status": "Status",
+    "title": "Title",
+    "creator": "Creator",
+    "upcoming": "Upcoming",
+    "ongoing": "Ongoing",
+    "closed": "Closed",
+    "canceled": "Canceled",
+    "registration": "Registration",
+    "startTime": "start time",
+    "period": "Period",
+    "participants": "Participants",
+    "points": "Points",
+    "eventCost": "Event Cost",
+    "Previous": "Previous",
+    "Next": "Next",
+    "Show": "Show",
+    "Lists": "Lists",
+    "search": "Search"
   }
 }

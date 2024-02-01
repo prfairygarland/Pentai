@@ -207,9 +207,8 @@ const AddItem = ({ getVal, setCat, setSubIcon, setModalIcon, setModal, getMod, m
 
       if (response?.status === 200) {
         // setShowSelectedImage('https://ptkapi.experiencecommerce.com' + response.data.image)
-        setShowSelectedImage(response.data.image)
-        // setShowSelectedImage(ALL_CONSTANTS.BASE_URL + response.data.image)
-
+        // setShowSelectedImage(response.data.image)
+        setShowSelectedImage(ALL_CONSTANTS.BASE_URL + response.data.image)
 
         setAddItemData({
           name: response.data.modelName,
