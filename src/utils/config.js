@@ -234,7 +234,10 @@ export let API_ENDPOINT = {
 
   // Live Management
 
-  getLiveStreams: ALL_CONSTANTS.API_URL + "/api/admin/lounge/getLiveStreams"
+  getLiveStreams: ALL_CONSTANTS.API_URL + "/api/admin/lounge/getLiveStreams",
+  createLiveStream: ALL_CONSTANTS.API_URL + "/api/admin/lounge/createLiveStream",
+  addQuizQuestion: ALL_CONSTANTS.API_URL + "/api/admin/lounge/quizQuestion/add"
+
 
 
 

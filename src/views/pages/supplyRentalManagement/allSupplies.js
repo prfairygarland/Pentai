@@ -452,255 +452,255 @@ const AllSupplies = () => {
 
   return (
     <div>
-    <div className="pageTitle mb-3 pb-2">
-    <h2>All Supplies</h2>
-    </div>
-    <div className='d-flex justify-content-between  mb-4'>
-      {isLoading && <Loader />}
-      <div className='col-md-4'>
-        <CSidebar className='w-100 pe-3'>
-          <CSidebarBrand className=' black-text d-flex justify-content-start p-3' style={{ color: 'black', background: 'none' }}><h5>{multiLang?.categoryHierarchy}</h5></CSidebarBrand>
-          <CSidebarBrand className=' black-text d-flex justify-content-between mb-2' style={{ color: 'black', borderBottom: '1px solid #000', background: 'none', alignItems: 'center' }}>
-            <p role='button' onClick={() => handleSetModal('allList')}>{multiLang?.allSupplies}</p>
-            <CButton className='text-center btn-sm' style={{
-              whiteSpace: 'nowrap',
-              textOverflow: 'ellipsis',
-            }} onClick={() => handleSetModal('addSupplyType', 'add')}>{multiLang?.addSupply}</CButton>
-          </CSidebarBrand>
-          <CSidebarNav style={{ color: 'black', padding: '3px', maxHeight: '500px', overflow: 'auto' }}>
-            {mainCategoryData.map((tab) => (
-              <CNavItem className='mb-3' key={tab.id} onClick={() => (handleTabClick(tab.id))}>
-                <div className='d-flex w-100'>
-                  <div className='d-flex w-100 flex-column '>
-                    <div className='d-flex w-100 justify-content-between'>
-                      <div className='d-flex align-items-center gap-1'>
-                        {iconSet !== tab.id && <CIcon style={{ transform: 'rotate(90deg)' }} onClick={() => (handleChange(tab.id), getCategoryList(tab.id))} icon={cibZeit} size="sm" />}
-                        {iconSet === tab.id && <CIcon style={{ transform: 'rotate(180deg)' }} onClick={() => { handleChange(null) }} icon={cibZeit} size="sm" />}
-                        <p role='button' onClick={() => (setIds(tab.id), handleSetModal('addSupplyType'))}>{tab.name}</p>
+      <div className="pageTitle mb-3 pb-2">
+        <h2>All Supplies</h2>
+      </div>
+      <div className='d-flex justify-content-between  mb-4'>
+        {isLoading && <Loader />}
+        <div className='col-md-4'>
+          <CSidebar className='w-100 pe-3'>
+            <CSidebarBrand className=' black-text d-flex justify-content-start p-3' style={{ color: 'black', background: 'none' }}><h5>{multiLang?.categoryHierarchy}</h5></CSidebarBrand>
+            <CSidebarBrand className=' black-text d-flex justify-content-between mb-2' style={{ color: 'black', borderBottom: '1px solid #000', background: 'none', alignItems: 'center' }}>
+              <p role='button' onClick={() => handleSetModal('allList')}>{multiLang?.allSupplies}</p>
+              <CButton className='text-center btn-sm' style={{
+                whiteSpace: 'nowrap',
+                textOverflow: 'ellipsis',
+              }} onClick={() => handleSetModal('addSupplyType', 'add')}>{multiLang?.addSupply}</CButton>
+            </CSidebarBrand>
+            <CSidebarNav style={{ color: 'black', padding: '3px', maxHeight: '500px', overflow: 'auto' }}>
+              {mainCategoryData.map((tab) => (
+                <CNavItem className='mb-3' key={tab.id} onClick={() => (handleTabClick(tab.id))}>
+                  <div className='d-flex w-100'>
+                    <div className='d-flex w-100 flex-column '>
+                      <div className='d-flex w-100 justify-content-between'>
+                        <div className='d-flex align-items-center gap-1'>
+                          {iconSet !== tab.id && <CIcon style={{ transform: 'rotate(90deg)' }} onClick={() => (handleChange(tab.id), getCategoryList(tab.id))} icon={cibZeit} size="sm" />}
+                          {iconSet === tab.id && <CIcon style={{ transform: 'rotate(180deg)' }} onClick={() => { handleChange(null) }} icon={cibZeit} size="sm" />}
+                          <p role='button' onClick={() => (setIds(tab.id), handleSetModal('addSupplyType'))}>{tab.name}</p>
+                        </div>
+                        <div>
+                          <CButton className='btn-sm' onClick={() => { setSuppyId(tab.id); handleSetModal('addCategory', 'add') }}>{multiLang?.addCategory}</CButton>
+                        </div>
                       </div>
                       <div>
-                        <CButton className='btn-sm' onClick={() => { setSuppyId(tab.id); handleSetModal('addCategory', 'add') }}>{multiLang?.addCategory}</CButton>
-                      </div>
-                    </div>
-                    <div>
-                      {sideBarId === tab.id &&
-                        <div>
-                          {categoryData?.map((catTab) => (
-                            <CNavItem style={{ marginTop: '20px' }} key={catTab.id}>
-                              <div className='d-flex justify-content-between ms-2 mt-2'>
-                                <div className='d-flex align-items-center gap-1'>
-                                  {iconCatSet !== catTab.id && <CIcon style={{ transform: 'rotate(90deg)' }} onClick={() => { handleCatIcon(catTab.id); getSubCategoryList(catTab.id) }} icon={cibZeit} size="sm" />}
-                                  {iconCatSet === catTab.id && <CIcon style={{ transform: 'rotate(180deg)' }} onClick={() => { handleCatIcon(null); }} icon={cibZeit} size="sm" />}
-                                  <p role='button' onClick={() => (setSuppyId(tab.id), setCatIds(catTab.id), handleSetModal('addCategory'))}>{catTab.name}</p>
+                        {sideBarId === tab.id &&
+                          <div>
+                            {categoryData?.map((catTab) => (
+                              <CNavItem style={{ marginTop: '20px' }} key={catTab.id}>
+                                <div className='d-flex justify-content-between ms-2 mt-2'>
+                                  <div className='d-flex align-items-center gap-1'>
+                                    {iconCatSet !== catTab.id && <CIcon style={{ transform: 'rotate(90deg)' }} onClick={() => { handleCatIcon(catTab.id); getSubCategoryList(catTab.id) }} icon={cibZeit} size="sm" />}
+                                    {iconCatSet === catTab.id && <CIcon style={{ transform: 'rotate(180deg)' }} onClick={() => { handleCatIcon(null); }} icon={cibZeit} size="sm" />}
+                                    <p role='button' onClick={() => (setSuppyId(tab.id), setCatIds(catTab.id), handleSetModal('addCategory'))}>{catTab.name}</p>
+                                  </div>
+                                  <div>
+                                    <CButton className='btn-sm' onClick={() => { setCatId(catTab.id); handleSetModal('addSubCategory', 'add') }}>{multiLang?.addSubCategory}</CButton>
+                                  </div>
                                 </div>
                                 <div>
-                                  <CButton className='btn-sm' onClick={() => { setCatId(catTab.id); handleSetModal('addSubCategory', 'add') }}>{multiLang?.addSubCategory}</CButton>
-                                </div>
-                              </div>
-                              <div>
-                                {sideSubBarId === catTab.id &&
-                                  <div>
-                                    {subCategoryData?.map((subCatTab) => (
-                                      <CNavItem style={{ marginTop: '20px' }} key={subCatTab.id}>
-                                        <div className='d-flex justify-content-between ms-3 mt-2'>
-                                          <div className='d-flex align-items-center gap-1'>
-                                            {iconSubCatSet !== subCatTab.id && <CIcon style={{ transform: 'rotate(90deg)' }} onClick={() => { handleSubCatIcon(subCatTab.id); getModalList(subCatTab.id) }} icon={cibZeit} size="sm" />}
-                                            {iconSubCatSet === subCatTab.id && <CIcon style={{ transform: 'rotate(180deg)' }} onClick={() => { handleSubCatIcon(null); }} icon={cibZeit} size="sm" />}
-                                            <p role='button' onClick={() => (setCatId(catTab.id), setSubCatIds(subCatTab.id), handleSetModal('addSubCategory'))}>{subCatTab.name}</p>
+                                  {sideSubBarId === catTab.id &&
+                                    <div>
+                                      {subCategoryData?.map((subCatTab) => (
+                                        <CNavItem style={{ marginTop: '20px' }} key={subCatTab.id}>
+                                          <div className='d-flex justify-content-between ms-3 mt-2'>
+                                            <div className='d-flex align-items-center gap-1'>
+                                              {iconSubCatSet !== subCatTab.id && <CIcon style={{ transform: 'rotate(90deg)' }} onClick={() => { handleSubCatIcon(subCatTab.id); getModalList(subCatTab.id) }} icon={cibZeit} size="sm" />}
+                                              {iconSubCatSet === subCatTab.id && <CIcon style={{ transform: 'rotate(180deg)' }} onClick={() => { handleSubCatIcon(null); }} icon={cibZeit} size="sm" />}
+                                              <p role='button' onClick={() => (setCatId(catTab.id), setSubCatIds(subCatTab.id), handleSetModal('addSubCategory'))}>{subCatTab.name}</p>
+                                            </div>
+                                            <div>
+                                              <CButton className='btn-sm' onClick={() => { setModalId(subCatTab.id); handleSetModal('addModal', 'add') }}>{multiLang?.addModel}</CButton>
+                                            </div>
                                           </div>
-                                          <div>
-                                            <CButton className='btn-sm' onClick={() => { setModalId(subCatTab.id); handleSetModal('addModal', 'add') }}>{multiLang?.addModel}</CButton>
-                                          </div>
-                                        </div>
-                                        {sideModelId === subCatTab.id &&
-                                          <div>
-                                            {modelData?.map((modalTab) => (
-                                              <CNavItem style={{ marginTop: '20px' }} key={modalTab.id}>
-                                                <div className='d-flex justify-content-between ms-4 mt-2'>
-                                                  <div className='d-flex align-items-center gap-1'>
-                                                    {iconModSet !== modalTab.id && <CIcon style={{ transform: 'rotate(90deg)' }} onClick={() => { handleModalIcon(modalTab.id); getItemList(catTab.id, subCatTab.id, modalTab.id) }} icon={cibZeit} size="sm" />}
-                                                    {iconModSet === modalTab.id && <CIcon style={{ transform: 'rotate(180deg)' }} onClick={() => { handleModalIcon(null) }} icon={cibZeit} size="sm" />}
+                                          {sideModelId === subCatTab.id &&
+                                            <div>
+                                              {modelData?.map((modalTab) => (
+                                                <CNavItem style={{ marginTop: '20px' }} key={modalTab.id}>
+                                                  <div className='d-flex justify-content-between ms-4 mt-2'>
+                                                    <div className='d-flex align-items-center gap-1'>
+                                                      {iconModSet !== modalTab.id && <CIcon style={{ transform: 'rotate(90deg)' }} onClick={() => { handleModalIcon(modalTab.id); getItemList(catTab.id, subCatTab.id, modalTab.id) }} icon={cibZeit} size="sm" />}
+                                                      {iconModSet === modalTab.id && <CIcon style={{ transform: 'rotate(180deg)' }} onClick={() => { handleModalIcon(null) }} icon={cibZeit} size="sm" />}
 
-                                                    <p role='button' onClick={() => (setModalId(subCatTab.id), setModalIds(modalTab.id), handleSetModal('addModal'))}>{modalTab.name}</p>
+                                                      <p role='button' onClick={() => (setModalId(subCatTab.id), setModalIds(modalTab.id), handleSetModal('addModal'))}>{modalTab.name}</p>
+                                                    </div>
+                                                    <div>
+                                                      <CButton className='btn-sm' onClick={() => { setCategoryId(catTab.id); setSubCategoryId(subCatTab.id); setMainID(tab.id); setItemName(modalTab.name); setGetModalId(modalTab.id); handleSetModal('addItem', 'add') }}>{multiLang?.addItem}</CButton>
+                                                    </div>
                                                   </div>
-                                                  <div>
-                                                    <CButton className='btn-sm' onClick={() => { setCategoryId(catTab.id); setSubCategoryId(subCatTab.id); setMainID(tab.id); setItemName(modalTab.name); setGetModalId(modalTab.id); handleSetModal('addItem', 'add') }}>{multiLang?.addItem}</CButton>
-                                                  </div>
-                                                </div>
-                                                {sideItemId === modalTab.id &&
-                                                  <div>
-                                                    {itemData?.map((itemTab) => (
-                                                      <CNavItem style={{ marginTop: '20px' }} key={itemTab.id}>
-                                                        <div className='d-flex justify-content-between ms-5 mt-2'>
-                                                          <div className='d-flex align-items-center gap-1'>
-                                                            {/* <CIcon onClick={() => (getItemList(catTab.id, subCatTab.id, itemTab.id))} icon={cibZeit} size="sm" /> */}
-                                                            <p role='button' onClick={() => { setItemName(modalTab.name); setItemIds(itemTab.id); handleSetModal('addItem') }}>{itemTab.itemNumber}</p>
-                                                          </div>
-                                                          {/* <div>
+                                                  {sideItemId === modalTab.id &&
+                                                    <div>
+                                                      {itemData?.map((itemTab) => (
+                                                        <CNavItem style={{ marginTop: '20px' }} key={itemTab.id}>
+                                                          <div className='d-flex justify-content-between ms-5 mt-2'>
+                                                            <div className='d-flex align-items-center gap-1'>
+                                                              {/* <CIcon onClick={() => (getItemList(catTab.id, subCatTab.id, itemTab.id))} icon={cibZeit} size="sm" /> */}
+                                                              <p role='button' onClick={() => { setItemName(modalTab.name); setItemIds(itemTab.id); handleSetModal('addItem') }}>{itemTab.itemNumber}</p>
+                                                            </div>
+                                                            {/* <div>
                                                             <CButton className='btn-sm' onClick={() => handleSetModal('addSubCategory')}>{multiLang?.addSub}</CButton>
                                                           </div> */}
-                                                        </div>
-                                                      </CNavItem>
-                                                    ))}
-                                                  </div>
-                                                }
-                                              </CNavItem>
-                                            ))}
-                                          </div>
-                                        }
-                                      </CNavItem>
-                                    ))}
-                                  </div>
-                                }
-                              </div>
-                            </CNavItem>
-                          ))}
-                        </div>
-                      }
+                                                          </div>
+                                                        </CNavItem>
+                                                      ))}
+                                                    </div>
+                                                  }
+                                                </CNavItem>
+                                              ))}
+                                            </div>
+                                          }
+                                        </CNavItem>
+                                      ))}
+                                    </div>
+                                  }
+                                </div>
+                              </CNavItem>
+                            ))}
+                          </div>
+                        }
+                      </div>
                     </div>
+
+                  </div>
+                </CNavItem>
+              ))}
+
+            </CSidebarNav>
+
+          </CSidebar>
+        </div>
+        {getModal === 'allList' &&
+          <div className='mb-4 col-md-8'>
+            <div className='clearfix'>
+              <CButton className='float-end mx-2 mb-2 btn-success' onClick={exportData}>{multiLang?.export}</CButton>
+            </div>
+            <div className='d-flex justify-content-between align-items-center my-4'>
+              <div className='mx-1 d-flex'>
+                <input className=' me-3 form-control' placeholder='Search' value={filterData.search} onChange={handleSearch} />
+                <CButton onClick={handleAllSupplyRentaldata}>{multiLang?.search}</CButton>
+              </div>
+              <div className='d-flex me-5 gap-1'>
+                <CFormSelect
+                  className='mx-4'
+                  style={{ width: '170px' }}
+                  value={filterData?.itemStatus}
+                  options={[
+                    { label: multiLang?.all, value: 'All' },
+                    {
+                      label: multiLang?.available, value: 'Available'
+                    },
+                    {
+                      label: multiLang?.unAvailable, value: 'Unavailable'
+                    }
+                  ]}
+                  onChange={handleAllSupplieRentalStatusChange}
+                />
+                <CFormSelect
+                  style={{ width: '170px' }}
+                  value={filterData?.visibility}
+                  options={[
+                    { label: multiLang?.all, value: 'All' },
+                    {
+                      label: multiLang?.visible, value: 'visible'
+                    },
+                    {
+                      label: multiLang?.hidden, value: 'hide'
+                    }
+                  ]}
+                  onChange={handleAllaupplieVisibility}
+                />
+              </div>
+
+            </div>
+            <div className='mb-4'>
+              <p style={{ fontSize: 'medium' }}>{multiLang?.total}: {totalCount > 0 ? totalCount : '0'}</p>
+            </div>
+            <ReactTable showCheckbox={false} columns={columns} data={allSuppliesData} totalCount={10} onSelectionChange={handleSelectionChange} />
+            {allSuppliesData.length > 0 &&
+              <div className='d-flex my-3 justify-content-center align-items-center gap-3'>
+                <div className='userlist-pagination'>
+                  <div className='userlist-pagination dataTables_paginate'>
+                    <ReactPaginate
+                      breakLabel={'...'}
+                      marginPagesDisplayed={1}
+                      previousLabel={<button>{multiLang?.previous}</button>}
+                      nextLabel={<button>{multiLang?.next}</button>}
+                      pageCount={totalPages}
+                      onPageChange={handlePageChange}
+                      forcePage={currentPage}
+                      // renderOnZeroPageCount={null}
+                      pageRangeDisplayed={4}
+                    />
                   </div>
 
                 </div>
-              </CNavItem>
-            ))}
-
-          </CSidebarNav>
-
-        </CSidebar>
-      </div>
-      {getModal === 'allList' &&
-        <div className='mb-4 col-md-8'>
-          <div className='clearfix'>
-            <CButton className='float-end mx-2 mb-2 btn-success' onClick={exportData}>{multiLang?.export}</CButton>
-          </div>
-          <div className='d-flex justify-content-between align-items-center my-4'>
-            <div className='mx-1 d-flex'>
-              <input className=' me-3 form-control' placeholder='Search' value={filterData.search} onChange={handleSearch} />
-              <CButton onClick={handleAllSupplyRentaldata}>{multiLang?.search}</CButton>
-            </div>
-            <div className='d-flex me-5 gap-1'>
-              <CFormSelect
-                className='mx-4'
-                style={{ width: '170px' }}
-                value={filterData?.itemStatus}
-                options={[
-                  { label: multiLang?.all, value: 'All' },
-                  {
-                    label: multiLang?.available, value: 'Available'
-                  },
-                  {
-                    label: multiLang?.unAvailable, value: 'Unavailable'
-                  }
-                ]}
-                onChange={handleAllSupplieRentalStatusChange}
-              />
-              <CFormSelect
-                style={{ width: '170px' }}
-                value={filterData?.visibility}
-                options={[
-                  { label: multiLang?.all, value: 'All' },
-                  {
-                    label: multiLang?.visible, value: 'visible'
-                  },
-                  {
-                    label: multiLang?.hidden, value: 'hide'
-                  }
-                ]}
-                onChange={handleAllaupplieVisibility}
-              />
-            </div>
-
-          </div>
-          <div className='mb-4'>
-            <p style={{ fontSize: 'medium' }}>{multiLang?.total}: {totalCount > 0 ? totalCount : '0'}</p>
-          </div>
-          <ReactTable showCheckbox={false} columns={columns} data={allSuppliesData} totalCount={10} onSelectionChange={handleSelectionChange} />
-          {allSuppliesData.length > 0 &&
-            <div className='d-flex my-3 justify-content-center align-items-center gap-3'>
-              <div className='userlist-pagination'>
-                <div className='userlist-pagination dataTables_paginate'>
-                  <ReactPaginate
-                    breakLabel={'...'}
-                    marginPagesDisplayed={1}
-                    previousLabel={<button>{multiLang?.previous}</button>}
-                    nextLabel={<button>{multiLang?.next}</button>}
-                    pageCount={totalPages}
-                    onPageChange={handlePageChange}
-                    forcePage={currentPage}
-                    // renderOnZeroPageCount={null}
-                    pageRangeDisplayed={4}
+                <div className='d-flex align-items-center gap-2 '>
+                  <label>{multiLang?.show}</label>
+                  <CFormSelect
+                    className=''
+                    aria-label=""
+                    value={itemsPerPage}
+                    options={paginationItemPerPageOptions}
+                    onChange={(event) => {
+                      setItemsPerPage(parseInt(event?.target?.value));
+                      setCurrentPage(0)
+                    }}
                   />
+                  <label>{multiLang?.lists}</label>
                 </div>
-
               </div>
-              <div className='d-flex align-items-center gap-2 '>
-                <label>{multiLang?.show}</label>
-                <CFormSelect
-                  className=''
-                  aria-label=""
-                  value={itemsPerPage}
-                  options={paginationItemPerPageOptions}
-                  onChange={(event) => {
-                    setItemsPerPage(parseInt(event?.target?.value));
-                    setCurrentPage(0)
-                  }}
-                />
-                <label>{multiLang?.lists}</label>
-              </div>
-            </div>
-          }
-        </div>
-      }
-      <CModal
-        backdrop="static"
-        visible={deleteVisible}
-        onClose={() => setDeleteVisible(false)}
-        aria-labelledby="StaticBackdropExampleLabel"
-      >
-        <CModalHeader>
-          <CModalTitle id="StaticBackdropExampleLabel">{multiLang?.deleteBoard}</CModalTitle>
-        </CModalHeader>
-        <CModalBody>
-          <p>{multiLang?.deleteBoardPopUp}</p>
-        </CModalBody>
-        <CModalFooter>
-          <CButton color="secondary" >
-            {multiLang?.delete}
-          </CButton>
-          <CButton color="primary" onClick={() => setDeleteVisible(false)}>{multiLang?.cancel}</CButton>
-        </CModalFooter>
-      </CModal>
+            }
+          </div>
+        }
+        <CModal
+          backdrop="static"
+          visible={deleteVisible}
+          onClose={() => setDeleteVisible(false)}
+          aria-labelledby="StaticBackdropExampleLabel"
+        >
+          <CModalHeader>
+            <CModalTitle id="StaticBackdropExampleLabel">{multiLang?.deleteBoard}</CModalTitle>
+          </CModalHeader>
+          <CModalBody>
+            <p>{multiLang?.deleteBoardPopUp}</p>
+          </CModalBody>
+          <CModalFooter>
+            <CButton color="secondary" >
+              {multiLang?.delete}
+            </CButton>
+            <CButton color="primary" onClick={() => setDeleteVisible(false)}>{multiLang?.cancel}</CButton>
+          </CModalFooter>
+        </CModal>
 
-      {getModal === 'addSupplyType' &&
+        {getModal === 'addSupplyType' &&
 
-        <AddSupplyType setModal={setState} getMod={getState} Modal={setModal} getId={ids} removeIds={setIds} getVal={setIcon} />
+          <AddSupplyType setModal={setState} getMod={getState} Modal={setModal} getId={ids} removeIds={setIds} getVal={setIcon} />
 
-      }
+        }
 
-      {getModal === 'addCategory' &&
+        {getModal === 'addCategory' &&
 
-        <AddCategory setModal={setState} getMod={getState} Modal={setModal} getMainCatId={suppyId} getCatId={catIds} removeCatIds={setCatIds} getVal={setIcon} setCat={setCatIcon} />
+          <AddCategory setModal={setState} getMod={getState} Modal={setModal} getMainCatId={suppyId} getCatId={catIds} removeCatIds={setCatIds} getVal={setIcon} setCat={setCatIcon} />
 
-      }
+        }
 
-      {getModal === 'addSubCategory' &&
+        {getModal === 'addSubCategory' &&
 
-        <AddSubCategory setModal={setState} getMod={getState} Modal={setModal} getMainSubCatId={catId} getSubCatId={subCatIds} removeSubCatIds={setSubCatIds} getVal={setIcon} setCat={setCatIcon} setSubIcon={setSubCatIcon} />
+          <AddSubCategory setModal={setState} getMod={getState} Modal={setModal} getMainSubCatId={catId} getSubCatId={subCatIds} removeSubCatIds={setSubCatIds} getVal={setIcon} setCat={setCatIcon} setSubIcon={setSubCatIcon} />
 
-      }
+        }
 
-      {getModal === 'addModal' &&
-        <AddModel setModal={setState} getMod={getState} Modal={setModal} getMainModalId={modalId} getModalId={subModalIds} removeModalIds={setModalIds} getVal={setIcon} setCat={setCatIcon} setSubIcon={setSubCatIcon} setModalIcon={setModIcon} />
-      }
+        {getModal === 'addModal' &&
+          <AddModel setModal={setState} getMod={getState} Modal={setModal} getMainModalId={modalId} getModalId={subModalIds} removeModalIds={setModalIds} getVal={setIcon} setCat={setCatIcon} setSubIcon={setSubCatIcon} setModalIcon={setModIcon} />
+        }
 
-      {getModal === 'addItem' &&
-        <AddItem setModal={setState} getMod={getState} Modal={setModal} modalName={itemName} supplyID={mainID} setMainIds={setMainID} getVal={setIcon} setCat={setCatIcon} setSubIcon={setSubCatIcon} setModalIcon={setModIcon} getItemId={subItemIds} removeItemIds={setItemIds} getCatId={categoryId} setCatId={setCategoryId} getSubCatId={subCategoryId} setSubCatId={setSubCategoryId} getModId={getModalId} setModId={setGetModalId} />
-      }
+        {getModal === 'addItem' &&
+          <AddItem setModal={setState} getMod={getState} Modal={setModal} modalName={itemName} supplyID={mainID} setMainIds={setMainID} getVal={setIcon} setCat={setCatIcon} setSubIcon={setSubCatIcon} setModalIcon={setModIcon} getItemId={subItemIds} removeItemIds={setItemIds} getCatId={categoryId} setCatId={setCategoryId} getSubCatId={subCategoryId} setSubCatId={setSubCategoryId} getModId={getModalId} setModId={setGetModalId} />
+        }
 
 
 
+      </div>
     </div>
-  </div>
   )
 }
 

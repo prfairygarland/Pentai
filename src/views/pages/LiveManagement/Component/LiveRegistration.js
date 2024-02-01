@@ -7,7 +7,9 @@ import DatePicker from 'react-date-picker';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import Loader from 'src/components/common/Loader'
+import { postApi } from 'src/utils/Api';
 import ConfirmationModal from 'src/utils/ConfirmationModal';
+import { API_ENDPOINT } from 'src/utils/config';
 
 const LiveRegistration = () => {
 
@@ -160,25 +162,30 @@ const LiveRegistration = () => {
     try {
       const formData = new FormData()
       formData.append('title', liveRegisterTitle)
-      formData.append('startDateTime', new Date(liveRegisterStartDate + 'T' + liveRegisterStartHours + ':' + liveRegisterStartMins))
-      formData.append('endDateTime', new Date(liveRegisterEndDate + 'T' + liveRegisterEndHours + ':' + liveRegisterEndMins))
-      formData.append('image', selectedImage)
-      formData.append('description', description)
-      formData.append('description', participateToggle)
-      formData.append('description', points)
-      formData.append('description', secretToggle)
-      formData.append('description', secret)
+      formData.append('scheduledAt', new Date(new Date(liveRegisterStartDate + 'T' + liveRegisterStartHours + ':' + liveRegisterStartMins)).toISOString())
+      formData.append('scheduledUpto', (liveRegisterEndDate !== '' ? new Date(new Date(liveRegisterEndDate + 'T' + liveRegisterEndHours + ':' + liveRegisterEndMins)).toISOString() : ''))
+      formData.append('images', selectedImage)
+      formData.append('content', description)
+      formData.append('participationRewardPoints', (points !== null ? points : 0))
+      if (secret !== null) {
+        formData.append('password', secret)
+      }
+      // formData.append('description', participateToggle)
+      // formData.append('description', secretToggle)
+
+      console.log('form data =>', formData);
 
 
-      // const res = await postApi(API_ENDPOINT.create_club_banner, formData)
-      // console.log(res)
-      // if (res.status === 200) {
-      //   if (res?.data?.status === 409) {
-      //     enqueueSnackbar(res?.data?.msg, { variant: 'error' })
-      //   } else {
-      //     enqueueSnackbar('Club Banner Added Successfully', { variant: 'success' })
-      //   }
-      // }
+      const res = await postApi(API_ENDPOINT.createLiveStream, formData)
+      console.log(' new =>', res)
+      if (res.status === 200) {
+        if (res?.data?.status === 500) {
+          enqueueSnackbar(res?.data?.msg, { variant: 'error' })
+        } else {
+          enqueueSnackbar('LiveStream Added Successfully', { variant: 'success' })
+          navigateToList()
+        }
+      }
     } catch (error) {
       console.log(error)
     }
