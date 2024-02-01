@@ -49,9 +49,13 @@ $enable-rtl: true;
   }
 
   .camp-tab-cont .primary-btn.active {
-    border-bottom: 2px solid black;
+    border-bottom: 2px solid #ea5242;
+    background: #ea5242;
+    color: #fff;
 }
-
+.camp-tab-cont .primary-btn {
+  background: none;
+}
 .radiolabel {
   max-width: 151px;
   width: 150px;
