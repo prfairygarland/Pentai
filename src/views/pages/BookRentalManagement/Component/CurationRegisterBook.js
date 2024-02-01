@@ -326,7 +326,8 @@ const CurationRegisterBook = ({ setDeleted, setSearchBookFilter, setSearchCurren
                                     {RegisteredData?.image !== null ? <img src={image ? image : RegisteredData?.image} style={{ height: '100%', width: '100%' }} /> : <img alt='' src='https://www.beelights.gr/assets/images/empty-image.png' style={{ height: '100%', width: '100%' }} />}
                                     <input style={{ display: 'none' }} type="file" name="upload" accept=".png, .jpg, .jpeg, .gif" ref={inputRef} onChange={handleUpload} />
                                 </div>
-                                <button style={{ background: '#4f5d73', height: '40px', width: '80px', cursor: 'pointer', borderRadius: 8, color: 'white' }} onClick={handleImageChange}>Upload</button>
+                                <button 
+                                className='btn btn-primary' onClick={handleImageChange}>Upload</button>
                                 <div className="file-information">
                                     <ul>
                                         <li>Maximum File Size : 00</li>
@@ -402,7 +403,7 @@ const CurationRegisterBook = ({ setDeleted, setSearchBookFilter, setSearchCurren
                 </tbody>
             </table>
 
-            <div className='d-flex justify-content-center align-items-center my-3'>
+            <div className='d-flex justify-content-center align-items-center my-3 gap-3'>
                 <CButton onClick={handleCancel} className="btn btn-black" >Cancel</CButton>
                 <CButton className="btn "  onClick={PostData}>Add</CButton>
             </div>

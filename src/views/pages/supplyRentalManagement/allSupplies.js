@@ -452,74 +452,74 @@ const AllSupplies = () => {
 
   return (
     <div>
-      <div className="pageTitle mb-3 pb-2">
-        <h2>All Supplies</h2>
-      </div>
-      <div className='d-flex justify-content-between  mb-4'>
-        {isLoading && <Loader />}
-        <div className='col-md-4'>
-          <CSidebar className='w-100 pe-3'>
-            <CSidebarBrand className=' black-text d-flex justify-content-start p-3' style={{ color: 'black', background: 'none' }}><h5>{multiLang?.categoryHierarchy}</h5></CSidebarBrand>
-            <CSidebarBrand className=' black-text d-flex justify-content-between mb-2' style={{ color: 'black', borderBottom: '1px solid #000', background: 'none', alignItems: 'center' }}>
-              <p role='button' onClick={() => handleSetModal('allList')}>{multiLang?.allSupplies}</p>
-              <CButton className='text-center btn-sm' style={{
-                whiteSpace: 'nowrap',
-                textOverflow: 'ellipsis',
-              }} onClick={() => handleSetModal('addSupplyType', 'add')}>{multiLang?.addSupply}</CButton>
-            </CSidebarBrand>
-            <CSidebarNav style={{ color: 'black', padding: '3px', maxHeight: '500px', overflow: 'auto' }}>
-              {mainCategoryData.map((tab) => (
-                <CNavItem className='mb-3' key={tab.id} onClick={() => (handleTabClick(tab.id))}>
-                  <div className='d-flex w-100'>
-                    <div className='d-flex w-100 flex-column '>
-                      <div className='d-flex w-100 justify-content-between'>
-                        <div className='d-flex align-items-center gap-1'>
-                          {iconSet !== tab.id && <CIcon style={{ transform: 'rotate(90deg)' }} onClick={() => (handleChange(tab.id), getCategoryList(tab.id))} icon={cibZeit} size="sm" />}
-                          {iconSet === tab.id && <CIcon style={{ transform: 'rotate(180deg)' }} onClick={() => { handleChange(null) }} icon={cibZeit} size="sm" />}
-                          <p role='button' onClick={() => (setIds(tab.id), handleSetModal('addSupplyType'))}>{tab.name}</p>
-                        </div>
-                        <div>
-                          <CButton className='btn-sm' onClick={() => { setSuppyId(tab.id); handleSetModal('addCategory', 'add') }}>{multiLang?.addCategory}</CButton>
-                        </div>
+    <div className="pageTitle mb-3 pb-2">
+    <h2>All Supplies</h2>
+    </div>
+    <div className='d-flex justify-content-between  mb-4'>
+      {isLoading && <Loader />}
+      <div className='col-md-4'>
+        <CSidebar className='w-100 pe-3'>
+          <CSidebarBrand className=' black-text d-flex justify-content-start p-3' style={{ color: 'black', background: 'none' }}><h5>{multiLang?.categoryHierarchy}</h5></CSidebarBrand>
+          <CSidebarBrand className=' black-text d-flex justify-content-between mb-2' style={{ color: 'black', borderBottom: '1px solid #000', background: 'none', alignItems: 'center' }}>
+            <p role='button' onClick={() => handleSetModal('allList')}>{multiLang?.allSupplies}</p>
+            <CButton className='text-center btn-sm' style={{
+              whiteSpace: 'nowrap',
+              textOverflow: 'ellipsis',
+            }} onClick={() => handleSetModal('addSupplyType', 'add')}>{multiLang?.addSupply}</CButton>
+          </CSidebarBrand>
+          <CSidebarNav style={{ color: 'black', padding: '3px', maxHeight: '500px', overflow: 'auto' }}>
+            {mainCategoryData.map((tab) => (
+              <CNavItem className='mb-3' key={tab.id} onClick={() => (handleTabClick(tab.id))}>
+                <div className='d-flex w-100'>
+                  <div className='d-flex w-100 flex-column '>
+                    <div className='d-flex w-100 justify-content-between'>
+                      <div className='d-flex align-items-center gap-1'>
+                        {iconSet !== tab.id && <CIcon style={{ transform: 'rotate(90deg)' }} onClick={() => (handleChange(tab.id), getCategoryList(tab.id))} icon={cibZeit} size="sm" />}
+                        {iconSet === tab.id && <CIcon style={{ transform: 'rotate(180deg)' }} onClick={() => { handleChange(null) }} icon={cibZeit} size="sm" />}
+                        <p role='button' onClick={() => (setIds(tab.id), handleSetModal('addSupplyType'))}>{tab.name}</p>
                       </div>
                       <div>
-                        {sideBarId === tab.id &&
-                          <div>
-                            {categoryData?.map((catTab) => (
-                              <CNavItem style={{ marginTop: '20px' }} key={catTab.id}>
-                                <div className='d-flex justify-content-between ms-2 mt-2'>
-                                  <div className='d-flex align-items-center gap-1'>
-                                    {iconCatSet !== catTab.id && <CIcon style={{ transform: 'rotate(90deg)' }} onClick={() => { handleCatIcon(catTab.id); getSubCategoryList(catTab.id) }} icon={cibZeit} size="sm" />}
-                                    {iconCatSet === catTab.id && <CIcon style={{ transform: 'rotate(180deg)' }} onClick={() => { handleCatIcon(null); }} icon={cibZeit} size="sm" />}
-                                    <p role='button' onClick={() => (setSuppyId(tab.id), setCatIds(catTab.id), handleSetModal('addCategory'))}>{catTab.name}</p>
-                                  </div>
-                                  <div>
-                                    <CButton className='btn-sm' onClick={() => { setCatId(catTab.id); handleSetModal('addSubCategory', 'add') }}>{multiLang?.addSubCategory}</CButton>
-                                  </div>
+                        <CButton className='btn-sm' onClick={() => { setSuppyId(tab.id); handleSetModal('addCategory', 'add') }}>{multiLang?.addCategory}</CButton>
+                      </div>
+                    </div>
+                    <div>
+                      {sideBarId === tab.id &&
+                        <div>
+                          {categoryData?.map((catTab) => (
+                            <CNavItem style={{ marginTop: '20px' }} key={catTab.id}>
+                              <div className='d-flex justify-content-between ms-2 mt-2'>
+                                <div className='d-flex align-items-center gap-1'>
+                                  {iconCatSet !== catTab.id && <CIcon style={{ transform: 'rotate(90deg)' }} onClick={() => { handleCatIcon(catTab.id); getSubCategoryList(catTab.id) }} icon={cibZeit} size="sm" />}
+                                  {iconCatSet === catTab.id && <CIcon style={{ transform: 'rotate(180deg)' }} onClick={() => { handleCatIcon(null); }} icon={cibZeit} size="sm" />}
+                                  <p role='button' onClick={() => (setSuppyId(tab.id), setCatIds(catTab.id), handleSetModal('addCategory'))}>{catTab.name}</p>
                                 </div>
                                 <div>
-                                  {sideSubBarId === catTab.id &&
-                                    <div>
-                                      {subCategoryData?.map((subCatTab) => (
-                                        <CNavItem style={{ marginTop: '20px' }} key={subCatTab.id}>
-                                          <div className='d-flex justify-content-between ms-3 mt-2'>
-                                            <div className='d-flex align-items-center gap-1'>
-                                              {iconSubCatSet !== subCatTab.id && <CIcon style={{ transform: 'rotate(90deg)' }} onClick={() => { handleSubCatIcon(subCatTab.id); getModalList(subCatTab.id) }} icon={cibZeit} size="sm" />}
-                                              {iconSubCatSet === subCatTab.id && <CIcon style={{ transform: 'rotate(180deg)' }} onClick={() => { handleSubCatIcon(null); }} icon={cibZeit} size="sm" />}
-                                              <p role='button' onClick={() => (setCatId(catTab.id), setSubCatIds(subCatTab.id), handleSetModal('addSubCategory'))}>{subCatTab.name}</p>
-                                            </div>
-                                            <div>
-                                              <CButton className='btn-sm' onClick={() => { setModalId(subCatTab.id); handleSetModal('addModal', 'add') }}>{multiLang?.addModel}</CButton>
-                                            </div>
+                                  <CButton className='btn-sm' onClick={() => { setCatId(catTab.id); handleSetModal('addSubCategory', 'add') }}>{multiLang?.addSubCategory}</CButton>
+                                </div>
+                              </div>
+                              <div>
+                                {sideSubBarId === catTab.id &&
+                                  <div>
+                                    {subCategoryData?.map((subCatTab) => (
+                                      <CNavItem style={{ marginTop: '20px' }} key={subCatTab.id}>
+                                        <div className='d-flex justify-content-between ms-3 mt-2'>
+                                          <div className='d-flex align-items-center gap-1'>
+                                            {iconSubCatSet !== subCatTab.id && <CIcon style={{ transform: 'rotate(90deg)' }} onClick={() => { handleSubCatIcon(subCatTab.id); getModalList(subCatTab.id) }} icon={cibZeit} size="sm" />}
+                                            {iconSubCatSet === subCatTab.id && <CIcon style={{ transform: 'rotate(180deg)' }} onClick={() => { handleSubCatIcon(null); }} icon={cibZeit} size="sm" />}
+                                            <p role='button' onClick={() => (setCatId(catTab.id), setSubCatIds(subCatTab.id), handleSetModal('addSubCategory'))}>{subCatTab.name}</p>
                                           </div>
-                                          {sideModelId === subCatTab.id &&
-                                            <div>
-                                              {modelData?.map((modalTab) => (
-                                                <CNavItem style={{ marginTop: '20px' }} key={modalTab.id}>
-                                                  <div className='d-flex justify-content-between ms-4 mt-2'>
-                                                    <div className='d-flex align-items-center gap-1'>
-                                                      {iconModSet !== modalTab.id && <CIcon style={{ transform: 'rotate(90deg)' }} onClick={() => { handleModalIcon(modalTab.id); getItemList(catTab.id, subCatTab.id, modalTab.id) }} icon={cibZeit} size="sm" />}
-                                                      {iconModSet === modalTab.id && <CIcon style={{ transform: 'rotate(180deg)' }} onClick={() => { handleModalIcon(null) }} icon={cibZeit} size="sm" />}
+                                          <div>
+                                            <CButton className='btn-sm' onClick={() => { setModalId(subCatTab.id); handleSetModal('addModal', 'add') }}>{multiLang?.addModel}</CButton>
+                                          </div>
+                                        </div>
+                                        {sideModelId === subCatTab.id &&
+                                          <div>
+                                            {modelData?.map((modalTab) => (
+                                              <CNavItem style={{ marginTop: '20px' }} key={modalTab.id}>
+                                                <div className='d-flex justify-content-between ms-4 mt-2'>
+                                                  <div className='d-flex align-items-center gap-1'>
+                                                    {iconModSet !== modalTab.id && <CIcon style={{ transform: 'rotate(90deg)' }} onClick={() => { handleModalIcon(modalTab.id); getItemList(catTab.id, subCatTab.id, modalTab.id) }} icon={cibZeit} size="sm" />}
+                                                    {iconModSet === modalTab.id && <CIcon style={{ transform: 'rotate(180deg)' }} onClick={() => { handleModalIcon(null) }} icon={cibZeit} size="sm" />}
 
                                                       <p role='button' onClick={() => (setModalId(subCatTab.id), setModalIds(modalTab.id), handleSetModal('addModal'))}>{modalTab.name}</p>
                                                     </div>
