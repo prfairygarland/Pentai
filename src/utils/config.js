@@ -161,11 +161,12 @@ export let API_ENDPOINT = {
 
   //{ Meeting Room Management}
 
-  meeting_lists: ALL_CONSTANTS.API_URL + "/admin/meeting/list",
+  meeting_lists: ALL_CONSTANTS.API_URL + "/admin/meeting/allReservations",
   building_lists: ALL_CONSTANTS.API_URL + "/admin/meeting/building/list",
   floor_lists: ALL_CONSTANTS.API_URL + "/admin/meeting/floor/list",
   room_lists: ALL_CONSTANTS.API_URL + "/admin/meeting/roomList",
   meeting_details: ALL_CONSTANTS.API_URL + "/admin/meeting/meetingDetail",
+  user_details: ALL_CONSTANTS.API_URL + "/admin/meeting/userDetail",
   reservation_details: ALL_CONSTANTS.API_URL + "/admin/meeting/reservationDetail",
   get_all_meeting_rooms: ALL_CONSTANTS.API_URL + "/admin/meeting/roomList",
   get_all_meeting_rooms_records: ALL_CONSTANTS.API_URL + "/admin/meeting/allMeetingRoom", 
