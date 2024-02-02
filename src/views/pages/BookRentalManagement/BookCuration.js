@@ -660,11 +660,11 @@ const BookCuration = () => {
                     </div>}
                 {categories === "indvBook" && <div className='w-100 px-2'>
                     <div className='d-flex justify-content-between mb-2'>
-                       
-                            <h4>Book (ISBN)</h4>
-                       
-                            <CButton className='btn-black'>Delete</CButton>
-                       
+
+                        <h4>Book (ISBN)</h4>
+
+                        <CButton className='btn-black'>Delete</CButton>
+
                     </div>
                     <div className='camp-tab-cont'>
                         <div
