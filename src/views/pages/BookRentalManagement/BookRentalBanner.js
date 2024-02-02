@@ -85,6 +85,11 @@ const BookRentalBanner = () => {
             maxBannerNumber: bannerSetting?.maxBannerNumber
         }
 
+        if(bannerSetting.maxBannerNumber < 1){
+            enqueueSnackbar("Invalid banner number", { variant: 'error'})
+            return false
+        }
+
 
         const res = await putApi(url, body)
         if (res?.data?.status === 200) {

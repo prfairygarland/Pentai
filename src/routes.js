@@ -24,6 +24,11 @@ import MeetingRoomsReservationStatus from './views/pages/MeetingRoomsResMgmt/Mee
 import AllMeetingRooms from './views/pages/MeetingRoomsResMgmt/AllMeetingRooms'
 import RouletteeventManagementListing from './views/pages/RewardManagement/RouletteeventManagementListing'
 import DataImport from './views/pages/BookRentalManagement/DataImport'
+import GreetingMessageManagement from './views/pages/operationManagement/GreetingMessageManagement'
+import BannerManagement from './views/pages/operationManagement/BannerManagement'
+import HomeContentManagement from './views/pages/operationManagement/HomeContentManagement'
+import PushNotificationManagement from './views/pages/operationManagement/PushNotificationManagement'
+import CreatePushNotificationRegistration from './views/pages/operationManagement/Component/CreatePushNotificationRegistration'
 
 const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
 
@@ -81,6 +86,11 @@ const routes = [
   //{ Reward Management}
   { path: '/RouletteEventManagement', name: 'Roulette event Management', element: RouletteeventManagementListing },
 
+  {path:'/GreetingMessageManagement', name: 'Greeting Message Management', element: GreetingMessageManagement},
+  {path: '/BannerManagement', name: 'Banner Management', element: BannerManagement},
+  {path: '/HomeContentManagement', name: 'Home Content Management', element: HomeContentManagement},
+  {path:'/PushNotificationManagement', name: 'Push Notification Management', element: PushNotificationManagement},
+  {path:'/PushNotificationManagement/createPushNotificationRegistration', name: 'Push Notification Registration', element: CreatePushNotificationRegistration}
 
 ]
 
