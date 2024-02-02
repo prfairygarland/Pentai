@@ -16,7 +16,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import ReactPaginate from 'react-paginate'
 import Loader from 'src/components/common/Loader'
 import ReactTable from 'src/components/common/ReactTable'
-import { getApi, getUserListExportData } from 'src/utils/Api'
+import { deleteApi, getApi, getUserListExportData } from 'src/utils/Api'
 import { ALL_CONSTANTS, API_ENDPOINT } from 'src/utils/config'
 import { paginationItemPerPageOptions } from 'src/utils/constant'
 import AddBuilding from './AddBuilding'
@@ -103,6 +103,21 @@ const AllMeetingRooms = () => {
     }
   }, [filterData.search])
 
+  const deleteRoom = async (roomId) => {
+    try {
+      let url = API_ENDPOINT.delete_meeting_room
+      const response = await deleteApi(url, `?id=${roomId}`)
+      if (response?.status === 200) {
+        enqueueSnackbar('Delete succefully', { variant: 'success' })
+        setIds(null)
+        setIcon(null)
+        // setModal(!getMod)
+      }
+    } catch (error) {
+      enqueueSnackbar('Something Went Wrong', { variant: 'error' })
+      console.log(error)
+    }
+  }
   const columns = useMemo(() => [
     {
       Header: multiLangObj?.location,
@@ -160,7 +175,7 @@ const AllMeetingRooms = () => {
           >
             Modify
           </a>
-          <a onClick={() => setDeleteVisible(true)} className="primTxt">
+          <a onClick={() => deleteRoom(row.original.roomId)} className="primTxt">
             Delete
           </a>
         </div>
@@ -641,7 +656,7 @@ const AllMeetingRooms = () => {
             <p>{multiLangObj?.areYouSureToDeleteRoom}</p>
           </CModalBody>
           <CModalFooter>
-            <CButton color="secondary" onClick={() => setDeleteVisible(false)}>
+            <CButton color="secondary" onClick={() => deleteRoom(false)}>
               {multiLangObj?.delete}
             </CButton>
             <CButton color="primary" onClick={() => setDeleteVisible(false)}>

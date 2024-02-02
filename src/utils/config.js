@@ -182,7 +182,9 @@ export let API_ENDPOINT = {
   delete_meeting_floor: ALL_CONSTANTS.API_URL + "/admin/meeting/deleteFloor",
 
   create_meeting_room: ALL_CONSTANTS.API_URL + "/admin/meeting/room/create",
+  update_meeting_room: ALL_CONSTANTS.API_URL + "/admin/meeting/roomUpdate",
   get_meeting_room_details: ALL_CONSTANTS.API_URL + "/admin/meeting/roomDetail",
+  get_equipments_from_building_id: ALL_CONSTANTS.API_URL + "/admin/meeting/getEquipmentsFromBuildingId",
   delete_meeting_room: ALL_CONSTANTS.API_URL + "/admin/meeting/deleteRoom",
 
   get_all_equipments: ALL_CONSTANTS.API_URL + "/admin/meeting/equipment/list",
