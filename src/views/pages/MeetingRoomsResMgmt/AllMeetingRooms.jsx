@@ -569,39 +569,45 @@ const AllMeetingRooms = () => {
                 <CButton onClick={handleAllMeetingData}>Search</CButton>
               </div>
               <div className="d-flex me-5 gap-1">
-                <CFormSelect
-                  className="mx-4"
-                  style={{ width: '170px' }}
-                  value={filterData?.itemStatus}
-                  options={[
-                    { label: 'All', value: 'All' },
-                    {
-                      label: 'Available',
-                      value: 'available',
-                    },
-                    {
-                      label: 'Unavailable',
-                      value: 'unAvailable',
-                    },
-                  ]}
-                  onChange={handleAllMeetingStatusChange}
-                />
-                <CFormSelect
-                  style={{ width: '170px' }}
-                  value={filterData?.visibility}
-                  options={[
-                    { label: 'All', value: 'All' },
-                    {
-                      label: 'Visible',
-                      value: 'visible',
-                    },
-                    {
-                      label: 'Hidden',
-                      value: 'hide',
-                    },
-                  ]}
-                  onChange={handleAllaupplieVisibility}
-                />
+                <div>
+                  <p style={{ fontWeight: 'bolder', paddingLeft: '23px' }}>Item Status</p>
+                  <CFormSelect
+                    className="mx-4"
+                    style={{ width: '170px' }}
+                    value={filterData?.itemStatus}
+                    options={[
+                      { label: 'All', value: 'All' },
+                      {
+                        label: 'Available',
+                        value: 'available',
+                      },
+                      {
+                        label: 'Unavailable',
+                        value: 'unAvailable',
+                      },
+                    ]}
+                    onChange={handleAllMeetingStatusChange}
+                  />
+                </div>
+                <div>
+                  <p style={{ fontWeight: 'bolder' }}>Visibility</p>
+                  <CFormSelect
+                    style={{ width: '170px' }}
+                    value={filterData?.visibility}
+                    options={[
+                      { label: 'All', value: 'All' },
+                      {
+                        label: 'Visible',
+                        value: 'visible',
+                      },
+                      {
+                        label: 'Hidden',
+                        value: 'hide',
+                      },
+                    ]}
+                    onChange={handleAllaupplieVisibility}
+                  />
+                </div>
               </div>
             </div>
             <div className="mb-4">

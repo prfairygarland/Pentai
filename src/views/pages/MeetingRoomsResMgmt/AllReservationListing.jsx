@@ -12,7 +12,7 @@ import DatePicker from 'react-date-picker'
 import { Link } from 'react-router-dom'
 import ReactTable from 'src/components/common/ReactTable'
 import { getApi } from 'src/utils/Api'
-import { API_ENDPOINT } from 'src/utils/config'
+import { ALL_CONSTANTS, API_ENDPOINT } from 'src/utils/config'
 import moment from 'moment/moment'
 import ReactPaginate from 'react-paginate'
 import { paginationItemPerPageOptions } from 'src/utils/constant'
@@ -29,19 +29,23 @@ const AllReservationListing = () => {
   const [itemsPerPage, setItemsPerPage] = useState(5)
   const [showMeetingRoomDetails, setShowMeetingRoomDetails] = useState(false)
   const [meetingRoomDetails, setMeetingRoomDetails] = useState({})
+  const [showUserDetails, setShowUserDetails] = useState(false)
+  const [userDetails, setUserDetails] = useState({})
+  const [userDetailImage, setUserDetailImage] = useState('')
   const [showMeetingReservationInfo, setShowMeetingReservationInfo] = useState(false)
   const [meetingReservationInfo, setMeetingReservationInfo] = useState({})
 
   const [buildings, setBuildings] = useState([{ id: '', name: 'All' }])
   const [floors, setFloors] = useState([{ id: '', name: 'All' }])
   const [allDays, setAllDays] = useState([
-    { value: 'yes', name: 'All Day - Yes' },
-    { value: 'no', name: 'All Day - No' },
+    { value: '', name: 'All' },
+    { value: 'yes', name: 'Yes - All Day' },
+    { value: 'no', name: 'No - All Day' },
   ])
   const [current, setCurrent] = useState([
+    { value: '', name: 'All' },
     { value: 'current', name: 'Current' },
     { value: 'past', name: 'Past' },
-    { value: 'all', name: 'All' },
   ])
 
   const handlePageChange = (selectedPage) => {
@@ -70,6 +74,30 @@ const AllReservationListing = () => {
       console.log(error)
     }
   }
+  async function urlToBlob(url) {
+    const response = await fetch(url)
+    const blob = await response.blob()
+    return blob
+  }
+  const urlsToFiles = async (url) => {
+    if (!url) return
+    const blob = await urlToBlob(ALL_CONSTANTS.BASE_URL + url)
+    const fileName = url
+    return new File([blob], fileName, { type: blob.type })
+  }
+  const showUserDetailsHandler = async (userId) => {
+    try {
+      const res = await getApi(API_ENDPOINT.user_details + '?userId=' + userId)
+      if (res.status === 200) {
+        setUserDetails(res?.data)
+        const userImage = await urlsToFiles(res?.data?.userImage)
+        setUserDetailImage(userImage)
+        setShowUserDetails(true)
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
   const meetingColumns = useMemo(
     () => [
       {
@@ -93,7 +121,7 @@ const AllReservationListing = () => {
       {
         Header: 'Location',
         accessor: 'location',
-        Cell: ({ row }) => <p className="text-center">{`${row.original.locationName}`}</p>,
+        Cell: ({ row }) => <p className="text-center">{`${row.original.buildingName}`}</p>,
       },
       {
         Header: 'Floor',
@@ -106,33 +134,44 @@ const AllReservationListing = () => {
         Cell: ({ row }) => (
           <Link
             onClick={() => {
-              showMeetingRoomDetailsHandler(row.original.meetingRoomId)
+              showMeetingRoomDetailsHandler(row.original.roomId)
             }}
             style={{ cursor: 'pointer' }}
           >
-            {row.original.meetingRoomName}{' '}
+            {row.original.roomName}{' '}
           </Link>
         ),
       },
       {
         Header: 'Meeting Room Code',
         accessor: 'meetingRoomCode',
-        Cell: ({ row }) => <p className="text-center">{`${row.original.meetingRoomId}`}</p>,
+        Cell: ({ row }) => <p className="text-center">{`${row.original.roomCode}`}</p>,
       },
       {
         Header: 'Title',
         accessor: 'title',
-        Cell: ({ row }) => <p className="text-center">{`${row.original.title}`}</p>,
+        Cell: ({ row }) => <p className="text-center">{`${row.original.meetingTitle}`}</p>,
       },
       {
         Header: 'User Name',
         accessor: 'userName',
-        Cell: ({ row }) => <p className="text-center">{`${row.original.userName}`}</p>,
+        Cell: ({ row }) => (
+          <Link
+            onClick={() => {
+              showUserDetailsHandler(row.original.userId)
+            }}
+            style={{ cursor: 'pointer' }}
+          >
+            {row.original.englishName}{' '}
+          </Link>
+        ),
       },
       {
         Header: 'All Day',
         accessor: 'allDay',
-        Cell: ({ row }) => <p className="text-center">{`${row.original.meetingDay}`}</p>,
+        Cell: ({ row }) => (
+          <p className="text-center">{`${row.original.allDay === 0 ? 'No' : 'Yes'}`}</p>
+        ),
       },
       {
         Header: 'View',
@@ -188,7 +227,7 @@ const AllReservationListing = () => {
     if (!buildId) {
       setFloors([{ id: '', name: 'All' }])
       setFilterObj((prev) => {
-        return { ...prev, buildingId: '' }
+        return { ...prev, buildingId: '', floorId: '' }
       })
       return
     }
@@ -202,14 +241,14 @@ const AllReservationListing = () => {
       console.log(error)
     }
     setFilterObj((prev) => {
-      return { ...prev, buildingId: buildId }
+      return { ...prev, buildingId: buildId, floorId: '' }
     })
     getMeetingList()
   }
 
   const getMeetingList = async () => {
     let url = API_ENDPOINT.meeting_lists
-    url += `?offset=${currentPage + 1}&limit=${itemsPerPage}`
+    url += `?pageNo=${currentPage + 1}&pageSize=${itemsPerPage}`
     console.log('filterObj?.buildingId :: ', filterObj?.buildingId)
     if (filterObj?.buildingId) {
       url += `&buildingId=${filterObj?.buildingId}`
@@ -217,17 +256,27 @@ const AllReservationListing = () => {
     if (filterObj?.floorId) {
       url += `&floorId=${filterObj?.floorId}`
     }
+    if (searchTxt) {
+      url += `&searchTerm=${searchTxt}`
+    }
     if (filterObj?.searchStartDate && filterObj?.searchEndDate) {
-      url += `&startDate=${filterObj?.searchStartDate}&endDate=${filterObj?.searchEndDate}`
+      url += `&start=${filterObj?.searchStartDate}T00:00:00.000Z&end=${filterObj?.searchEndDate}T23:59:59.999Z`
+    }
+    if (filterObj?.allDay) {
+      url += `&allDay=${filterObj?.allDay}`
+    }
+    if (filterObj?.status) {
+      url += `&status=${filterObj?.status}`
     }
     try {
       const res = await getApi(url)
       if (res.status === 200) {
         console.log(res?.data)
         setMeetingData(res?.data)
-        setTotalDataCount(res?.totalCount)
-        setTotalPages(Math.ceil(res.totalCount / Number(itemsPerPage)))
+        setTotalDataCount(res?.total)
+        setTotalPages(Math.ceil(res.total / Number(itemsPerPage)))
       } else {
+        setTotalDataCount(0)
         setMeetingData([])
       }
     } catch (error) {
@@ -264,7 +313,7 @@ const AllReservationListing = () => {
             onChange={(e) => setSearchTxt(e.target.value)}
           />
           &nbsp;&nbsp;
-          <CButton onClick={() => alert('WIP')}>Search</CButton>
+          <CButton onClick={getMeetingList}>Search</CButton>
         </div>
         <div style={{ width: '70%', display: 'flex' }}>
           <CFormSelect
@@ -311,11 +360,13 @@ const AllReservationListing = () => {
             name="boardId"
             className="board-dropdown"
             onChange={(e) => {
-              alert('wip')
+              setFilterObj((prev) => {
+                return { ...prev, allDay: e.target.value }
+              })
             }}
           >
             {allDays.map((option, index) => (
-              <option key={option.id} value={option.id}>
+              <option key={option.value} value={option.value}>
                 {option.name}
               </option>
             ))}
@@ -327,11 +378,13 @@ const AllReservationListing = () => {
             name="boardId"
             className="board-dropdown"
             onChange={(e) => {
-              alert('wip')
+              setFilterObj((prev) => {
+                return { ...prev, status: e.target.value }
+              })
             }}
           >
             {current.map((option, index) => (
-              <option key={option.id} value={option.id}>
+              <option key={option.value} value={option.value}>
                 {option.name}
               </option>
             ))}
@@ -453,6 +506,132 @@ const AllReservationListing = () => {
         </CModalBody>
       </CModal>
 
+      {userDetailImage && (
+        <CModal
+          alignment="center"
+          size="lg"
+          visible={showUserDetails}
+          backdrop="static"
+          onClose={() => setShowUserDetails(false)}
+          aria-labelledby="LiveDemoExampleLabel"
+        >
+          <CModalHeader onClose={() => setShowUserDetails(false)}>
+            <CModalTitle>User Information</CModalTitle>
+          </CModalHeader>
+          <CModalBody>
+            <div className="card-body">
+              <div className="formWraper">
+                <div className="form-outline form-white  d-flex ">
+                  <div className="formWrpLabel">
+                    <label className="fw-bolder ">Profile Image</label>
+                  </div>
+                  <div className="room-image-container">
+                    <img
+                      style={{ width: '100px', height: '100px' }}
+                      src={URL.createObjectURL(userDetailImage)}
+                      alt=""
+                    />
+                  </div>
+                </div>
+                <div className="form-outline form-white  d-flex ">
+                  <div className="formWrpLabel">
+                    <label className="fw-bolder ">Employee No.</label>
+                  </div>
+                  <div className="upload-image-main-container">
+                    <div className="upload-img-btn-and-info">{userDetails?.employeeCode}</div>
+                  </div>
+                </div>
+                <div className="form-outline form-white  d-flex ">
+                  <div className="formWrpLabel">
+                    <label className="fw-bolder ">Name :</label>
+                  </div>
+                  <div className="upload-image-main-container">
+                    <div className="upload-img-btn-and-info">{userDetails?.koreanName}</div>
+                  </div>
+                </div>
+                <div className="form-outline form-white  d-flex ">
+                  <div className="formWrpLabel">
+                    <label className="fw-bolder ">English Name :</label>
+                  </div>
+                  <div className="upload-image-main-container">
+                    <div className="upload-img-btn-and-info">{userDetails?.englishName}</div>
+                  </div>
+                </div>
+                <div className="form-outline form-white  d-flex ">
+                  <div className="formWrpLabel">
+                    <label className="fw-bolder ">Email</label>
+                  </div>
+                  <div className="upload-image-main-container">
+                    <div className="upload-img-btn-and-info">{userDetails?.email}</div>
+                  </div>
+                </div>
+                <div className="form-outline form-white  d-flex ">
+                  <div className="formWrpLabel">
+                    <label className="fw-bolder ">Company</label>
+                  </div>
+                  <div className="upload-image-main-container">
+                    <div className="upload-img-btn-and-info">{userDetails?.companyName}</div>
+                  </div>
+                </div>
+                <div className="form-outline form-white  d-flex ">
+                  <div className="formWrpLabel">
+                    <label className="fw-bolder ">Division</label>
+                  </div>
+                  <div className="upload-image-main-container">
+                    <div className="upload-img-btn-and-info">{userDetails?.divisionName}</div>
+                  </div>
+                </div>
+                <div className="form-outline form-white  d-flex ">
+                  <div className="formWrpLabel">
+                    <label className="fw-bolder ">Group</label>
+                  </div>
+                  <div className="upload-image-main-container">
+                    <div className="upload-img-btn-and-info">{userDetails?.groupName}</div>
+                  </div>
+                </div>
+                <div className="form-outline form-white  d-flex ">
+                  <div className="formWrpLabel">
+                    <label className="fw-bolder ">Team</label>
+                  </div>
+                  <div className="upload-image-main-container">
+                    <div className="upload-img-btn-and-info">{userDetails?.teamName}</div>
+                  </div>
+                </div>
+                <div className="form-outline form-white  d-flex ">
+                  <div className="formWrpLabel">
+                    <label className="fw-bolder ">Last Access</label>
+                  </div>
+                  <div className="upload-image-main-container">
+                    <div className="upload-img-btn-and-info">{userDetails?.lastLoginAt}</div>
+                  </div>
+                </div>
+                <div className="form-outline form-white  d-flex ">
+                  <div className="formWrpLabel">
+                    <label className="fw-bolder ">Reservation Information</label>
+                  </div>
+                  <div className="upload-image-main-container">
+                    <div className="upload-img-btn-and-info">
+                      <b>Meeting Room Reservation : {userDetails?.reservationCount}</b>
+                      <br />
+                      <br />
+                    </div>
+                    <div>
+                      {userDetails?.reservationInfo.map((info) => (
+                        <div key={info?.startDateTime}>
+                          {info?.roomName} - {info?.title} - {info?.startDateTime.split('T')[0]}{' '}
+                          {info?.startDateTime.split('T')[1].split('.')[0]} -{' '}
+                          {info?.endDateTime.split('T')[1].split('.')[0]}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </CModalBody>
+        </CModal>
+      )}
+
       <CModal
         alignment="center"
         visible={showMeetingReservationInfo}
@@ -461,7 +640,7 @@ const AllReservationListing = () => {
         aria-labelledby="LiveDemoExampleLabel"
       >
         <CModalHeader onClose={() => setShowMeetingReservationInfo(false)}>
-          <CModalTitle>Meeting Room Information</CModalTitle>
+          <CModalTitle>Meeting Reservation Information</CModalTitle>
         </CModalHeader>
         <CModalBody>
           <div className="card-body">
