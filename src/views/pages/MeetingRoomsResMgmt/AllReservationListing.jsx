@@ -20,8 +20,6 @@ import { paginationItemPerPageOptions } from 'src/utils/constant'
 const AllReservationListing = () => {
   const [meetingData, setMeetingData] = useState('')
   const [filterObj, setFilterObj] = useState({})
-  const [searchStartDate, setSearchStartDate] = useState('')
-  const [searchEndDate, setSearchEndDate] = useState('')
   const [searchTxt, setSearchTxt] = useState('')
   const [searchBuilding, setSearchBuilding] = useState('')
   const [searchFloor, setSearchFloor] = useState('')
@@ -77,12 +75,20 @@ const AllReservationListing = () => {
       {
         Header: 'Start Time',
         accessor: 'startTime',
-        Cell: ({ row }) => <p className="text-center">{`${row.original.startDateTime}`}</p>,
+        Cell: ({ row }) => (
+          <p className="text-center">{`${moment(row.original.startDateTime).format(
+            'YYYY-MM-DD HH:mm:ss',
+          )}`}</p>
+        ),
       },
       {
         Header: 'End Time',
         accessor: 'endTime',
-        Cell: ({ row }) => <p className="text-center">{`${row.original.endDateTime}`}</p>,
+        Cell: ({ row }) => (
+          <p className="text-center">{`${moment(row.original.endDateTime).format(
+            'YYYY-MM-DD HH:mm:ss',
+          )}`}</p>
+        ),
       },
       {
         Header: 'Location',
@@ -153,9 +159,16 @@ const AllReservationListing = () => {
       year = d.getFullYear()
     if (month.length < 2) month = '0' + month
     if (day.length < 2) day = '0' + day
-    setFilterObj((prev) => {
-      return { ...prev, [filterObjKey]: [year, month, day].join('-') }
-    })
+    if (year === 1970) {
+      setFilterObj((prev) => {
+        return { ...prev, [filterObjKey]: undefined }
+      })
+    } else {
+      setFilterObj((prev) => {
+        return { ...prev, [filterObjKey]: [year, month, day].join('-') }
+      })
+    }
+
     // getMeetingList()
   }
 
@@ -174,6 +187,9 @@ const AllReservationListing = () => {
   const getFloorsFromBuildingId = async (buildId) => {
     if (!buildId) {
       setFloors([{ id: '', name: 'All' }])
+      setFilterObj((prev) => {
+        return { ...prev, buildingId: '' }
+      })
       return
     }
     try {
@@ -194,6 +210,16 @@ const AllReservationListing = () => {
   const getMeetingList = async () => {
     let url = API_ENDPOINT.meeting_lists
     url += `?offset=${currentPage + 1}&limit=${itemsPerPage}`
+    console.log('filterObj?.buildingId :: ', filterObj?.buildingId)
+    if (filterObj?.buildingId) {
+      url += `&buildingId=${filterObj?.buildingId}`
+    }
+    if (filterObj?.floorId) {
+      url += `&floorId=${filterObj?.floorId}`
+    }
+    if (filterObj?.searchStartDate && filterObj?.searchEndDate) {
+      url += `&startDate=${filterObj?.searchStartDate}&endDate=${filterObj?.searchEndDate}`
+    }
     try {
       const res = await getApi(url)
       if (res.status === 200) {
@@ -211,7 +237,7 @@ const AllReservationListing = () => {
 
   useEffect(() => {
     getMeetingList()
-  }, [itemsPerPage, currentPage])
+  }, [itemsPerPage, currentPage, filterObj])
 
   useEffect(() => {
     getBuildings()
@@ -225,7 +251,7 @@ const AllReservationListing = () => {
         />
         &nbsp; - &nbsp;
         <DatePicker
-          value={searchEndDate}
+          value={filterObj?.searchEndDate}
           onChange={(event) => handleDateChange(event, 'searchEndDate')}
         />
       </div>
@@ -266,6 +292,9 @@ const AllReservationListing = () => {
             className="board-dropdown"
             onChange={(e) => {
               setSearchFloor(e.target.value)
+              setFilterObj((prev) => {
+                return { ...prev, floorId: e.target.value }
+              })
             }}
             disabled={!searchBuilding}
           >
