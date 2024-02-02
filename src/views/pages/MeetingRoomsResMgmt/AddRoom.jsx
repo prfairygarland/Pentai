@@ -2,6 +2,7 @@ import {
   CButton,
   CFormCheck,
   CFormInput,
+  CFormSwitch,
   CModal,
   CModalBody,
   CModalFooter,
@@ -19,11 +20,31 @@ const AddRoom = ({ setModal, getMod, Modal, removeIds, buildingId, getVal, floor
   const [deleteVisible, setDeleteVisible] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [roomImage, setRoomImage] = useState('')
+  const [customSetting, setCustomSetting] = useState(false)
   const [addRoomData, setAddRoomData] = useState({
     name: '',
     meetingRoomCode: '',
     capacity: 1,
     visibility: true,
+    buildingEquipment: [
+      {
+        id: 1,
+        name: 'TV',
+        iconName: 'display',
+      },
+      {
+        id: 2,
+        name: 'Camera',
+        iconName: 'camera',
+      },
+    ],
+    roomEquipment: [
+      {
+        id: 1,
+        name: 'TV',
+        iconName: 'display',
+      },
+    ],
   })
 
   useEffect(() => {
@@ -35,10 +56,40 @@ const AddRoom = ({ setModal, getMod, Modal, removeIds, buildingId, getVal, floor
         meetingRoomCode: '',
         capacity: 1,
         visibility: true,
+        roomEquipment: [],
       })
     }
+    getEquipmentsFromBuildingId()
   }, [roomId])
 
+  const getEquipmentsFromBuildingId = async () => {
+    try {
+      let url = API_ENDPOINT.get_equipments_from_building_id + `?id=${buildingId}`
+      const response = await getApi(url)
+
+      if (response?.status === 200) {
+        setAddRoomData((prev) => ({ ...prev, buildingEquipment: response?.data }))
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  const roomEquipmentChangeHandler = (equipmentObj) => {
+    const alreadyCheckedEquipments = addRoomData?.roomEquipment.filter(
+      (item) => item.id === equipmentObj.id,
+    )
+    if (alreadyCheckedEquipments.length === 0) {
+      setAddRoomData((prev) => ({
+        ...prev,
+        roomEquipment: [...addRoomData?.roomEquipment, equipmentObj],
+      }))
+    } else {
+      const remainingEquipments = addRoomData?.roomEquipment.filter(
+        (item) => item.id !== equipmentObj.id,
+      )
+      setAddRoomData((prev) => ({ ...prev, roomEquipment: remainingEquipments }))
+    }
+  }
   async function urlToBlob(url) {
     const response = await fetch(url)
     const blob = await response.blob()
@@ -64,7 +115,10 @@ const AddRoom = ({ setModal, getMod, Modal, removeIds, buildingId, getVal, floor
           visibility: response.data.visibility === 'visible' ? true : false,
           meetingRoomCode: response.data.meetingCode,
           capacity: response.data.capacity,
+          roomEquipment: response.data.roomEquipment,
+          buildingEquipment: response.data.buildingEquipment,
         })
+        setCustomSetting(response.data.customSetting === 'yes')
       }
     } catch (error) {
       console.log(error)
@@ -121,15 +175,29 @@ const AddRoom = ({ setModal, getMod, Modal, removeIds, buildingId, getVal, floor
     try {
       const formData = new FormData()
       formData.append('name', addRoomData.name)
-      formData.append('floorId', floorId)
-      formData.append('buildingId', buildingId)
       formData.append('capacity', addRoomData.capacity)
       formData.append('meetingCode', addRoomData.meetingRoomCode)
       formData.append('images', roomImage)
-      formData.append('equipmentIds', JSON.stringify([1]))
+      formData.append('customSetting', customSetting ? 'yes' : 'no')
       formData.append('visibility', addRoomData.visibility === true ? 'visible' : 'hide')
 
-      let res = await postApi(API_ENDPOINT.create_meeting_room, formData)
+      let res
+      if (roomId) {
+        formData.append(
+          'equipmentIds',
+          JSON.stringify(addRoomData.roomEquipment?.map((equip) => equip.id)),
+        )
+        formData.append('roomId', roomId)
+        res = await putApi(API_ENDPOINT.update_meeting_room, formData)
+      } else {
+        formData.append('buildingId', buildingId)
+        formData.append('floorId', floorId)
+        formData.append(
+          'equipments',
+          JSON.stringify(addRoomData.roomEquipment?.map((equip) => equip.id)),
+        )
+        res = await postApi(API_ENDPOINT.create_meeting_room, formData)
+      }
       console.log(res)
       if (res.status === 200) {
         setAddRoomData({
@@ -275,6 +343,45 @@ const AddRoom = ({ setModal, getMod, Modal, removeIds, buildingId, getVal, floor
                 )}
               </div>
             </div>
+            <div className="toggleContainer">
+              <div>Custom Settings</div>
+              <div>
+                <CFormSwitch
+                  id="club_period_qualification"
+                  className="cFormSwitch"
+                  onClick={() => {
+                    setCustomSetting((prev) => !prev)
+                    setAddRoomData((prev) => ({ ...prev, visibility: true }))
+                  }}
+                  checked={customSetting}
+                />
+              </div>
+            </div>
+            <div className="d-flex col-md-12">
+              <div className="form-outline form-white d-flex w-100">
+                <div className="formWrpLabel">
+                  <label className="fw-bolder ">Equipment</label>
+                </div>
+                <div className="push-notification-container gap-3">
+                  {addRoomData?.buildingEquipment?.length > 0 && (
+                    <ul className="p-2">
+                      {addRoomData?.buildingEquipment.map((item) => (
+                        <CFormCheck
+                          key={item}
+                          id="flexCheckDefault"
+                          className="gap-2"
+                          label={item.name}
+                          checked={addRoomData?.roomEquipment?.some(
+                            (roomEqu) => roomEqu.id === item.id,
+                          )}
+                          onChange={() => roomEquipmentChangeHandler(item)}
+                        />
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              </div>
+            </div>
             <div className="d-flex col-md-12">
               <div className="form-outline form-white d-flex w-100">
                 <div className="formWrpLabel">
@@ -289,6 +396,7 @@ const AddRoom = ({ setModal, getMod, Modal, removeIds, buildingId, getVal, floor
                     defaultChecked={addRoomData.visibility}
                     onClick={() => setAddRoomData((prev) => ({ ...prev, visibility: true }))}
                     value={true}
+                    disabled={!customSetting}
                   />
                   <CFormCheck
                     type="radio"
@@ -298,6 +406,7 @@ const AddRoom = ({ setModal, getMod, Modal, removeIds, buildingId, getVal, floor
                     defaultChecked={!addRoomData.visibility}
                     onClick={() => setAddRoomData((prev) => ({ ...prev, visibility: false }))}
                     value={false}
+                    disabled={!customSetting}
                   />
                 </div>
               </div>

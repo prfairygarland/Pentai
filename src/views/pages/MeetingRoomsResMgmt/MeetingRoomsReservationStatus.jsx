@@ -1,4 +1,12 @@
-import { CButton, CModal, CModalBody, CModalHeader, CModalTitle } from '@coreui/react'
+import {
+  CButton,
+  CFormInput,
+  CFormSelect,
+  CModal,
+  CModalBody,
+  CModalHeader,
+  CModalTitle,
+} from '@coreui/react'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import AllReservationListing from './AllReservationListing'
@@ -9,6 +17,57 @@ import { getApi } from 'src/utils/Api'
 const MeetingRoomsReservationStatus = () => {
   const [currentTab, setCurrentTab] = useState('All Reservation')
   const [showBookMeetingRoom, setShowBookMeetingRoom] = useState(false)
+  const arrTimes = [
+    '00:00',
+    '00:30',
+    '01:00',
+    '01:30',
+    '02:00',
+    '02:30',
+    '03:00',
+    '03:30',
+    '04:00',
+    '04:30',
+    '05:00',
+    '05:30',
+    '06:00',
+    '06:30',
+    '07:00',
+    '07:30',
+    '08:00',
+    '08:30',
+    '09:00',
+    '09:30',
+    '10:00',
+    '10:30',
+    '11:00',
+    '11:30',
+    '12:00',
+    '12:30',
+    '13:00',
+    '13:30',
+    '14:00',
+    '14:30',
+    '15:00',
+    '15:30',
+    '16:00',
+    '16:30',
+    '17:00',
+    '17:30',
+    '18:00',
+    '18:30',
+    '19:00',
+    '19:30',
+    '20:00',
+    '20:30',
+    '21:00',
+    '21:30',
+    '22:00',
+    '22:30',
+    '23:00',
+    '23:30',
+    '24:00',
+  ]
 
   const setTab = (tab) => {
     setCurrentTab(tab)
@@ -95,10 +154,69 @@ const MeetingRoomsReservationStatus = () => {
                   <div className="formWrpLabel">
                     <label className="fw-bolder ">Meeting Room</label>
                   </div>
+                  <CFormSelect
+                    size="sm"
+                    name="boardId"
+                    className="board-dropdown"
+                    onChange={(e) => {
+                      alert(e)
+                    }}
+                  >
+                    {[
+                      { id: '001', name: 'Zero - One' },
+                      { id: '002', name: 'Zero - Two' },
+                    ].map((option, index) => (
+                      <option key={option.id} value={option.id}>
+                        {option.name}
+                      </option>
+                    ))}
+                  </CFormSelect>
+                </div>
+                <div className="form-outline form-white  d-flex ">
+                  <div className="formWrpLabel">
+                    <label className="fw-bolder ">Room Title Room</label>
+                  </div>
+                  <CFormInput
+                    type="text"
+                    placeholder="Enter Poll Title"
+                    className="txt-poll-title"
+                    name="pollTitle"
+                    onChange={(e) => {
+                      alert(e.target.value.substring(0, 62))
+                    }}
+                  />
+                  <span className="txt-byte-information">{} / 62 byte</span>
+                </div>
+                <div className="form-outline form-white  d-flex ">
+                  <div className="formWrpLabel">
+                    <label className="fw-bolder ">Date & Time</label>
+                  </div>
                   <div className="upload-image-main-container">
-                    <div className="upload-img-btn-and-info">Data</div>
+                    <div className="upload-img-btn-and-info">Date & Time</div>
                   </div>
                 </div>
+                <div className="form-outline form-white  d-flex ">
+                  <div className="formWrpLabel">
+                    <label className="fw-bolder ">All Day</label>
+                  </div>
+                </div>
+                <div
+                  className="form-outline form-white  d-flex "
+                  style={{ width: '463px', flexflow: 'wrap' }}
+                >
+                  {arrTimes.map((time) => (
+                    <label
+                      className="fw-bolder "
+                      key={time}
+                      style={{ cursor: 'pointer', margin: '4px' }}
+                    >
+                      {time}
+                    </label>
+                  ))}
+                </div>
+              </div>
+              <div className="d-flex justify-content-end">
+                <CButton onClick={() => {}}>Book</CButton>
               </div>
             </div>
           </CModalBody>

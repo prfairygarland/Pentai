@@ -24,7 +24,7 @@ const AddBuilding = ({ setModal, getMod, Modal, removeIds, buildingId, getVal })
   const [filteredEquipments, setFilteredEquipments] = useState([])
   const [addBuildingData, setAddBuildingData] = useState({
     name: '',
-    associatedRooms: 1,
+    associatedRooms: 0,
     visibility: true,
     allEquipments: [],
   })
@@ -35,7 +35,7 @@ const AddBuilding = ({ setModal, getMod, Modal, removeIds, buildingId, getVal })
     } else {
       setAddBuildingData({
         name: '',
-        associatedRooms: 1,
+        associatedRooms: 0,
         visibility: true,
       })
       getAllEquipments()
@@ -120,6 +120,7 @@ const AddBuilding = ({ setModal, getMod, Modal, removeIds, buildingId, getVal })
           name: response.data.name,
           visibility: response.data.visibility === 'visible' ? true : false,
           associatedRooms: response.data.associatedItem,
+          allEquipments: response?.data?.buildingEquipment,
         })
       }
     } catch (error) {
@@ -157,7 +158,7 @@ const AddBuilding = ({ setModal, getMod, Modal, removeIds, buildingId, getVal })
       let data = {
         name: addBuildingData.name,
         visibility: addBuildingData.visibility === true ? 'visible' : 'hide',
-        equipments: JSON.stringify(addBuildingData?.allEquipments),
+        equipments: JSON.stringify(addBuildingData?.allEquipments?.map((equip) => equip.id)),
       }
 
       if (buildingId) {
@@ -307,16 +308,20 @@ const AddBuilding = ({ setModal, getMod, Modal, removeIds, buildingId, getVal })
                       )}
                     </CCol>
                     <CCol xs="auto">
-                      <CButton type="submit" onClick={() => {}} className="mb-3 btn-primary">
+                      <CButton type="submit" onClick={addNewEquipment} className="mb-3 btn-primary">
                         Add
                       </CButton>
                     </CCol>
                   </div>
+                  {console.log(
+                    'addBuildingData?.allEquipments :: ',
+                    addBuildingData?.allEquipments,
+                  )}
                   <div className="d-flex w-100 mt-4 flex-column">
                     <div className="prowordsection">
                       <div className="d-flex flex-wrap">
                         {addBuildingData?.allEquipments &&
-                          addBuildingData?.allEquipments.map((equipDetails, index) => (
+                          addBuildingData?.allEquipments?.map((equipDetails, index) => (
                             <div className="prohibitword m-2" key={0}>
                               <p>{equipDetails?.name}&nbsp;&nbsp;&nbsp;</p>
                               <button onClick={() => removeEquipment(equipDetails?.id)}>
@@ -328,7 +333,11 @@ const AddBuilding = ({ setModal, getMod, Modal, removeIds, buildingId, getVal })
                     </div>
                     <div className="d-flex justify-content-end mt-2">
                       <CCol xs="auto">
-                        <CButton type="submit" onClick={() => {}} className="mb-3 btn-black">
+                        <CButton
+                          type="submit"
+                          onClick={() => removeEquipment()}
+                          className="mb-3 btn-black"
+                        >
                           Delete All
                         </CButton>
                       </CCol>
@@ -383,7 +392,7 @@ const AddBuilding = ({ setModal, getMod, Modal, removeIds, buildingId, getVal })
         </div>
       </div>
       <div className="d-flex justify-content-center gap-3 my-3">
-        <CButton onClick={() => saveBuilding('cancle')} className="btn-black">
+        <CButton onClick={() => cancelHandler()} className="btn-black">
           Cancel
         </CButton>
         <CButton onClick={() => saveBuilding()}>{buildingId ? 'Update' : 'Save'}</CButton>
