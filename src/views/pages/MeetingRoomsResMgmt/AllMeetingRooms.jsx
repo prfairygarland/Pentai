@@ -59,6 +59,7 @@ const AllMeetingRooms = () => {
   const [iconCatSet, setCatIcon] = useState(null)
   const [iconSubCatSet, setSubCatIcon] = useState(null)
   const [iconModSet, setModIcon] = useState(null)
+  const [roomDeleteId, setRoomDeleteId] = useState('')
 
   const { i18n } = useTranslation()
   const translationObject = i18n.getDataByLanguage(i18n.language)
@@ -103,19 +104,22 @@ const AllMeetingRooms = () => {
     }
   }, [filterData.search])
 
-  const deleteRoom = async (roomId) => {
+  const deleteRoom = async () => {
+    setIsLoading(true)
     try {
       let url = API_ENDPOINT.delete_meeting_room
-      const response = await deleteApi(url, `?id=${roomId}`)
+      const response = await deleteApi(url, `?id=${roomDeleteId}`)
       if (response?.status === 200) {
         enqueueSnackbar('Delete succefully', { variant: 'success' })
         setIds(null)
         setIcon(null)
-        // setModal(!getMod)
       }
     } catch (error) {
       enqueueSnackbar('Something Went Wrong', { variant: 'error' })
       console.log(error)
+    } finally {
+      handleAllMeetingData()
+      setIsLoading(false)
     }
   }
   const columns = useMemo(() => [
@@ -167,15 +171,19 @@ const AllMeetingRooms = () => {
       Cell: ({ row }) => (
         <div className="d-flex gap-4">
           <a
-            onClick={() => {
-              handleSetModal('addItem')
-              setItemIds(row.original.id)
-            }}
+            onClick={() => (
+              setBuildingId(row.original.buildingId),
+              handleSetModal('addRoom', row.original.roomId),
+              setFloorId(row.original.floorId)
+            )}
             className="greenTxt"
           >
             Modify
           </a>
-          <a onClick={() => deleteRoom(row.original.roomId)} className="primTxt">
+          <a
+            onClick={() => (setDeleteVisible(true), setRoomDeleteId(row.original.roomId))}
+            className="primTxt"
+          >
             Delete
           </a>
         </div>
@@ -656,7 +664,7 @@ const AllMeetingRooms = () => {
             <p>{multiLangObj?.areYouSureToDeleteRoom}</p>
           </CModalBody>
           <CModalFooter>
-            <CButton color="secondary" onClick={() => deleteRoom(false)}>
+            <CButton color="secondary" onClick={() => (setDeleteVisible(false), deleteRoom())}>
               {multiLangObj?.delete}
             </CButton>
             <CButton color="primary" onClick={() => setDeleteVisible(false)}>

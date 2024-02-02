@@ -312,7 +312,11 @@ const AddRoom = ({ setModal, getMod, Modal, removeIds, buildingId, getVal, floor
               <div className="upload-image-main-container">
                 <div className="upload-img-btn-and-info">
                   <div className="upload-container-btn">
-                    <label className="label-btn" color="dark" htmlFor="imageFiles">
+                    <label
+                      className="btn btn-primary"
+                      style={{ paddingLeft: 20 }}
+                      htmlFor="imageFiles"
+                    >
                       Upload
                       <input
                         type="file"
@@ -326,19 +330,23 @@ const AddRoom = ({ setModal, getMod, Modal, removeIds, buildingId, getVal, floor
                     </label>
                   </div>
                   <div className="upload-container-guidance">
-                    <p className="upload-instruction"># Instruction One</p>
-                    <p className="upload-instruction"># Instruction Two</p>
+                    <p className="upload-instruction"># You can upload 1 image only</p>
                     <div className="file-information">
                       <ul>
-                        <li>5MB</li>
-                        <li>5MB</li>
+                        <li>· Image Size: With:720px, Height: 420px</li>
+                        <li>· Maximum File Size: 5MB</li>
+                        <li>· File Type : JPG, PNG</li>
                       </ul>
                     </div>
                   </div>
                 </div>
                 {roomImage && (
                   <div className="room-image-container">
-                    <img src={URL.createObjectURL(roomImage)} alt="" />
+                    <img
+                      style={{ width: '100px', height: '100px' }}
+                      src={URL.createObjectURL(roomImage)}
+                      alt=""
+                    />
                   </div>
                 )}
               </div>
