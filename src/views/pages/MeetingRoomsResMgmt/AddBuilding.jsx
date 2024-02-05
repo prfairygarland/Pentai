@@ -42,9 +42,16 @@ const AddBuilding = ({ setModal, getMod, Modal, removeIds, buildingId, getVal })
     }
   }, [buildingId])
 
+  const filteredEquipmentsHandler = (searchTxtArg) => {
+    setSearchTxt(searchTxtArg)
+    if (!searchTxtArg) {
+      setFilteredEquipments([])
+      return false
+    }
+    getAllEquipments(searchTxtArg)
+  }
   const getAllEquipments = async (searchTxtArg = '') => {
     try {
-      setSearchTxt(searchTxtArg)
       let url = API_ENDPOINT.get_all_equipments
       if (searchTxtArg) {
         url += '?search=' + searchTxtArg
@@ -289,7 +296,7 @@ const AddBuilding = ({ setModal, getMod, Modal, removeIds, buildingId, getVal })
                       <CFormInput
                         type="text"
                         id="inputPassword2"
-                        onChange={(e) => getAllEquipments(e.target.value)}
+                        onChange={(e) => filteredEquipmentsHandler(e.target.value)}
                         placeholder="Please enter equipment name"
                         value={searchTxt}
                       />

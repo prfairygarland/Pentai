@@ -79,6 +79,7 @@ const AllMeetingRooms = () => {
 
   const handleCatIcon = async (id) => {
     if (id === null) {
+      setRoomList([])
       setCatIcon(null)
       setSubCatIcon(null)
       setModIcon(null)
