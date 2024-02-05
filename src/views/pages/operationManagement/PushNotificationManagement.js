@@ -1,12 +1,16 @@
 import { cilMenu } from '@coreui/icons';
 import CIcon from '@coreui/icons-react';
 import { CButton, CDropdown, CDropdownItem, CDropdownMenu, CDropdownToggle, CFormCheck, CModal } from '@coreui/react'
-import React, { useMemo } from 'react'
+import React, { useMemo, useState } from 'react'
 import DatePicker from 'react-date-picker';
 import { useNavigate } from 'react-router-dom';
+import Loader from 'src/components/common/Loader';
 import ReactTable from 'src/components/common/ReactTable';
 
 const PushNotificationManagement = () => {
+
+    const [isLoading, setIsLoading] = useState(false)
+
 
     const navigate = useNavigate()
 
@@ -16,6 +20,7 @@ const PushNotificationManagement = () => {
 
     const handleSelectionChange = () =>{
         console.log('hello')
+        // setIsLoading(true)
     }
 
     const Classification = [
@@ -30,6 +35,8 @@ const PushNotificationManagement = () => {
         {label:'confirmed', value:'confirmed'},
         {label:'Cancelled', value:'cancelled'}
     ]
+
+   
 
     const columns = useMemo(() => [
         
@@ -75,7 +82,7 @@ const PushNotificationManagement = () => {
                 <h2>Push Notification Management</h2>
                 <CButton onClick={() => navigate('createPushNotificationRegistration')}>Create</CButton>
             </div>
-            <div>
+           {isLoading && <Loader />} <div>
         <div className='container bg-light p-3 mb-3'>
           <div className='d-flex mb-3'>
             <div className='me-5'>

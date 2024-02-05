@@ -27,10 +27,7 @@ const BooksDetail = ({ bookId, genreId, setBookId, setSideSubBookBarId, setIconS
     const inputRef = useRef(null)
     const [image, setImage] = useState(null);
 
-    // setSideSubBookBarId = { setSideSubBookBarId }
-    // setIconSubBookSet = { setIconSubBookSet }
-    // setSideSubBarId = { setSideSubBarId }
-    // setIconSubSet = { setIconSubSet }
+    console.log('bookImage', bookData)
 
     useEffect(() => {
         setBookData({
@@ -38,7 +35,7 @@ const BooksDetail = ({ bookId, genreId, setBookId, setSideSubBookBarId, setIconS
             title: bookDisplay.title,
             ISBN: bookDisplay.SIBNCode,
             author: bookDisplay.author,
-            image: bookDisplay.image,
+            image: bookDisplay.image ? bookDisplay.image : null,
             bookdesr: bookDisplay.description,
             visibility: bookDisplay.visibility === 'visible' ? true : false,
             AssociatedItem: bookDisplay.associatedItem ? bookDisplay.associatedItem : 0,
@@ -46,24 +43,32 @@ const BooksDetail = ({ bookId, genreId, setBookId, setSideSubBookBarId, setIconS
 
         })
         // setImage(bookDisplay.image)
+        // setImage(bookDisplay.image)
     }, [bookDisplay, bookId])
 
     useEffect(() => {
         const getBookGenreData = async () => {
-            const res = await getApi(API_ENDPOINT.get_genre_list)
-            if (res?.status === 200) {
-                const data = await res?.data?.map((op) => {
-                    return { 'label': op?.name, 'value': op?.id }
+            setIsLoading(true)
+            try {
+                const res = await getApi(API_ENDPOINT.get_genre_list)
+                if (res?.status === 200) {
+                    const data = await res?.data?.map((op) => {
+                        return { 'label': op?.name, 'value': op?.id }
 
-                })
-                setGenre(data)
-                let val = data?.filter((ele) => ele?.label === bookDisplay?.genreName)[0]?.value?.toString()
-                setBookData((prev) => {
-                    return {
-                        ...prev,
-                        bookgenre: val
-                    }
-                })
+                    })
+                    setGenre(data)
+                    let val = data?.filter((ele) => ele?.label === bookDisplay?.genreName)[0]?.value?.toString()
+                    setBookData((prev) => {
+                        return {
+                            ...prev,
+                            bookgenre: val
+                        }
+                    })
+                    setIsLoading(false)
+                }
+            } catch (error) {
+               console.log(error)
+               setIsLoading(false)
             }
         }
         getBookGenreData()
@@ -253,15 +258,18 @@ const BooksDetail = ({ bookId, genreId, setBookId, setSideSubBookBarId, setIconS
         setSideSubBarId(null)
     }
 
+    const imgUrl = bookData?.image?.includes('https://ptkapi.experiencecommerce.com')
+    const imageProps = imgUrl ? { crossOrigin: 'anonymous' } : {}
+
 
     return (
         <div style={{ width: '100%' }}>
-           
+
             <div>
                 {isLoading && <Loader />}
                 <div>
                     <div className='d-flex justify-content-between'>
-                    <h4>Books details</h4>
+                        <h4>Books details</h4>
                         <CButton onClick={() => setdeleteVisible(true)} className='btn-black'>Delete</CButton>
                     </div>
                     <div className="dropdown-container mb-2">
@@ -304,34 +312,34 @@ const BooksDetail = ({ bookId, genreId, setBookId, setSideSubBookBarId, setIconS
                                 </div>
                             </div>
 
-                            <div className="form-outline form-white d-flex ">
-                                    <div className="formWrpLabel" >
-                                        <label className="fw-bolder ">
-                                            Book Title
-                                        </label>
+                            <div className="form-outline form-white d-flex gap-3">
+                                <div className="formWrpLabel" >
+                                    <label className="fw-bolder ">
+                                        Book Title
+                                    </label>
+                                </div>
+                                <div className="formWrpInpt d-flex">
+                                    <div className="d-flex formradiogroup mb-2 gap-3">
+                                        <CFormInput
+                                            value={bookData.title}
+                                            onChange={handleTitleChange}
+                                        />
                                     </div>
-                                    <div className="formWrpInpt d-flex">
-                                        <div className="d-flex formradiogroup mb-2 gap-3">
-                                            <CFormInput
-                                                value={bookData.title}
-                                                onChange={handleTitleChange}
-                                            />
-                                        </div>
                                 </div>
                             </div>
-                            <div className="form-outline form-white d-flex ">
-                                    <div className="formWrpLabel" >
-                                        <label className="fw-bolder ">
-                                            Author
-                                        </label>
+                            <div className="form-outline form-white d-flex gap-3">
+                                <div className="formWrpLabel" >
+                                    <label className="fw-bolder ">
+                                        Author
+                                    </label>
+                                </div>
+                                <div className="formWrpInpt d-flex">
+                                    <div className="d-flex formradiogroup mb-2 gap-3">
+                                        <CFormInput
+                                            value={bookData.author}
+                                            onChange={handleAuthorChange}
+                                        />
                                     </div>
-                                    <div className="formWrpInpt d-flex">
-                                        <div className="d-flex formradiogroup mb-2 gap-3">
-                                            <CFormInput
-                                                value={bookData.author}
-                                                onChange={handleAuthorChange}
-                                            />
-                                        </div>
                                 </div>
                             </div>
                             <div className="form-outline form-white   d-flex ">
@@ -342,7 +350,7 @@ const BooksDetail = ({ bookId, genreId, setBookId, setSideSubBookBarId, setIconS
                                 </div>
                                 <div className="formWrpInpt d-flex">
                                     <div className='useDetailImgWrp' >
-                                        {bookData?.image !== null ? <img alt='' src={image ? image : bookData?.image} style={{ height: '100%', width: '100%' }} /> : <img alt='' src='https://www.beelights.gr/assets/images/empty-image.png' style={{ height: '100%', width: '100%' }} />}
+                                        {bookData?.image ? <img alt='' {...imageProps} src={image ? image : bookData?.image} style={{ height: '100%', width: '100%' }} /> : <img alt='' src='https://www.beelights.gr/assets/images/empty-image.png' style={{ height: '100%', width: '100%' }} />}
                                         <input style={{ display: 'none' }} type="file" name="upload" accept=".png, .jpg, .jpeg" ref={inputRef} onChange={handleUpload} />
                                     </div>
                                     <div className='ms-4'>
@@ -435,8 +443,8 @@ const BooksDetail = ({ bookId, genreId, setBookId, setSideSubBookBarId, setIconS
                             All categories and items belonging will be deleted.</p>
                     </CModalBody>
                     <CModalFooter>
-                        <CButton onClick={deleteSingleBook}  className='btn-black'>Delete</CButton>
-                        <CButton onClick={() => setdeleteVisible(false)} className='btn-black'>
+                        <CButton onClick={deleteSingleBook} color="primary">Delete</CButton>
+                        <CButton onClick={() => setdeleteVisible(false)} color="secondary">
                             Cancel
                         </CButton>
                     </CModalFooter>

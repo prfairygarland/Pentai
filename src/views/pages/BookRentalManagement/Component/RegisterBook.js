@@ -5,8 +5,9 @@ import { API_ENDPOINT } from 'src/utils/config';
 import { imageUrl } from '../BookRentalStatus';
 import { useCallback } from 'react';
 import { enqueueSnackbar } from 'notistack';
+import Loader from 'src/components/common/Loader';
 
-const RegisterBook = ({ setDeleted, setSearchBookFilter, setSearchCurrentPage, setBook, setSearchBookId, searchBookId, searchBookDetail, setSearchBookDetail, searchBooks, genreId, setFilteredData, setSearchBooks, setCategories }) => {
+const RegisterBook = ({ setDeleted, book, setSideSubBookBarId, setIconSubBookSet, setIconSubSet, setIconSet, setSideBarId, setSearchBookFilter, setSearchCurrentPage, setBook, setSearchBookId, searchBookId, searchBookDetail, setSearchBookDetail, searchBooks, genreId, setFilteredData, setSearchBooks, setCategories }) => {
     const [RegisteredData, setRegisteredData] = useState({
         bookgenre: '',
         ISBN: '',
@@ -18,6 +19,7 @@ const RegisterBook = ({ setDeleted, setSearchBookFilter, setSearchCurrentPage, s
         image: null
     })
 
+    const [isLoading, setIsLoading] = useState(false)
     const [image, setImage] = useState(null);
     const inputRef = useRef(null)
     const [genre, setGenre] = useState();
@@ -26,33 +28,21 @@ const RegisterBook = ({ setDeleted, setSearchBookFilter, setSearchCurrentPage, s
     const [postImage, setPostImage] = useState(null)
     const [filterBook, setFilterBook] = useState()
 
-
+    console.log('searchBookDetail', searchBookDetail)
+    console.log('RegisteredData', RegisteredData)
 
 
     useEffect(() => {
-        if (searchBookDetail) {
             setRegisteredData({
                 bookgenre: RegisteredData.bookgenre,
                 categoryID: RegisteredData.categoryID,
                 subCategoryID: RegisteredData.subCategoryID,
                 title: searchBookDetail?.title,
                 Author: searchBookDetail?.authors ? searchBookDetail?.authors[0] : '',
-                ISBN: searchBookDetail?.industryIdentifiers ? searchBookDetail?.industryIdentifiers[0].identifier.replace('/[^0-9]/g', '') : '',
+                ISBN: searchBookDetail?.industryIdentifiers ? (searchBookDetail?.industryIdentifiers[0]?.type === "ISBN_13" ? searchBookDetail?.industryIdentifiers[0]?.identifier : '') : '',
                 description: searchBookDetail?.description ? searchBookDetail.description : '',
-                image: searchBookDetail?.imageLinks ? searchBookDetail?.imageLinks.thumbnail : '',
+                image: searchBookDetail?.imageLinks ? searchBookDetail?.imageLinks.thumbnail : null,
             })
-        }
-        else {
-            setRegisteredData({
-                bookgenre: '',
-                ISBN: '',
-                title: '',
-                Author: '',
-                categoryID: '',
-                subCategoryID: '',
-                description: ''
-            })
-        }
     }, [searchBookDetail, searchBookId])
 
 
@@ -161,20 +151,27 @@ const RegisterBook = ({ setDeleted, setSearchBookFilter, setSearchCurrentPage, s
 
     useEffect(() => {
         const getBookGenreData = async () => {
-            const res = await getApi(API_ENDPOINT.get_genre_list)
-            if (res?.status === 200) {
-                const data = await res?.data?.map((op) => {
-                    return { 'label': op?.name, 'value': op?.id }
-
-                })
-                setGenre(data)
-                setRegisteredData((prev) => {
-                    return {
-                        ...prev,
-                        bookgenre: genreId.toString()
-                    }
-                })
-            }
+             setIsLoading(true)
+             try {     
+                 const res = await getApi(API_ENDPOINT.get_genre_list)
+                 if (res?.status === 200) {
+                     const data = await res?.data?.map((op) => {
+                         return { 'label': op?.name, 'value': op?.id }
+                      
+                     })
+                     setIsLoading(false)
+                     setGenre(data)
+                     setRegisteredData((prev) => {
+                         return {
+                             ...prev,
+                             bookgenre: genreId.toString()
+                         }
+                     })
+                 }
+             } catch (error) {
+                console.log(error)
+                setIsLoading(false)
+             }
         }
         getBookGenreData()
         // FilterBookData()
@@ -204,6 +201,11 @@ const RegisterBook = ({ setDeleted, setSearchBookFilter, setSearchCurrentPage, s
         setSearchBookFilter({
             title: ''
         })
+        setIconSet(null)
+        setIconSubSet(null)
+        setSideSubBookBarId(null)
+        setIconSubBookSet(null)
+        setSideBarId(null)
     }
 
     useEffect(() => {
@@ -242,8 +244,18 @@ const RegisterBook = ({ setDeleted, setSearchBookFilter, setSearchCurrentPage, s
             const res = await postApi(url, formData)
             setPostImage(res?.data?.processedImageUrls[0]?.imageUrl)
         }
+        setRegisteredData((prev) =>{
+            return {
+                ...prev,
+                image: (imageUrl + postImage)
+            }
+        })
+
 
     }
+
+    console.log('image', image)
+    console.log('postImage', postImage)
 
 
     const PostData = async () => {
@@ -269,42 +281,59 @@ const RegisterBook = ({ setDeleted, setSearchBookFilter, setSearchCurrentPage, s
             if (RegisteredData.subCategoryID != '') {
                 body['subCategoryId'] = RegisteredData.subCategoryID
             }
-            if(RegisteredData.categoryID===''){
-                enqueueSnackbar('Please select category', { variant:'error'})
+            if (RegisteredData.categoryID === '') {
+                enqueueSnackbar('Please select category', { variant: 'error' })
                 return false
             }
-            if(RegisteredData.ISBN===''){
-                enqueueSnackbar('Please enter ISBN', { variant:'error'})
+            if (RegisteredData.ISBN === '') {
+                enqueueSnackbar('Please enter ISBN', { variant: 'error' })
                 return false
             }
-            if(RegisteredData.title.trim()===''){
-                enqueueSnackbar('Please enter title', { variant:'error'})
-                return false
-            }
-            if(RegisteredData.Author===''){
-                enqueueSnackbar('Please enter author name', { variant:'error'})
-                return false
-            }
-            if(RegisteredData.description===''){
-                enqueueSnackbar('Please enter description', { variant:'error'})
-                return false
-            }
-            if(RegisteredData.image===null){
-                enqueueSnackbar('Please add book Image', { variant:'error'})
-                return false
-            }
-                const res = await postApi(url, body)
-                if (res?.data?.status === 200) {
-                    enqueueSnackbar("Book created successfully", { variant: "success" })
-                    setCategories('AllBooks')
-                    setSearchBooks([])
-                    setDeleted((prev) => prev + 1)
-                    setBook('search')
-                    setSearchCurrentPage(0)
-                    setSearchBookFilter({title:''})
+            if (RegisteredData.ISBN) {
+                const validISBN = /\d+$/.test(RegisteredData?.ISBN)
+                const CheckisISBN = (RegisteredData.ISBN.length === 10 || RegisteredData.ISBN.length === 13)
+                if (!validISBN) {
+                    enqueueSnackbar('ISBN should be digit', { variant: 'error' })
+                    return false
                 }
-                else {
-                    enqueueSnackbar("Failed to create book", { variant: "error" })
+                if (!CheckisISBN) {
+                    enqueueSnackbar('ISBN should be 10 or 13 digits', { variant: 'error' })
+                    return false
+                }
+            }
+            if (RegisteredData.title.trim() === '') {
+                enqueueSnackbar('Please enter title', { variant: 'error' })
+                return false
+            }
+            if (RegisteredData.Author === '') {
+                enqueueSnackbar('Please enter author name', { variant: 'error' })
+                return false
+            }
+            if (RegisteredData.description === '') {
+                enqueueSnackbar('Please enter description', { variant: 'error' })
+                return false
+            }
+            if (RegisteredData.image === null) {
+                enqueueSnackbar('Please add book Image', { variant: 'error' })
+                return false
+            }
+            const res = await postApi(url, body)
+            if (res?.data?.status === 200) {
+                enqueueSnackbar("Book created successfully", { variant: "success" })
+                setCategories('AllBooks')
+                setSearchBooks([])
+                setDeleted((prev) => prev + 1)
+                setBook('search')
+                setSearchCurrentPage(0)
+                setSearchBookFilter({ title: '' })
+                setIconSet(null)
+                setIconSubSet(null)
+                setSideSubBookBarId(null)
+                setIconSubBookSet(null)
+                setSideBarId(null)
+            }
+            else {
+                enqueueSnackbar("Failed to create book", { variant: "error" })
             }
 
 
@@ -316,6 +345,7 @@ const RegisterBook = ({ setDeleted, setSearchBookFilter, setSearchCurrentPage, s
 
     return (
         <div style={{ marginTop: '2%' }}>
+            {isLoading && <Loader />}
             <table border="1" className="table table-bordered">
                 <thead>
                     <tr>
@@ -408,7 +438,7 @@ const RegisterBook = ({ setDeleted, setSearchBookFilter, setSearchCurrentPage, s
 
             <div className='d-flex justify-content-center align-items-center gap-3 my-3'>
                 <CButton onClick={handleCancel} className="btn btn-black" >Cancel</CButton>
-                <CButton className="btn"  onClick={PostData}>Add</CButton>
+                <CButton className="btn" onClick={PostData}>Add</CButton>
             </div>
         </div>
     )

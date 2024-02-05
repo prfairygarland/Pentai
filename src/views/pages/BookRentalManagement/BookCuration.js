@@ -14,9 +14,12 @@ import CurationSearchBook from './Component/CurationSearchBook'
 import CurationRegisterBook from './Component/CurationRegisterBook'
 import CurationBookDetails from './Component/CurationBookDetails'
 import moment from 'moment/moment'
+import Loader from 'src/components/common/Loader'
+import { enqueueSnackbar } from 'notistack'
 
 const BookCuration = () => {
 
+    const [isLoading, setIsLoading] = useState(false)
     const [itemsPerPage, setItemsPerPage] = useState(5)
     const [currentPage, setCurrentPage] = useState(0)
     const [Genre, setGenre] = useState()
@@ -64,6 +67,7 @@ const BookCuration = () => {
 
     //displaying all the curationlists
     const getBookList = async () => {
+        setIsLoading(true)
         let url = `${API_ENDPOINT.categoryList}`
 
         try {
@@ -72,11 +76,14 @@ const BookCuration = () => {
                 setAllCurationList(response?.data)
                 setTotalCount(response?.totalCount)
                 setTotalPages(Math.ceil(response.totalCount / Number(itemsPerPage)))
+                setIsLoading(false)
             } else {
                 setAllCurationList([])
+                setIsLoading(false)
             }
         } catch (error) {
             console.log(error)
+            setIsLoading(false)
         }
 
     }
@@ -112,23 +119,27 @@ const BookCuration = () => {
 
     // search the book from google and adding it into category
     const SearchBookList = async () => {
+        setIsLoading(true)
         let url = `${API_ENDPOINT.searchGoogleBook}`
         if (searchBookFilter.title) {
             url = url + `?searchByName=${searchBookFilter.title}&limit=${searchItemPerPage}&offset=${currentSearchPage + 1}`
         }
-
+        
         try {
             const res = await getApi(url)
             if (res?.status === 200) {
                 setSearchBooks(res?.data)
                 console.log('totle', res?.totalItems)
                 setSearchtotalPage(Math.ceil(res?.totalItems / Number(searchItemPerPage)))
+                setIsLoading(false)
             }
             else {
                 setSearchBooks([])
+                setIsLoading(false)
             }
         } catch (error) {
             console.log(error)
+            setIsLoading(false)
         }
 
     }
@@ -136,6 +147,12 @@ const BookCuration = () => {
     useEffect(() => {
         SearchBookList()
     }, [currentSearchPage, searchItemPerPage])
+
+    useEffect(() => {
+        if(searchBookFilter.title===''){
+            SearchBookList()
+        }
+    }, [searchBookFilter.title])
 
 
 
@@ -414,7 +431,6 @@ const BookCuration = () => {
 
     useEffect(() => {
         getBookList()
-        getBookList()
         getALLBookgenre()
     }, [stateupDate])
 
@@ -465,6 +481,7 @@ const BookCuration = () => {
             <div className="pageTitle mb-3 pb-2">
                 <h2>Book Curation</h2>
             </div>
+            {isLoading && <Loader />}
             <div style={{ display: 'flex' }}>
                 <div className='col-md-4'>
                     <CSidebar className='w-100 pe-3'>
@@ -680,7 +697,7 @@ const BookCuration = () => {
                                 type='button'
                                 role='tab'
                                 aria-selected='true'
-                                onClick={() => setCurationBook('Curationsearch')}
+                                onClick={() => {setCurationBook('Curationsearch');setCurationSearchBookDetail({});setSearchBookId(null)}}
                             >
                                 Search Book
                             </button>

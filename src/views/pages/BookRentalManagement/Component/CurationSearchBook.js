@@ -18,10 +18,6 @@ const CurationSearchBook = ({ searchBooks, setItemSearchPerPage, currentSearchPa
 
     const PostData = (id) => {
         setCurationBook('CurationRegister')
-        setSearchBookFilter({
-            title: ''
-        })
-
         setSearchBookId(id)
     }
 

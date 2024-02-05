@@ -11,6 +11,7 @@ import { paginationItemPerPageOptions } from 'src/utils/constant';
 import UserProfile from './Component/UserProfile';
 import RentalStatus from './Component/RentalStatus';
 import RentalHistory from './Component/RentalHistory';
+import Loader from 'src/components/common/Loader';
 
 export let imageUrl = 'https://ptkapi.experiencecommerce.com'
 
@@ -24,6 +25,7 @@ const BookRentalStatus = () => {
         endDate: ''
     }
 
+    const [isLoading, setIsLoading] = useState(false)
     const [currentPage, setCurrentPage] = useState(0)
     const [itemsPerPage, setItemsPerPage] = useState(5)
     const [genre, setGenre] = useState();
@@ -75,13 +77,13 @@ const BookRentalStatus = () => {
     const handleShowRentalHistory = async (BookRentalId, id) => {
         setBookRentalId(BookRentalId)
         let url = API_ENDPOINT.get_rentalhistory + `?bookRentalId=${BookRentalId}&limit=${itemsPerPage}&offset=${HisCurrentPage + 1}`
-            setSelectedId(BookRentalId)
+        setSelectedId(BookRentalId)
         try {
             const response = await getApi(url)
             if (response?.status === 200) {
-               setRentalHistoryData(response?.data)
-               setTotalCount(response?.totalCount)
-               setHisTotalPages(Math.ceil(response.totalCount / Number(itemsPerPage)));
+                setRentalHistoryData(response?.data)
+                setTotalCount(response?.totalCount)
+                setHisTotalPages(Math.ceil(response.totalCount / Number(itemsPerPage)));
             }
         } catch (error) {
             console.log(error)
@@ -90,65 +92,65 @@ const BookRentalStatus = () => {
     }
 
 
-            const columns = useMemo(() => [
-                {
-                    Header: 'Book Genre',
-                    accessor: '',
-                    Cell: ({ row }) => <p>{`${row.original.genreBane}`}</p>
-                },
-                {
-                    Header: 'Book Title',
-                    accessor: 'title',
-                    Cell: ({ row }) => <p>{`${row.original.title.charAt(0).toUpperCase() + row.original.title.slice(1)}`}</p>
-                },
-                {
-                    Header: 'Author',
-                    accessor: 'author',
-                    Cell: ({ row }) => <p>{`${row.original.author.charAt(0).toUpperCase() + row.original.author.slice(1)}`}</p>
+    const columns = useMemo(() => [
+        {
+            Header: 'Book Genre',
+            accessor: '',
+            Cell: ({ row }) => <p>{`${row.original.genreBane}`}</p>
+        },
+        {
+            Header: 'Book Title',
+            accessor: 'title',
+            Cell: ({ row }) => <p>{`${row.original.title.charAt(0).toUpperCase() + row.original.title.slice(1)}`}</p>
+        },
+        {
+            Header: 'Author',
+            accessor: 'author',
+            Cell: ({ row }) => <p>{`${row.original.author.charAt(0).toUpperCase() + row.original.author.slice(1)}`}</p>
 
-                },
-                {
-                    Header: 'ISBN',
-                    accessor: 'SIBNCode',
-                    Cell: ({ row }) => <p>{row.original.SIBNCode}</p>
-                },
-                {
-                    Header: 'Item Number',
-                    accessor: '',
-                    Cell: ({ row }) => <p>{row.original.itemNumber}</p>
-                },
-                {
-                    Header: 'Rental Status',
-                    accessor: 'status',
-                    Cell: ({ row }) => <p>{row.original.status}</p>,
+        },
+        {
+            Header: 'ISBN',
+            accessor: 'SIBNCode',
+            Cell: ({ row }) => <p>{row.original.SIBNCode}</p>
+        },
+        {
+            Header: 'Item Number',
+            accessor: '',
+            Cell: ({ row }) => <p>{row.original.itemNumber}</p>
+        },
+        {
+            Header: 'Rental Status',
+            accessor: 'status',
+            Cell: ({ row }) => <p>{row.original.status}</p>,
 
-                },
-                {
-                    Header: 'User Name',
-                    accessor: 'userName',
-                    Cell: ({ row }) => <Link onClick={() => { handleShowUserInfo(row.original.userId); setPopUp('userDetails') }} style={{ cursor: 'pointer' }}>{row.original.userName} </Link>,
-                },
-                {
-                    Header: 'Rental Duration',
-                    accessor: 'duration',
-                    Cell: ({ row }) => <>
-                        <p>{moment(row.original.startDateTime).format("YYYY-MM-DD HH:mm:ss")} </p>
-                        <p>{moment(row.original.endDateTime).format("YYYY-MM-DD HH:mm:ss")} </p>
-                    </>,
+        },
+        {
+            Header: 'User Name',
+            accessor: 'userName',
+            Cell: ({ row }) => <Link onClick={() => { handleShowUserInfo(row.original.userId); setPopUp('userDetails') }} style={{ cursor: 'pointer' }}>{row.original.userName} </Link>,
+        },
+        {
+            Header: 'Rental Duration',
+            accessor: 'duration',
+            Cell: ({ row }) => <>
+                <p>{moment(row.original.startDateTime).format("YYYY-MM-DD HH:mm:ss")} </p>
+                <p>{moment(row.original.endDateTime).format("YYYY-MM-DD HH:mm:ss")} </p>
+            </>,
 
-                },
-                {
-                    Header: 'Rental Details',
-                    accessor: 'details',
-                    Cell: ({ row }) => <a onClick={() => { setUserInfoPopup(true); setPopUp('RentalD'); handleShowRentalDetails(row.original.id) }} className='mx-3 px-3 py-2 blueTxt'>View</a>
-                },
-                {
-                    Header: 'Rental History',
-                    accessor: 'history',
-                    Cell: ({ row }) => <a onClick={() => { setUserInfoPopup(true); setPopUp('RenatlH'); handleShowRentalHistory(row.original?.BookRentalId, row.original?.id) }} className='mx-3 px-3 py-2 blueTxt'>View</a>
+        },
+        {
+            Header: 'Rental Details',
+            accessor: 'details',
+            Cell: ({ row }) => <a onClick={() => { setUserInfoPopup(true); setPopUp('RentalD'); handleShowRentalDetails(row.original.id) }} className='mx-3 px-3 py-2 blueTxt'>View</a>
+        },
+        {
+            Header: 'Rental History',
+            accessor: 'history',
+            Cell: ({ row }) => <a onClick={() => { setUserInfoPopup(true); setPopUp('RenatlH'); handleShowRentalHistory(row.original?.BookRentalId, row.original?.id) }} className='mx-3 px-3 py-2 blueTxt'>View</a>
 
-                },
-            ], [])
+        },
+    ], [])
 
     useEffect(() => {
         const getBookGenreData = async () => {
@@ -167,6 +169,7 @@ const BookRentalStatus = () => {
     }, [])
 
     const getData = async (id) => {
+        setIsLoading(true)
         let url = `${API_ENDPOINT.get_book_list}?offset=${currentPage + 1}&limit=${itemsPerPage}`
         if (filterData?.title) {
             url = url + `&search=${filterData?.title}`
@@ -189,23 +192,25 @@ const BookRentalStatus = () => {
         if (res?.status === 200) {
             setBookList(res?.data)
             setTotalPages(Math.ceil(res?.totalCount / Number(itemsPerPage)))
+            setIsLoading(false)
         }
-        else{
+        else {
             setBookList([])
+            setIsLoading(false)
         }
     }
 
     useEffect(() => {
-      if(filterData.title===''){
-        getData()
-      }
+        if (filterData.title === '') {
+            getData()
+        }
     }, [filterData.title])
-    
+
 
 
     const getUserListExport = async () => {
         let url = `${API_ENDPOINT.book_listexport}?offset=${currentPage + 1}&limit=${itemsPerPage}`;
-    
+
         if (filterData?.title) {
             url = url + `&search=${filterData?.title}`
         }
@@ -218,27 +223,27 @@ const BookRentalStatus = () => {
         if (filterData?.startDate && filterData?.endDate) {
             url = url + `&startDate=${moment(filterData.startDate).format("YYYY-MM-DD")}&endDate=${moment(filterData.endDate).format("YYYY-MM-DD")}`
         }
-    
-    
+
+
         console.log('url check =>', url);
-    
+
         const res = await getUserListExportData(url)
         console.log('res =>', res);
-    
+
         if (res?.filePath) {
-          const downloadLink = res?.filePath;
-          const link = document.createElement('a');
-          link.href = 'https://ptkapi.experiencecommerce.com/' + downloadLink;
-          link.setAttribute('download', `exported_data_${new Date().getTime()}.xlsx`);
-    
-          link.click();
-        //   checkExportSelectid(false)
-    
+            const downloadLink = res?.filePath;
+            const link = document.createElement('a');
+            link.href = 'https://ptkapi.experiencecommerce.com/' + downloadLink;
+            link.setAttribute('download', `exported_data_${new Date().getTime()}.xlsx`);
+
+            link.click();
+            //   checkExportSelectid(false)
+
         } else {
-        //   checkExportSelectid(false)
-          console.log('No data found');
+            //   checkExportSelectid(false)
+            console.log('No data found');
         }
-      }
+    }
 
     useEffect(() => {
         getData()
@@ -258,14 +263,14 @@ const BookRentalStatus = () => {
     const handleStartDate = (event) => {
         const value = event
         setStartDate(value)
-         if(value){
-             setFilterData((prev) => {
-                 return {
-                     ...prev,
-                     startDate: value
-                 }
-             })
-         }
+        if (value) {
+            setFilterData((prev) => {
+                return {
+                    ...prev,
+                    startDate: value
+                }
+            })
+        }
     }
 
     const handleEndDate = (event) => {
@@ -307,8 +312,8 @@ const BookRentalStatus = () => {
         console.log('selected rows type =>', typeof selectedRowsIds);
 
         const getIds = selectedRowsIds.map((item) => {
-          console.log('ites =>', item);
-          return item.id.toString();
+            console.log('ites =>', item);
+            return item.id.toString();
         })
         console.log('getIds', getIds)
         console.log('getIds =>', typeof getIds);
@@ -322,12 +327,13 @@ const BookRentalStatus = () => {
 
     return (
         <div>
-        <div className="pageTitle mb-3 pb-2">
-      <h2>Book Rental Status</h2>
-    </div>
+            <div className="pageTitle mb-3 pb-2">
+                <h2>Book Rental Status</h2>
+            </div>
             <div className='clearfix'>
                 <CButton onClick={getUserListExport} className='float-end mx-2 btn-success'>Export</CButton>
             </div>
+            {isLoading && <Loader />}
             <div className='d-flex justify-content-between align-items-center mb-4'>
                 <div className='mx-1 d-flex'>
                     <input className='me-3 form-control' placeholder='Search' value={filterData.title} onChange={handleSearch} />
@@ -408,21 +414,21 @@ const BookRentalStatus = () => {
                     setUserInfoPopup(false)
                     // setUserInfoData({})
                 }}>
-                    <CModalTitle className='p-1'>{popUp === 'userDetails' ? 'User Information' : '' ||  popUp === 'RentalD' ? 'Rental Details' : '' || popUp === 'RenatlH' ? 'Rental History' : '' }</CModalTitle>
+                    <CModalTitle className='p-1'>{popUp === 'userDetails' ? 'User Information' : '' || popUp === 'RentalD' ? 'Rental Details' : '' || popUp === 'RenatlH' ? 'Rental History' : ''}</CModalTitle>
                 </CModalHeader>
-               <CModalBody>
-               {popUp === 'userDetails' ?
-                    <UserProfile userInfoData={userInfoData} />
-                    : ''}
-                {
-                    popUp === 'RentalD' ?
-                        <RentalStatus RentalStatusData={RentalStatusData} setRentalStatusData={setRentalStatusData} setUserInfoPopup={setUserInfoPopup} /> : ''
-                }
-                {
-                    popUp === 'RenatlH' ?
-                        <RentalHistory bookRentalId={bookRentalId}  itemsPerPage={itemsPerPage} selectedId={selectedId} setHistCurrentPage={setHistCurrentPage} HisCurrentPage={HisCurrentPage} handleShowRentalHistory={handleShowRentalHistory} RentalHistoryData={RentalHistoryData} RentalStatusData={RentalStatusData} totalCount={totalCount} HistotalPages={HistotalPages} /> : ''
-                }
-               </CModalBody>
+                <CModalBody>
+                    {popUp === 'userDetails' ?
+                        <UserProfile userInfoData={userInfoData} />
+                        : ''}
+                    {
+                        popUp === 'RentalD' ?
+                            <RentalStatus RentalStatusData={RentalStatusData} setRentalStatusData={setRentalStatusData} setUserInfoPopup={setUserInfoPopup} /> : ''
+                    }
+                    {
+                        popUp === 'RenatlH' ?
+                            <RentalHistory bookRentalId={bookRentalId} itemsPerPage={itemsPerPage} selectedId={selectedId} setHistCurrentPage={setHistCurrentPage} HisCurrentPage={HisCurrentPage} handleShowRentalHistory={handleShowRentalHistory} RentalHistoryData={RentalHistoryData} RentalStatusData={RentalStatusData} totalCount={totalCount} HistotalPages={HistotalPages} /> : ''
+                    }
+                </CModalBody>
             </CModal>
         </div>
     )
