@@ -374,16 +374,24 @@ const AddRoom = ({ setModal, getMod, Modal, removeIds, buildingId, getVal, floor
                   {addRoomData?.buildingEquipment?.length > 0 && (
                     <ul className="p-2">
                       {addRoomData?.buildingEquipment.map((item) => (
-                        <CFormCheck
-                          key={item}
-                          id="flexCheckDefault"
+                        <div
                           className="gap-2"
-                          label={item.name}
-                          checked={addRoomData?.roomEquipment?.some(
-                            (roomEqu) => roomEqu.id === item.id,
-                          )}
-                          onChange={() => roomEquipmentChangeHandler(item)}
-                        />
+                          key={item.id}
+                          onClick={() => roomEquipmentChangeHandler(item)}
+                        >
+                          <input
+                            type="checkbox"
+                            className="form-check-input"
+                            id="validationFormCheck2"
+                            name="radio-stacked"
+                            checked={addRoomData?.roomEquipment?.some(
+                              (roomEqu) => roomEqu.id === item.id,
+                            )}
+                          />
+                          <label className="form-check-label" onClick={(e) => e.preventDefault()}>
+                            {item.name}
+                          </label>
+                        </div>
                       ))}
                     </ul>
                   )}
