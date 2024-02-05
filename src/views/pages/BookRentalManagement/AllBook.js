@@ -16,6 +16,7 @@ import SubBooks from './Component/BooksDetail'
 import BooksDetail from './Component/BooksDetail'
 import ItemNumber from './Component/ItemNumber'
 import { enqueueSnackbar } from 'notistack'
+import Loader from 'src/components/common/Loader'
 
 const initialData = {
     title: '',
@@ -27,6 +28,7 @@ const initialData = {
 
 const AllBook = () => {
 
+    const [isLoading, setIsLoading] = useState(false)
     const [itemsPerPage, setItemsPerPage] = useState(5)
     const [currentPage, setCurrentPage] = useState(0)
     const [filterData, setFilteredData] = useState(initialData)
@@ -104,6 +106,7 @@ const AllBook = () => {
 
 
     const getBookList = async () => {
+        setIsLoading(true)
         let url = `${API_ENDPOINT.get_all_book}?limit=${itemsPerPage}&offset=${currentPage + 1}`
 
         if (filterData.status && filterData.status !== 'All') {
@@ -127,36 +130,57 @@ const AllBook = () => {
                 setTotalCount(response?.totalCount)
                 setTotalPages(Math.ceil(response.totalCount / Number(itemsPerPage)))
                 console.log('books', response?.data)
+                setIsLoading(false)
             } else {
                 setAllBookList([])
                 setTotalCount(0)
+                setIsLoading(false)
             }
         } catch (error) {
             console.log(error)
+            setIsLoading(false)
         }
     }
 
     const SearchBookList = async () => {
         let url = `${API_ENDPOINT.searchGoogleBook}`
+        setIsLoading(true)
         if (searchBookFilter.title) {
             url = url + `?searchByName=${searchBookFilter.title}&limit=${searchItemPerPage}&offset=${currentSearchPage + 1}`
         }
+
 
         try {
             const res = await getApi(url)
             if (res?.status === 200) {
                 setSearchBooks(res?.data)
                 setSearchtotalPage(Math.ceil(res?.totalItems / searchItemPerPage))
+                setIsLoading(false)
+            }
+            else {
+                setSearchBooks([])
+                setIsLoading(false)
             }
         } catch (error) {
             console.log(error)
+            setIsLoading(false)
         }
 
     }
 
     useEffect(() => {
         SearchBookList()
+        // console.log('render')
+
     }, [currentSearchPage, searchItemPerPage])
+
+    useEffect(() => {
+        if (searchBookFilter.title === '') {
+            SearchBookList()
+            console.log('render1')
+        }
+    }, [searchBookFilter.title])
+
 
 
 
@@ -488,7 +512,8 @@ const AllBook = () => {
 
         setSearchBookDetail(searchBooks[searchBookId])
 
-    }, [searchBookId, book])
+    }, [searchBookId])
+
 
 
     useEffect(() => {
@@ -512,12 +537,12 @@ const AllBook = () => {
     }
 
 
-
     return (
 
         <><div className="pageTitle mb-3 pb-2">
             <h2>All Books</h2>
         </div>
+            {isLoading && <Loader />}
             <div style={{ display: 'flex', borderRadius: 10, padding: 5, width: '100%' }}>
                 <div className='col-md-4'>
                     <CSidebar className='w-100 pe-3'>
@@ -746,36 +771,36 @@ const AllBook = () => {
                         </div>
                     </div>
                     <div className='camp-tab-cont'>
-                    <div
-                        className='nav nav-tabs'
-                        id='nav-tab'
-                        role='tablist'
-                    >
-                        <button
-                            className={`primary-btn ${book === 'search' && 'active'}`}
-                            id='edit-tab'
-                            data-bs-toggle='tab'
-                            data-bs-target='#edit'
-                            type='button'
-                            role='tab'
-                            aria-selected='true'
-                            onClick={() => setBook('search')}
+                        <div
+                            className='nav nav-tabs'
+                            id='nav-tab'
+                            role='tablist'
                         >
-                            Search Book
-                        </button>
-                        <button
-                            className={`primary-btn ${book === 'Register' && 'active'}`}
-                            id='review-tab'
-                            data-bs-toggle='tab'
-                            data-bs-target='#review'
-                            type='button'
-                            role='tab'
-                            aria-selected='false'
-                            onClick={() => setBook('Register')}
-                        >
-                            Register Book
-                        </button>
-                    </div>
+                            <button
+                                className={`primary-btn ${book === 'search' && 'active'}`}
+                                id='edit-tab'
+                                data-bs-toggle='tab'
+                                data-bs-target='#edit'
+                                type='button'
+                                role='tab'
+                                aria-selected='true'
+                                onClick={() => { setBook('search'); setSearchBookDetail({}); setSearchBookId(null) }}
+                            >
+                                Search Book
+                            </button>
+                            <button
+                                className={`primary-btn ${book === 'Register' && 'active'}`}
+                                id='review-tab'
+                                data-bs-toggle='tab'
+                                data-bs-target='#review'
+                                type='button'
+                                role='tab'
+                                aria-selected='false'
+                                onClick={() => setBook('Register')}
+                            >
+                                Register Book
+                            </button>
+                        </div>
                     </div>
                     {categories === 'Sub' && (<div>
                         {book === 'search' && <SearchBooks SearchBookList={SearchBookList}
@@ -790,6 +815,13 @@ const AllBook = () => {
                             setSearchBookFilter={setSearchBookFilter}
                             searchBooks={searchBooks} />}
                         {book === 'Register' && <RegisterBook AllBookList={AllBookList} setSearchBookFilter={setSearchBookFilter}
+                            setSideSubBookBarId={setSideSubBookBarId}
+                            setIconSubBookSet={setIconSubBookSet}
+                            setSideSubBarId={setSideSubBarId}
+                            setIconSubSet={setIconSubSet}
+                            setBookId={setBookId}
+                            setSideBarId={setSideBarId}
+                            setIconSet={setIconSet}
                             setSearchCurrentPage={setSearchCurrentPage}
                             setSearchBookId={setSearchBookId}
                             searchBookId={searchBookId}
@@ -800,10 +832,10 @@ const AllBook = () => {
                             setCategories={setCategories}
                             setDeleted={setDeleted}
                             setBook={setBook}
+                            book={book}
                             setSearchBooks={setSearchBooks}
                             searchBooks={searchBooks} />}
                     </div>)}
-
                 </div>}
                 <CModal
                     backdrop="static"

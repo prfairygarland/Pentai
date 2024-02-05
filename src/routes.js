@@ -86,6 +86,8 @@ const routes = [
   //{ Reward Management}
   { path: '/RouletteEventManagement', name: 'Roulette event Management', element: RouletteeventManagementListing },
 
+
+   // Operation Management
   {path:'/GreetingMessageManagement', name: 'Greeting Message Management', element: GreetingMessageManagement},
   {path: '/BannerManagement', name: 'Banner Management', element: BannerManagement},
   {path: '/HomeContentManagement', name: 'Home Content Management', element: HomeContentManagement},

@@ -1,22 +1,30 @@
 import { CButton, CCol, CFormInput, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle } from '@coreui/react'
 import { enqueueSnackbar } from 'notistack'
 import React, { useState } from 'react'
+import { useEffect } from 'react'
+import Loader from 'src/components/common/Loader'
+import { getApi, postApi } from 'src/utils/Api'
+import { API_ENDPOINT } from 'src/utils/config'
 
 const GreetingMessageManagement = () => {
 
+    const [isLoading, setIsLoading] = useState(false)
     const [inputList, setInputList] = useState([''])
-    const [value, setValue] = useState('')
     const [visible, setVisible] = useState(false)
+    const [GreetingMessages, setGreetingMessages] = useState([])
 
     const handleRemoveInput = (index) => {
-        const newList = [...inputList];
+        const newList = [...GreetingMessages];
         newList.splice(index, 1);
-        setInputList(newList)
+        setGreetingMessages(newList)
     }
 
+    console.log('inputList', inputList)
+    console.log('GreetingMessages', GreetingMessages)
+
     const handleAddInput = () => {
-        if (inputList.length < 5) {
-            setInputList([...inputList, ''])
+        if (GreetingMessages.length < 5) {
+            setGreetingMessages([...GreetingMessages, {description:''}])
         }
         else {
             enqueueSnackbar('You can’t create more than five', { variant: 'error' })
@@ -24,13 +32,16 @@ const GreetingMessageManagement = () => {
     }
 
     const handleInputChange = (index, value) => {
-        const newList = [...inputList];
-        newList[index] = value;
-        setInputList(newList)
+        // const newList = [...GreetingMessages];
+        const newList = GreetingMessages.map((obj, i) => index === i ? {...obj, description: value} : obj)
+        console.log(newList)
+        // newList[index] = value.substring(0, 40);
+        setGreetingMessages(newList)
     }
 
     const saveAllInputMessage = () => {
-        const value = inputList.every((input) => input.trim() !== '');
+        const value = GreetingMessages.every((input) => input.description.trim() !== '');
+        console.log('value', value)
         if (value) {
             setVisible(true)
         }
@@ -39,9 +50,58 @@ const GreetingMessageManagement = () => {
         }
     }
 
-    const handleSave = () =>{
+    const handleSave = () => {
+        handleCreateGreetingMessages()
         setVisible(false)
-        enqueueSnackbar('It has been saved', {variant: 'success'})
+
+    }
+
+
+    const handleGetGreetingMessages = async () => {
+        //  setIsLoading(true)
+        //  const url = 'http://192.168.9.175:3000/api/admin/Operation/greetingMessage'
+        try {
+            const response = await getApi('http://192.168.9.175:3000/api/admin/Operation/greetingMessage')
+            if (response?.status === 200) {
+                setGreetingMessages(response?.data)
+                setIsLoading(false)
+            }
+        } catch (error) {
+            console.log(error)
+            // setIsLoading(false)
+        }
+    }
+
+    useEffect(() => {
+        handleGetGreetingMessages()
+    }, [])
+
+    const handleCreateGreetingMessages = async () => {
+        setIsLoading(true)
+        let url = API_ENDPOINT.create_GreetingMessages
+
+        const des = GreetingMessages.map((item) => item.description)
+
+        const body = {
+            description: des
+        }
+
+        console.log('body', body)
+
+        try {
+            const response = await postApi('http://192.168.9.175:3000/api/admin/Operation/addGreeting', body)
+            if (response?.data?.status === 200) {
+                // enqueueSnackbar('Greeting message created successfully', {variant:'success'})
+                enqueueSnackbar('It has been saved', { variant: 'success' })
+                handleGetGreetingMessages()
+            }
+            else {
+                enqueueSnackbar('Failed to create Greeting message', { variant: 'error' })
+            }
+        } catch (error) {
+            console.log(error)
+        }
+        setIsLoading(false)
     }
 
     return (
@@ -49,20 +109,24 @@ const GreetingMessageManagement = () => {
             <div className='pageTitle mb-3 pb-2'>
                 <h2>Greeting Message Management</h2>
             </div>
+            {isLoading && <Loader />}
             <div className="formWraper mt-3">
                 <div className="form-outline form-white  d-flex ">
                     <div className="formWrpLabel">
-                        <label className="fw-bolder ">Greetings</label>
+                        <label className="fw-bolder ">Greeting Message</label>
                     </div>
                     <div className="formWrpInpt">
                         <div className="d-flex w-100 mt-4 flex-column">
                             <div className="prowordsection">
                                 <div className="d-flex flex-wrap">
                                     {inputList &&
-                                        inputList.map((value, index) => (
+                                        GreetingMessages.map((value, index) => (
                                             <div className="d-flex gap-3 w-100 m-2" key={index}>
-                                                <CFormInput type='text' placeholder='Enter the Message' value={value} onChange={(e) => handleInputChange(index, e.target.value)} />
-                                                {inputList.length > 1 && <button onClick={() => handleRemoveInput(index)}>
+                                                <CFormInput type='text' placeholder='Enter the Message' value={value.description} onChange={(e) => handleInputChange(index, e.target.value)} />
+                                                <span className="txt-byte-information">
+                                                    {value?.length ? value?.length : 0} / 40 byte
+                                                </span>
+                                                {GreetingMessages.length > 1 && <button onClick={() => handleRemoveInput(index)}>
                                                     <i className='icon-close'></i>
                                                 </button>}
                                             </div>
@@ -88,20 +152,20 @@ const GreetingMessageManagement = () => {
                 </CCol>
             </div>
             <CModal
-            visible={visible}
-            onClose={() => setVisible(false)}
+                visible={visible}
+                onClose={() => setVisible(false)}
             >
-            <CModalHeader>
-              <CModalTitle>React Modal title</CModalTitle>
-            </CModalHeader>
-            <CModalBody>
-              <p>Are you sure to save?</p>
-            </CModalBody>
-            <CModalFooter>
-              <CButton color="secondary">Close</CButton>
-              <CButton color="primary" onClick={handleSave}>Ok</CButton>
-            </CModalFooter>
-          </CModal>
+                <CModalHeader>
+                    <CModalTitle>React Modal title</CModalTitle>
+                </CModalHeader>
+                <CModalBody>
+                    <p>Are you sure to save?</p>
+                </CModalBody>
+                <CModalFooter>
+                    <CButton color="secondary">Close</CButton>
+                    <CButton color="primary" onClick={handleSave}>Ok</CButton>
+                </CModalFooter>
+            </CModal>
         </div>
     )
 }

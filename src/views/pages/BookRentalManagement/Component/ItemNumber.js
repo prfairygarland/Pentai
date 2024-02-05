@@ -31,10 +31,11 @@ const ItemNumber = ({ bookItemDetail, setIconSubSet, setIconSubBookSet, setSideS
     })
 
     useEffect(() => {
+        setIsLoading(true)
         if (bookItemId) {
             setData({
                 id: bookItemDetail.id,
-                ISBN: bookItemDetail?.SIBNCode ?  bookItemDetail?.SIBNCode : '',
+                ISBN: bookItemDetail?.SIBNCode ? bookItemDetail?.SIBNCode : '',
                 ItemNumber: bookItemDetail?.itemNumber ? bookItemDetail?.itemNumber : '',
                 title: bookItemDetail?.title ? bookItemDetail?.title : '',
                 author: bookItemDetail?.author ? bookItemDetail?.author : '',
@@ -44,9 +45,10 @@ const ItemNumber = ({ bookItemDetail, setIconSubSet, setIconSubBookSet, setSideS
                 RentalDuration: bookItemDetail?.rentableDurationWeek ? bookItemDetail?.rentableDurationWeek : '',
                 ExtendDuration: bookItemDetail?.extendDurationWeek ? bookItemDetail?.extendDurationWeek : '',
                 visibility: bookItemDetail?.visibility,
-                PointOfPickAndReturn: bookItemDetail?.pickUpAndReturn ?  bookItemDetail?.pickUpAndReturn  : '' ,
+                PointOfPickAndReturn: bookItemDetail?.pickUpAndReturn ? bookItemDetail?.pickUpAndReturn : '',
                 customSetting: bookItemDetail?.customSetting === 'no' ? false : true
             })
+            setIsLoading(false)
         }
         else {
             setData({
@@ -56,14 +58,15 @@ const ItemNumber = ({ bookItemDetail, setIconSubSet, setIconSubBookSet, setSideS
                 title: bookDisplay?.title,
                 author: bookDisplay?.author,
                 itemStatus: bookDisplay?.itemStatus,
-                itemRegDate: bookDisplay?.registeredDate,
-                itemImage: bookDisplay?.image,
+                itemRegDate: bookDisplay?.registeredDate ? bookDisplay?.registeredDate : '',
+                itemImage: bookDisplay?.image ? bookDisplay?.image : null,
                 RentalDuration: '',
                 ExtendDuration: '',
                 visibility: false,
-                PointOfPickAndReturn: bookItemDetail?.pickUpAndReturn ?  bookItemDetail?.pickUpAndReturn  : '',
+                PointOfPickAndReturn: bookItemDetail?.pickUpAndReturn ? bookItemDetail?.pickUpAndReturn : '',
                 customSetting: false
             })
+            setIsLoading(false)
         }
 
     }, [bookItemDetail, bookItemId, bookDisplay])
@@ -217,40 +220,40 @@ const ItemNumber = ({ bookItemDetail, setIconSubSet, setIconSubBookSet, setSideS
         }
 
 
-        if(data.title.trim() === ''){
+        if (data.title.trim() === '') {
             enqueueSnackbar('Please enter Book title', { variant: 'error' })
             return false
         }
-        if(data.ItemNumber === ''){
+        if (data.ItemNumber === '') {
             enqueueSnackbar('Please enter book item number', { variant: 'error' })
             return false
         }
-        if(data.author === ''){
+        if (data.author === '') {
             enqueueSnackbar('Please enter author name', { variant: 'error' })
             return false
         }
-        if(data.itemStatus === ''){
+        if (data.itemStatus === '') {
             enqueueSnackbar('Please enter item status', { variant: 'error' })
             return false
         }
-        if(data.itemRegDate === ''){
+        if (data.itemRegDate === '') {
             enqueueSnackbar('Please enter register date', { variant: 'error' })
             return false
         }
-        if(data.itemImage === null){
+        if (data.itemImage === null) {
             enqueueSnackbar('Please select item image', { variant: 'error' })
             return false
         }
-        if(data.customSetting){
-            if(data.RentalDuration < 1){
+        if (data.customSetting) {
+            if (data.RentalDuration < 1) {
                 enqueueSnackbar('Please enter valid renatl weeks', { variant: 'error' })
                 return false
             }
-            if(data.ExtendDuration < 1){
+            if (data.ExtendDuration < 1) {
                 enqueueSnackbar('Please enter valid extend weeks', { variant: 'error' })
                 return false
             }
-            if(data.PointOfPickAndReturn === ''){
+            if (data.PointOfPickAndReturn === '') {
                 enqueueSnackbar('Please enter point of pick and return', { variant: 'error' })
                 return false
             }
@@ -340,6 +343,9 @@ const ItemNumber = ({ bookItemDetail, setIconSubSet, setIconSubBookSet, setSideS
         setSideSubBookBarId(null)
     }
 
+    const imgUrl = data?.itemImage?.includes('https://ptkapi.experiencecommerce.com')
+    const imageProps = imgUrl ? { crossOrigin: 'anonymous' } : {}
+
     return (
         <div className='col-md-8'>
             {/* <h1>Item Number</h1> */}
@@ -347,10 +353,10 @@ const ItemNumber = ({ bookItemDetail, setIconSubSet, setIconSubBookSet, setSideS
                 {isLoading && <Loader />}
                 <div>
                     <div className='d-flex justify-content-between align-item-center mb-3'>
-                    <h4 className="me-3">Item Number</h4>
+                        <h4 className="me-3">Item Number</h4>
                         <CButton onClick={() => setdeleteVisible(true)} className='btn-black'>Delete</CButton>
                     </div>
-                  
+
                     <div className="card-body">
                         <div className="formWraper">
                             <div className="form-outline form-white   d-flex ">
@@ -437,7 +443,7 @@ const ItemNumber = ({ bookItemDetail, setIconSubSet, setIconSubBookSet, setSideS
                                     <div className="formWrpInpt d-flex">
                                         <div className="d-flex formradiogroup mb-2 gap-3 w-100">
                                             <CFormSelect
-                                                
+
                                                 // style={{ width: '170px' }}
                                                 name='itemStatus'
                                                 value={data.itemStatus}
@@ -463,7 +469,7 @@ const ItemNumber = ({ bookItemDetail, setIconSubSet, setIconSubBookSet, setSideS
                                     </div>
                                     <div className="formWrpInpt d-flex">
                                         <div className="d-flex formradiogroup mb-2 gap-3 w-100">
-                                            <DatePicker 
+                                            <DatePicker
                                                 value={data.itemRegDate}
                                                 minDate={new Date()}
                                                 onChange={handleChangeItemRegDate}
@@ -480,7 +486,7 @@ const ItemNumber = ({ bookItemDetail, setIconSubSet, setIconSubBookSet, setSideS
                                 </div>
                                 <div className="formWrpInpt d-flex">
                                     <div style={{ width: '180px', overflow: 'hidden', marginBottom: '5%' }} >
-                                        {data.itemImage ? <img alt='' src={data?.itemImage} style={{ height: '100%', width: '100%' }} /> : <img alt='' src='https://www.beelights.gr/assets/images/empty-image.png' style={{ height: '100%', width: '100%' }} />}
+                                        {data.itemImage ? <img alt='' {...imageProps} src={data?.itemImage} style={{ height: '100%', width: '100%' }} /> : <img alt='' src='https://www.beelights.gr/assets/images/empty-image.png' style={{ height: '100%', width: '100%' }} />}
                                         <input style={{ display: 'none' }} type="file" name="upload" accept=".png, .jpg, .jpeg" ref={inputRef} onChange={handleUpload} />
                                     </div>
                                     {/* <div className='ms-4'>
@@ -619,7 +625,7 @@ const ItemNumber = ({ bookItemDetail, setIconSubSet, setIconSubBookSet, setSideS
                     </CModalFooter>
                 </CModal>
             </div>
-       </div>
+        </div>
     )
 }
 

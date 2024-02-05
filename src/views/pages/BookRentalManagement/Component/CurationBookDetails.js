@@ -249,6 +249,9 @@ const CurationBookDetails = ({ bookId, setSideSubBookBarId, setIconSubBookSet, s
         setSideSubBarId(null)
     }
 
+    const imgUrl = bookData?.image?.includes('https://ptkapi.experiencecommerce.com')
+    const imageProps = imgUrl ? { crossOrigin: 'anonymous' } : {}
+
 
     return (
         <div style={{ width: '100%' }}>
@@ -342,7 +345,7 @@ const CurationBookDetails = ({ bookId, setSideSubBookBarId, setIconSubBookSet, s
                                 </div>
                                 <div className="formWrpInpt d-flex">
                                     <div style={{ width: '180px', overflow: 'hidden', marginBottom: '5%' }} >
-                                        {bookData.image !== null ? <img alt='' src={image ? image : bookData.image} style={{ height: '100%', width: '100%' }} /> : <img alt='' src='https://www.beelights.gr/assets/images/empty-image.png' style={{ height: '100%', width: '100%' }} />}
+                                        {bookData.image !== null ? <img alt='' {...imageProps} src={image ? image : bookData.image} style={{ height: '100%', width: '100%' }} /> : <img alt='' src='https://www.beelights.gr/assets/images/empty-image.png' style={{ height: '100%', width: '100%' }} />}
                                         <input style={{ display: 'none' }} type="file" name="upload" accept=".png, .jpg, .jpeg" ref={inputRef} onChange={handleUpload} />
                                     </div>
                                     <div className='ms-4'>

@@ -7,9 +7,9 @@ import { enqueueSnackbar } from 'notistack'
 const BookGenre = ({ library, setSideBarId, setSideSubBarId, setIconSubSet, libraryDetails, setIconSet, setDeleted, getALLBookgenre, setFilteredData, setCategories, genreId }) => {
 
     const [data, setData] = useState({
-        title: 'New',
+        title: '',
         code: '',
-        AssociiatedItems: '',
+        AssociiatedItems: 0,
         isVisible: true
     })
 
@@ -20,7 +20,6 @@ const BookGenre = ({ library, setSideBarId, setSideSubBarId, setIconSubSet, libr
     //To get the particular genre by its Id
     const getGenreById = async () => {
         if (genreId) {
-
             let url = `${API_ENDPOINT.get_GenreDetails}?id=${genreId}`
 
             const res = await getApi(url)
@@ -30,16 +29,16 @@ const BookGenre = ({ library, setSideBarId, setSideSubBarId, setIconSubSet, libr
                 setData({
                     title: res?.data.name,
                     code: res?.data.code ? res.data.code : '',
-                    AssociiatedItems: res?.data.associatedItem,
+                    AssociiatedItems: res?.data.associatedItem ? res?.data.associatedItem : 0,
                     isVisible: res.data.visibility === 'visible' ? true : false
                 })
             }
         }
         else {
             setData({
-                title: 'New',
+                title: '',
                 code: '',
-                AssociiatedItems: '',
+                AssociiatedItems: 0,
                 isVisible: true
             })
         }
@@ -54,10 +53,11 @@ const BookGenre = ({ library, setSideBarId, setSideSubBarId, setIconSubSet, libr
 
 
     const handleChangeTitle = (e) => {
+        const value = e.target.value.substring(0, 14)
         setData((prev) => {
             return {
                 ...prev,
-                title: e.target.value
+                title: value
             }
         })
     }
@@ -86,7 +86,7 @@ const BookGenre = ({ library, setSideBarId, setSideSubBarId, setIconSubSet, libr
         const body = {
             name: data.title ? data.title : '',
             code: data.code ? data.code : '',
-            associatedItem: data.AssociiatedItems ? data.AssociiatedItems : '',
+            associatedItem: data.AssociiatedItems ? data.AssociiatedItems : 0,
             visibility: data.isVisible === true ? 'visible' : 'hide',
             bookLibraryId: 1
         }
@@ -128,8 +128,8 @@ const BookGenre = ({ library, setSideBarId, setSideSubBarId, setIconSubSet, libr
     const handleDelete = async () => {
         let url = `${API_ENDPOINT.delete_genre}?id=`
 
-        const res = deleteApi(url, genreId)
-        if (res?.data?.status === 200) {
+        const res = await deleteApi(url, genreId)
+        if (res?.status === 200) {
             enqueueSnackbar('Genre deleted successfully', { variant: 'success' })
             setDeleted((prev) => prev + 1)
             setCategories('AllBooks')
@@ -137,9 +137,11 @@ const BookGenre = ({ library, setSideBarId, setSideSubBarId, setIconSubSet, libr
             setSideBarId(null)
             setIconSubSet(null)
             setSideSubBarId(null)
+            setdeleteVisible(false)
         }
         else {
             enqueueSnackbar('Failed to delete Genre', { variant: 'error' })
+            setdeleteVisible(false)
         }
 
     }
@@ -152,7 +154,7 @@ const BookGenre = ({ library, setSideBarId, setSideSubBarId, setIconSubSet, libr
             id: genreDetails.id ? genreDetails.id : genreId,
             name: data.title ? data.title : '',
             code: genreDetails.code ? genreDetails.code : 'New_002',
-            associatedItem: data.AssociiatedItems ? data.AssociiatedItems : '',
+            associatedItem: data.AssociiatedItems ? data.AssociiatedItems : 0,
             visibility: data.isVisible === true ? 'visible' : 'hide',
         }
         try {
@@ -211,9 +213,9 @@ const BookGenre = ({ library, setSideBarId, setSideSubBarId, setIconSubSet, libr
     return (
         <div style={{ width: '100%', borderRadius: '0' }}>
             <div className="card p-2">
-                
+
                 <div className=' w-100 d-flex justify-content-between align-item-center'>
-                <h4 className="me-3">Book Genre</h4>
+                    <h4 className="me-3">Book Genre</h4>
                     <CButton onClick={() => setdeleteVisible(true)} className=' btn-black'>Delete</CButton>
                 </div>
                 <div className="card-body px-0">
@@ -228,11 +230,14 @@ const BookGenre = ({ library, setSideBarId, setSideSubBarId, setIconSubSet, libr
                                 <div className="d-flex formradiogroup mb-2 gap-3">
                                     <CFormInput
                                         type="text"
-                                        placeholder="Library"
+                                        placeholder="Enter Name"
                                         name="title"
                                         value={data.title}
                                         onChange={handleChangeTitle}
                                     />
+                                    <span className="txt-byte-information">
+                                        {data.title?.length ? data.title?.length : 0} / 14 byte
+                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -302,7 +307,7 @@ const BookGenre = ({ library, setSideBarId, setSideSubBarId, setIconSubSet, libr
                 </div>
             </div>
             <div className='d-flex justify-content-center gap-3 my-3'>
-                 <CButton onClick={handleCancel} className='btn-black'>Cancel</CButton>
+                <CButton onClick={handleCancel} className='btn-black'>Cancel</CButton>
                 <CButton onClick={genreId ? handleUpdateGenre : handleCreateGenre}>Save</CButton>
             </div>
             <CModal

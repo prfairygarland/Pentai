@@ -169,9 +169,9 @@ export let API_ENDPOINT = {
   user_details: ALL_CONSTANTS.API_URL + "/admin/meeting/userDetail",
   reservation_details: ALL_CONSTANTS.API_URL + "/admin/meeting/reservationDetail",
   get_all_meeting_rooms: ALL_CONSTANTS.API_URL + "/admin/meeting/roomList",
-  get_all_meeting_rooms_records: ALL_CONSTANTS.API_URL + "/admin/meeting/allMeetingRoom", 
-  get_all_meeting_rooms_export: ALL_CONSTANTS.API_URL + "/admin/meeting/allExport", 
-   
+  get_all_meeting_rooms_records: ALL_CONSTANTS.API_URL + "/admin/meeting/allMeetingRoom",
+  get_all_meeting_rooms_export: ALL_CONSTANTS.API_URL + "/admin/meeting/allExport",
+
   create_meeting_building: ALL_CONSTANTS.API_URL + "/admin/meeting/building/create",
   get_meeting_building_details: ALL_CONSTANTS.API_URL + "/admin/meeting/buildingDetail",
   update_meeting_building: ALL_CONSTANTS.API_URL + "/admin/meeting/buildingUpdate",
@@ -190,8 +190,8 @@ export let API_ENDPOINT = {
 
   get_all_equipments: ALL_CONSTANTS.API_URL + "/admin/meeting/equipment/list",
   add_new_equipment: ALL_CONSTANTS.API_URL + "/admin/meeting/equipment/create",
-  
-  
+
+
 
   //{ Supply Rental Management}
 
@@ -239,7 +239,12 @@ export let API_ENDPOINT = {
 
   getLiveStreams: ALL_CONSTANTS.API_URL + "/api/admin/lounge/getLiveStreams",
   createLiveStream: ALL_CONSTANTS.API_URL + "/api/admin/lounge/createLiveStream",
-  addQuizQuestion: ALL_CONSTANTS.API_URL + "/api/admin/lounge/quizQuestion/add"
+  addQuizQuestion: ALL_CONSTANTS.API_URL + "/api/admin/lounge/quizQuestion/add",
+
+  //Operation Management
+  get_GreetingMessages: ALL_CONSTANTS.API_URL + "/admin/Operation/greetingMessage",
+  create_GreetingMessages: ALL_CONSTANTS.API_URL + "/admin/Operation/addGreeting",
+  delete_GreetingMessages: ALL_CONSTANTS.API_URL + "/admin/Operation/deleteGreeting"
 
 
 

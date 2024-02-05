@@ -9,8 +9,10 @@ import { cilLineWeight, cilList, cilListRich, cilLockUnlocked, cilMenu } from '@
 import moment from 'moment/moment'
 import DatePicker from 'react-date-picker'
 import { enqueueSnackbar } from 'notistack'
+import Loader from 'src/components/common/Loader'
 
 const BookRentalBanner = () => {
+    const [isLoading, setIsLoading] = useState(false)
     const [modalProps, setModalProps] = useState({})
     const [bannerSetting, setBannerSetting] = useState({})
     const [itemsPerPage, setItemsPerPage] = useState(5)
@@ -36,10 +38,16 @@ const BookRentalBanner = () => {
 
     const getBannerList = async () => {
         let url = `${API_ENDPOINT.get_bannerList}?limit=${itemsPerPage}&offset=${currentPage + 1}`
-
-        const res = await getApi(url)
-        if (res.status === 200) {
-            setbannerList(res?.data)
+           setIsLoading(true)
+        try {   
+            const res = await getApi(url)
+            if (res?.status === 200) {
+                setbannerList(res?.data)
+                setIsLoading(false)
+            }
+        } catch (error) {
+             console.log(error)
+             setIsLoading(false)
         }
 
     }
@@ -168,10 +176,13 @@ const BookRentalBanner = () => {
         }
     }
 
+    console.log('banner', linkToUrl)
+
     const saveClubBannerHandler = async () => {
+        setIsLoading(true)
         try {
             const formData = new FormData()
-            // formData.append('bannerCategoryId', bannerSetting?.id)
+            formData.append('bannerCategoryId', bannerSetting?.id)
             formData.append('title', bannerTitle)
             formData.append('image', uploadedBannerImage)
             formData.append('type', imageType)
@@ -222,11 +233,13 @@ const BookRentalBanner = () => {
                     bannerUpdateId ?
                         enqueueSnackbar('Banner Updated Successfully', { variant: 'success' }) :
                         enqueueSnackbar('Banner Added Successfully', { variant: 'success' })
+                        setIsLoading(false)
                 }
                 getBannerList()
             }
         } catch (error) {
             console.log(error)
+            setIsLoading(false)
         }
         setAddModifyClubBannerModal(false)
         setModalProps({
@@ -402,6 +415,7 @@ const BookRentalBanner = () => {
 <div className="pageTitle mb-3 pb-2">
       <h2>Book Rental Banner</h2>
     </div>
+         {isLoading && <Loader />}
             <header>
                 <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around', border: '1px', width: '100%', height: '20%', background: '#ccc' }}>
                     <div>

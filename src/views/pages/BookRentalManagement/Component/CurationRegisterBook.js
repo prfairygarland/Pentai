@@ -5,6 +5,7 @@ import { API_ENDPOINT } from 'src/utils/config';
 import { imageUrl } from '../BookRentalStatus';
 import { useCallback } from 'react';
 import { enqueueSnackbar } from 'notistack';
+import Loader from 'src/components/common/Loader';
 
 const CurationRegisterBook = ({ setDeleted, setSearchBookFilter, setSearchCurrentPage, setIconSet, setSideBarId, setCategoryID, searchBookId, categoryID, subCategoryID, setCurationSearchBookDetail, searchCurationBookDetail, setCategories, searchBooks, setCurationBook, setSearchBooks }) => {
     const [RegisteredData, setRegisteredData] = useState({
@@ -19,6 +20,7 @@ const CurationRegisterBook = ({ setDeleted, setSearchBookFilter, setSearchCurren
         description: '',
         image: null
     })
+    const [isLoading, setIsLoading] = useState(false)
     const [image, setImage] = useState(null);
     const inputRef = useRef(null)
     const [genre, setGenre] = useState();
@@ -28,31 +30,17 @@ const CurationRegisterBook = ({ setDeleted, setSearchBookFilter, setSearchCurren
     const [filterBook, setFilterBook] = useState()
 
     useEffect(() => {
-        if (searchCurationBookDetail) {
             setRegisteredData({
                 bookgenre: RegisteredData.bookgenre,
                 categoryID: RegisteredData.categoryID,
                 subCategoryID: RegisteredData.subCategoryID,
                 title: searchCurationBookDetail?.title ? searchCurationBookDetail?.title : '',
                 Author: searchCurationBookDetail?.authors ? searchCurationBookDetail?.authors[0] : '',
-                ISBN: searchCurationBookDetail?.industryIdentifiers ? searchCurationBookDetail?.industryIdentifiers[0].identifier.replace('/[^0-9]/g', '') : '',
+                ISBN: searchCurationBookDetail?.industryIdentifiers ? (searchCurationBookDetail?.industryIdentifiers[0]?.type === "ISBN_13" ? searchCurationBookDetail?.industryIdentifiers[0]?.identifier : '' ) : '',
                 description: searchCurationBookDetail?.description ? searchCurationBookDetail.description : '',
                 image: searchCurationBookDetail?.imageLinks ? searchCurationBookDetail?.imageLinks.thumbnail : null,
             })
-        }
-        else {
-            setRegisteredData({
-                bookgenre: '',
-                ISBN: '',
-                title: '',
-                Author: '',
-                categoryID: '',
-                subCategoryID: '',
-                description: '',
-                image: null
-            })
-        }
-    }, [searchCurationBookDetail])
+        }, [searchCurationBookDetail, searchBookId])
 
 
 
@@ -158,20 +146,28 @@ const CurationRegisterBook = ({ setDeleted, setSearchBookFilter, setSearchCurren
 
 
     useEffect(() => {
-        const getBookGenreData = async () => {
-            const res = await getApi(API_ENDPOINT.get_genre_list)
-            if (res?.status === 200) {
-                const data = await res?.data?.map((op) => {
-                    return { 'label': op?.name, 'value': op?.id }
 
-                })
-                setGenre(data)
-                setRegisteredData((prev) => {
-                    return {
-                        ...prev,
-                        bookgenre: data[0].value.toString()
-                    }
-                })
+        const getBookGenreData = async () => {
+            setIsLoading(true)
+            try {      
+                const res = await getApi(API_ENDPOINT.get_genre_list)
+                if (res?.status === 200) {
+                    const data = await res?.data?.map((op) => {
+                        return { 'label': op?.name, 'value': op?.id }
+    
+                    })
+                    setIsLoading(false)
+                    setGenre(data)
+                    setRegisteredData((prev) => {
+                        return {
+                            ...prev,
+                            bookgenre: data[0].value.toString()
+                        }
+                    })
+                }
+            } catch (error) {
+                console.log(error)
+                setIsLoading(false)
             }
         }
         getBookGenreData()
@@ -236,6 +232,12 @@ const CurationRegisterBook = ({ setDeleted, setSearchBookFilter, setSearchCurren
             const res = await postApi(url, formData)
             setPostImage(res?.data?.processedImageUrls[0]?.imageUrl)
         }
+        setRegisteredData((prev) =>{
+            return {
+                ...prev,
+                image: (imageUrl + postImage)
+            }
+        })
 
     }
 
@@ -311,6 +313,7 @@ const CurationRegisterBook = ({ setDeleted, setSearchBookFilter, setSearchCurren
 
     return (
         <div style={{ marginTop: '2%' }}>
+            {isLoading && <Loader />}
             <table border="1" className="table table-bordered mt-3">
                 <thead>
                     <tr>

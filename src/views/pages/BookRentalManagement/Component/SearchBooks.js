@@ -35,13 +35,12 @@ const SearchBooks = ({ searchBooks,
 
     const PostData = (id) => {
         setBook('Register')
-
         setSearchBookId(id)
     }
 
 
     const handlePageChange = (selectedPage) => {
-        setSearchCurrentPage(selectedPage.selected)
+        setSearchCurrentPage(selectedPage?.selected)
     }
 
     const paginationsearch = [
@@ -75,7 +74,7 @@ const SearchBooks = ({ searchBooks,
                                         <table className="table table-bordered">
                                             <tr>
                                                 <td>ISBN</td>
-                                                <td>{item?.industryIdentifiers ? item?.industryIdentifiers[0]?.identifier : 'NA'}</td>
+                                                <td>{item?.industryIdentifiers ? ((item?.industryIdentifiers[0]?.type === 'ISBN_13' ||item?.industryIdentifiers[0]?.type === 'ISBN_10') ? item?.industryIdentifiers[0]?.identifier : 'NA') : 'NA'}</td>
                                             </tr>
                                             <tr>
                                                 <td>Book Title</td>
