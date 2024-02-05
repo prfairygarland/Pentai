@@ -665,16 +665,16 @@ const AllMeetingRooms = () => {
           aria-labelledby="StaticBackdropExampleLabel"
         >
           <CModalHeader>
-            <CModalTitle id="StaticBackdropExampleLabel">{multiLangObj?.deleteBoard}</CModalTitle>
+            <CModalTitle id="StaticBackdropExampleLabel">{multiLangObj?.deleteRoom}</CModalTitle>
           </CModalHeader>
           <CModalBody>
             <p>{multiLangObj?.areYouSureToDeleteRoom}</p>
           </CModalBody>
           <CModalFooter>
-            <CButton color="secondary" onClick={() => (setDeleteVisible(false), deleteRoom())}>
+            <CButton color="primary" onClick={() => (setDeleteVisible(false), deleteRoom())}>
               {multiLangObj?.delete}
             </CButton>
-            <CButton color="primary" onClick={() => setDeleteVisible(false)}>
+            <CButton color="secondary" onClick={() => setDeleteVisible(false)}>
               {multiLangObj?.cancel}
             </CButton>
           </CModalFooter>

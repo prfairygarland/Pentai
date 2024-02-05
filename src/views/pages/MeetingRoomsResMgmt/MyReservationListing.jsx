@@ -16,8 +16,10 @@ import { ALL_CONSTANTS, API_ENDPOINT } from 'src/utils/config'
 import moment from 'moment/moment'
 import ReactPaginate from 'react-paginate'
 import { paginationItemPerPageOptions } from 'src/utils/constant'
+import Loader from 'src/components/common/Loader'
 
 const MyReservationListing = () => {
+  const [isLoading, setIsLoading] = useState(false)
   const [meetingData, setMeetingData] = useState('')
   const [filterObj, setFilterObj] = useState({})
   const [searchTxt, setSearchTxt] = useState('')
@@ -247,6 +249,7 @@ const MyReservationListing = () => {
   }
 
   const getMeetingList = async () => {
+    setIsLoading(true)
     let url = API_ENDPOINT.meeting_lists
     url += `?pageNo=${currentPage + 1}&pageSize=${itemsPerPage}&myReservationsOnly=1`
     console.log('filterObj?.buildingId :: ', filterObj?.buildingId)
@@ -281,6 +284,8 @@ const MyReservationListing = () => {
       }
     } catch (error) {
       console.log(error)
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -289,10 +294,17 @@ const MyReservationListing = () => {
   }, [itemsPerPage, currentPage, filterObj])
 
   useEffect(() => {
+    if (searchTxt === '') {
+      getMeetingList()
+    }
+  }, [searchTxt])
+
+  useEffect(() => {
     getBuildings()
   }, [])
   return (
     <>
+      {isLoading && <Loader />}
       <div className="mb-3 d-flex justify-content-end">
         <DatePicker
           value={filterObj?.searchStartDate}
