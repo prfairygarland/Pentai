@@ -5,9 +5,9 @@ import { enqueueSnackbar } from 'notistack';
 import React, { useRef, useState } from 'react'
 import DatePicker from 'react-date-picker';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Loader from 'src/components/common/Loader'
-import { postApi } from 'src/utils/Api';
+import { postApi, putApi } from 'src/utils/Api';
 import ConfirmationModal from 'src/utils/ConfirmationModal';
 import { API_ENDPOINT } from 'src/utils/config';
 
@@ -20,6 +20,7 @@ const LiveRegistration = () => {
 
 
   const navigate = useNavigate()
+  const location = useLocation()
   const [isLoading, setIsLoading] = useState(false)
   const [activeTab, setActiveTab] = useState('');
   const inputRef = useRef(null)
@@ -54,6 +55,8 @@ const LiveRegistration = () => {
   const [currentQuizeIndex, setCurrentQuizeIndex] = useState(null)
   const [rewardPoints, setRewardPoints] = useState(null)
 
+
+  console.log('test =>', location?.state?.streamId)
 
   const handleTimeInputChange = (e) => {
     const sanitizedValue = e.target.value.replace(/[^0-9]/g, '');
@@ -220,6 +223,8 @@ const LiveRegistration = () => {
       console.error('Error fetching data:', error);
     }
   };
+
+
 
   const handleLiveRegisterStartDate = (event) => {
     let d = new Date(event),
@@ -494,8 +499,8 @@ const LiveRegistration = () => {
 
   const resetQuiz = async () => {
     setQuizQuestion('')
-    setSelectedRadio(null)
-    setAnswerSelectedRadio(null)
+    setSelectedRadio('trueOrFalse')
+    setAnswerSelectedRadio(true)
     setUploadedImages([])
     setInputValues([{ value: '', answer: true }])
     setShortAnswer('')
@@ -602,14 +607,111 @@ const LiveRegistration = () => {
   }
 
   const saveQuizRegistration = async () => {
-    console.log('quizeToggle =>', quizToggle);
     console.log('mainQuizs =>', mainQuizs)
-    console.log('rewardPointsToggle =>', rewardPointsToggle);
-    console.log('rewardPoints =>', rewardPoints)
+    try {
+      // let data = {
+      //   streamId: location?.state?.streamId,
+      //   quizRewardPoints: rewardPoints !== null ? rewardPoints : 0,
+      //   quizRewardType: rewardPointsCheckBox === true ? 'sharedByAll' : 'givenToAll'
+      // }
+      // console.log('form data =>', data);
+
+      // const responce = await putApi(API_ENDPOINT.updateQuizInfo, data)
+      // console.log(' new =>', responce)
+
+      console.log('test', mainQuizs);
+
+
+
+      for (let obj in mainQuizs) {
+        const formData = new FormData()
+        console.log('obj', mainQuizs[obj].question);
+        formData.append('streamId', location?.state?.streamId)
+        formData.append('title', mainQuizs[obj].question)
+        formData.append('type', mainQuizs[obj].type)
+        formData.append('timeLimitSeconds', mainQuizs[obj].countDownTime)
+        formData.append('order', obj)
+
+
+        console.log('mainQuizs[obj].options =>', mainQuizs[obj].options);
+        if (mainQuizs[obj].type === 'shortAnswer') {
+          formData.append(`options[${0}][title]`, mainQuizs[obj].options)
+          formData.append(`options[${0}][isCorrect]`, 1)
+
+        } else {
+          for (let i in mainQuizs[obj].options) {
+            console.log('i =>', mainQuizs[obj].options[i]);
+            if (mainQuizs[obj].type === 'trueOrFalse') {
+              formData.append(`options[${i}][title]`, mainQuizs[obj].options[i].title)
+              if (mainQuizs[obj].isCorrect === true) {
+                formData.append(`options[${i}][isCorrect]`, 1)
+              } else {
+                formData.append(`options[${i}][isCorrect]`, 0)
+              }
+            } else if (mainQuizs[obj].type === 'imageMultipleChoice') {
+              // images.push(mainQuizs[obj].options[i].image)
+              formData.append(`options[${i}][title]`, mainQuizs[obj].options[i].title)
+              if (mainQuizs[obj].options[i].value === true) {
+                formData.append(`options[${i}][isCorrect]`, 1)
+              } else {
+                formData.append(`options[${i}][isCorrect]`, 0)
+              }
+              formData.append('images', mainQuizs[obj].options[i].image)
+
+            } else if (mainQuizs[obj].type === 'multipleChoice') {
+              formData.append(`options[${i}][title]`, mainQuizs[obj].options[i].value)
+              if (mainQuizs[obj].options[i].answer === true) {
+                formData.append(`options[${i}][isCorrect]`, 1)
+              } else {
+                formData.append(`options[${i}][isCorrect]`, 0)
+              }
+            }
+          }
+        }
+
+        console.log('form data =>', formData);
+
+        const res = await postApi(API_ENDPOINT.addQuizQuestion, formData)
+        console.log(' new =>', res)
+      }
+
+
+
+
+      // console.log('form data =>', formData);
+      // const res = await postApi(API_ENDPOINT.createLiveStream, formData)
+      // console.log(' new =>', res)
+      // if (res.status === 200) {
+      //   if (res?.data?.status === 500) {
+      //     enqueueSnackbar(res?.data?.msg, { variant: 'error' })
+      //   } else {
+      //     enqueueSnackbar('LiveStream Added Successfully', { variant: 'success' })
+      //     navigateToList()
+      //   }
+      // }
+    } catch (error) {
+      console.log(error)
+    }
+    setModalProps({
+      isModalOpen: false
+    })
+
   }
+
 
   const navigateToList = async () => {
     navigate('/LiveManagement')
+  }
+
+  console.log('location 1=>', location?.state?.streamId);
+
+  const quizCheck = async () => {
+    if (location?.state?.streamId !== undefined) {
+      handleTabClick('Quiz')
+    } else {
+      enqueueSnackbar('Add live stream first.', { variant: 'error' })
+    }
+    console.log('location 2=>', location?.state?.streamId);
   }
 
   return (
@@ -617,9 +719,9 @@ const LiveRegistration = () => {
       {isLoading && <Loader />}
       <ConfirmationModal modalProps={modalProps} />
       <main>
-      <div className="pageTitle mb-3 pb-2">
-      <h2>Live Registration</h2>
-      </div>
+        <div className="pageTitle mb-3 pb-2">
+          <h2>Live Registration</h2>
+        </div>
         {/* edit only  */}
 
 
@@ -633,6 +735,8 @@ const LiveRegistration = () => {
           </div>
 
         </div>
+
+        {location?.state?.streamId !== undefined &&
         <div className="d-flex justify-content-between p-3 h-100 w-100 bg-light rounded mt-2 mb-4">
           <div className="align-items-center align-items-center">
             <p className="fw-medium me-3" style={{ 'white-space': 'nowrap' }}>
@@ -670,6 +774,7 @@ const LiveRegistration = () => {
           </div>
 
         </div>
+        }
 
 
         {/* edit only */}
@@ -683,7 +788,7 @@ const LiveRegistration = () => {
                 </CNavLink>
               </CNavItem>
               <CNavItem>
-                <CNavLink role='button' className={activeTab === 'Quiz' ? 'active' : ''} onClick={() => handleTabClick('Quiz')}>{multiLang?.LiveManagementRegistrationLive?.Quiz}</CNavLink>
+                <CNavLink role='button' className={activeTab === 'Quiz' ? 'active' : ''} onClick={() => quizCheck()}>{multiLang?.LiveManagementRegistrationLive?.Quiz}</CNavLink>
               </CNavItem>
             </CNav>
           </div>
@@ -727,7 +832,7 @@ const LiveRegistration = () => {
                           <div>
                             <div className="formWrpInpt d-flex w-100 flex-column">
                               <div className="d-flex formradiogroup mb-2 gap-1 w-100">
-                                <DatePicker value={liveRegisterStartDate} format='DD/MM/YYYY'
+                                <DatePicker value={liveRegisterStartDate}
                                   onChange={(event) => handleLiveRegisterStartDate(event)}
                                 />
                                 <input
@@ -739,7 +844,7 @@ const LiveRegistration = () => {
                                   onChange={(e) => liveRegisterStartTimeHandler(e)}
                                 />
                               </div>
-                            
+
                               <p>{multiLang?.LiveManagementRegistrationLive?.Scheduled_start_time_msg}</p>
                             </div>
                           </div>
@@ -755,7 +860,7 @@ const LiveRegistration = () => {
                           <div className='w-100'>
                             <div className="formWrpInpt d-flex w-100 flex-column">
                               <div className="d-flex formradiogroup mb-2 gap-1 w-100">
-                                <DatePicker value={liveRegisterEndDate} format='DD/MM/YYYY'
+                                <DatePicker value={liveRegisterEndDate}
                                   onChange={(event) => handleLiveRegisterEndDate(event)} />
                                 <input
                                   type="time"
@@ -766,7 +871,7 @@ const LiveRegistration = () => {
                                   onChange={(e) => liveRegisterEndTimeHandler(e)}
                                 />
                               </div>
-                           
+
                               <p>{multiLang?.LiveManagementRegistrationLive?.Scheduled_end_time_msg}</p>
                             </div>
                           </div>
@@ -781,7 +886,7 @@ const LiveRegistration = () => {
                         </div>
                         <div className="upload-image-main-container">
                           <div className="upload-img-btn-and-info gap-1 flex-column">
-                          <div className="upload-container-guidance">
+                            <div className="upload-container-guidance">
                               <div className="file-information">
                                 <ul>
                                   <li>- {multiLang?.LiveManagementRegistrationLive?.Image_size}</li>
@@ -801,7 +906,7 @@ const LiveRegistration = () => {
                             </div>
                             {selectedImage ? (
                               <div className="uploadImgWrap">
-                                <i className="icon-close" onClick={() => setSelectedImage('')} style={{cursor:'pointer'}} />
+                                <i className="icon-close" onClick={() => setSelectedImage('')} style={{ cursor: 'pointer' }} />
                                 <div>
                                   <img src={URL.createObjectURL(selectedImage)} alt="" />
                                 </div>
@@ -814,7 +919,7 @@ const LiveRegistration = () => {
                               </label>
 
                             )}
-                           
+
                           </div>
                         </div>
                       </div>
@@ -914,7 +1019,11 @@ const LiveRegistration = () => {
                 </div>
               </div>
               <div className='d-flex justify-content-center gap-3 my-3'>
+
+                {location?.state?.streamId !== undefined &&
                 <CButton onClick={() => navigateToList()} >{multiLang?.LiveManagementRegistrationLive?.list}</CButton>
+                }
+
                 <CButton onClick={confirmationCloseModalHandler} className='btn-black'>{multiLang?.LiveManagementRegistrationLive?.Cancel}</CButton>
                 <CButton onClick={validateLiveRegister}>{multiLang?.LiveManagementRegistrationLive?.Save}</CButton>
               </div>
@@ -1032,9 +1141,11 @@ const LiveRegistration = () => {
                   </div>
                 </div>
               </div>
-              <div 
-              className='d-flex justify-content-center align-items-center gap-3 my-3'>
+              <div
+                className='d-flex justify-content-center align-items-center gap-3 my-3'>
+                {location?.state?.streamId !== undefined &&
                 <CButton onClick={() => navigateToList()} >{multiLang?.LiveManagementRegistrationLive?.list}</CButton>
+                }
                 <CButton onClick={confirmationCloseModalHandler} className='btn-black'>{multiLang?.LiveManagementRegistrationQuiz?.Cancel}</CButton>
                 <CButton onClick={() => validateAllRegistration()}>{multiLang?.LiveManagementRegistrationQuiz?.Save}</CButton>
               </div>
@@ -1342,11 +1453,11 @@ const LiveRegistration = () => {
                                   {selectedRadio === 'trueOrFalse' &&
                                     <div className='gap-2 mt-3 d-flex justify-content-center gap-3'>
                                       <div className='trueFlaseBtn d-flex justify-content-center align-items-center'>
-                                      <CFormCheck className='ms-2' button={{ color: 'secondary' }} type="radio" name="options" id="option3" autoComplete="off" label="True" disabled />
+                                        <CFormCheck className='ms-2' button={{ color: 'secondary' }} type="radio" name="options" id="option3" autoComplete="off" label="True" disabled />
                                       </div>
-                                     <div className='trueFlaseBtn d-flex justify-content-center align-items-center'>
-                                     <CFormCheck button={{ color: 'secondary' }} type="radio" name="options" id="option3" autoComplete="off" label="False" disabled />
-                                     </div>
+                                      <div className='trueFlaseBtn d-flex justify-content-center align-items-center'>
+                                        <CFormCheck button={{ color: 'secondary' }} type="radio" name="options" id="option3" autoComplete="off" label="False" disabled />
+                                      </div>
                                     </div>
                                   }
                                   {selectedRadio === 'imageMultipleChoice' &&

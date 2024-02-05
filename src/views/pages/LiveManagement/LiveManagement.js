@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import DatePicker from 'react-date-picker'
 import { useTranslation } from 'react-i18next'
 import ReactPaginate from 'react-paginate'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 import Loader from 'src/components/common/Loader'
 import ReactTable from 'src/components/common/ReactTable'
 import { getApi } from 'src/utils/Api'
@@ -30,6 +30,8 @@ const LiveManagement = () => {
   const [totalPages, setTotalPages] = useState(0)
   const [itemsPerPage, setItemsPerPage] = useState(10)
   const [liveStreamsData, setLiveStreamsData] = useState([])
+  const navigate = useNavigate();
+
 
   const perPageValue = [
     { label: '10', value: 10 },
@@ -59,7 +61,7 @@ const LiveManagement = () => {
           <img
             crossOrigin="anonymous"
             style={{ width: '150px', height: '100px' }}
-            src={ALL_CONSTANTS.BASE_URL + row.original.background}
+            src={ALL_CONSTANTS.BASE_URL + '/' + row.original.background}
             alt=""
           />
         </div>
@@ -74,7 +76,7 @@ const LiveManagement = () => {
     {
       Header: multiLang?.LiveManagement?.Title,
       accessor: 'title',
-      Cell: ({ row }) => <p> {row.original.title ? row.original.title : '-'}</p>
+      Cell: ({ row }) => <p onClick={() => viewHandler(row.original.id)}> {row.original.title ? row.original.title : '-'}</p>
     },
     {
       Header: multiLang?.LiveManagement?.Scheduled_start_time,
@@ -117,6 +119,14 @@ const LiveManagement = () => {
     }
 
   ], [currentPage, itemsPerPage])
+
+  const viewHandler = (id) => {
+    navigate("./LiveRegistration", {
+      state: {
+        streamId: id
+      }
+    })
+  }
 
   const getLiveStreamsData = async () => {
     setIsLoading(true)
@@ -230,9 +240,9 @@ const LiveManagement = () => {
   }
 
   return (
-    
+
     <div className='mb-5'>
-   
+
       {isLoading && <Loader />}
       <main>
       <div className="pageTitle mb-3 pb-2">
