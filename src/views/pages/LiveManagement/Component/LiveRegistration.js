@@ -2,22 +2,19 @@ import { cilAudio, cilCircle, cilHamburgerMenu, cilImage, cilRectangle, cilX } f
 import CIcon from '@coreui/icons-react';
 import { CButton, CCard, CCardBody, CCardText, CCardTitle, CFormCheck, CFormInput, CFormSelect, CFormSwitch, CFormTextarea, CImage, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CNav, CNavItem, CNavLink } from '@coreui/react';
 import { enqueueSnackbar } from 'notistack';
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import DatePicker from 'react-date-picker';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Loader from 'src/components/common/Loader'
-import { postApi, putApi } from 'src/utils/Api';
+import { getApi, postApi, putApi } from 'src/utils/Api';
 import ConfirmationModal from 'src/utils/ConfirmationModal';
-import { API_ENDPOINT } from 'src/utils/config';
+import { ALL_CONSTANTS, API_ENDPOINT } from 'src/utils/config';
 
 const LiveRegistration = () => {
-
-
   const { t, i18n } = useTranslation();
   const translationObject = i18n.getDataByLanguage(i18n.language);
   const multiLang = translationObject?.translation
-
 
   const navigate = useNavigate()
   const location = useLocation()
@@ -25,6 +22,7 @@ const LiveRegistration = () => {
   const [activeTab, setActiveTab] = useState('');
   const inputRef = useRef(null)
   const [modalProps, setModalProps] = useState({})
+  const [liveStatus, setLiveStatus] = useState('')
   const [liveRegisterTitle, setLiveRegisterTitle] = useState('')
   const [liveRegisterStartDate, setLiveRegisterStartDate] = useState('')
   const [liveRegisterStartHours, setLiveRegisterStartHours] = useState('')
@@ -54,9 +52,6 @@ const LiveRegistration = () => {
   const [mainQuizs, setMainQuizs] = useState([])
   const [currentQuizeIndex, setCurrentQuizeIndex] = useState(null)
   const [rewardPoints, setRewardPoints] = useState(null)
-
-
-  console.log('test =>', location?.state?.streamId)
 
   const handleTimeInputChange = (e) => {
     const sanitizedValue = e.target.value.replace(/[^0-9]/g, '');
@@ -173,12 +168,7 @@ const LiveRegistration = () => {
       if (secret !== null) {
         formData.append('password', secret)
       }
-      // formData.append('description', participateToggle)
-      // formData.append('description', secretToggle)
-
       console.log('form data =>', formData);
-
-
       const res = await postApi(API_ENDPOINT.createLiveStream, formData)
       console.log(' new =>', res)
       if (res.status === 200) {
@@ -703,16 +693,88 @@ const LiveRegistration = () => {
     navigate('/LiveManagement')
   }
 
-  console.log('location 1=>', location?.state?.streamId);
-
   const quizCheck = async () => {
     if (location?.state?.streamId !== undefined) {
       handleTabClick('Quiz')
     } else {
       enqueueSnackbar('Add live stream first.', { variant: 'error' })
     }
-    console.log('location 2=>', location?.state?.streamId);
   }
+
+  const getStreamDetails = async () => {
+    try {
+      let url = `${API_ENDPOINT.getStreamDetails}?streamId=${location?.state?.streamId}`
+      const res = await getApi(url)
+      console.log(res)
+      if (res.status === 200) {
+        setLiveStatus(res?.data?.status)
+        setLiveRegisterTitle(res?.data?.title)
+        // console.log(new Date(res?.data?.scheduledAt))
+
+        let startDateTime = new Date(res?.data?.scheduledAt),
+          startMonth = '' + (startDateTime.getMonth() + 1),
+          startDay = '' + startDateTime.getDate(),
+          startYear = startDateTime.getFullYear()
+        if (startMonth.length < 2) startMonth = '0' + startMonth
+        if (startDay.length < 2) startDay = '0' + startDay
+        setLiveRegisterStartDate([startYear, startMonth, startDay].join('-'))
+        if (startDateTime.getHours() < 10) {
+          setLiveRegisterStartHours('0' + (startDateTime.getHours()))
+        } else {
+          setLiveRegisterStartHours(startDateTime.getHours())
+        }
+        if (startDateTime.getMinutes() < 10) {
+          setLiveRegisterStartMins('0' + startDateTime.getMinutes())
+        } else {
+          setLiveRegisterStartMins(startDateTime.getMinutes())
+        }
+
+        let endDateTime = new Date(res?.data?.scheduledUpto),
+            endMonth = '' + (endDateTime.getMonth() + 1),
+            endDay = '' + endDateTime.getDate(),
+            endYear = endDateTime.getFullYear()
+        if (endMonth.length < 2) endMonth = '0' + endMonth
+        if (endDay.length < 2) endDay = '0' + endDay
+        setLiveRegisterEndDate([endYear, endMonth, endDay].join('-'))
+        if (endDateTime.getHours() < 10) {
+          setLiveRegisterEndHours('0' + (endDateTime.getHours()))
+        } else {
+          setLiveRegisterEndHours(endDateTime.getHours())
+        }
+        if (endDateTime.getMinutes() < 10) {
+          setLiveRegisterEndMins('0' + endDateTime.getMinutes())
+        } else {
+          setLiveRegisterEndMins(endDateTime.getMinutes())
+        }
+        const image = await urlToFile(res?.data?.background)
+        setSelectedImage(image)
+
+        setParticipateToggle(res?.data?.participationRewardPoints !== 0)
+        setPoints(res?.data?.participationRewardPoints)
+        setDescription(res?.data?.content)
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  async function urlToBlob(url) {
+    const response = await fetch(url)
+    const blob = await response.blob()
+    return blob
+  }
+
+  const urlToFile = async (url) => {
+    const blob = await urlToBlob(ALL_CONSTANTS.BASE_URL + "/" + url)
+    const fileName = url
+    return new File([blob], fileName, { type: blob.type })
+  }
+
+  useEffect(() => {
+    if (location?.state?.streamId !== undefined) {
+      getStreamDetails()
+    }
+  }, [])
 
   return (
     <div className='mb-5'>
@@ -727,7 +789,7 @@ const LiveRegistration = () => {
 
         <div className="d-flex justify-content-between align-items-center">
           <div>
-            <p>{multiLang?.LiveManagementRegistrationLive?.liveDetails}</p>
+            <p>{multiLang?.LiveManagementRegistrationLive?.liveDetails} [{liveStatus}]</p>
           </div>
           <div className='d-flex gap-3'>
             <CButton >{multiLang?.LiveManagementRegistrationLive?.console}  <CIcon icon={cilAudio}></CIcon> </CButton>

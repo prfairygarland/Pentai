@@ -76,7 +76,7 @@ const LiveManagement = () => {
     {
       Header: multiLang?.LiveManagement?.Title,
       accessor: 'title',
-      Cell: ({ row }) => <p onClick={() => viewHandler(row.original.id)}> {row.original.title ? row.original.title : '-'}</p>
+      Cell: ({ row }) => <p style={{ cursor: 'pointer' }} onClick={() => viewHandler(row.original.id)}> {row.original.title ? row.original.title : '-'}</p>
     },
     {
       Header: multiLang?.LiveManagement?.Scheduled_start_time,
