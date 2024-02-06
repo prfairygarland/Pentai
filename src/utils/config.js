@@ -244,9 +244,15 @@ export let API_ENDPOINT = {
 
 
   //Operation Management
-  get_GreetingMessages: ALL_CONSTANTS.API_URL + "/admin/Operation/greetingMessage",
-  create_GreetingMessages: ALL_CONSTANTS.API_URL + "/admin/Operation/addGreeting",
-  delete_GreetingMessages: ALL_CONSTANTS.API_URL + "/admin/Operation/deleteGreeting"
+  get_GreetingMessages: ALL_CONSTANTS.API_URL + "/api/admin/Operation/greetingMessage",
+  create_GreetingMessages: ALL_CONSTANTS.API_URL + "/api/admin/Operation/addGreeting",
+  delete_GreetingMessages: ALL_CONSTANTS.API_URL + "/api/admin/Operation/deleteGreeting",
+  get_OperationMangementBannerLis : ALL_CONSTANTS.API_URL + "/api/admin/Operation/getBannerList",
+  get_OperationMangementAutoSlide: ALL_CONSTANTS.API_URL + "/api/admin/Operation/autoSlideBanner",
+  update_OperationManagementAutoSlide: ALL_CONSTANTS.API_URL + "/api/admin/Operation/updateAutoSlide",
+  delete_OperationManagementBanner: ALL_CONSTANTS.API_URL + "/api/admin/Operation/deleteBanner",
+  create_OperationManagementBanner: ALL_CONSTANTS.API_URL + "/api/admin/Operation/createBanner",
+  update_OperationManagementBanner: ALL_CONSTANTS.API_URL + "/api/admin/Operation/updateBanner"
 
 
 

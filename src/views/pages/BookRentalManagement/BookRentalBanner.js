@@ -314,7 +314,6 @@ const BookRentalBanner = () => {
                 getBannerList()
                 enqueueSnackbar('Banner Deleted Successfully', { variant: 'success' })
                 setDeleteVisible(false)
-                setDeleteVisible(false)
             } else {
                 enqueueSnackbar('Something went wrong, please try later!', { variant: 'success' })
             }
