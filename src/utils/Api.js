@@ -302,6 +302,29 @@ export const getApi = async (url, header) => {
   }
 };
 
+export const patchApi = async (url, header) => {
+  {
+    const CustomHeader = {
+      accept: 'text/plain',
+      token: localStorage.getItem('token') ? localStorage.getItem('token') : sessionStorage.getItem('sessionToken')
+    };
+    let data = null;
+    try {
+      let res = await axios.patch(url, {}, {
+        headers: {
+          ...CustomHeader,
+          ...header,
+        },
+      });
+
+      data = res.data;
+    } catch (err) {
+      console.log(err);
+    }
+    return data;
+  }
+};
+
 export const postApi = async (url, data, header) => {
   {
     const CustomHeader = {

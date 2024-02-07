@@ -242,6 +242,10 @@ export let API_ENDPOINT = {
   getStreamDetails: ALL_CONSTANTS.API_URL + "/api/admin/lounge/getStreamDetails",
   addQuizQuestion: ALL_CONSTANTS.API_URL + "/api/admin/lounge/quizQuestion/add",
   updateQuizInfo: ALL_CONSTANTS.API_URL + "/api/admin/lounge/updateQuizInfo",
+  startQuizQuestion: ALL_CONSTANTS.API_URL + "/api/admin/lounge/quizQuestion/start",
+  endQuizQuestion: ALL_CONSTANTS.API_URL + "/api/admin/lounge/quizQuestion/end",
+  sendAdminChatText: ALL_CONSTANTS.API_URL + "/api/lounge/sendMessages",
+  getChatToken: ALL_CONSTANTS.API_URL + "/api/lounge/createChatToken",
 
 
   //Operation Management

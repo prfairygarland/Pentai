@@ -770,6 +770,10 @@ const LiveRegistration = () => {
     return new File([blob], fileName, { type: blob.type })
   }
 
+  const consoleLiveHandler = () => {
+    navigate('../LiveManagement/liveConsole', { state: { streamId: location?.state?.streamId }})
+  }
+
   useEffect(() => {
     if (location?.state?.streamId !== undefined) {
       getStreamDetails()
@@ -792,7 +796,7 @@ const LiveRegistration = () => {
             <p>{multiLang?.LiveManagementRegistrationLive?.liveDetails} [{liveStatus}]</p>
           </div>
           <div className='d-flex gap-3'>
-            <CButton >{multiLang?.LiveManagementRegistrationLive?.console}  <CIcon icon={cilAudio}></CIcon> </CButton>
+            <CButton onClick={consoleLiveHandler}>{multiLang?.LiveManagementRegistrationLive?.console}  <CIcon icon={cilAudio}></CIcon> </CButton>
             <CButton className='btn-black'>{multiLang?.LiveManagementRegistrationLive?.liveCancel}</CButton>
           </div>
 
