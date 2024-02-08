@@ -2,14 +2,15 @@ import { cilAudio, cilCircle, cilHamburgerMenu, cilImage, cilRectangle, cilX } f
 import CIcon from '@coreui/icons-react';
 import { CButton, CCard, CCardBody, CCardText, CCardTitle, CFormCheck, CFormInput, CFormSelect, CFormSwitch, CFormTextarea, CImage, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CNav, CNavItem, CNavLink } from '@coreui/react';
 import { enqueueSnackbar } from 'notistack';
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import DatePicker from 'react-date-picker';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Loader from 'src/components/common/Loader'
-import { getApi, postApi, putApi } from 'src/utils/Api';
+import { deleteApi, getApi, postApi, putApi } from 'src/utils/Api';
 import ConfirmationModal from 'src/utils/ConfirmationModal';
 import { ALL_CONSTANTS, API_ENDPOINT } from 'src/utils/config';
+import { imageUrl } from '../../BookRentalManagement/BookRentalStatus';
 
 const LiveRegistration = () => {
   const { t, i18n } = useTranslation();
@@ -41,23 +42,30 @@ const LiveRegistration = () => {
   const [visible, setVisible] = useState(false)
   const [quizToggle, setQuizToggle] = useState(false);
   const [quizQuestion, setQuizQuestion] = useState('')
-  const [selectedRadio, setSelectedRadio] = useState('trueOrFalse');
+  const [selectedRadio, setSelectedRadio] = useState('TrueOrFalse');
   const [answerSelectedRadio, setAnswerSelectedRadio] = useState(true);
   const [rewardPointsToggle, setrewardPointsToggle] = useState(false)
   const [rewardPointsCheckBox, setrewardPointsCheckBox] = useState(true)
   const [uploadedImages, setUploadedImages] = useState([])
-  const [inputValues, setInputValues] = useState([{ value: '', answer: true }]);
+  const [inputValues, setInputValues] = useState([]);
   const [shortAnswer, setShortAnswer] = useState('')
   const [timeLimit, setTimeLimit] = useState(10)
   const [mainQuizs, setMainQuizs] = useState([])
   const [currentQuizeIndex, setCurrentQuizeIndex] = useState(null)
   const [rewardPoints, setRewardPoints] = useState(null)
+  const [questionsId, setQuestionsId] = useState(null)
+  const [streamId, setStreamId] = useState(null)
+  const [quizIdTodelete, setQuizIdToDelete] = useState(null)
+  const [type, setType] = useState('')
 
   const handleTimeInputChange = (e) => {
     const sanitizedValue = e.target.value.replace(/[^0-9]/g, '');
     const newValue = sanitizedValue
     setTimeLimit(newValue);
   };
+
+  console.log('quizIdTodelete', quizIdTodelete)
+  console.log('mainQuizs', mainQuizs)
 
   const validateLiveRegister = () => {
     if (liveRegisterTitle.trim() === '') {
@@ -117,6 +125,18 @@ const LiveRegistration = () => {
     })
   }
 
+  const confirmationDeleteHandler = (isOpen, index) => {
+    setModalProps({
+      isModalOpen: isOpen,
+      content: 'Are you sure to delete?',
+      cancelBtn: 'Close',
+      cancelBtnHandler: cancelConfirmation,
+      successBtn: 'Ok',
+      successBtnHandler: () => deleteQuiz(index),
+      // modalCloseHandler: confirmationSaveLiveRegistrationModalHandler,
+    })
+  }
+
   const confirmationCloseModalHandler = (isOpen) => {
     setModalProps({
       isModalOpen: isOpen,
@@ -169,14 +189,28 @@ const LiveRegistration = () => {
         formData.append('password', secret)
       }
       console.log('form data =>', formData);
-      const res = await postApi(API_ENDPOINT.createLiveStream, formData)
-      console.log(' new =>', res)
-      if (res.status === 200) {
-        if (res?.data?.status === 500) {
-          enqueueSnackbar(res?.data?.msg, { variant: 'error' })
-        } else {
-          enqueueSnackbar('LiveStream Added Successfully', { variant: 'success' })
-          navigateToList()
+      if (location?.state?.streamId) {
+        formData.append('id', location?.state?.streamId)
+        const res = await putApi(API_ENDPOINT.editLiveStream, formData)
+        if (res?.status === 200) {
+          if (res?.data?.status === 500) {
+            enqueueSnackbar(res?.data?.msg, { variant: 'error' })
+          } else {
+            enqueueSnackbar('LiveStream updated Successfully', { variant: 'success' })
+            navigateToList()
+          }
+        }
+      }
+      else {
+        const res = await postApi(API_ENDPOINT.createLiveStream, formData)
+        console.log(' new =>', res)
+        if (res.status === 200) {
+          if (res?.data?.status === 500) {
+            enqueueSnackbar(res?.data?.msg, { variant: 'error' })
+          } else {
+            enqueueSnackbar('LiveStream Added Successfully', { variant: 'success' })
+            navigateToList()
+          }
         }
       }
     } catch (error) {
@@ -186,6 +220,8 @@ const LiveRegistration = () => {
       isModalOpen: false
     })
   }
+
+  console.log('upload', uploadedImages)
 
   const handleTabClick = (value) => {
     try {
@@ -205,8 +241,10 @@ const LiveRegistration = () => {
         setPoints(null)
         setSecret(null)
         setActiveTab(value);
+        setQuestionsId(null)
       } else {
         setActiveTab(value);
+        getStreamDetails()
       }
 
     } catch (error) {
@@ -294,7 +332,7 @@ const LiveRegistration = () => {
 
   const handleRadioChange = (value) => {
     setSelectedRadio(value);
-    if (value === 'trueOrFalse') {
+    if (value === 'TrueOrFalse') {
       setUploadedImages([])
       setInputValues([{ value: '', answer: true }])
       setShortAnswer('')
@@ -445,7 +483,7 @@ const LiveRegistration = () => {
     } else if (selectedRadio === null) {
       enqueueSnackbar('Please select quiz type', { variant: 'error' })
       return false
-    } else if (selectedRadio === 'trueOrFalse' && answerSelectedRadio === null) {
+    } else if (selectedRadio === 'TrueOrFalse' && answerSelectedRadio === null) {
       enqueueSnackbar('Please select answer', { variant: 'error' })
       return false
     }
@@ -489,22 +527,28 @@ const LiveRegistration = () => {
 
   const resetQuiz = async () => {
     setQuizQuestion('')
-    setSelectedRadio('trueOrFalse')
+    setSelectedRadio('TrueOrFalse')
     setAnswerSelectedRadio(true)
     setUploadedImages([])
     setInputValues([{ value: '', answer: true }])
     setShortAnswer('')
     setTimeLimit(10)
+    setQuestionsId(null)
   }
 
   const saveQuiz = async () => {
     let quizData = {
-      question: quizQuestion,
-      countDownTime: timeLimit
+      title: quizQuestion,
+      timeLimitSeconds: timeLimit
     };
 
-    if (selectedRadio === 'trueOrFalse') {
-      quizData['type'] = "trueOrFalse"
+    if (questionsId) {
+      quizData['id'] = questionsId
+      quizData['streamId'] = streamId
+    }
+
+    if (selectedRadio === 'TrueOrFalse') {
+      quizData['type'] = "TrueOrFalse"
       quizData['options'] = [{ "title": "True" }, { "title": "False" }]
       quizData['isCorrect'] = answerSelectedRadio
     }
@@ -514,7 +558,7 @@ const LiveRegistration = () => {
       quizData['options'] = uploadedImages
       for (let index = 0; index < uploadedImages.length; index++) {
         if (uploadedImages[index].value === true) {
-          quizData['isCorrect'] = { title: uploadedImages[index].title, image: uploadedImages[index].image }
+          quizData['isCorrect'] = { title: uploadedImages[index].title, image: imageUrl + uploadedImages[index].image }
         }
       }
 
@@ -532,7 +576,7 @@ const LiveRegistration = () => {
 
     if (selectedRadio === 'shortAnswer') {
       quizData['type'] = "shortAnswer"
-      quizData['options'] = shortAnswer
+      quizData['options'] = [{ "title": shortAnswer }]
       quizData['isCorrect'] = shortAnswer
     }
 
@@ -540,6 +584,7 @@ const LiveRegistration = () => {
 
     if (currentQuizeIndex !== null) {
       const getData = [...mainQuizs]
+      console.log('getData', getData)
       getData[currentQuizeIndex] = quizData
       setMainQuizs(getData)
       enqueueSnackbar('Update succesfully.', { variant: 'success' })
@@ -551,37 +596,78 @@ const LiveRegistration = () => {
       enqueueSnackbar('Added succesfully.', { variant: 'success' })
       setCurrentQuizeIndex(null)
     }
-
     setVisible(false)
     resetQuiz()
   }
 
-  const editQuiz = async (data, index) => {
-    console.log('edit data =>', data);
-    setCurrentQuizeIndex(index)
-    setQuizQuestion(data.question)
-    setTimeLimit(data.countDownTime)
-    setSelectedRadio(data.type)
+  console.log('ans', questionsId)
 
-    if (data.type === 'trueOrFalse') {
-      setAnswerSelectedRadio(data.isCorrect)
+  const editQuiz = useCallback(async (data, index) => {
+    console.log('edit data =>', data);
+    setQuestionsId(data?.id)
+    setCurrentQuizeIndex(index)
+    setQuizQuestion(data.title)
+    setTimeLimit(data.timeLimitSeconds)
+    setSelectedRadio(data.type)
+    setStreamId(data?.streamId)
+    setType(data.type)
+    // setInputValues(data?.options)
+
+    if (data?.type === 'TrueOrFalse') {
+      data?.options?.map((val) => {
+        console.log('first', val)
+        setAnswerSelectedRadio(val?.isCorrect === 0 ? false : true)
+      })
     }
-    if (data.type === 'imageMultipleChoice') {
-      setUploadedImages(data.options)
+    if (data?.type === 'imageMultipleChoice') {
+      const inputva = data?.options?.map(val => ({
+        title: val?.title,
+        value: val?.isCorrect === 0 ? false : true,
+        ...val
+      }))
+      setUploadedImages(inputva)
+
     }
-    if (data.type === 'multipleChoice') {
-      setInputValues(data.options)
+    if (data?.type === 'multipleChoice') {
+      const inputval = data?.options?.map(val => ({
+        value: val?.title,
+        answer: val.isCorrect === 0 ? false : true
+      }))
+
+      setInputValues(inputval)
+
     }
-    if (data.type === 'shortAnswer') {
-      setShortAnswer(data.options)
+    if (data?.type === 'shortAnswer') {
+      data?.options?.map((val) => {
+        setShortAnswer(val?.title)
+      })
+
     }
     setVisible(true)
-  }
+  }, [visible])
+
+  console.log('input', uploadedImages)
 
   const deleteQuiz = async (index) => {
     const originalData = [...mainQuizs]
     originalData.splice(index, 1)
     setMainQuizs(originalData)
+    //  try {   
+    //    let url = `${API_ENDPOINT.deleteQuizQuestion}?questionId=${id}`
+    //    const res = await deleteApi(url)
+    //    if (res?.data?.status === 200) {
+    //      enqueueSnackbar('Quiz question deleted successfully', { variant: 'success' })
+    //      getStreamDetails()
+    //    }
+    //    else {
+    //      enqueueSnackbar('Failed to delete the Quiz question', { variant: 'error' })
+    //    }
+    //  } catch (error) {
+
+    //  }
+    setModalProps({
+      isModalOpen: false
+    })
 
   }
 
@@ -597,17 +683,33 @@ const LiveRegistration = () => {
   }
 
   const saveQuizRegistration = async () => {
+    setIsLoading(true)
     console.log('mainQuizs =>', mainQuizs)
-    try {
-      // let data = {
-      //   streamId: location?.state?.streamId,
-      //   quizRewardPoints: rewardPoints !== null ? rewardPoints : 0,
-      //   quizRewardType: rewardPointsCheckBox === true ? 'sharedByAll' : 'givenToAll'
-      // }
-      // console.log('form data =>', data);
 
-      // const responce = await putApi(API_ENDPOINT.updateQuizInfo, data)
-      // console.log(' new =>', responce)
+    try {
+      let url = `${API_ENDPOINT.deleteQuizQuestion}?questionId=${quizIdTodelete}`
+      const res = await deleteApi(url)
+      if (res?.data?.status === 200) {
+        //  enqueueSnackbar('Quiz question deleted successfully', { variant: 'success' })
+        getStreamDetails()
+      }
+      else {
+        //  enqueueSnackbar('Failed to delete the Quiz question', { variant: 'error' })
+      }
+    } catch (error) {
+
+    }
+
+    try {
+      let data = {
+        streamId: location?.state?.streamId,
+        quizRewardPoints: rewardPoints !== null ? rewardPoints : 0,
+        quizRewardType: rewardPointsCheckBox === true ? 'sharedByAll' : 'givenToAll'
+      }
+      console.log('form data =>', data);
+
+      const responce = await putApi(API_ENDPOINT.updateQuizInfo, data)
+      console.log(' new =>', responce)
 
       console.log('test', mainQuizs);
 
@@ -617,25 +719,26 @@ const LiveRegistration = () => {
         const formData = new FormData()
         console.log('obj', mainQuizs[obj].question);
         formData.append('streamId', location?.state?.streamId)
-        formData.append('title', mainQuizs[obj].question)
+        formData.append('title', mainQuizs[obj].title)
         formData.append('type', mainQuizs[obj].type)
-        formData.append('timeLimitSeconds', mainQuizs[obj].countDownTime)
+        formData.append('timeLimitSeconds', mainQuizs[obj].timeLimitSeconds)
         formData.append('order', obj)
 
 
         console.log('mainQuizs[obj].options =>', mainQuizs[obj].options);
         if (mainQuizs[obj].type === 'shortAnswer') {
-          formData.append(`options[${0}][title]`, mainQuizs[obj].options)
+          formData.append(`options[${0}][title]`, mainQuizs[obj].options[0].title)
           formData.append(`options[${0}][isCorrect]`, 1)
 
         } else {
           for (let i in mainQuizs[obj].options) {
             console.log('i =>', mainQuizs[obj].options[i]);
-            if (mainQuizs[obj].type === 'trueOrFalse') {
+            if (mainQuizs[obj].type === 'TrueOrFalse') {
               formData.append(`options[${i}][title]`, mainQuizs[obj].options[i].title)
-              if (mainQuizs[obj].isCorrect === true) {
+              if (mainQuizs[obj].isCorrect === true || mainQuizs[obj].options[i].isCorrect === 1) {
                 formData.append(`options[${i}][isCorrect]`, 1)
-              } else {
+              }
+              else {
                 formData.append(`options[${i}][isCorrect]`, 0)
               }
             } else if (mainQuizs[obj].type === 'imageMultipleChoice') {
@@ -647,10 +750,9 @@ const LiveRegistration = () => {
                 formData.append(`options[${i}][isCorrect]`, 0)
               }
               formData.append('images', mainQuizs[obj].options[i].image)
-
             } else if (mainQuizs[obj].type === 'multipleChoice') {
-              formData.append(`options[${i}][title]`, mainQuizs[obj].options[i].value)
-              if (mainQuizs[obj].options[i].answer === true) {
+              formData.append(`options[${i}][title]`, mainQuizs[obj].options[i].value ? mainQuizs[obj].options[i].value : mainQuizs[obj].options[i].title)
+              if (mainQuizs[obj].options[i].answer === true || mainQuizs[obj].options[i].isCorrect === 1) {
                 formData.append(`options[${i}][isCorrect]`, 1)
               } else {
                 formData.append(`options[${i}][isCorrect]`, 0)
@@ -659,13 +761,44 @@ const LiveRegistration = () => {
           }
         }
 
+        console.log('ids1', mainQuizs[obj].id)
+        // console.log('ids2', questionsId)
+        // console.log('id')
+
         console.log('form data =>', formData);
-
-        const res = await postApi(API_ENDPOINT.addQuizQuestion, formData)
-        console.log(' new =>', res)
+        console.log('type', type)
+        let res = ''
+        if (mainQuizs[obj].id) {
+          formData.append('questionId', mainQuizs[obj].id)
+          res = await putApi(API_ENDPOINT.editQuizQuestion, formData)
+          if (res?.data?.status == 200) {
+            getStreamDetails()
+            // enqueueSnackbar('Quiz question Updated Successfully', { variant: 'success' })
+            // navigate('/LiveManagement')
+            setIsLoading(false)
+          }
+          else {
+            enqueueSnackbar('Request failed', { variant: 'error' })
+          }
+        }
+        else {
+          res = await postApi(API_ENDPOINT.addQuizQuestion, formData)
+          if (res?.status === 200) {
+            getStreamDetails()
+            // navigate('/LiveManagement')
+            if (res?.data?.status === 400) {
+              enqueueSnackbar(res?.data?.msg, { variant: 'error' })
+            } else if (res?.data?.status !== 200) {
+              enqueueSnackbar(res?.data?.error, { variant: 'error' })
+            }
+            else if (res?.data?.status === 200) {
+              enqueueSnackbar('Quiz question Added Successfully', { variant: 'success' })
+              setIsLoading(false)
+              // setIsLoading(false)
+            }
+          }
+        }
       }
-
-
 
 
       // console.log('form data =>', formData);
@@ -702,13 +835,54 @@ const LiveRegistration = () => {
   }
 
   const getStreamDetails = async () => {
+    setIsLoading(true)
     try {
       let url = `${API_ENDPOINT.getStreamDetails}?streamId=${location?.state?.streamId}`
       const res = await getApi(url)
-      console.log(res)
+      console.log("res", res)
       if (res.status === 200) {
         setLiveStatus(res?.data?.status)
         setLiveRegisterTitle(res?.data?.title)
+        setRewardPoints(res?.data?.quizRewardPoints)
+        if (res?.data?.quizRewardPoints > 0) {
+          setrewardPointsToggle(true)
+        }
+        if (res?.data?.questions.length > 0) {
+          setQuizToggle(true)
+        }
+        setrewardPointsCheckBox(res?.data?.quizRewardType === "sharedByAll" ? true : false)
+        setSecret(res?.data?.password)
+        if (res?.data?.password) {
+          setSecretToggle(true)
+        }
+        // quizRewardType
+        setIsLoading(false)
+        console.log('questions', res?.data?.questions)
+        // if (res?.data?.questions?.length > 0) {
+        setMainQuizs(res?.data?.questions)
+
+        // const images = res?.data?.questions?.map((item) => {
+        //   if (item?.type === 'imageMultipleChoice') {
+        //     item?.options?.map((val) => ({
+        //       title: val?.title,
+        //       value: val?.isCorrect === 0 ? false : true,
+        //       image: imageUrl + val?.image,
+        //       ...val
+        //     }))
+        //   }
+        // })
+        // setUploadedImages(images)
+
+
+        // res?.data?.question?.map((val) => {
+        //   console.log('val', val)
+        //   setQuizQuestion(val?.title)
+        //   setSelectedRadio(val?.type)
+        //   setTimeLimit(val?.timeLimitSeconds)
+        //   setInputValues(val?.options)
+        // })
+        // }
+        // setQuizQuestion
         // console.log(new Date(res?.data?.scheduledAt))
 
         let startDateTime = new Date(res?.data?.scheduledAt),
@@ -730,9 +904,9 @@ const LiveRegistration = () => {
         }
 
         let endDateTime = new Date(res?.data?.scheduledUpto),
-            endMonth = '' + (endDateTime.getMonth() + 1),
-            endDay = '' + endDateTime.getDate(),
-            endYear = endDateTime.getFullYear()
+          endMonth = '' + (endDateTime.getMonth() + 1),
+          endDay = '' + endDateTime.getDate(),
+          endYear = endDateTime.getFullYear()
         if (endMonth.length < 2) endMonth = '0' + endMonth
         if (endDay.length < 2) endDay = '0' + endDay
         setLiveRegisterEndDate([endYear, endMonth, endDay].join('-'))
@@ -756,7 +930,12 @@ const LiveRegistration = () => {
     } catch (error) {
       console.log(error)
     }
+    finally {
+      setIsLoading(false)
+    }
   }
+
+  console.log('uploadedImages', uploadedImages)
 
   async function urlToBlob(url) {
     const response = await fetch(url)
@@ -803,43 +982,43 @@ const LiveRegistration = () => {
         </div>
 
         {location?.state?.streamId !== undefined &&
-        <div className="d-flex justify-content-between p-3 h-100 w-100 bg-light rounded mt-2 mb-4">
-          <div className="align-items-center align-items-center">
-            <p className="fw-medium me-3" style={{ 'white-space': 'nowrap' }}>
-              {multiLang?.LiveManagementRegistrationLive?.start}
-            </p>
-            <p>-</p>
-          </div>
-          <div className="align-items-center ms-2 align-items-center">
-            <p className="fw-medium me-1">{multiLang?.LiveManagementRegistrationLive?.end}</p>
-            <p>-</p>
-          </div>
-          <div className="align-items-center ms-2 align-items-center">
-            <p className="fw-medium me-1">{multiLang?.LiveManagementRegistrationLive?.time}</p>
-            <p>-</p>
-          </div>
-          <div className="align-items-center ms-2 align-items-center">
-            <p className="fw-medium me-1">{multiLang?.LiveManagementRegistrationLive?.uniqueVisitor}</p>
-            <p>-</p>
-          </div>
-          <div className="align-items-center ms-2 align-items-center">
-            <p className="fw-medium me-1">{multiLang?.LiveManagementRegistrationLive?.pageView}</p>
-            <p>-</p>
-          </div>
-          <div className="align-items-center ms-2 align-items-center">
-            <p className="fw-medium me-1">{multiLang?.LiveManagementRegistrationLive?.like}</p>
-            <p>-</p>
-          </div>
-          <div className="align-items-center ms-2 align-items-center">
-            <p className="fw-medium me-1">{multiLang?.LiveManagementRegistrationLive?.chat}</p>
-            <p>-</p>
-          </div>
-          <div className="align-items-center ms-2 align-items-center">
-            <p className="fw-medium me-1">{multiLang?.LiveManagementRegistrationLive?.creator}</p>
-            <p>-</p>
-          </div>
+          <div className="d-flex justify-content-between p-3 h-100 w-100 bg-light rounded mt-2 mb-4">
+            <div className="align-items-center align-items-center">
+              <p className="fw-medium me-3" style={{ 'white-space': 'nowrap' }}>
+                {multiLang?.LiveManagementRegistrationLive?.start}
+              </p>
+              <p>-</p>
+            </div>
+            <div className="align-items-center ms-2 align-items-center">
+              <p className="fw-medium me-1">{multiLang?.LiveManagementRegistrationLive?.end}</p>
+              <p>-</p>
+            </div>
+            <div className="align-items-center ms-2 align-items-center">
+              <p className="fw-medium me-1">{multiLang?.LiveManagementRegistrationLive?.time}</p>
+              <p>-</p>
+            </div>
+            <div className="align-items-center ms-2 align-items-center">
+              <p className="fw-medium me-1">{multiLang?.LiveManagementRegistrationLive?.uniqueVisitor}</p>
+              <p>-</p>
+            </div>
+            <div className="align-items-center ms-2 align-items-center">
+              <p className="fw-medium me-1">{multiLang?.LiveManagementRegistrationLive?.pageView}</p>
+              <p>-</p>
+            </div>
+            <div className="align-items-center ms-2 align-items-center">
+              <p className="fw-medium me-1">{multiLang?.LiveManagementRegistrationLive?.like}</p>
+              <p>-</p>
+            </div>
+            <div className="align-items-center ms-2 align-items-center">
+              <p className="fw-medium me-1">{multiLang?.LiveManagementRegistrationLive?.chat}</p>
+              <p>-</p>
+            </div>
+            <div className="align-items-center ms-2 align-items-center">
+              <p className="fw-medium me-1">{multiLang?.LiveManagementRegistrationLive?.creator}</p>
+              <p>-</p>
+            </div>
 
-        </div>
+          </div>
         }
 
 
@@ -1087,7 +1266,7 @@ const LiveRegistration = () => {
               <div className='d-flex justify-content-center gap-3 my-3'>
 
                 {location?.state?.streamId !== undefined &&
-                <CButton onClick={() => navigateToList()} >{multiLang?.LiveManagementRegistrationLive?.list}</CButton>
+                  <CButton onClick={() => navigateToList()} >{multiLang?.LiveManagementRegistrationLive?.list}</CButton>
                 }
 
                 <CButton onClick={confirmationCloseModalHandler} className='btn-black'>{multiLang?.LiveManagementRegistrationLive?.Cancel}</CButton>
@@ -1180,18 +1359,19 @@ const LiveRegistration = () => {
                             <div className='d-flex col-md-6'>
                               <div className="formWrpLabel" >
                                 <label className="fw-bolder ">
+
                                   {multiLang?.LiveManagementRegistrationQuiz?.Create_Quiz}  <span className="mandatory-red-asterisk">*</span>
                                 </label>
                               </div>
                               <div className="formWrpInpt  w-100 align-items-center gap-2">
                                 <ul >
-                                  {mainQuizs.length > 0 &&
-                                    mainQuizs.map((data, i) => (
+                                  {mainQuizs?.length > 0 &&
+                                    mainQuizs?.map((data, i) => (
                                       <li key={i} className='d-flex gap-3 align-items-center'>
                                         <span>{i + 1}</span>
-                                        <p>{data.type}</p>
-                                        <p onClick={() => editQuiz(data, i)}>{data.question}</p>
-                                        <i role='button' onClick={() => deleteQuiz(i)} className="icon-close"></i>
+                                        <p>{data?.type}</p>
+                                        <p onClick={() => editQuiz(data, i)}>{data?.title}</p>
+                                        <i role='button' onClick={() => { setQuizIdToDelete(data?.id); confirmationDeleteHandler(true, i) }} className="icon-close"></i>
                                       </li>
                                     ))
                                   }
@@ -1210,7 +1390,7 @@ const LiveRegistration = () => {
               <div
                 className='d-flex justify-content-center align-items-center gap-3 my-3'>
                 {location?.state?.streamId !== undefined &&
-                <CButton onClick={() => navigateToList()} >{multiLang?.LiveManagementRegistrationLive?.list}</CButton>
+                  <CButton onClick={() => navigateToList()} >{multiLang?.LiveManagementRegistrationLive?.list}</CButton>
                 }
                 <CButton onClick={confirmationCloseModalHandler} className='btn-black'>{multiLang?.LiveManagementRegistrationQuiz?.Cancel}</CButton>
                 <CButton onClick={() => validateAllRegistration()}>{multiLang?.LiveManagementRegistrationQuiz?.Save}</CButton>
@@ -1247,14 +1427,14 @@ const LiveRegistration = () => {
                         <div className=''>
                           <h5>{multiLang?.LiveManagementRegistrationQuiz?.Quiz_type}</h5>
                           <div className='d-flex flex-wrap mt-2 mb-2  quizCheckBox'>
-                            <CButton color="light" className="d-flex align-items-center  gap-2" onClick={() => { setAnswerSelectedRadio(true); handleRadioChange('trueOrFalse') }}>
+                            <CButton color="light" className="d-flex align-items-center  gap-2" onClick={() => { setAnswerSelectedRadio(true); handleRadioChange('TrueOrFalse') }}>
                               <CFormCheck
                                 className='w-50 gap-2'
                                 type="radio"
                                 id="radioButton1"
                                 name="TrueFalse"
                                 // label="True/False"
-                                checked={selectedRadio === 'trueOrFalse'}
+                                checked={selectedRadio === 'TrueOrFalse'}
                               />
                               <CIcon icon={cilCircle}></CIcon>
                               <CIcon icon={cilX}></CIcon>
@@ -1306,7 +1486,7 @@ const LiveRegistration = () => {
                         {selectedRadio !== null &&
                           <div className='answer'>
                             <h5>{multiLang?.LiveManagementRegistrationQuiz?.answer}</h5>
-                            {selectedRadio === 'trueOrFalse' &&
+                            {selectedRadio === 'TrueOrFalse' &&
                               <div className='d-flex quizCheckBox'>
                                 <CButton color="light" className="d-flex align-items-center justify-content-between p-2  gap-2" onClick={() => setAnswerSelectedRadio(true)}>
                                   <CFormCheck
@@ -1349,7 +1529,7 @@ const LiveRegistration = () => {
                               <div className='mt-2 mb-2'>
                                 {uploadedImages?.length > 0 && (
                                   <div className="upload-images-container uploadImgWrap">
-                                    {uploadedImages.map((imgFile, index) => (
+                                    {uploadedImages?.map((imgFile, index) => (
                                       <div key={index}>
                                         <div>
                                           <CButton color="light" className="d-flex align-items-center gap-2" onClick={() => imageAnswerHandler(index)}>
@@ -1359,11 +1539,10 @@ const LiveRegistration = () => {
                                               id="radioButton4"
                                               checked={uploadedImages[index]?.value === true}
                                             />
-
                                             <div
                                               className='remaining-img-container'
                                             >
-                                              <img src={URL.createObjectURL(uploadedImages[index].image)} alt="" />
+                                              <img crossOrigin='anonymous' src={imgFile?.id ? imageUrl + imgFile?.image : URL.createObjectURL(uploadedImages[index].image)} alt="" />
                                               <button
                                                 className="thumbclsBtn"
                                                 onClick={(e) => deleteUploadedImageHandler(e, index)}
@@ -1440,12 +1619,12 @@ const LiveRegistration = () => {
                                           />
                                           <CFormInput
                                             type="text"
-                                            value={input.value}
+                                            value={input?.value}
                                             onClick={(e) => e.stopPropagation()}
                                             onChange={(e) => handleMultipleInputChange(index, e.target.value)}
                                           // placeholder={`Input ${index + 1} Value`}
                                           />
-                                          <span>{input.value.length} / 30</span>
+                                          <span>{input?.value?.length} / 30</span>
 
                                         </div>
                                       </div>
@@ -1516,7 +1695,7 @@ const LiveRegistration = () => {
                                   <CCardText>
                                     {quizQuestion}
                                   </CCardText>
-                                  {selectedRadio === 'trueOrFalse' &&
+                                  {selectedRadio === 'TrueOrFalse' &&
                                     <div className='gap-2 mt-3 d-flex justify-content-center gap-3'>
                                       <div className='trueFlaseBtn d-flex justify-content-center align-items-center'>
                                         <CFormCheck className='ms-2' button={{ color: 'secondary' }} type="radio" name="options" id="option3" autoComplete="off" label="True" disabled />
@@ -1536,8 +1715,8 @@ const LiveRegistration = () => {
                                                 <div
                                                   className='remaining-img-container'
                                                 >
-                                                  <img src={URL.createObjectURL(input.image)} alt="" />
-                                                  <p>{input.title}</p>
+                                                  <img crossOrigin='anonymous' src={input.id ? imageUrl + input.image : URL.createObjectURL(uploadedImages[index].image)} alt="" />
+                                                  <p>{input.question}</p>
                                                 </div>
                                               </div>
                                             </div>
@@ -1555,7 +1734,7 @@ const LiveRegistration = () => {
                                           {inputValues.map((input, index) => (
                                             <div key={index} >
                                               <div>
-                                                <p>{input.value}</p>
+                                                <p>{input?.value}</p>
                                               </div>
                                             </div>
 
