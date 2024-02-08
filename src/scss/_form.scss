@@ -1,0 +1,116 @@
+
+.formWraper{
+  border: 1px solid #ccc;
+}
+.formWraper .form-outline{
+  border-bottom: 1px solid #ccc;
+
+
+}
+.formWraper .form-outline .formWrpLabel{
+background: #e3e0e0;
+display: flex;
+    align-items: center;
+border-left: 1px solid #ccc;
+padding: 10px;
+    // min-width: 250px;
+    max-width: 150px;
+    width: 100%;
+}
+
+.form-check{
+  display: flex;
+  align-items: center;
+}
+.formWraper .form-outline label{
+  padding-left: 5px;
+  flex: 1;
+     }
+     .form-check .form-check-input{
+      margin-top: 0;
+     }
+  .formWraper .form-outline .formWrpInpt{
+    padding: 10px;
+    flex: 1;
+  }
+  .reveseCheckBox{
+    padding-left: 0 !important;
+    input{
+      margin-left: 5px !important;
+    } 
+  }
+  .addItemWrp {
+    .formWraper{
+      .form-outline{
+        .formWrpLabel{
+          max-width: 150px;
+          width: 100%;
+          min-width: auto;
+        }
+      }
+    }
+  }
+  .lableWidthMin{
+    .formWraper{
+      .form-outline{
+        .formWrpLabel{
+          max-width: 150px;
+          width: 100%;
+          min-width: auto;
+        }
+      }
+    }
+  }
+  .popMiddl{
+    max-height: 500px;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+  .form-control{
+    border-radius: 0 !important;
+    height: 38px;
+    
+  }
+  textarea.form-control{
+    height: auto;
+  }
+  .form-control:focus{
+    box-shadow: none;
+    border:var(--cui-border-width) solid var(--cui-input-border-color, var(--cui-border-color)) ;
+  }
+.form-check-label{
+  cursor: pointer;
+}
+.form-select{
+  border-radius: 0 !important;
+  cursor: pointer;
+}
+.form-select:focus{
+  box-shadow: none;
+  border:var(--cui-border-width) solid var(--cui-input-border-color, var(--cui-border-color)) ;
+}
+.react-date-picker{
+  cursor: pointer;
+}
+.react-date-picker__calendar-button{
+  position: relative;
+  svg{
+    display: none !important;
+  }
+&::after{
+  content: '\e92d';
+  font-family: 'icomoon';
+  font-size: 20px;
+}
+}
+
+select{
+  option{
+    cursor: pointer;
+  }
+}
+.time-picker{
+  height: 38px !important;
+  border:var(--cui-border-width) solid var(--cui-input-border-color, var(--cui-border-color)) ;
+  padding: 0 10px;
+}

@@ -1,0 +1,363 @@
+
+
+.wrapper {
+  width: 100%;
+  @include ltr-rtl("padding-left", var(--cui-sidebar-occupy-start, 0));
+  will-change: auto;
+  @include transition(padding .15s);
+}
+
+// .formWraper .form-outline input{
+//   height: 50px;
+// }
+.logHead{
+  font-size: 1.6em;
+}
+.drpBtn{
+min-width: 100px;
+
+}
+
+.drpBtn button{
+  text-align: left;
+  border: 1px solid #ccc;
+  padding-right: 20px;
+  padding-left: 10px;
+  cursor: pointer;
+  &:hover{
+  border: 1px solid #ccc;
+border-radius: 0 ;
+  }
+  &:active{
+    border: 1px solid #ccc !important;
+  }
+}
+.drpBtn button::after{
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  content: "\e913";
+    font-family: "icomoon";
+    border: none;
+    font-size: 12px;
+    right: 7px;
+    margin-left: 0;
+}
+.drpDBtn{
+min-width: 150px;
+
+}
+.drpDBtn button,.drpDBtn button:hover{
+  text-align: left;
+  border: 1px solid #ccc;    
+  height: 38px;
+  padding-right: 20px;
+  padding-left: 10px;
+}
+.drpDBtn button::after{
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  content: "\e913";
+  font-family: "icomoon";
+  border: none;
+  font-size: 12px;
+  right: 7px;
+}
+.ptk-table th {
+background: ($black);
+color: ($white);
+    white-space: nowrap;
+    padding: 10px;
+    font-family: ($fontrg);
+    position: relative;
+    text-align: center;
+}
+.ptk-table {
+  width: 100%;
+}
+.ptk-table td {
+    padding: 10px;
+    font-size: 14px;
+    white-space: nowrap;
+    vertical-align: top;
+a{
+  text-decoration: underline !important;
+}
+}
+.ptk-table tbody tr{
+  border-bottom: 1px solid #ccc !important;
+}
+.ptk-table th span.sortarrow{
+  // position: absolute;
+  // top: 50%;
+  // right: 10px;
+  // transform: translateY(-50%);
+  margin-left: 10px;
+  font-size: 12px;
+}
+@media(max-width:768px){
+  .formWraper .form-outline {
+    flex-direction: column;
+}
+.formWraper .form-outline .formWrpLabel{
+
+border-left:none;
+}
+}
+.dropDownbackground{
+  background-color: white;
+}
+.userlist-pagination ul {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  list-style: none;
+  // margin-top: 15px;
+}
+
+.userlist-pagination ul li.selected a,
+.userlist-pagination ul li a:hover, .userlist-pagination ul li a:hover button {
+  background: ($primary);
+  color:($white) !important;
+  border-color: ($primary);
+}
+
+.userlist-pagination ul li a {
+  font-size: 13px;
+  padding: 6px 12px;
+  min-width: 38px;
+  border: 1px solid #999;
+  margin-right: 5px;
+  min-height: 38px;
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  justify-content: center;
+}
+
+.userlist-pagination ul li a button {
+  font-size: 13px;
+  border: none;
+  background: none;
+}
+
+.userlist-pagination ul li:last-child a {
+  margin-right: 0;
+}
+
+.disable-class {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+
+
+.bg-light{
+  background: ($lightGray);
+}
+.btn-light{
+  background: ($lightGray);
+  color: ($gray);
+}
+.filterbtn{
+border-radius: 0;
+}
+.participantList{
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  .participatntCont{
+  flex: 1;
+  display: flex;
+  .participatntimgBox{
+  width: 40px;
+  height: 40px;
+  border-radius: 40;
+margin-right: 15px;
+}
+h3{
+  font-size: 18px;
+}
+}
+.participRightBtns{
+margin-left: 15px;
+}
+}
+
+.uploadImgWrap{
+  margin-top: 10px;
+   overflow-x: auto;
+  max-width: 700px;
+   align-items: end;
+    border: none !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  .thubmnail-img-container{
+    min-width: 250px;
+    position: relative;
+      border: 1px solid #ccc;
+      height: 200px;
+      margin-right: 10px;
+      margin-bottom: 10px;
+    img{
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  &:hover{
+    .thumbclsBtn{
+      display: block;
+    }
+  }
+
+  }
+  .remaining-img-container{
+    min-width: 100px;
+    height: 100px;
+    position: relative;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    margin-bottom: 10px;
+    img{
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      object-fit: cover;
+    }
+
+    &:last-child{
+      margin-right: 0;
+    }
+      &:hover{
+    .thumbclsBtn{
+      display: block;
+    }}
+  }
+  .thumbclsBtn{
+    background: none;
+    border: none;
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    display: none;
+  }
+  &::-webkit-scrollbar-track
+{
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	border-radius: 10px;
+	background-color: #F5F5F5;
+}
+
+&::-webkit-scrollbar
+{
+	height: 5px;
+	background-color: #F5F5F5;
+}
+
+&::-webkit-scrollbar-thumb
+{
+	border-radius: 10px;
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+	background-color: #555;
+}
+
+}
+
+.getColour {
+  color: blue;
+}
+.uploadFileWrp{
+  border: none !important;
+  border-radius: 0 !important;
+  flex-direction: row !important;
+  gap: 10px;
+  margin-top: 20px; flex-wrap: wrap;
+  .individual-file-and-delete{
+// padding-right: 35px;
+    .uploaded-file-delete{
+      width: 16px !important;
+      height: 16px;
+      font-size: 8px;
+      justify-content: center;
+      align-items: center;
+      /* position: absolute; */
+      /* right: 0; */
+      border: 1px solid ($primary);
+      border-radius: 10px;
+      margin-left: 5px;
+      color: ($primary);
+    }
+  }
+  
+}
+.uploadImgDetail {
+  margin: 20px !important;
+  .thubmnail-img-container{
+    min-width: 100px;
+    height: 100px;
+    &:first-child{
+      min-width: 250px;
+      height: 250px;
+    }
+  }
+}
+.linkToTxt {
+  .form-check-label{
+    white-space: nowrap;
+  }
+}
+
+
+.react-date-picker__wrapper {
+  display: flex;
+  flex-grow: 1;
+  flex-shrink: 0;
+  border: thin solid var(--cui-input-border-color, var(--cui-border-color)) !important;
+  height: 38px;
+  background: #fff;
+  border-radius: 0px;
+  padding-left: 5px;
+}
+.clubTable{
+  table{
+    tr{
+      th{
+        p{
+          text-align: left !important;
+          display: inline-block;
+        }
+        &:first-child{
+          width: 30px !important;
+        }
+        &:nth-child(2){
+          width: 50px !important;
+        }
+      }
+    }
+  }
+}
+
+.pageTitle{
+  border-bottom: 1px solid ($primGray);
+  h2{
+    font-size: 20px;
+  }
+}
+.greenTxt{
+  color: ($green);
+}
+.blueTxt{
+  color: ($blue);
+}
+.primTxt{
+  color: ($primary);
+}
+.dropdown-menu.show{
+  border-radius: 0;
+  padding: 0 !important;
+}
+.dropdown-item:hover, .dropdown-item:focus{
+  background: ($blue);
+  color: ($white);
+}
