@@ -949,8 +949,14 @@ const LiveRegistration = () => {
     return new File([blob], fileName, { type: blob.type })
   }
 
-  const consoleLiveHandler = () => {
-    navigate('../LiveManagement/liveConsole', { state: { streamId: location?.state?.streamId }})
+  const consoleLiveHandler = async () => {
+    try {
+      // let url = `${API_ENDPOINT.startLiveStream}?streamId=${location?.state?.streamId}`
+      // await patchApi(url)
+      navigate('../LiveManagement/liveConsole', { state: { streamId: location?.state?.streamId }})
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   useEffect(() => {

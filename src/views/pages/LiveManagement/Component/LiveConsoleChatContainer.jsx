@@ -4,13 +4,12 @@ import { getApi, postApi } from 'src/utils/Api'
 import { API_ENDPOINT } from 'src/utils/config'
 import { enqueueSnackbar } from 'notistack'
 
-const LiveConsoleChatContainer = ({ streamId }) => {
-  const socketURL = 'wss://edge.ivschat.ap-south-1.amazonaws.com'
+const LiveConsoleChatContainer = ({ streamId, socketURL, isLive }) => {
   const [chatToken, setChatToken] = useState('')
   const [chatData, setChatData] = useState([])
 
   useEffect(() => {
-    if (chatToken) {
+    if (chatToken && isLive === 1) {
       const socket = new WebSocket(socketURL, chatToken)
       try {
         // Connection opened
@@ -45,7 +44,9 @@ const LiveConsoleChatContainer = ({ streamId }) => {
   }
 
   useEffect(() => {
-    getChatToken()
+    if (isLive === 1) {
+      getChatToken()
+    }
   }, [])
 
   const [adminChatText, setAdminChatText] = useState('')
@@ -94,6 +95,8 @@ const LiveConsoleChatContainer = ({ streamId }) => {
           padding: '5px',
           margin: '10px',
           height: '40vh',
+          maxHeight: '40vh',
+          overflowX: 'auto',
         }}
       >
         <div>
@@ -129,22 +132,24 @@ const LiveConsoleChatContainer = ({ streamId }) => {
           />
           <span className="txt-byte-information">{adminChatText.length} / 150 byte</span>
         </div>
-        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-          <CButton
-            color="secondary"
-            style={{
-              borderRadius: '15px',
-              padding: '0px 10px',
-              height: '25px',
-              color: '#fff',
-              fontWeight: '900',
-              backgroundColor: 'blue',
-            }}
-            onClick={sendAdminChatText}
-          >
-            Send
-          </CButton>
-        </div>
+        {isLive === 1 && (
+          <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <CButton
+              color="secondary"
+              style={{
+                borderRadius: '15px',
+                padding: '0px 10px',
+                height: '25px',
+                color: '#fff',
+                fontWeight: '900',
+                backgroundColor: 'blue',
+              }}
+              onClick={sendAdminChatText}
+            >
+              Send
+            </CButton>
+          </div>
+        )}
       </div>
     </div>
   )
