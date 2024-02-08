@@ -245,6 +245,7 @@ export let API_ENDPOINT = {
   startQuizQuestion: ALL_CONSTANTS.API_URL + "/api/admin/lounge/quizQuestion/start",
   endQuizQuestion: ALL_CONSTANTS.API_URL + "/api/admin/lounge/quizQuestion/end",
   sendAdminChatText: ALL_CONSTANTS.API_URL + "/api/lounge/sendMessages",
+  uploadImageChoiceImage : ALL_CONSTANTS.API_URL + "api/uploadImage",
   getChatToken: ALL_CONSTANTS.API_URL + "/api/lounge/createChatToken",
   editLiveStream: ALL_CONSTANTS.API_URL + "/api/admin/lounge/updateLiveStream",
   editQuizQuestion: ALL_CONSTANTS.API_URL + "/api/admin/lounge/quizQuestion/edit",
