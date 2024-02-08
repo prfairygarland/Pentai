@@ -86,7 +86,7 @@ const LiveManagement = () => {
     {
       Header: multiLang?.LiveManagement?.Creator,
       accessor: 'authorId',
-      Cell: ({ row }) => <p>{row.original.authorId ? row.original.authorId : '-'}</p>
+      Cell: ({ row }) => <p>{row.original.authorName ? row.original.authorName : '-'}</p>
     },
     {
       Header: multiLang?.LiveManagement?.UV,

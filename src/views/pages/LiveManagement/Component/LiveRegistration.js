@@ -11,6 +11,7 @@ import { deleteApi, getApi, postApi, putApi } from 'src/utils/Api';
 import ConfirmationModal from 'src/utils/ConfirmationModal';
 import { ALL_CONSTANTS, API_ENDPOINT } from 'src/utils/config';
 import { imageUrl } from '../../BookRentalManagement/BookRentalStatus';
+import moment from 'moment/moment';
 
 const LiveRegistration = () => {
   const { t, i18n } = useTranslation();
@@ -57,6 +58,13 @@ const LiveRegistration = () => {
   const [streamId, setStreamId] = useState(null)
   const [quizIdTodelete, setQuizIdToDelete] = useState(null)
   const [type, setType] = useState('')
+  const [live, setLive] = useState(0)
+  const [liveInformation, setLiveInformation] = useState({})
+  const [modifyImage, setModifyImage] = useState('')
+
+  console.log('modifyImage', modifyImage)
+
+  console.log('live', live)
 
   const handleTimeInputChange = (e) => {
     const sanitizedValue = e.target.value.replace(/[^0-9]/g, '');
@@ -380,7 +388,10 @@ const LiveRegistration = () => {
       } else {
         files.push({ title: '', value: false, image: file })
       }
+    
     })
+
+
     e.target.value = null
     setUploadedImages(files)
   }
@@ -589,6 +600,7 @@ const LiveRegistration = () => {
       setMainQuizs(getData)
       enqueueSnackbar('Update succesfully.', { variant: 'success' })
       setCurrentQuizeIndex(null)
+
     } else {
       const allQuizData = mainQuizs ? [...mainQuizs] : []
       allQuizData.push(quizData)
@@ -625,7 +637,9 @@ const LiveRegistration = () => {
         value: val?.isCorrect === 0 ? false : true,
         ...val
       }))
+      const img = data?.options?.map((val) => val?.image)
       setUploadedImages(inputva)
+      setModifyImage(img)
 
     }
     if (data?.type === 'multipleChoice') {
@@ -692,6 +706,7 @@ const LiveRegistration = () => {
       if (res?.data?.status === 200) {
         //  enqueueSnackbar('Quiz question deleted successfully', { variant: 'success' })
         getStreamDetails()
+      //  navigate('/LiveManagement')
       }
       else {
         //  enqueueSnackbar('Failed to delete the Quiz question', { variant: 'error' })
@@ -709,6 +724,9 @@ const LiveRegistration = () => {
       console.log('form data =>', data);
 
       const responce = await putApi(API_ENDPOINT.updateQuizInfo, data)
+      if(responce?.status === 200){
+        navigate('/LiveManagement')
+      }
       console.log(' new =>', responce)
 
       console.log('test', mainQuizs);
@@ -749,7 +767,9 @@ const LiveRegistration = () => {
               } else {
                 formData.append(`options[${i}][isCorrect]`, 0)
               }
+
               formData.append('images', mainQuizs[obj].options[i].image)
+              console.log("type =>", typeof mainQuizs[obj].options[i].image);
             } else if (mainQuizs[obj].type === 'multipleChoice') {
               formData.append(`options[${i}][title]`, mainQuizs[obj].options[i].value ? mainQuizs[obj].options[i].value : mainQuizs[obj].options[i].title)
               if (mainQuizs[obj].options[i].answer === true || mainQuizs[obj].options[i].isCorrect === 1) {
@@ -763,15 +783,12 @@ const LiveRegistration = () => {
 
         console.log('ids1', mainQuizs[obj].id)
         // console.log('ids2', questionsId)
-        // console.log('id')
-
-        console.log('form data =>', formData);
         console.log('type', type)
         let res = ''
         if (mainQuizs[obj].id) {
           formData.append('questionId', mainQuizs[obj].id)
           res = await putApi(API_ENDPOINT.editQuizQuestion, formData)
-          if (res?.data?.status == 200) {
+          if (res?.status == 200) {
             getStreamDetails()
             // enqueueSnackbar('Quiz question Updated Successfully', { variant: 'success' })
             // navigate('/LiveManagement')
@@ -784,8 +801,8 @@ const LiveRegistration = () => {
         else {
           res = await postApi(API_ENDPOINT.addQuizQuestion, formData)
           if (res?.status === 200) {
+            navigate('/LiveManagement')
             getStreamDetails()
-            // navigate('/LiveManagement')
             if (res?.data?.status === 400) {
               enqueueSnackbar(res?.data?.msg, { variant: 'error' })
             } else if (res?.data?.status !== 200) {
@@ -799,19 +816,6 @@ const LiveRegistration = () => {
           }
         }
       }
-
-
-      // console.log('form data =>', formData);
-      // const res = await postApi(API_ENDPOINT.createLiveStream, formData)
-      // console.log(' new =>', res)
-      // if (res.status === 200) {
-      //   if (res?.data?.status === 500) {
-      //     enqueueSnackbar(res?.data?.msg, { variant: 'error' })
-      //   } else {
-      //     enqueueSnackbar('LiveStream Added Successfully', { variant: 'success' })
-      //     navigateToList()
-      //   }
-      // }
     } catch (error) {
       console.log(error)
     }
@@ -819,6 +823,11 @@ const LiveRegistration = () => {
       isModalOpen: false
     })
 
+  }
+
+  const checkFormat = (url) => {
+    console.log("url =>", url);
+    return typeof url
   }
 
 
@@ -860,20 +869,17 @@ const LiveRegistration = () => {
         console.log('questions', res?.data?.questions)
         // if (res?.data?.questions?.length > 0) {
         setMainQuizs(res?.data?.questions)
-
-        // const images = res?.data?.questions?.map((item) => {
-        //   if (item?.type === 'imageMultipleChoice') {
-        //     item?.options?.map((val) => ({
-        //       title: val?.title,
-        //       value: val?.isCorrect === 0 ? false : true,
-        //       image: imageUrl + val?.image,
-        //       ...val
-        //     }))
-        //   }
-        // })
-        // setUploadedImages(images)
-
-
+        setLive(res?.data?.isLive)
+        setLiveInformation({
+          startTime: res?.data?.scheduledAt,
+          endTime: res?.data?.scheduledUpto,
+          time: res?.data?.serverTime,
+          like: res?.data?.likes,
+          author: res?.data?.authorName,
+          Uv: res?.data?.uv,
+          Pv: res?.data?.pv,
+          Chats: res?.data?.chats
+        })
         // res?.data?.question?.map((val) => {
         //   console.log('val', val)
         //   setQuizQuestion(val?.title)
@@ -982,7 +988,7 @@ const LiveRegistration = () => {
           </div>
           <div className='d-flex gap-3'>
             <CButton onClick={consoleLiveHandler}>{multiLang?.LiveManagementRegistrationLive?.console}  <CIcon icon={cilAudio}></CIcon> </CButton>
-            <CButton className='btn-black'>{multiLang?.LiveManagementRegistrationLive?.liveCancel}</CButton>
+            {liveStatus === 'ready' && <CButton className='btn-black'>{multiLang?.LiveManagementRegistrationLive?.liveCancel}</CButton>}
           </div>
 
         </div>
@@ -993,35 +999,35 @@ const LiveRegistration = () => {
               <p className="fw-medium me-3" style={{ 'white-space': 'nowrap' }}>
                 {multiLang?.LiveManagementRegistrationLive?.start}
               </p>
-              <p>-</p>
+              <p>{liveInformation.startTime ? moment(liveInformation.startTime).format('YYYY-MM-DD HH:mm') : '-'}</p>
             </div>
             <div className="align-items-center ms-2 align-items-center">
               <p className="fw-medium me-1">{multiLang?.LiveManagementRegistrationLive?.end}</p>
-              <p>-</p>
+              <p>{liveInformation.endTime ? moment(liveInformation.endTime).format('YYYY-MM-DD HH:mm') : '-'}</p>
             </div>
             <div className="align-items-center ms-2 align-items-center">
               <p className="fw-medium me-1">{multiLang?.LiveManagementRegistrationLive?.time}</p>
-              <p>-</p>
+              <p>{liveInformation.time ? moment(liveInformation.time).format('HH:mm:s') : '-'}</p>
             </div>
             <div className="align-items-center ms-2 align-items-center">
               <p className="fw-medium me-1">{multiLang?.LiveManagementRegistrationLive?.uniqueVisitor}</p>
-              <p>-</p>
+              <p>{liveInformation.Uv ? liveInformation.Uv : '-'}</p>
             </div>
             <div className="align-items-center ms-2 align-items-center">
               <p className="fw-medium me-1">{multiLang?.LiveManagementRegistrationLive?.pageView}</p>
-              <p>-</p>
+              <p>{liveInformation.Pv ? liveInformation.Pv : '-'}</p>
             </div>
             <div className="align-items-center ms-2 align-items-center">
               <p className="fw-medium me-1">{multiLang?.LiveManagementRegistrationLive?.like}</p>
-              <p>-</p>
+              <p>{liveInformation.like ? liveInformation.like : '-'}</p>
             </div>
             <div className="align-items-center ms-2 align-items-center">
               <p className="fw-medium me-1">{multiLang?.LiveManagementRegistrationLive?.chat}</p>
-              <p>-</p>
+              <p>{liveInformation.Chats ? liveInformation.Chats : '-'}</p>
             </div>
             <div className="align-items-center ms-2 align-items-center">
               <p className="fw-medium me-1">{multiLang?.LiveManagementRegistrationLive?.creator}</p>
-              <p>-</p>
+              <p>{liveInformation.author ? liveInformation.author : '-'}</p>
             </div>
 
           </div>
@@ -1048,7 +1054,7 @@ const LiveRegistration = () => {
 
           {activeTab === '' &&
             <div>
-              <div className='mt-4'>
+              <div style={live === 1 ? {pointerEvents : 'none', opacity:'0.5'} : null} className='mt-4'>
                 <div className='addItemWrp'>
                   <div className="card-body">
                     <div className="formWraper">
@@ -1275,8 +1281,8 @@ const LiveRegistration = () => {
                   <CButton onClick={() => navigateToList()} >{multiLang?.LiveManagementRegistrationLive?.list}</CButton>
                 }
 
-                <CButton onClick={confirmationCloseModalHandler} className='btn-black'>{multiLang?.LiveManagementRegistrationLive?.Cancel}</CButton>
-                <CButton onClick={validateLiveRegister}>{multiLang?.LiveManagementRegistrationLive?.Save}</CButton>
+                {live === 0 &&<CButton onClick={confirmationCloseModalHandler} className='btn-black'>{multiLang?.LiveManagementRegistrationLive?.Cancel}</CButton>}
+                {live === 0 && <CButton onClick={validateLiveRegister}>{multiLang?.LiveManagementRegistrationLive?.Save}</CButton>}
               </div>
             </div>
           }
@@ -1398,8 +1404,8 @@ const LiveRegistration = () => {
                 {location?.state?.streamId !== undefined &&
                   <CButton onClick={() => navigateToList()} >{multiLang?.LiveManagementRegistrationLive?.list}</CButton>
                 }
-                <CButton onClick={confirmationCloseModalHandler} className='btn-black'>{multiLang?.LiveManagementRegistrationQuiz?.Cancel}</CButton>
-                <CButton onClick={() => validateAllRegistration()}>{multiLang?.LiveManagementRegistrationQuiz?.Save}</CButton>
+                {live === 0 && <CButton onClick={confirmationCloseModalHandler} className='btn-black'>{multiLang?.LiveManagementRegistrationQuiz?.Cancel}</CButton>}
+                {live === 0 && <CButton onClick={() => validateAllRegistration()}>{multiLang?.LiveManagementRegistrationQuiz?.Save}</CButton>}
               </div>
 
               <div>
@@ -1772,7 +1778,7 @@ const LiveRegistration = () => {
                     <CButton className='btn-black' onClick={() => { setVisible(false); resetQuiz() }}>
                       {multiLang?.LiveManagementRegistrationQuiz?.close}
                     </CButton>
-                    <CButton color="primary" onClick={() => validateQuize()}>{multiLang?.LiveManagementRegistrationQuiz?.Save}</CButton>
+                    {live === 0 && <CButton color="primary" onClick={() => validateQuize()}>{multiLang?.LiveManagementRegistrationQuiz?.Save}</CButton>}
                   </CModalFooter>
                 </CModal>
               </div>
