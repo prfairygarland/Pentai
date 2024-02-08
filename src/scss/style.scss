@@ -1,0 +1,140 @@
+// If you want to override variables do it here
+
+@import "variables";
+
+$enable-ltr: true;
+$enable-rtl: true;
+
+// Import CoreUI for React components library
+@import "@coreui/coreui/scss/coreui";
+
+// Import Chart.js custom tooltips styles
+@import "@coreui/chartjs/scss/coreui-chartjs";
+
+@import "layout";
+@import "example";
+
+// If you want to add custom CSS you can put it here.
+@import "custom";
+@import "reset";
+@import "sidebar";
+@import "form";
+@import "header";
+@import "../assets/fonts/icomoon/style.css";
+@import "modal";
+
+.primary-btn {
+  align-items: center;
+  border: 0;
+  cursor: pointer;
+  display: inline-flex;
+  font-family: var(--font-medium);
+  font-size: 1em;
+  justify-content: center;
+  line-height: 1.3;
+  min-height: 34px;
+  padding: 12px 20px;
+  text-align: center;
+  transition: all .2s ease-in;
+  }
+  
+  // .primary-btn:hover {
+  //   transition: 0.2s all ease-in;
+  //   background: var(--white-color);
+  //   color: var(--secondary-color);
+  // }
+
+  .nav-tabs{
+    --cui-nav-tabs-border-width:0
+  }
+
+  .camp-tab-cont .primary-btn.active {
+    border-bottom: 2px solid #ea5242;
+    background: #ea5242;
+    color: #fff;
+}
+.camp-tab-cont .primary-btn {
+  background: none;
+}
+.radiolabel {
+  max-width: 151px;
+  width: 150px;
+}
+
+.prohabitinfo p{
+  margin: 0;
+  font-size: 12px;
+  color: rgb(156, 154, 154);
+}
+
+.prowordsection{
+  background: #f1eeee;
+  display: block;
+  height: 250px;
+  width: 100%;
+  padding: 20px;
+  overflow-y: scroll;
+}
+
+.prohibitword {
+  display: flex;
+background: lightgray;
+    /* width: max-content; */
+    padding: 6px 12px;
+    position: relative;
+}
+
+.prohibitword button {
+  height: 16px;
+  width: 16px;
+width: max-content;
+align-items: center;
+padding: 9px;
+border: 3px solid #bfa9a7;
+border-radius: 20px;
+}
+
+.prohibitword button {
+  text-align: center;
+  height: 17px;
+  width: 17px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 1px solid ($primary);
+  color: ($primary);
+  position: absolute;
+  top: -5px;
+  right: -5px;
+}
+.prohibitword button i{
+  font-size: 7px;
+}
+.short-data-table .no-data-message p {
+  text-align: center;
+  font-size: 1.2em;
+  color: #999;
+}
+.mandatory-red-asterisk {
+  color: red;
+}
+
+.txt-byte-information {
+  font-size: 11px;
+  width: 85px;
+  display: flex;
+  justify-content: end;
+  align-items: center;
+}
+
+.err-msg-txt {
+  color: red;
+}
+
+.horizontal-line {
+  width: 99%;
+  border: 1px solid black;
+  margin: 10px 0px;
+}

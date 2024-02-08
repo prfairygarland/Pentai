@@ -1,0 +1,360 @@
+// Here you can add other styles
+.loader-overlay {
+    position: fixed;
+    top: 0;
+    width:  78%;
+    height: 100%;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    backdrop-filter: blur(5px);
+    background-color: #01223770;
+  }
+  
+  .preloader {
+    // background: url(../images/logo-small.svg) no-repeat center;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-size: 45px;
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    // background-color: #fff;
+    padding: 5px;
+  }
+  
+  .preloader2 {
+    border: 4px solid var(--secondary-color);
+    border-top: 4px solid var(--black-color);
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    animation: spin 1s ease-in-out infinite;
+    position: relative;
+    margin: auto;
+    top: 0;
+  }
+  
+  .modal-backdrop.show {
+    backdrop-filter: blur(6px);
+    background-color: #01223770;
+  }
+  
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+  
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  .userdetailPopTable{
+    table{
+      thead{
+        tr{
+          th{
+            &:first-child{
+              width: 40px !important;
+            }
+          }
+        }
+      }
+    }
+  }
+  .UserInfoList{
+    p{
+      margin-bottom: 10px;
+    }
+  }
+  .minMaxBtn{
+    button{
+      width: 38px;
+      height: 38px;
+      font-size: 20px;
+      align-items: center;
+      display: flex;
+      justify-content: center;
+    }
+    input{
+      margin: 0 5px;
+      text-align: center;
+      width: 50px;
+    }
+  }
+.tabNav{
+  .nav-item{
+    margin-right: 10px;
+    background: var(--cui-sidebar-nav-link-active-bg);
+    .nav-link {
+      border-radius: 0px;
+      color: ($black);
+      &.active{
+        background:($primary);
+        color: ($white);
+      }
+      &:hover{
+        background:($primary);
+        color: ($white);
+      }
+    }
+  }
+}
+  .bookListHeader{
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+  }
+  .booklstLft{
+    width: 25%;
+  }
+  .booklstRgt{
+    width: 25%;
+  }
+  .booklstMidd{
+    // width: 50%;
+    flex: 1;
+  }
+  .bookListbody{
+    // display: flex;
+    // flex-direction: row;
+  }
+
+  .table-bordered{
+    border: 1px solid #ccc;
+  thead{
+    th{
+      border-bottom: 1px solid #ccc;
+      border-left: 1px solid #ccc;
+      text-align: center;
+      background-color: #ccc;
+      padding: 20px 0 20px 0;
+    }
+  }
+  tbody{
+   tr{
+    td{
+      border-bottom: 1px solid #ccc;
+      border-left: 1px solid #ccc;
+      vertical-align: middle;
+    table{
+      border: none;
+      margin: 0;
+      // border-bottom:1px solid #ccc ;
+     tr{
+      td{
+        &:first-child{
+          border-left: 0;
+          width: 120px;
+        } &:nth-child(2){
+          padding:12px;
+         
+        }
+      }
+      &:last-child{
+        td{
+          border-bottom: none;
+        }
+      }
+     }
+   
+     
+    }
+    &:nth-child(2){
+      padding: 0;
+     vertical-align: top;
+    }
+   &:first-child{
+    text-align: center;
+    img{
+      height: 100px;
+      display: inline;
+    }
+   }
+    }
+   
+   }
+  }
+   
+  }
+  .card{
+    border-radius: 0;
+  }
+  .sidebarMenuLink {
+    li{
+      cursor: pointer;
+      strong{
+        text-transform: capitalize;
+      }
+    }
+  }
+  .lblwidth{
+    width: 200px;
+  }
+  .sidebar-nav{
+    .nav-item{
+      svg{
+        cursor: pointer;
+        width: 11px !important;
+    height: 11px !important;
+      }
+      p{
+        flex: 1;
+      }
+    }
+  }
+  .useDetailImgWrp{
+    width: 200px;
+    height: 200px;
+    img{
+width: 100%;
+height: 100%;
+object-fit: cover;
+    }
+  }
+  .profileImg{
+    width: 150px;
+    height: 150px;
+    img{
+width: 100%;
+height: 100%;
+object-fit: cover;
+    }
+  }
+
+  .quizCheckBox{
+    button{
+      width: calc((100% / 2) - 10px);
+      margin-right:10px ;
+      margin-bottom: 10px;
+      height: auto;
+      .form-check-input{
+        margin-top: 0;
+      }
+
+    }
+    .btn-sm{
+      height: auto;
+      --cui-btn-padding-y: 0.25rem;
+    --cui-btn-padding-x: 0.5rem;
+    }
+  }
+  .thumbnailLiveImg{
+    cursor: pointer;
+  }
+  .trueFlaseBtn {
+    label{
+      width: 100px;
+      height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+  .multiAns{
+   
+    .form-control{
+      flex: 1;
+    }
+  }
+  .Livetitle{
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    max-width: 400px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+
+  }
+  .imageMultipleChoice{
+    width: calc((100% / 2) - 10px);
+    margin-right: 10px;
+    margin-bottom: 10px;
+.imageMultipleChoiceCheck{
+  position: relative;
+
+}
+    .remaining-img-container{
+      width: 140px;
+      position: relative;
+      height: 100px;
+      img{
+        object-fit: cover;
+        width: 100%;
+        height: 100%;
+      }
+      .thumbclsBtn{
+        position: absolute;
+        top: 0;
+    right: 0;
+    width: 20px;
+    height: 20px;
+    font-size: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+        background: ($primary);
+        color: ($white);
+      }
+    }
+    .imgchoiseInput{
+      position: relative;
+      input{
+padding-right: 80px;
+      }
+      span{
+        position: absolute;
+        top: 50%;
+        right: 7px;
+        transform: translateY(-50%);
+      }
+    }
+  }
+  .createQuizTitle{
+    text-transform: capitalize;
+  }
+  .ansImgChoise{
+    height: 180px;
+    img{
+      object-fit: cover;
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  .olNumListing{
+    list-style: decimal;
+    margin-left: 30px;
+    margin-top: 10px;
+
+    li{
+      margin-bottom: 5px;
+
+    }
+  }
+  .tdImg{
+    width: 120px;
+    height: 120px;
+    img{
+      width: 100%;
+    height: 100%;
+    object-fit: cover;
+    }
+  }
+  .noDataAvailable{
+   
+    p{
+      color: ($gray2);
+      font-family: ($fontmd);
+      font-size: 20px;
+      min-height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
