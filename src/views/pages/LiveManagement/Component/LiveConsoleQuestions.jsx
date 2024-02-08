@@ -10,7 +10,7 @@ import { patchApi } from 'src/utils/Api'
 import { ALL_CONSTANTS, API_ENDPOINT } from 'src/utils/config'
 import { enqueueSnackbar } from 'notistack'
 
-const LiveConsoleQuestions = ({ questions }) => {
+const LiveConsoleQuestions = ({ questions, isLive }) => {
   const readyQuestionStyles = {
     marginRight: '5px',
     padding: '0px 5px',
@@ -165,7 +165,7 @@ const LiveConsoleQuestions = ({ questions }) => {
                           )}
                         </p>
                       ))}
-                    {questStatusAndBtn[index]?.quesStatus === 'ready' && (
+                    {questStatusAndBtn[index]?.quesStatus === 'ready' && Number(isLive) === 1 && (
                       <CButton
                         color="secondary"
                         style={{ width: '100%', borderRadius: '25px' }}
@@ -174,7 +174,7 @@ const LiveConsoleQuestions = ({ questions }) => {
                         Start
                       </CButton>
                     )}
-                    {questStatusAndBtn[index]?.quesStatus === 'now' && (
+                    {questStatusAndBtn[index]?.quesStatus === 'now' && Number(isLive) === 1 && (
                       <CButton
                         color="primary"
                         style={{ width: '100%', borderRadius: '25px' }}
