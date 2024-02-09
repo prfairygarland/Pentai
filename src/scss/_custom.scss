@@ -261,3 +261,192 @@ object-fit: cover;
       flex: 1;
     }
   }
+  .Livetitle{
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    max-width: 400px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+
+  }
+  .imageMultipleChoice{
+    width: calc((100% / 2) - 10px);
+    margin-right: 10px;
+    margin-bottom: 10px;
+.imageMultipleChoiceCheck{
+  position: relative;
+
+}
+    .remaining-img-container{
+      width: 140px;
+      position: relative;
+      height: 100px;
+      img{
+        object-fit: cover;
+        width: 100%;
+        height: 100%;
+      }
+      .thumbclsBtn{
+        position: absolute;
+        top: 0;
+    right: 0;
+    width: 20px;
+    height: 20px;
+    font-size: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+        background: ($primary);
+        color: ($white);
+      }
+    }
+    .imgchoiseInput{
+      position: relative;
+      input{
+padding-right: 80px;
+      }
+      span{
+        position: absolute;
+        top: 50%;
+        right: 7px;
+        transform: translateY(-50%);
+      }
+    }
+  }
+  .createQuizTitle{
+    text-transform: capitalize;
+  }
+  .createQuizTitleClickable{
+    cursor: pointer;
+  }
+  .ansImgChoise{
+    height: 180px;
+    img{
+      object-fit: cover;
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  .olNumListing{
+    list-style: decimal;
+    margin-left: 30px;
+    margin-top: 10px;
+
+    li{
+      margin-bottom: 5px;
+
+    }
+  }
+  .tdImg{
+    width: 120px;
+    height: 120px;
+    img{
+      width: 100%;
+    height: 100%;
+    object-fit: cover;
+    }
+  }
+  .noDataAvailable{
+   
+    p{
+      color: ($gray2);
+      font-family: ($fontmd);
+      font-size: 20px;
+      min-height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+  .uploadImgWrapBox{
+    position: relative;
+    overflow: inherit;
+    .uploadImgWrapclose{
+      position: absolute;
+      top: -15px;
+      right: 0;
+      color: ($primary);
+    }
+  }
+  .liveConsoleTitle{
+    display: flex;
+    justify-content: space-between;
+    padding: 15px;
+    border-bottom: 1px solid ($gray2);
+  }
+  .statusBox{
+    border: 1px solid ($gray2);
+          // border-radius: 10px;
+          padding: 10px;
+          margin: 10px;
+          height: 22vh;
+          overflow-x: auto;
+          p{
+            margin-bottom: 5px;
+          }
+  }
+  .chatBoxWrp{
+    border: 1px solid ($gray2);
+    // border-radius: 10px;
+    padding: 10px;
+          margin: 10px;
+         
+          .chatBoxList{
+            height: 40vh;
+            max-height: 40vh;
+            overflow-x: auto;
+          }
+  }
+  .adminChat{
+    border: 1px solid ($gray2);
+    // border-radius: 10px;
+    padding: 10px;
+          margin: 10px;
+          height: 20vh;
+        
+  }
+  .quizQuesBox{
+    .accordion-button{
+      align-items: flex-start;
+
+      span{
+        white-space: nowrap;
+        padding: 4px 8px;
+        font-size: 12px;
+        margin-right: 10px;
+          &.ready{
+            color: ($green);
+            border: 1px solid ($green) !important;
+          }
+          &.new{
+            color: ($primary);
+            border: 1px solid ($primary);
+          }
+          &.end{
+            background: ($primary);
+            border: 1px solid ($primary);
+            color: ($white);
+          }
+      }
+      &:focus{
+        box-shadow: none;
+      }
+
+    }
+   
+  }
+  .quizWrapBox{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    border: 1px solid ($gray);
+    padding: 5px;
+    p{
+      margin-right: 10px;
+      text-transform: capitalize;
+    }
+  }

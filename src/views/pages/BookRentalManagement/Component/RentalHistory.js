@@ -108,7 +108,7 @@ const RentalHistory = ({ bookRentalId, setHistCurrentPage, HisCurrentPage, selec
                 </div>
                 <div className='d-flex justify-content-between py-md-3 '>
                     <p style={{ fontSize: 'medium' }}>Total: {totalCount > 0 ? totalCount : '-'}</p>
-                    <CButton onClick={historyExportData} className='mx-3 px-3 py-2 rounded border-1'>Export</CButton>
+                    <CButton onClick={historyExportData} className=''>Export</CButton>
                 </div>
             </div>
             <ReactTable columns={columns} data={RentalHistoryData} showCheckbox={false} onSelectionChange={handleSelectionChange} />

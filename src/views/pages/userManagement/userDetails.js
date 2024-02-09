@@ -233,6 +233,9 @@ const UserDetails = () => {
   return (
     <>
       <div>
+      <div className="pageTitle mb-3 pb-2">
+      <h2>User Details</h2>
+    </div>
         {/* <div>
           <CButton className='btn btn-dark'>Reset password</CButton>
         </div> */}
@@ -390,7 +393,7 @@ const UserDetails = () => {
                                     <p className='mb-2'>{multiLang?.Total}: {totalSupply}</p>
                                     <div className='userdetailPopTable'>
                                       <ReactTable showCheckbox={false} columns={suppliesRentalColumns} data={supplyRentalData} totalCount={5} onSelectionChange={handleSelectionChange} /></div>
-                                    <div className='userlist-pagination dataTables_paginate'>
+                                    <div className='userlist-pagination dataTables_paginate mt-3'>
                                       <ReactPaginate
                                         breakLabel={'...'}
                                         marginPagesDisplayed={1}
@@ -436,7 +439,7 @@ const UserDetails = () => {
                                     <div className='userdetailPopTable'>
                                       <ReactTable showCheckbox={false} columns={bookRentalColumns} data={bookRentalData} totalCount={5} onSelectionChange={handleSelectionChange} />
                                     </div>
-                                    <div className='userlist-pagination dataTables_paginate'>
+                                    <div className='userlist-pagination dataTables_paginate mt-3'>
                                       <ReactPaginate
                                         breakLabel={'...'}
                                         marginPagesDisplayed={1}
@@ -504,7 +507,7 @@ const UserDetails = () => {
                                <ReactTable className='d-flex ' showCheckbox={false} columns={operationClubColumns} data={oprationClubData} totalCount={5} onSelectionChange={handleSelectionChange} />
                                </div>
 
-                                <div className='userlist-pagination dataTables_paginate '>
+                                <div className='userlist-pagination dataTables_paginate mt-3'>
                                   <ReactPaginate
                                     breakLabel={'...'}
                                     marginPagesDisplayed={1}

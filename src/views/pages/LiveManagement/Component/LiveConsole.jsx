@@ -50,31 +50,19 @@ const LiveConsole = () => {
 
   return (
     <>
-      <div style={{ display: 'flex', justifyContent: 'space-between', padding: '5px 20px' }}>
-        <div style={{ fontWeight: 'bold', paddingTop: '8px', fontSize: '20px' }}>
-          Title : {title}
+      <div className="liveConsoleTitle">
+        <div className="w-50">
+          <h5>LIVE Console</h5>
+          <p>
+            <b>Title</b> : {title}
+          </p>
         </div>
-        <div>
-          {isLive === 0 && (
-            <CButton
-              color="secondary"
-              style={{ borderRadius: '15px', width: '150px' }}
-              onClick={startLiveStream}
-            >
-              Start
-            </CButton>
-          )}
-          {isLive === 1 && (
-            <CButton
-              color="primary"
-              style={{ borderRadius: '15px', width: '150px' }}
-              onClick={endLiveStream}
-            >
-              End
-            </CButton>
-          )}
+        <div className="w-50 d-flex  justify-content-end">
+          {isLive === 0 && <CButton onClick={startLiveStream}>Start</CButton>}
+          {isLive === 1 && <CButton onClick={endLiveStream}>End</CButton>}
         </div>
       </div>
+      <div style={{ display: 'flex', justifyContent: 'space-between', padding: '5px 20px' }}></div>
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <LiveConsoleQuestions questions={questions} isLive={isLive} />
         <LiveConsoleVideoView playbackUrl={playbackUrl} isLive={isLive} />

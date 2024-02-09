@@ -780,7 +780,7 @@ const BulletinBoardPostDetails = () => {
                                             {bulletinBoardPostDetail[0]?.createdAt?.split('T')[0]}
                                           </p>
                                         </div>
-                                        <div className="d-flex flex-column gap-2 mt-3">
+                                        <div className="d-flex flex-column gap-2 mt-1">
                                           <div className="d-flex gap-2">
                                             <p>{multiLangObj?.status}:</p>
                                             <p>{bulletinBoardPostDetail[0]?.status}</p>
@@ -1159,7 +1159,7 @@ const BulletinBoardPostDetails = () => {
                             value={commentInput}
                             onChange={(e) => handleICommentnputChange(e)}
                           />
-                          <div className="d-flex justify-content-between">
+                          <div className="d-flex justify-content-end">
                             <CButton
                               color="primary"
                               // onClick={handlePost}
@@ -1349,7 +1349,7 @@ const BulletinBoardPostDetails = () => {
                           </CModalBody>
                           <CModalFooter className="d-flex justify-content-center">
                             <CButton
-                              color="secondary"
+                              className='btn-black'
                               onClick={() => {
                                 setDeleteCommentModal(false)
                                 clearDeleteModuleValues()
@@ -1359,7 +1359,7 @@ const BulletinBoardPostDetails = () => {
                               {multiLangObj?.cancel}
                             </CButton>
                             <CButton
-                              color="primary"
+                             
                               disabled={selectedDeleteReason == ''}
                               onClick={() => handleDeleteAll()}
                             >

@@ -66,8 +66,9 @@ const LiveConsoleChatContainer = ({ streamId, socketURL, isLive }) => {
   }
 
   return (
-    <div style={{ width: '26%', display: 'flex', flexDirection: 'column' }}>
-      <div
+    // <div style={{ width: '26%', display: 'flex', flexDirection: 'column' }}>
+    <div className="col-md-4 p-2">
+      {/* <div
         style={{
           border: '1px solid black',
           borderRadius: '10px',
@@ -75,20 +76,31 @@ const LiveConsoleChatContainer = ({ streamId, socketURL, isLive }) => {
           margin: '10px',
           height: '22vh',
         }}
-      >
-        <div>
-          Status :{' '}
+      > */}
+      <div className="statusBox">
+        <p>
+          <b> Status :</b>{' '}
           <span style={{ color: 'red' }}>
             <b>On AIR</b>
           </span>
-        </div>
-        <div>Scheduled : YYYY-MM-DD 00:00 ~ YYYY-MM-DD 00:00</div>
-        <div>Current time : 00:00:00 PM</div>
-        <div>Start time : 00:00:00 PM</div>
-        <div>Elapsed time : 00:00:00</div>
-        <div>UV l PV l Like : 000 l 000 l 000</div>
+        </p>
+        <p>
+          <b>Scheduled :</b> YYYY-MM-DD 00:00 ~ YYYY-MM-DD 00:00
+        </p>
+        <p>
+          <b>Current time :</b> 00:00:00 PM
+        </p>
+        <p>
+          <b>Start time :</b> 00:00:00 PM
+        </p>
+        <p>
+          <b>Elapsed time :</b> 00:00:00
+        </p>
+        <p>
+          <b>UV l PV l Like :</b> 000 l 000 l 000
+        </p>
       </div>
-      <div
+      {/* <div
         style={{
           border: '1px solid black',
           borderRadius: '10px',
@@ -98,18 +110,19 @@ const LiveConsoleChatContainer = ({ streamId, socketURL, isLive }) => {
           maxHeight: '40vh',
           overflowX: 'auto',
         }}
-      >
-        <div>
-          <b>Chat (1000)</b>
+      > */}
+      <div className="chatBoxWrp">
+        <h5>Chat (1000)</h5>
+        <div className="chatBoxList">
+          {chatData.length > 0 &&
+            chatData.map((chat, index) => (
+              <p key={index}>
+                <b>{chat.name}</b> : {chat.message}
+              </p>
+            ))}
         </div>
-        {chatData.length > 0 &&
-          chatData.map((chat, index) => (
-            <div key={index}>
-              {chat.name} : {chat.message}
-            </div>
-          ))}
       </div>
-      <div
+      {/* <div
         style={{
           border: '1px solid black',
           borderRadius: '10px',
@@ -117,8 +130,9 @@ const LiveConsoleChatContainer = ({ streamId, socketURL, isLive }) => {
           margin: '10px',
           height: '20vh',
         }}
-      >
-        <div style={{ fontWeight: 'bold', fontSize: '18px' }}>Admin Chat</div>
+      > */}
+      <div className="adminChat">
+        <h5>Admin Chat</h5>
         <div>
           <CFormInput
             type="text"
@@ -130,26 +144,15 @@ const LiveConsoleChatContainer = ({ streamId, socketURL, isLive }) => {
               setAdminChatText(e.target.value.substring(0, 150))
             }}
           />
-          <span className="txt-byte-information">{adminChatText.length} / 150 byte</span>
         </div>
-        {isLive === 1 && (
-          <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-            <CButton
-              color="secondary"
-              style={{
-                borderRadius: '15px',
-                padding: '0px 10px',
-                height: '25px',
-                color: '#fff',
-                fontWeight: '900',
-                backgroundColor: 'blue',
-              }}
-              onClick={sendAdminChatText}
-            >
-              Send
-            </CButton>
-          </div>
-        )}
+        <div className="d-flex justify-content-between align-items-center mt-2">
+          <span>{adminChatText.length} / 150 byte</span>
+          {isLive === 1 && (
+            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+              <CButton onClick={sendAdminChatText}>Send</CButton>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   )

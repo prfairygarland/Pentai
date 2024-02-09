@@ -385,7 +385,7 @@ const AllReservationListing = () => {
           </CFormSelect>
           &nbsp;
           <CFormSelect
-            style={{ width: '23%' }}
+            style={{ width: '23%', marginRight: 0 }}
             size="sm"
             name="boardId"
             className="board-dropdown"
@@ -407,12 +407,14 @@ const AllReservationListing = () => {
         {totalDataCount > 0 && <p style={{ margin: 0 }}>Total&nbsp;:&nbsp; {totalDataCount}</p>}
       </div>
       {meetingData && (
-        <ReactTable
-          columns={meetingColumns}
-          data={meetingData}
-          showCheckbox={false}
-          onSelectionChange={() => {}}
-        />
+        <div className="table-responsive">
+          <ReactTable
+            columns={meetingColumns}
+            data={meetingData}
+            showCheckbox={false}
+            onSelectionChange={() => {}}
+          />
+        </div>
       )}
       <div className="d-flex w-100 justify-content-center align-items-center my-3 gap-3">
         {meetingData.length > 0 && (
@@ -526,6 +528,7 @@ const AllReservationListing = () => {
           backdrop="static"
           onClose={() => setShowUserDetails(false)}
           aria-labelledby="LiveDemoExampleLabel"
+          scrollable
         >
           <CModalHeader onClose={() => setShowUserDetails(false)}>
             <CModalTitle>User Information</CModalTitle>
@@ -537,12 +540,14 @@ const AllReservationListing = () => {
                   <div className="formWrpLabel">
                     <label className="fw-bolder ">Profile Image</label>
                   </div>
-                  <div className="room-image-container">
-                    <img
-                      style={{ width: '100px', height: '100px' }}
-                      src={URL.createObjectURL(userDetailImage)}
-                      alt=""
-                    />
+                  <div className="p-2">
+                    <div className="room-image-container ">
+                      <img
+                        style={{ width: '100px', height: '100px' }}
+                        src={URL.createObjectURL(userDetailImage)}
+                        alt=""
+                      />
+                    </div>
                   </div>
                 </div>
                 <div className="form-outline form-white  d-flex ">
@@ -659,7 +664,9 @@ const AllReservationListing = () => {
             <div className="formWraper">
               <div className="form-outline form-white  d-flex ">
                 <div className="upload-image-main-container">
-                  <div className="upload-img-btn-and-info">{meetingReservationInfo?.roomName}</div>
+                  <div className="upload-img-btn-and-info">
+                    <h4>{meetingReservationInfo?.roomName}</h4>
+                  </div>
                 </div>
               </div>
               <div className="form-outline form-white  d-flex ">

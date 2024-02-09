@@ -453,13 +453,13 @@ const AllSupplies = () => {
   return (
     <div>
       <div className="pageTitle mb-3 pb-2">
-        <h2>All Supplies</h2>
+        <h2>{multiLang?.allSupplies}</h2>
       </div>
       <div className='d-flex justify-content-between  mb-4'>
         {isLoading && <Loader />}
         <div className='col-md-4'>
           <CSidebar className='w-100 pe-3'>
-            <CSidebarBrand className=' black-text d-flex justify-content-start p-3' style={{ color: 'black', background: 'none' }}><h5>{multiLang?.categoryHierarchy}</h5></CSidebarBrand>
+            <CSidebarBrand className=' black-text d-flex justify-content-start p-3 ps-0' style={{ color: 'black', background: 'none' }}><h5>{multiLang?.categoryHierarchy}</h5></CSidebarBrand>
             <CSidebarBrand className=' black-text d-flex justify-content-between mb-2' style={{ color: 'black', borderBottom: '1px solid #000', background: 'none', alignItems: 'center' }}>
               <p role='button' onClick={() => handleSetModal('allList')}>{multiLang?.allSupplies}</p>
               <CButton className='text-center btn-sm' style={{
@@ -571,14 +571,14 @@ const AllSupplies = () => {
         {getModal === 'allList' &&
           <div className='mb-4 col-md-8'>
             <div className='clearfix'>
-              <CButton className='float-end mx-2 mb-2 btn-success' onClick={exportData}>{multiLang?.export}</CButton>
+              <CButton className='float-end  mb-2 btn-success' onClick={exportData}>{multiLang?.export}</CButton>
             </div>
             <div className='d-flex justify-content-between align-items-center my-4'>
               <div className='mx-1 d-flex'>
                 <input className=' me-3 form-control' placeholder='Search' value={filterData.search} onChange={handleSearch} />
                 <CButton onClick={handleAllSupplyRentaldata}>{multiLang?.search}</CButton>
               </div>
-              <div className='d-flex me-5 gap-1'>
+              <div className='d-flex gap-1'>
                 <CFormSelect
                   className='mx-4'
                   style={{ width: '170px' }}
@@ -611,7 +611,7 @@ const AllSupplies = () => {
               </div>
 
             </div>
-            <div className='mb-4'>
+            <div className='mb-3'>
               <p style={{ fontSize: 'medium' }}>{multiLang?.total}: {totalCount > 0 ? totalCount : '0'}</p>
             </div>
             <ReactTable showCheckbox={false} columns={columns} data={allSuppliesData} totalCount={10} onSelectionChange={handleSelectionChange} />
@@ -663,11 +663,11 @@ const AllSupplies = () => {
           <CModalBody>
             <p>{multiLang?.deleteBoardPopUp}</p>
           </CModalBody>
-          <CModalFooter>
-            <CButton color="secondary" >
+          <CModalFooter className='d-flex justify-content-center'>
+            <CButton className='btn-black' >
               {multiLang?.delete}
             </CButton>
-            <CButton color="primary" onClick={() => setDeleteVisible(false)}>{multiLang?.cancel}</CButton>
+            {/* <CButton className='btn-black' onClick={() => setDeleteVisible(false)}>{multiLang?.cancel}</CButton> */}
           </CModalFooter>
         </CModal>
 

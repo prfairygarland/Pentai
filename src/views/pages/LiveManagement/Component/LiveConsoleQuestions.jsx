@@ -78,71 +78,51 @@ const LiveConsoleQuestions = ({ questions, isLive }) => {
   }, [questions])
 
   return (
-    <div style={{ width: '37%' }}>
-      <div className="container bg-light p-3 mb-3">
+    // <div style={{ width: '37%' }}>
+    <div className="col-md-4">
+      <div className=" bg-light p-3 mb-3">
         <div>
-          <CAccordion alwaysOpen activeItemKey={1}>
+          <h4>Quiz (1/10)</h4>
+          <p>
+            <b>Winner:100</b>
+          </p>
+          <p>Reward Points: 1,000 Points</p>
+          <p>*Points shared by all</p>
+        </div>
+        <div>
+          <CAccordion alwaysOpen activeItemKey={1} className="mt-2">
             {Array.isArray(questions) &&
               questions.map((quesData, index) => (
-                <CAccordionItem key={quesData?.id}>
-                  <CAccordionHeader>
+                <CAccordionItem key={quesData?.id} className="mb-2">
+                  <CAccordionHeader className="quizQuesBox">
                     {questStatusAndBtn[index]?.quesId === quesData?.id &&
                       questStatusAndBtn[index]?.quesStatus === 'ready' && (
-                        <p style={readyQuestionStyles}>Ready</p>
+                        <span className="ready">Ready</span>
                       )}{' '}
                     {questStatusAndBtn[index]?.quesId === quesData?.id &&
                       questStatusAndBtn[index]?.quesStatus === 'now' && (
-                        <p style={nowQuestionStyles}>Now</p>
+                        <span className="now">Now</span>
                       )}{' '}
                     {questStatusAndBtn[index]?.quesId === quesData?.id &&
                       questStatusAndBtn[index]?.quesStatus === 'end' && (
-                        <p style={endQuestionStyles}>End</p>
+                        <span className="end">End</span>
                       )}{' '}
-                    {quesData?.title} - {quesData?.type}
+                    {quesData?.title}
                   </CAccordionHeader>
                   <CAccordionBody>
                     {quesData?.type !== 'imageMultipleChoice' &&
                       quesData?.options?.map((quesOpt) => (
-                        <p
-                          style={{
-                            border: '1px solid gray',
-                            borderRadius: '15px',
-                            margin: '3px',
-                            padding: '3px 10px',
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                          }}
-                          key={quesOpt?.id}
-                        >
-                          {quesOpt?.title}
+                        <div key={quesOpt?.id} className="quizWrapBox">
+                          <p>{quesOpt?.title}</p>
                           {quesOpt?.isCorrect !== 0 && (
-                            <span
-                              style={{
-                                backgroundColor: 'blue',
-                                color: '#fff',
-                                borderRadius: '15px',
-                                padding: '2px 10px',
-                              }}
-                            >
-                              CORRECT
-                            </span>
+                            <span className="btn btn-sm btn-success">CORRECT</span>
                           )}
-                        </p>
+                        </div>
                       ))}
 
                     {quesData?.type === 'imageMultipleChoice' &&
                       quesData?.options?.map((quesOpt) => (
-                        <p
-                          style={{
-                            border: '1px solid gray',
-                            borderRadius: '15px',
-                            margin: '3px',
-                            padding: '3px 10px',
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                          }}
-                          key={quesOpt?.id}
-                        >
+                        <div key={quesOpt?.id} className="quizWrapBox">
                           <img
                             crossOrigin="anonymous"
                             style={{ width: '75px', height: '75px', borderRadius: '15px' }}
@@ -150,36 +130,17 @@ const LiveConsoleQuestions = ({ questions, isLive }) => {
                             alt=""
                           />
                           {quesOpt?.isCorrect !== 0 && (
-                            <span
-                              style={{
-                                backgroundColor: 'blue',
-                                color: '#fff',
-                                borderRadius: '15px',
-                                padding: '2px 10px',
-                                height: '25px',
-                                marginTop: '25px',
-                              }}
-                            >
-                              CORRECT
-                            </span>
+                            <span className="btn btn-sm btn-success">CORRECT</span>
                           )}
-                        </p>
+                        </div>
                       ))}
                     {questStatusAndBtn[index]?.quesStatus === 'ready' && Number(isLive) === 1 && (
-                      <CButton
-                        color="secondary"
-                        style={{ width: '100%', borderRadius: '25px' }}
-                        onClick={() => startQuiz(index, quesData.id)}
-                      >
+                      <CButton className="btn w-100" onClick={() => startQuiz(index, quesData.id)}>
                         Start
                       </CButton>
                     )}
                     {questStatusAndBtn[index]?.quesStatus === 'now' && Number(isLive) === 1 && (
-                      <CButton
-                        color="primary"
-                        style={{ width: '100%', borderRadius: '25px' }}
-                        onClick={() => endQuiz(index, quesData.id)}
-                      >
+                      <CButton className="btn w-100" onClick={() => endQuiz(index, quesData.id)}>
                         End
                       </CButton>
                     )}

@@ -223,13 +223,13 @@ const RouletteeventManagementListing = () => {
             </CNav>
           </div>
           <div>
-            <NavLink to='./LiveRegistration'><CButton>{multiLang?.registration}</CButton></NavLink>
+            <NavLink to='./LiveRegistration'><CButton className='btn-success'>{multiLang?.registration}</CButton></NavLink>
           </div>
         </div>
         <div className='d-flex justify-content-between mb-2 mt-3'>
 
           <div className='mx-1 d-flex'>
-            <input className='form-control px-4 me-3' value={filterData.search} onChange={handleSearch} />
+            <input className='form-control me-3' placeholder='Search' value={filterData.search} onChange={handleSearch} />
             <CButton >{multiLang?.search}</CButton>
           </div>
 

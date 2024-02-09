@@ -191,7 +191,20 @@ const WelfareBoard = () => {
       <section>
         <div className="d-flex w-100">
           <div className="col-md-4">
-            <div className="d-flex justify-content-end pt-3 pb-3 gap-2">
+            {/* <div className="d-flex justify-content-end pt-3 pb-3 gap-2">
+              
+            </div> */}
+            <div className="d-flex justify-content-center gap-2 mt-3">
+              <CCol  className="w-100" style={{ width: 'auto' }}>
+                <CFormInput
+                  type="text"
+                  id="inputPassword2"
+                  placeholder="Search"
+                  onFocus={handleSearchFocus}
+                  onChange={handleSearchChange}
+                />
+              
+              </CCol>
               <CButton
                 type="submit"
                 className=" text-white "
@@ -209,16 +222,7 @@ const WelfareBoard = () => {
                 </CButton>
               )}
             </div>
-            <div className="d-flex justify-content-center">
-              <CCol xs="auto" className="w-100" style={{ width: 'auto' }}>
-                <CFormInput
-                  type="text"
-                  id="inputPassword2"
-                  placeholder="Search"
-                  onFocus={handleSearchFocus}
-                  onChange={handleSearchChange}
-                />
-                {searchData.length > 0 && (
+            {searchData.length > 0 && (
                   <ul className="p-2 sidebarMenuLink">
                     {filteredData.map((item) => (
                       <li className="p-2" key={item.id} onClick={() => handleItemClick(item)}>
@@ -227,15 +231,12 @@ const WelfareBoard = () => {
                     ))}
                   </ul>
                 )}
-              </CCol>
-            </div>
           </div>
           {addWelfareBoard === true ? (
             <div className="col-md-8">
               
                 <div className="w-100 p-3">
-                  <main>
-                    <div>
+                  
                       <div className="card-body">
                         <div className="formWraper">
                           <div className="form-outline form-white d-flex">
@@ -294,23 +295,23 @@ const WelfareBoard = () => {
                           </div>
                         </div>
                       </div>
-                    </div>
-                  </main>
+                   
+                  {addWelfareBoard && (
+          <div className="save-cancel-btn-container justify-content-end mt-3">
+            <CButton className="btn "  onClick={() => validate()}>
+            {translationObject?.translation?.communityBoardManagement?.save}
+            </CButton>
+          </div>
+        )}
                 </div>
-            
+               
             </div>
           ) : (
             <></>
           )}
         </div>
 
-        {addWelfareBoard && (
-          <div className="save-cancel-btn-container">
-            <CButton className="btn "  onClick={() => validate()}>
-            {translationObject?.translation?.communityBoardManagement?.save}
-            </CButton>
-          </div>
-        )}
+      
 
         <CModal
           backdrop="static"
@@ -324,8 +325,8 @@ const WelfareBoard = () => {
           <CModalBody>
             <p>{translationObject?.translation?.communityBoardManagement?.areYouSureToSave}</p>
           </CModalBody>
-          <CModalFooter>
-            <CButton color="secondary" onClick={() => setVisible(false)}>
+          <CModalFooter className='d-flex justify-content-center'>
+            <CButton className='btn-black' onClick={() => setVisible(false)}>
             {translationObject?.translation?.communityBoardManagement?.close}
             </CButton>
             <CButton onClick={() => saveBoard()} color="primary">

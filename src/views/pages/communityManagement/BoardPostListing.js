@@ -454,16 +454,16 @@ const BoardPostListing = () => {
         Header: multiLangObj?.views,
         accessor: 'views',
         Cell: ({ row }) => (
-          <a className="text-center">{`${row.original.views ? row.original.views : 0}`}</a>
+          <p className="text-center">{`${row.original.views ? row.original.views : 0}`}</p>
         ),
       },
       {
         Header: multiLangObj?.noOfReportedComments,
         accessor: 'reportsCommentsCount',
         Cell: ({ row }) => (
-          <a className="text-center">
+          <p className="text-center">
             {row.original.reportsCommentsCount ? row.original.reportsCommentsCount : 0}
-          </a>
+          </p>
         ),
       },
       {
@@ -521,9 +521,9 @@ const BoardPostListing = () => {
         <div>
           <div className="d-flex justify-content-end align-items-center">
             
-            <CButton onClick={createPostHandler}>{multiLangObj?.createPost}</CButton>
+            <CButton onClick={createPostHandler} className='btn-success'>{multiLangObj?.createPost}</CButton>
           </div>
-          <div className="d-flex p-3 justify-content-between h-100 w-100 bg-light rounded mt-2">
+          <div className="d-flex p-3 justify-content-between h-100 w-100 bg-light  mt-2">
             <div className="d-flex align-items-center w-25 ms-2 align-items-center">
               <p className="fw-medium me-3" style={{ 'white-space': 'nowrap' }}>
                 {multiLangObj?.board}
@@ -560,7 +560,7 @@ const BoardPostListing = () => {
               </p>
             </div>
           </div>
-          <div className="d-flex p-4  flex-column bg-light rounded mt-3">
+          <div className="d-flex p-4  flex-column bg-light  mt-3">
             <div className="d-flex align-items-center w-100">
               <div className="d-flex align-items-center me-5">
                 <label className="me-3 fw-medium">{multiLangObj?.department}</label>
@@ -589,7 +589,7 @@ const BoardPostListing = () => {
                 </div>
               </div>
             </div>
-            <div className="d-flex align-items-center w-100 mt-4">
+            <div className="d-flex align-items-center w-100 mt-2">
               <div className="d-flex align-items-center me-5 ">
                 <label className="fw-medium me-3 " style={{ 'white-space': 'nowrap' }}>
                   {multiLangObj?.postType}
@@ -700,9 +700,9 @@ const BoardPostListing = () => {
           </CModalHeader>
           <CModalBody>
             <div className="UserInfoList">
-              <p>{multiLangObj?.userName} : {userInfoData.englishName ? userInfoData.englishName : '-'}</p>
-              <p>{multiLangObj?.grpTeam} : {userInfoData.teamName ? userInfoData.teamName : '-'} </p>
-              <p>{multiLangObj?.emailAdd} : {userInfoData.email ? userInfoData.email : '-'}</p>
+              <p><b>{multiLangObj?.userName} :</b> {userInfoData.englishName ? userInfoData.englishName : '-'}</p>
+              <p><b>{multiLangObj?.grpTeam} :</b> {userInfoData.teamName ? userInfoData.teamName : '-'} </p>
+              <p><b>{multiLangObj?.emailAdd} :</b> {userInfoData.email ? userInfoData.email : '-'}</p>
             </div>
           </CModalBody>
         </CModal>

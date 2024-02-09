@@ -167,7 +167,7 @@ const SupplyRentalStatus = () => {
     {
       Header: 'Rental Details',
       accessor: '',
-      Cell: ({ row }) => <button onClick={() => { setUserInfoPopup(true); setPopUp('RentalD'); handleShowRentalDetails(row.original.id) }} className='mx-3 px-3 py-2 rounded border-1'>View</button>
+      Cell: ({ row }) => <a onClick={() => { setUserInfoPopup(true); setPopUp('RentalD'); handleShowRentalDetails(row.original.id) }} className='blueTxt'>View</a>
     },
     {
       Header: 'Rental Confirm',
@@ -175,10 +175,10 @@ const SupplyRentalStatus = () => {
       // Cell: ({ row }) => <button>Confirm</button>
       // onClick={() => { { confirmSupply('Rental', row.original.id) } }}
       Cell: ({ row }) =>
-        <div>
-          <button className='mx-3 px-3 py-2 rounded border-1' onClick={() => handleConfirmRentalSupply(row.original.id)} style={{ cursor: 'pointer' }}>Confirm</button>
+        
+          <a className='primTxt' onClick={() => handleConfirmRentalSupply(row.original.id)} style={{ cursor: 'pointer' }}>Confirm</a>
 
-        </div>
+        
 
 
     }
@@ -822,6 +822,7 @@ const SupplyRentalStatus = () => {
             alignment="center"
             visible={userInfoPopup}
             size='lg'
+            scrollable
             onClose={() => {
               setUserInfoPopup(false);
               setUserInfoData({});
@@ -835,6 +836,7 @@ const SupplyRentalStatus = () => {
               setUserInfoData({});
               setRentalDetailsData({});
               setGetsupplyIdAndid({ supplyRentalId: null, id: null });
+              
             } }>
               {popUp === 'userDetails' && <CModalTitle className='p-1'>{multiLang?.userInformation}</CModalTitle>}
               {popUp === 'RentalD' && <CModalTitle className='p-1'>{multiLang?.rentalDetails}</CModalTitle>}
@@ -863,7 +865,7 @@ const SupplyRentalStatus = () => {
                     </div>
                     <div className='d-flex justify-content-between py-md-3 '>
                       <p style={{ fontSize: 'medium' }}>{multiLang?.total}: {totalCount > 0 ? totalCount : '-'}</p>
-                      <button className='mx-3 px-3 py-2 rounded border-1' onClick={() => historyExportData(getsupplyIdAndid.supplyRentalId, currentHistoryPage)}>{multiLang?.export}</button>
+                      <button className='btn btn-primary' onClick={() => historyExportData(getsupplyIdAndid.supplyRentalId, currentHistoryPage)}>{multiLang?.export}</button>
                     </div>
                   </div>
                   <ReactTable columns={columns} data={supplyRentalHistoryData} showCheckbox={false} onSelectionChange={handleSelectionChange} />

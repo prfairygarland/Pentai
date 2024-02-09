@@ -77,12 +77,12 @@ const CreatePushNotificationRegistration = () => {
                                         Send Date<span className="mandatory-red-asterisk">*</span>
                                         </label>
                                 </div>
-                                <div className="d-flex w-100 p-2 gap-5 ">
+                                <div className="d-flex w-100 p-2 gap-5 align-items-center">
                                     <CFormCheck 
                                     type='radio'
                                      label="immediate"
                                     />
-                                    <div className='d-flex w-100 gap-2'>
+                                    <div className='d-flex w-100 gap-2 align-items-center'>
                                         {/* <div> */}
                                             <CFormCheck 
                                              label="Send date"

@@ -246,7 +246,7 @@ const BulletinBoardPostDetails = () => {
                                 </div>
 
                                 <div className="d-flex">
-                                  <div className="form-outline form-white  d-flex ">
+                                  <div className="form-outline form-white  d-flex w-100">
                                     <div className="formWrpLabel">
                                       <label className="fw-bolder ">Push Notification</label>
                                     </div>
@@ -281,7 +281,7 @@ const BulletinBoardPostDetails = () => {
                                     </div>
                                   </div>
 
-                                  <div className="form-outline form-white  d-flex ">
+                                  <div className="form-outline form-white  d-flex   w-100">
                                     <div className="formWrpLabel">
                                       <label className="fw-bolder ">Add as Notice</label>
                                     </div>
@@ -465,8 +465,8 @@ const BulletinBoardPostDetails = () => {
                       </div>
                     )}
                   {postLikeListData.length == 0 && (
-                    <div className="text-center mt-3">
-                      <h5>No data Available</h5>
+                    <div className="noDataAvailable">
+                      <p>No data Available</p>
                     </div>
                   )}
                 </CAccordionBody>
@@ -514,8 +514,8 @@ const BulletinBoardPostDetails = () => {
                       </div>
                     )}
                   {postCommentListData.length == 0 && (
-                    <div className="text-center mt-3">
-                      <h5>No data Available</h5>
+                    <div className="noDataAvailable">
+                      <p>No data Available</p>
                     </div>
                   )}
                 </CAccordionBody>

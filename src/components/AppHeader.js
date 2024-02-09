@@ -111,12 +111,12 @@ const AppHeader = () => {
               </CModalHeader>
               {/* <CModalBody>Are you sure! you want to logout </CModalBody> */}
               <CModalBody>{multiLang?.Logout_Popup}</CModalBody>
-              <CModalFooter>
-                <CButton color="secondary" onClick={() => setVisible(false)}>
+              <CModalFooter className='d-flex justify-content-center'>
+                <CButton className='btn-black' onClick={() => setVisible(false)}>
                   {/* Cancel */}
                   {multiLang?.Cancel}
                 </CButton>
-                <CButton onClick={() => logOut()} color="primary">{multiLang?.Logout}</CButton>
+                <CButton onClick={() => logOut()} >{multiLang?.Logout}</CButton>
               </CModalFooter>
             </CModal>
 

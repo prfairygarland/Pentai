@@ -185,13 +185,13 @@ const SupplyRentalDetails = ({ endModal, RentalStatusData, setRentalStatusData, 
                       <div className='formWrpLabel'>
                         <label className="fw-bolder ">{multiLang?.reasonRemarks}</label>
                       </div>
-                      <div className='formWrpInpt clearfix d-flex'>
+                      <div className='formWrpInpt clearfix d-flex gap-2'>
                         <CFormTextarea
                           id="exampleFormControlTextarea1"
-                          rows={1}
+                          rows={2}
                           value={RentalStatusData?.reasonRemark}
                         ></CFormTextarea>
-                        <button disabled className='mx-2 px-3 py-2 rounded border-1 float-end'>{multiLang?.save}</button>
+                        <button disabled className='btn btn-primary'>{multiLang?.save}</button>
                       </div>
                     </div>
 
@@ -222,7 +222,7 @@ const SupplyRentalDetails = ({ endModal, RentalStatusData, setRentalStatusData, 
                               <CFormCheck type="radio" name="club_board" id="exampleRadios2" label="Provide" checked={selectedCheckbox === 'Provide'} onChange={() => handleCheckboxChange('Provide')} />
                             </div>
                             <div>
-                              <button className='mx-2 px-3 py-2 rounded border-1 float-end' onClick={() => setRentalVisible(!rentalVisible)}>{multiLang?.confirm}</button>
+                              <button className='btn btn-primary' onClick={() => setRentalVisible(!rentalVisible)}>{multiLang?.confirm}</button>
                             </div>
                           </div>
                         </div>
@@ -239,7 +239,7 @@ const SupplyRentalDetails = ({ endModal, RentalStatusData, setRentalStatusData, 
 
                           </div>
                           <div>
-                            <button className='mx-2 px-3 py-2 rounded border-1 float-end' onClick={() => setReturnVisible(!returnVisible)}>{multiLang?.confirm}</button>
+                            <button className='btn btn-primary' onClick={() => setReturnVisible(!returnVisible)}>{multiLang?.confirm}</button>
                           </div>
                         </div>
                       </div>
@@ -256,7 +256,7 @@ const SupplyRentalDetails = ({ endModal, RentalStatusData, setRentalStatusData, 
                             <label className="fw-bolder ">{multiLang?.endRental}</label>
                           </div>
                           <div className='formWrpInpt clearfix'>
-                            <button onClick={() => setVisible(!visible)} className='mx-2 px-3 py-2 rounded border-1 float-end'>{multiLang?.confirm}</button>
+                            <button onClick={() => setVisible(!visible)} className='btn btn-primary float-end'>{multiLang?.confirm}</button>
                           </div>
                         </div>
                       </div>
@@ -279,7 +279,7 @@ const SupplyRentalDetails = ({ endModal, RentalStatusData, setRentalStatusData, 
               </CModalBody>
               <CModalFooter className='d-flex justify-content-center gap-md-4 border-0 '>
                 <CButton className='px-4' color="primary" onClick={() => confirmSupply(selectedCheckbox, RentalStatusData.id)} >{multiLang?.yes}</CButton>
-                <CButton color="secondary" onClick={() => setRentalVisible(false)}>
+                <CButton className='btn-black' onClick={() => setRentalVisible(false)}>
                   {multiLang?.cancel}
                 </CButton>
               </CModalFooter>
@@ -296,10 +296,10 @@ const SupplyRentalDetails = ({ endModal, RentalStatusData, setRentalStatusData, 
                 <p>{multiLang?.changeRentalStatusPopUp}</p>
               </CModalBody>
               <CModalFooter className='d-flex justify-content-center gap-md-4 border-0 '>
-                <CButton color="secondary" onClick={() => setVisible(false)}>
+                <CButton className='btn-black' onClick={() => setVisible(false)}>
                   {multiLang?.cancel}
                 </CButton>
-                <CButton className='px-4' color="primary" onClick={() => confirmSupply('Returned', RentalStatusData.id)}>{multiLang?.yes}</CButton>
+                <CButton  color="primary" onClick={() => confirmSupply('Returned', RentalStatusData.id)}>{multiLang?.yes}</CButton>
               </CModalFooter>
             </CModal>
             <CModal

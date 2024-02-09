@@ -229,7 +229,9 @@ const PollManagement = ({ isPollOpen, setModal, pollModifyData = '', changePollD
               />
             </div>
             <div className="participant-change-container minMaxBtn">
-              <CButton onClick={() => handleParticipantChange(-1)}>-</CButton>
+              <CButton onClick={() => handleParticipantChange(-1)} className="btn-black">
+                -
+              </CButton>
               <CFormInput
                 className="txt-participant-change"
                 disabled={!isNoOfParticipationChecked}

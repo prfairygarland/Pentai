@@ -75,8 +75,9 @@ const LiveManagement = () => {
     },
     {
       Header: multiLang?.LiveManagement?.Title,
+      
       accessor: 'title',
-      Cell: ({ row }) => <p style={{ cursor: 'pointer' }} onClick={() => viewHandler(row.original.id)}> {row.original.title ? row.original.title : '-'}</p>
+      Cell: ({ row }) => <a className='Livetitle' style={{ cursor: 'pointer' }} onClick={() => viewHandler(row.original.id)}> {row.original.title ? row.original.title : '-'}</a>
     },
     {
       Header: multiLang?.LiveManagement?.Scheduled_start_time,
@@ -277,7 +278,7 @@ const LiveManagement = () => {
         <div className='d-flex justify-content-between mb-2 mt-3'>
 
           <div className='mx-1 d-flex'>
-            <input className='form-control me-3' placeholder='Search' value={filterData.search} onChange={handleSearch} />
+            <input className='form-control me-3' placeholder='Title' value={filterData.search} onChange={handleSearch} />
             <CButton onClick={getLiveStreamsData}>{multiLang?.LiveManagement?.Search}</CButton>
           </div>
 

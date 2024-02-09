@@ -291,13 +291,13 @@ const ClubDetails = () => {
         Header: <p className="text-center">{multiLangObj?.history}</p>,
         accessor: 'history',
         Cell: ({ row }) => (
-          <p
+          <a
             role="button"
             onClick={() => viewPostHistoryHandler(row.original.postId)}
-            className="text-center"
+            className="text-center blueTxt"
           >
             {multiLangObj?.view}
-          </p>
+          </a>
         ),
       },
     ],
@@ -453,41 +453,43 @@ const ClubDetails = () => {
         <CButton onClick={changeHideShow}>
           {clubData?.isClubDisplay === 0 ? multiLangObj?.show : multiLangObj?.hide}
         </CButton>
-        <CButton onClick={deleteClubHandler}>{multiLangObj?.delete}</CButton>
+        <CButton onClick={deleteClubHandler} className="btn-black">
+          {multiLangObj?.delete}
+        </CButton>
       </div>
       <div className="d-flex p-4  flex-column bg-light rounded mt-3">
-        <div className="d-flex align-items-center w-100">
-          <div className="d-flex align-items-center me-5">
+        <div className="d-flex align-items-center w-100 flex-wrap mb-3">
+          <div className="d-flex align-items-center w-50">
             <label className="me-1 fw-medium">{multiLangObj?.clubName} : </label>
             <div className="d-flex p-1 gap-3">
               <p>{clubData?.clubName}</p>
             </div>
           </div>
-          <div className="d-flex align-items-center me-5 p-2">
+          <div className="d-flex align-items-center w-50">
             <label className="me-1 fw-medium">{multiLangObj?.clubStatus} : </label>
             <div className="d-flex p-1 gap-3">
               <p>{clubData?.clubStatus}</p>
             </div>
           </div>
-          <div className="d-flex align-items-center me-5 p-2">
+          <div className="d-flex align-items-center w-50">
             <label className="me-1 fw-medium">{multiLangObj?.host} : </label>
             <div className="d-flex p-1 gap-3">
               <p>{clubData?.englishName}</p>
             </div>
           </div>
-          <div className="d-flex align-items-center me-5 p-2">
+          <div className="d-flex align-items-center w-50">
             <label className="me-1 fw-medium">{multiLangObj?.createdDate} : </label>
             <div className="d-flex p-1 gap-3">
               <p>{new Date(clubData?.clubCreatedAt).toLocaleString()}</p>
             </div>
           </div>
-          <div className="d-flex align-items-center me-5 p-2">
+          <div className="d-flex align-items-center w-50">
             <label className="me-1 fw-medium">{multiLangObj?.history} : </label>
             <div className="d-flex p-1 gap-3">
               <p>
                 <Link
                   onClick={(e) => clubViewHandler(clubData?.clubId)}
-                  className=" text-center"
+                  className=" text-center blueTxt"
                   style={{ cursor: 'pointer' }}
                 >
                   {multiLangObj?.view}
@@ -496,7 +498,7 @@ const ClubDetails = () => {
             </div>
           </div>
         </div>
-        <div className="d-flex align-items-center w-100">
+        <div className="d-flex  w-100">
           <div className="club-detail-image-container">
             {/* <img crossOrigin="anonymous" src={ALL_CONSTANTS.BASE_URL + clubData?.ImageUrl} alt="" /> */}
             <img
@@ -505,7 +507,7 @@ const ClubDetails = () => {
               alt=""
             />
           </div>
-          <div className="d-flex align-items-center me-5 p-3">
+          <div className="d-flex  me-5 px-3">
             <p>{clubData?.clubDescription}</p>
           </div>
         </div>
@@ -529,6 +531,7 @@ const ClubDetails = () => {
               value={filterData?.searchstring}
               onChange={handleDepartmentSearchChange}
               id="inputPassword2"
+              placeholder="Search"
             />
           </div>
           <div className="d-flex align-items-center">
@@ -581,14 +584,16 @@ const ClubDetails = () => {
             />
           </div>
         </div>
-        <div className="d-flex gap-3 mt-3">
+        <div className="d-flex gap-3 mt-3 justify-content-end">
           <CButton onClick={handleSearchfilter}>{multiLangObj?.search}</CButton>
-          <CButton onClick={resetFilter}>{multiLangObj?.reset}</CButton>
+          <CButton onClick={resetFilter} className="btn-black">
+            {multiLangObj?.reset}
+          </CButton>
         </div>
       </div>
       <div className="d-flex flex-column mt-3 p-3">
         {totalDataCount > 0 && (
-          <p style={{ margin: 0 }}>
+          <p className="mb-2" style={{ margin: 0 }}>
             {multiLangObj?.total}&nbsp;:&nbsp; {totalDataCount}
           </p>
         )}
@@ -598,7 +603,7 @@ const ClubDetails = () => {
           showCheckbox={false}
           onSelectionChange={() => {}}
         />
-        <div className="d-flex w-100 justify-content-center gap-3">
+        <div className="d-flex w-100 justify-content-center gap-3 my-3">
           {postData.length > 0 && (
             <div className="userlist-pagination">
               <div className="userlist-pagination dataTables_paginate">
@@ -617,7 +622,7 @@ const ClubDetails = () => {
             </div>
           )}
           {postData.length > 0 && (
-            <div className="d-flex align-items-center gap-2 mt-2">
+            <div className="d-flex align-items-center gap-2 ">
               <label>{multiLangObj?.show}</label>
               <CFormSelect
                 className=""

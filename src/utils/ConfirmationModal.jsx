@@ -1,4 +1,4 @@
-import { CButton, CModal, CModalBody, CModalHeader, CModalTitle } from '@coreui/react'
+import { CButton, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle } from '@coreui/react'
 import React from 'react'
 
 const ConfirmationModal = (props) => {
@@ -14,27 +14,26 @@ const ConfirmationModal = (props) => {
       onClose={() => closeHandler()}
       aria-labelledby="LiveDemoExampleLabel"
     >
-      <CModalHeader onClose={() => closeHandler()}>
+      <CModalHeader onClose={() => closeHandler()} style={{ borderWidth: 0 }}>
         <CModalTitle>{props?.modalProps?.title}</CModalTitle>
       </CModalHeader>
       <CModalBody>
-        <div>{props?.modalProps?.content}</div>
-        <div className="d-flex justify-content-end">
-          {props?.modalProps?.cancelBtn && (
-            <>
-              <CButton onClick={props?.modalProps?.cancelBtnHandler}>
-                {props?.modalProps?.cancelBtn}
-              </CButton>
-              &nbsp;
-            </>
-          )}
-          {props?.modalProps?.successBtn && (
-            <CButton onClick={props?.modalProps?.successBtnHandler}>
-              {props?.modalProps?.successBtn}
-            </CButton>
-          )}
-        </div>
+        <p className="text-center">{props?.modalProps?.content}</p>
       </CModalBody>
+      <CModalFooter className="d-flex justify-content-center gap-2">
+        {props?.modalProps?.cancelBtn && (
+          <>
+            <CButton className="btn-black" onClick={props?.modalProps?.cancelBtnHandler}>
+              {props?.modalProps?.cancelBtn}
+            </CButton>
+          </>
+        )}
+        {props?.modalProps?.successBtn && (
+          <CButton onClick={props?.modalProps?.successBtnHandler}>
+            {props?.modalProps?.successBtn}
+          </CButton>
+        )}
+      </CModalFooter>
     </CModal>
   )
 }

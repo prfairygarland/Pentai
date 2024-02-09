@@ -572,25 +572,26 @@ const CreatePost = () => {
                         {recruitData.recruitmentDeadline.getMinutes()}
                       </p>
                       <p>
-                        {multiLangObj?.status} :{' '}
+                        <b>{multiLangObj?.status}</b> :{' '}
                         {recruitData?.recruitmentStatus
                           ? recruitData?.recruitmentStatus
                           : 'Not Open'}
                       </p>
                       <p>
-                        {multiLangObj?.noOfPart} : {recruitData.recruitmentMaxParticipants}
+                        <b>{multiLangObj?.noOfPart}</b> : {recruitData.recruitmentMaxParticipants}
                       </p>
-                      <p>
-                        {multiLangObj?.raffle} : {recruitData.recruitmentAllowRaffle ? 'Yes' : 'No'}
-                        / {recruitData.recruitmentRaffleMaxWinners}
+                      <p className="mb-2">
+                        <b>{multiLangObj?.raffle}</b> :{' '}
+                        {recruitData.recruitmentAllowRaffle ? 'Yes' : 'No'}/{' '}
+                        {recruitData.recruitmentRaffleMaxWinners}
                       </p>
                       {recruitData?.recruitmentStatus !== 'closed' && (
-                        <CButton className="btn mt-3" color="dark" onClick={() => modifyRecruit()}>
+                        <CButton className="me-2" onClick={() => modifyRecruit()}>
                           {multiLangObj?.modify}
                         </CButton>
                       )}
                       {!location?.state?.postId && (
-                        <CButton className="delete-btn" onClick={() => setRecruitData({})}>
+                        <CButton className="btn-black" onClick={() => setRecruitData({})}>
                           {multiLangObj?.delete}
                         </CButton>
                       )}
@@ -606,7 +607,7 @@ const CreatePost = () => {
                           ? multiLangObj?.single
                           : multiLangObj?.multi}
                       </p>
-                      <h3>Poll : {pollData.pollTitle}</h3>
+                      <h5>Poll : {pollData.pollTitle}</h5>
                       <div style={{ fontWeight: 800 }}>
                         {pollData?.pollEndTimestamp.getFullYear()}-
                         {pollData?.pollEndTimestamp.getMonth() + 1}-
@@ -615,20 +616,23 @@ const CreatePost = () => {
                         {pollData?.pollEndTimestamp.getMinutes()}
                       </div>
                       <div>
-                        <ul>
+                        <ul className="my-2">
                           {pollData?.pollDisplayOptions &&
                             pollData?.pollDisplayOptions.map((opt, index) => (
-                              <li key={index}>
-                                {multiLangObj?.option} {index + 1} : {opt?.title ? opt?.title : opt}
+                              <li key={index} className="mb-1">
+                                <b>
+                                  {multiLangObj?.option} {index + 1}
+                                </b>{' '}
+                                : {opt?.title ? opt?.title : opt}
                               </li>
                             ))}
                         </ul>
                       </div>
-                      <CButton className="btn" color="dark" onClick={() => modifyPoll()}>
+                      <CButton className="me-2" onClick={() => modifyPoll()}>
                         {multiLangObj?.modify}
                       </CButton>
                       {!location?.state?.postId && (
-                        <CButton className="delete-btn" onClick={() => setPollData({})}>
+                        <CButton className="btn-black" onClick={() => setPollData({})}>
                           {multiLangObj?.delete}
                         </CButton>
                       )}
