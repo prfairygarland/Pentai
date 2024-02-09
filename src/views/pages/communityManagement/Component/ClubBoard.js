@@ -155,7 +155,7 @@ const ClubBoard = () => {
         Header: <p className="text-center">{multiLangObj?.headerTitle}</p>,
         accessor: 'PostTypes',
         Cell: ({ row }) => (
-          <p
+          <a
             role="button"
             onClick={() =>
               modifyClubPeriodHandler(
@@ -172,7 +172,7 @@ const ClubBoard = () => {
             className="text-center"
           >
             {row.original.title}
-          </p>
+          </a>
         ),
       },
       {
@@ -208,7 +208,7 @@ const ClubBoard = () => {
         Header: <p className="text-center">{multiLangObj?.headerFinalDeadline}</p>,
         accessor: 'finalDeadline',
         Cell: ({ row }) => (
-          <p role="button" className="text-center">
+          <p  className="text-center">
             {new Date(row.original.finalDeadline).toLocaleDateString()}
           </p>
         ),
@@ -217,36 +217,36 @@ const ClubBoard = () => {
         Header: <p className="text-center">{multiLangObj?.headerMinPartiLimit}</p>,
         accessor: 'minPart',
         Cell: ({ row }) => (
-          <a role="button" className="text-center">
+          <p className="text-center">
             {row.original.minParticipants}
-          </a>
+          </p>
         ),
       },
       {
         Header: <p className="text-center">{multiLangObj?.headerMaxSameGrpLimit}</p>,
         accessor: 'maxLimit',
         Cell: ({ row }) => (
-          <a role="button" className="text-center">
+          <p className="text-center">
             {row.original.maxParticipantsPerGroup}
-          </a>
+          </p>
         ),
       },
       {
         Header: <p className="text-center">{multiLangObj?.headerNoOdClubActs}</p>,
         accessor: 'clubAct',
         Cell: ({ row }) => (
-          <a role="button" className="text-center">
+          <p className="text-center">
             -
-          </a>
+          </p>
         ),
       },
       {
         Header: <p className="text-center">{multiLangObj?.headerTotalNoOfPart}</p>,
         accessor: 'totNoOfPart',
         Cell: ({ row }) => (
-          <a role="button" className="text-center">
+          <p className="text-center">
             -
-          </a>
+          </p>
         ),
       },
       {
@@ -340,13 +340,13 @@ const ClubBoard = () => {
         Header: <p className="text-center">{multiLangObj?.history}</p>,
         accessor: 'history',
         Cell: ({ row }) => (
-          <p
+          <a
             role="button"
             onClick={() => clubViewHandler(row.original.recruitmentId)}
-            className="text-center"
+            className="blueTxt"
           >
             View
-          </p>
+          </a>
         ),
       },
     ],
@@ -572,10 +572,10 @@ const ClubBoard = () => {
         Header: <p className="text-center">{multiLangObj?.thumbnailImg}</p>,
         accessor: 'regPeriod',
         Cell: ({ row }) => (
-          <div style={{ width: '150px', height: '100px' }}>
+          <div className='tdImg'>
             <img
               crossOrigin="anonymous"
-              style={{ width: '150px', height: '100px' }}
+              
               src={ALL_CONSTANTS.BASE_URL + row.original.image}
               alt=""
             />
@@ -586,9 +586,9 @@ const ClubBoard = () => {
         Header: <p className="text-center">{multiLangObj?.headerTitle}</p>,
         accessor: 'firstDeadline',
         Cell: ({ row }) => (
-          <p role="button" className="text-center" onClick={() => editClubBannerHandler(row.original.id)}>
+          <a role="button" className="text-center" onClick={() => editClubBannerHandler(row.original.id)}>
             {row.original.title}
-          </p>
+          </a>
         ),
       },
       {
@@ -915,30 +915,35 @@ const ClubBoard = () => {
   }, [currentPageOfClubActivity, itemsPerPageOfClubActivity])
   return (
     <div>
-      <div className='toggleContainer'>
-        <div>Club Period/Qualification</div>
-        <div><CFormSwitch id="club_period_qualification" className='cFormSwitch' onClick={handleShowClubPeriodToggle} defaultChecked={showClubPeriod}/></div>
-      </div>
-      {showClubPeriod && <div>
-        <CForm className="d-flex">
+      <div className='toggleContainer flex-column  p-0'>
+    <div className='d-flex justify-content-between align-items-center w-100 p-2'>
+    <h5>Club Period/Qualification</h5>
+        <CFormSwitch id="club_period_qualification" className='cFormSwitch' onClick={handleShowClubPeriodToggle} defaultChecked={showClubPeriod}/>
+    </div>
+
+        {showClubPeriod && <div className='w-100 pb-0   p-3' style={{borderTopWidth:1, borderTopColor:'#ccc', borderTopStyle:'solid'}}>
+       <div className='d-flex justify-content-end'>
+       <CForm className="d-flex w-50">
           <CFormInput className="me-sm-2" placeholder="Search" size="sm" value={searchTxt} onChange={(e) => setSearchTxt(e.target.value)}/>
           <CButton  className="my-2 my-sm-0 " type="button" onClick={getClubRegistrationPeriodsBySearch}>
             Search
           </CButton>
         </CForm>
-        <CForm className="d-flex justify-content-end mt-2">
-          <CButton className="my-2 my-sm-0 ps-3 pe-4" type="button" onClick={addNewClubPeriodHandler}>
+       </div>
+        <CForm className="d-flex justify-content-between align-items-center my-3">
+        {totalclubPeriodDataCount > 0 && <p >Total&nbsp;:&nbsp; {totalclubPeriodDataCount}</p>}
+          <CButton className="my-2 my-sm-0 " type="button" onClick={addNewClubPeriodHandler}>
             Add
           </CButton>
         </CForm>
-        {totalclubPeriodDataCount > 0 && <p style={{ margin: 0 }}>Total&nbsp;:&nbsp; {totalclubPeriodDataCount}</p>}
+       
         <ReactTable
           columns={clubPeriodDataColumns}
           data={clubPeriodData}
           showCheckbox={false}
           onSelectionChange={() => {}}
         />
-        <div className="d-flex w-100 justify-content-center mt-3 mb-4 gap-3">
+        <div className="d-flex w-100 justify-content-center my-3  gap-3">
           {clubPeriodData?.length > 0 && (
             <div className="userlist-pagination">
               <div className="userlist-pagination dataTables_paginate">
@@ -979,6 +984,7 @@ const ClubBoard = () => {
           onClose={() => {
             setClubActivityListPopup(false)
           }}
+          
           backdrop="static"
           aria-labelledby="LiveDemoExampleLabel"
         >
@@ -998,43 +1004,43 @@ const ClubBoard = () => {
               }}
               showCheckbox={false}
             />}
-            <div className="d-flex w-100 justify-content-center gap-3 align-items-center mt-3">
           {clubActivityListData?.length > 0 && (
-            <div className="userlist-pagination">
-              <div className="userlist-pagination dataTables_paginate">
-                <ReactPaginate
-                  breakLabel={'...'}
-                  marginPagesDisplayed={1}
-                  previousLabel={<button>Previous</button>}
-                  nextLabel={<button>Next</button>}
-                  pageCount={totalPagesOfClubActivity}
-                  onPageChange={handlePageChangeOfClubActivity}
-                  forcePage={currentPageOfClubActivity}
-                  renderOnZeroPageCount={null}
-                  pageRangeDisplayed={4}
+            <div className="d-flex w-100 justify-content-center gap-3 align-items-center my-3">
+              <div className="userlist-pagination">
+                <div className="userlist-pagination dataTables_paginate">
+                  <ReactPaginate
+                    breakLabel={'...'}
+                    marginPagesDisplayed={1}
+                    previousLabel={<button>Previous</button>}
+                    nextLabel={<button>Next</button>}
+                    pageCount={totalPagesOfClubActivity}
+                    onPageChange={handlePageChangeOfClubActivity}
+                    forcePage={currentPageOfClubActivity}
+                    renderOnZeroPageCount={null}
+                    pageRangeDisplayed={4}
+                  />
+                </div>
+              </div>
+              <div className="d-flex align-items-center gap-2">
+                <label>Show</label>
+                <CFormSelect
+                  className=""
+                  aria-label=""
+                  options={paginationItemPerPageOptions}
+                  onChange={(event) => {
+                    setItemsPerPageOfClubActivity(parseInt(event?.target?.value))
+                    setCurrentPageOfClubActivity(0)
+                  }}
                 />
+                <label>Lists</label>
               </div>
             </div>
           )}
-          {clubActivityListData?.length > 0 && (
-            <div className="d-flex align-items-center gap-2">
-              <label>Show</label>
-              <CFormSelect
-                className=""
-                aria-label=""
-                options={paginationItemPerPageOptions}
-                onChange={(event) => {
-                  setItemsPerPageOfClubActivity(parseInt(event?.target?.value))
-                  setCurrentPageOfClubActivity(0)
-                }}
-              />
-              <label>Lists</label>
-            </div>
-          )}
-        </div>
-            <p className='text-center'>
+          <div className='noDataAvailable'>
+          <p className='text-center'>
             {clubActivityListData.length === 0 && <>No Data Available</>}
             </p>
+          </div>
           </CModalBody>
         </CModal>
         <CModal className='modal-md'
@@ -1170,16 +1176,19 @@ const ClubBoard = () => {
           </CModalFooter>
         </CModal>
       </div>}
-      <div className='toggleContainer'>
-        <div>Club Banner</div>
-        <div><CFormSwitch id="club_banner" className="cFormSwitch" onClick={handleShowClubBannerToggle} defaultChecked={showClubBanner}/></div>
       </div>
-      {showClubBanner &&
-       <div>
+      
+      <div className='toggleContainer flex-column p-0'>
+        <div className='d-flex justify-content-between align-items-center w-100 p-2'>
+        <h5>Club Banner</h5> 
+        <CFormSwitch id="club_banner" className="cFormSwitch" onClick={handleShowClubBannerToggle} defaultChecked={showClubBanner}/>
+        </div>
+        {showClubBanner &&
+       <div className='w-100 pb-0 p-3' style={{borderTopWidth:1, borderTopColor:'#ccc', borderTopStyle:'solid'}}>
       <div className='d-flex justify-content-between align-items-center w-100 mb-3'>
       {totalclubBannerDataCount > 0 && <p style={{ margin: 0 }}>Total&nbsp;:&nbsp; {totalclubBannerDataCount}</p>}
       <CForm className=" mt-2">
-          <CButton  className="my-2 my-sm-0 ps-3 pe-4" type="button" onClick={addNewClubBannerHandler}>
+          <CButton  className="my-2 my-sm-0 " type="button" onClick={addNewClubBannerHandler}>
             Add
           </CButton>
         </CForm>
@@ -1191,7 +1200,7 @@ const ClubBoard = () => {
           showCheckbox={false}
           onSelectionChange={() => {}}
         />
-        <div className="d-flex w-100 justify-content-center gap-3 align-items-center mt-3">
+        <div className="d-flex w-100 justify-content-center gap-3 align-items-center my-3">
           {clubBannerData?.length > 0 && (
             <div className="userlist-pagination">
               <div className="userlist-pagination dataTables_paginate">
@@ -1229,6 +1238,7 @@ const ClubBoard = () => {
         <CModal className='modal-lg'
           alignment="center"
           visible={addModifyClubBannerModal}
+          scrollable
           onClose={() => {
             setAddModifyClubBannerModal(false)
           }}
@@ -1314,7 +1324,7 @@ const ClubBoard = () => {
                     <label className="fw-bolder ">Upload Image</label>
                   </div>
                   <div className="upload-image-main-container">
-                    <div className="upload-img-btn-and-info">
+                    <div className="upload-img-btn-and-info flex-column">
                       <div className="upload-container-btn">
                         <label className="btn btn-primary" style={{paddingLeft:20}}  htmlFor="imageFiles">
                         Upload
@@ -1374,7 +1384,7 @@ const ClubBoard = () => {
                         }}
                       />
                   </div>
-                  <div className="push-notification-container gap-3  px-0 py-2">
+                  <div className="push-notification-container gap-3 align-items-center px-0 py-2">
                     <CFormCheck
                       type="radio"
                       name="imageType"
@@ -1383,7 +1393,7 @@ const ClubBoard = () => {
                       label="Pop-up Image"
                       value={false}
                     />
-                    <label className="btn btn-primary " htmlFor="popupImg" style={{display: `${imageType === 'popUpImage' ? '' : 'none'}`}}>
+                    <label className="btn btn-primary w-25"  htmlFor="popupImg" style={{display: `${imageType === 'popUpImage' ? '' : 'none'}`, maxWidth:150}}>
                           Upload
                           <input
                             type="file"
@@ -1396,7 +1406,7 @@ const ClubBoard = () => {
                     </label>
                   </div>
                   {imageType === 'popUpImage' && popupImage && <div className="upload-images-container uploadImgWrap">
-                      <div className='thubmnail-img-container'>
+                      <div className='thubmnail-img-container' style={{height:'auto'}}>
                         <img src={URL.createObjectURL(popupImage)} alt="" />
                       </div>
                   </div>}
@@ -1404,13 +1414,16 @@ const ClubBoard = () => {
                 </div>
               </div>
             </div>
-            <div className="d-flex justify-content-center mt-3 gap-2">
+           
+          </CModalBody>
+          <CModalFooter className="d-flex justify-content-center gap-2">
               <CButton onClick={cancelBannerModalHandler} className='btn-black'>Cancel</CButton>
               <CButton onClick={validateClubBannerHandler}>{periodId ? 'Update' : 'Save'}</CButton>
-            </div>
-          </CModalBody>
+            </CModalFooter>
         </CModal>
       </div>}
+      </div>
+      
     </div>
   )
 }

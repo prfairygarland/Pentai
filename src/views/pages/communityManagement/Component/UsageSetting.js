@@ -287,8 +287,8 @@ const UsageSetting = (props) => {
           </div>
         </div>
       </div>
-      <hr />
-      <div className="d-flex justify-content-center">
+      {/* <hr /> */}
+      <div className="d-flex justify-content-center mt-2">
         <CCol xs="auto">
           <CButton
             type="submit"
@@ -355,8 +355,8 @@ const UsageSetting = (props) => {
           </div>
         </div>
       </div>
-      <hr />
-      <div className="d-flex justify-content-center">
+      {/* <hr /> */}
+      <div className="d-flex justify-content-center mt-2">
         <CCol xs="auto">
           <CButton type="submit" className="mb-3 btn-primary" onClick={confirmationSaveAllHandler}>
           {translationObject?.translation?.communityBoardManagement?.saveProhibitedWords}

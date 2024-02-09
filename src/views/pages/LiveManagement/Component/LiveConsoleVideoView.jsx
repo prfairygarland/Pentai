@@ -3,10 +3,10 @@ import React from 'react'
 const LiveConsoleVideoView = ({ playbackUrl, isLive }) => {
   const videoStyles = {
     height: '100%',
-    width: '37%',
-    left: '37%',
-    top: '0',
-    position: 'fixed',
+    width: '100%',
+    // left: '37%',
+    // top: '0',
+    // position: 'fixed',
   }
 
   ;(async function (IVSPlayerPackage) {
@@ -65,8 +65,9 @@ const LiveConsoleVideoView = ({ playbackUrl, isLive }) => {
 
   return (
     <div
+      className="col-md-4"
       style={{
-        width: '37%',
+        // width: '37%',
         height: '90vh',
         backgroundColor: 'gray',
         display: 'flex',

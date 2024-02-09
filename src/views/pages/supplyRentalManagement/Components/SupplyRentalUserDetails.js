@@ -17,7 +17,7 @@ const SupplyRentalUserDetals = ({ userInfoData, type }) => {
 
 
   return (
-    <div className='popMiddl'>
+  
 
       <div className="row justify-content-center">
         {/* <div className="row justify-content-center"> */}
@@ -127,7 +127,7 @@ const SupplyRentalUserDetals = ({ userInfoData, type }) => {
                     <label className="fw-bolder ">{multiLang?.rentalInfo}
                     </label>
                   </div>
-                  <div className='d-flex'>
+                  <div className='d-flex w-100'>
                     <div className='col-md-6'>
                       <div className='formWrpLabel' style={{ maxWidth: '100%' }}>
                         <label className="fw-bolder">{multiLang?.supplyRental} :{userInfoData.suppliesCount ? userInfoData.suppliesCount : '0'} </label>
@@ -171,7 +171,7 @@ const SupplyRentalUserDetals = ({ userInfoData, type }) => {
         {/* </div> */}
       </div>
 
-    </div>
+    
   )
 }
 

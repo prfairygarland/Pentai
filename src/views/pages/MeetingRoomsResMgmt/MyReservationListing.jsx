@@ -385,7 +385,7 @@ const MyReservationListing = () => {
           </CFormSelect>
           &nbsp;
           <CFormSelect
-            style={{ width: '23%' }}
+            style={{ width: '23%', marginRight: 0 }}
             size="sm"
             name="boardId"
             className="board-dropdown"

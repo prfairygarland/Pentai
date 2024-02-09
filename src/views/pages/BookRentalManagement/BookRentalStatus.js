@@ -331,7 +331,7 @@ const BookRentalStatus = () => {
                 <h2>Book Rental Status</h2>
             </div>
             <div className='clearfix'>
-                <CButton onClick={getUserListExport} className='float-end mx-2 btn-success'>Export</CButton>
+                <CButton onClick={getUserListExport} className='float-end mb-2 btn-success'>Export</CButton>
             </div>
             {isLoading && <Loader />}
             <div className='d-flex justify-content-between align-items-center mb-4'>
@@ -356,7 +356,7 @@ const BookRentalStatus = () => {
                         onChange={handleBookGenre}
                     />
                 </div>
-                <div className='d-flex p-2 gap-3'>
+                <div className='d-flex p-2 pe-0 gap-3'>
                     <DatePicker value={startDate} onChange={handleStartDate} />
                     <DatePicker value={endDate} onChange={handleEndDate} />
                 </div>

@@ -608,7 +608,7 @@ const UserList = () => {
 
     <>
     <div className='pageTitle mb-3 pb-2'>
-      <h2>User List</h2>
+      <h2>{multiLang?.User_List}</h2>
     </div>
       {isLoading && <Loader />}
       <div>
@@ -732,12 +732,15 @@ const UserList = () => {
                   {userFileFormat && <p className='text-danger text-center'>{multiLang?.Upload_Header_Error}</p>}
                   {fileSize && <p className='text-danger text-center'>{multiLang?.Upload_File_Size_Error}</p>}
 
-                  <div className='p-1'>
-                    {/* <p>Download Sample File</p> */}
-                    <CButton className='btn btn-primary' onClick={() => sampleUserExportFile()}>{multiLang?.Sample_File}</CButton>
-                  </div>
+                  {/* <div className='p-1'>
+                    <p>Download Sample File</p> 
+                   
+                  </div> */}
 
                 </CModalBody>
+                <CModalFooter className='d-flex justify-content-center'>
+                <CButton className='btn btn-primary' onClick={() => sampleUserExportFile()}>{multiLang?.Sample_File}</CButton>
+                </CModalFooter>
               </CModal>
               <button className='btn btn-light  me-3' onClick={() => setOrgImportVisible(!orgImportVisible)}>{multiLang?.Org_Import}</button>
               <CModal
@@ -760,14 +763,14 @@ const UserList = () => {
                   {fileFormat && <p className='text-danger text-center'>{multiLang?.Upload_Header_Error}</p>}
                   {fileSize && <p className='text-danger text-center'>{multiLang?.Upload_File_Size_Error}</p>}
 
-                  <div className='p-1'>
-                    {/* <p>Download Sample File</p> */}
-                    <CButton className='btn btn-primary' onClick={() => sampleOrgExportFile()}>{multiLang?.Sample_File}</CButton>
-                  </div>
+               
                 </CModalBody>
+                <CModalFooter  className='d-flex justify-content-center'>
+                <CButton className='btn btn-primary' onClick={() => sampleOrgExportFile()}>{multiLang?.Sample_File} </CButton>
+                </CModalFooter>
               </CModal>
 
-              <button className='btn btn-light  me-3' onClick={() => checkExportSelectid(!exportSelectid)}>{multiLang?.Export}</button>
+              <button className='btn btn-light  me-3' onClick={() => checkExportSelectid(!exportSelectid)}>{multiLang?.Export} </button>
               <CModal
                 backdrop="static"
                 alignment="center"
@@ -780,12 +783,15 @@ const UserList = () => {
                 <CModalBody>
                   {dataIds?.length > 0 ? <p>{multiLang?.Selected_User_Data}</p> : <p>{multiLang?.All_User_Data}</p>}
 
-                  <div className='d-flex justify-content-end'>
+              
+                </CModalBody>
+                <CModalFooter className='d-flex justify-content-center'>
+                
                     <CButton onClick={() => getUserListExport()} >{multiLang?.Export}</CButton>
-                  </div>
+               
                   {fileFormat && <p className='text-danger text-center'>{multiLang?.Upload_Header_Error}</p>}
 
-                </CModalBody>
+                </CModalFooter>
               </CModal>
            
             </div>

@@ -651,7 +651,7 @@ const ClubBoardListing = () => {
           <h2>{multiLangObj?.clubBoardManagement}</h2>
         </div>
         <div>
-          <div className="d-flex p-3 h-100 w-100 bg-light rounded mt-2">
+          <div className="d-flex p-3 h-100 w-100 bg-light  mt-2">
             <div className="d-flex align-items-center w-25 ms-2 align-items-center">
               <p className="fw-medium me-3" style={{ 'white-space': 'nowrap' }}>
                 {multiLangObj?.board}
@@ -676,7 +676,7 @@ const ClubBoardListing = () => {
           </div>
           {selectedBoard === 'club' && (
             <>
-              <div className="d-flex p-4  flex-column bg-light rounded mt-3">
+              <div className="d-flex p-4  flex-column bg-light  mt-3">
                 <div className="d-flex align-items-center w-100">
                   <div className="d-flex align-items-center me-5">
                     <label className="me-3 fw-medium">{multiLangObj?.search}</label>
@@ -706,7 +706,7 @@ const ClubBoardListing = () => {
                     </div>
                   </div>
                 </div>
-                <div className="d-flex align-items-center w-100 mt-4">
+                <div className="d-flex align-items-center w-100 mt-2">
                   <div className="d-flex align-items-center me-5 ">
                     <label className="fw-medium me-3 " style={{ 'white-space': 'nowrap' }}>
                       {multiLangObj?.clubStatus}
@@ -857,7 +857,7 @@ const ClubBoardListing = () => {
                     />
                   </div>
                 </div>
-                <div className="d-flex gap-3 mt-3">
+                <div className="d-flex gap-3 mt-3 justify-content-end">
                   <CButton onClick={handleSearchfilter}>{multiLangObj?.search}</CButton>
                   <CButton onClick={resetFilter} className="btn-black">
                     {multiLangObj?.reset}

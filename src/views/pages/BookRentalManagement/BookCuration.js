@@ -485,7 +485,7 @@ const BookCuration = () => {
             <div style={{ display: 'flex' }}>
                 <div className='col-md-4'>
                     <CSidebar className='w-100 pe-3'>
-                        <CSidebarBrand className=' black-text d-flex justify-content-start p-3' style={{ color: 'black', background: 'none' }}><h5>Category Hierarchy</h5></CSidebarBrand>
+                        <CSidebarBrand className=' black-text d-flex justify-content-start p-3 ps-0' style={{ color: 'black', background: 'none' }}><h5>Category Hierarchy</h5></CSidebarBrand>
                         <div>
                             <CSidebarBrand className=' black-text mb-2 justify-content-start' style={{ color: 'black', background: 'none' }}>
                                 <b onClick={() => setCategories('AllCuration')} role='button'>All Curation</b>
@@ -640,7 +640,7 @@ const BookCuration = () => {
                         <div>
                             <ReactTable columns={columns} data={AllCurationList} showCheckbox={false} onSelectionChange={handleSelectionChange} />
                         </div>
-                        <div className='d-flex w-100 justify-content-center gap-3'>
+                        <div className='d-flex w-100 justify-content-center gap-3 my-3'>
                             {AllCurationList.length > 0 &&
                                 <div className='userlist-pagination'>
                                     <div className='userlist-pagination dataTables_paginate'>
@@ -660,7 +660,7 @@ const BookCuration = () => {
                                 </div>
 
                             }
-                            {AllCurationList.length > 0 && <div className='d-flex align-items-center gap-2 mt-2'>
+                            {AllCurationList.length > 0 && <div className='d-flex align-items-center gap-2 '>
                                 <label>Show</label>
                                 <CFormSelect
                                     className=''

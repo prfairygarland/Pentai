@@ -83,7 +83,7 @@ const ReactTable = ({
         placeholder='Search...'
       />
       {data.length === 0 ? (
-        <div className='no-data-message'>
+        <div className='noDataAvailable'>
           <p>No data available</p>
         </div>
       ) : (

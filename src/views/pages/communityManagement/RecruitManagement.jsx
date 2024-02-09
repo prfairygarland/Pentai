@@ -253,7 +253,9 @@ const RecruitManagement = ({
               />
             </div>
             <div className="participants-raffle-inc-dec minMaxBtn">
-              <CButton onClick={() => handleParticipantChange(-1)}>-</CButton>
+              <CButton onClick={() => handleParticipantChange(-1)} className="btn-black">
+                -
+              </CButton>
               <CFormInput
                 className="txt-participant-raffle"
                 disabled={!isNoOfParticipationChecked}
@@ -280,7 +282,9 @@ const RecruitManagement = ({
             </div>
             <div>
               <div className="participants-raffle-inc-dec minMaxBtn">
-                <CButton onClick={() => handleRaffleChange(-1)}>-</CButton>
+                <CButton onClick={() => handleRaffleChange(-1)} className="btn-black">
+                  -
+                </CButton>
                 <CFormInput
                   className="txt-participant-raffle"
                   disabled={!isNoOfRaffleChecked}

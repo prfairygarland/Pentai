@@ -482,7 +482,7 @@ const WelfareBoardPostListing = () => {
         Header: multiLangObj?.views,
         accessor: 'views',
         Cell: ({ row }) => (
-          <a className=" text-center">{`${row.original.views ? row.original.views : 0}`}</a>
+          <p className=" text-center">{`${row.original.views ? row.original.views : 0}`}</p>
         ),
       },
       {
@@ -538,7 +538,9 @@ const WelfareBoardPostListing = () => {
         </div>
         <div>
           <div className="d-flex justify-content-end align-items-center">
-            <CButton onClick={createPostHandler}>{multiLangObj?.createPost}</CButton>
+            <CButton onClick={createPostHandler} className="btn-success">
+              {multiLangObj?.createPost}
+            </CButton>
           </div>
           <div className="d-flex p-3 h-100 w-100 bg-light rounded mt-2">
             <div className="d-flex align-items-center w-25 ms-2 align-items-center">

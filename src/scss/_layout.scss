@@ -51,7 +51,7 @@ min-width: 150px;
   text-align: left;
   border: 1px solid #ccc;    
   height: 38px;
-  padding-right: 17px;
+  padding-right: 20px;
   padding-left: 10px;
 }
 .drpDBtn button::after{
@@ -62,10 +62,10 @@ min-width: 150px;
   font-family: "icomoon";
   border: none;
   font-size: 12px;
-  right: 5px;
+  right: 7px;
 }
 .ptk-table th {
-background: ($primary);
+background: ($black);
 color: ($white);
     white-space: nowrap;
     padding: 10px;
@@ -325,6 +325,7 @@ margin-left: 15px;
       th{
         p{
           text-align: left !important;
+          display: inline-block;
         }
         &:first-child{
           width: 30px !important;
@@ -352,6 +353,7 @@ margin-left: 15px;
 .primTxt{
   color: ($primary);
 }
+
 .dropdown-menu.show{
   border-radius: 0;
   padding: 0 !important;

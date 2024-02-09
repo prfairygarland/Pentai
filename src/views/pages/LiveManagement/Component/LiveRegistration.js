@@ -982,10 +982,10 @@ const LiveRegistration = () => {
         {/* edit only  */}
 
 
-        <div className="d-flex justify-content-between align-items-center">
-          <div>
-            <p>{multiLang?.LiveManagementRegistrationLive?.liveDetails} [{liveStatus}]</p>
-          </div>
+        <div className="d-flex justify-content-end align-items-center mb-2">
+          {/* <div>
+            <p>{multiLang?.LiveManagementRegistrationLive?.liveDetails}</p>
+          </div> */}
           <div className='d-flex gap-3'>
             <CButton onClick={consoleLiveHandler}>{multiLang?.LiveManagementRegistrationLive?.console}  <CIcon icon={cilAudio}></CIcon> </CButton>
             {liveStatus === 'ready' && <CButton className='btn-black'>{multiLang?.LiveManagementRegistrationLive?.liveCancel}</CButton>}
@@ -996,38 +996,38 @@ const LiveRegistration = () => {
         {location?.state?.streamId !== undefined &&
           <div className="d-flex justify-content-between p-3 h-100 w-100 bg-light rounded mt-2 mb-4">
             <div className="align-items-center align-items-center">
-              <p className="fw-medium me-3" style={{ 'white-space': 'nowrap' }}>
+              <h5 className="fw-medium me-3 text-center" style={{ 'white-space': 'nowrap' }}>
                 {multiLang?.LiveManagementRegistrationLive?.start}
-              </p>
-              <p>{liveInformation.startTime ? moment(liveInformation.startTime).format('YYYY-MM-DD HH:mm') : '-'}</p>
+              </h5>
+              <p className='text-center'>{liveInformation.startTime ? moment(liveInformation.startTime).format('YYYY-MM-DD HH:mm') : '-'}</p>
             </div>
             <div className="align-items-center ms-2 align-items-center">
-              <p className="fw-medium me-1">{multiLang?.LiveManagementRegistrationLive?.end}</p>
-              <p>{liveInformation.endTime ? moment(liveInformation.endTime).format('YYYY-MM-DD HH:mm') : '-'}</p>
+              <h5 className="fw-medium me-1 text-center">{multiLang?.LiveManagementRegistrationLive?.end}</h5>
+              <p className='text-center'>{liveInformation.endTime ? moment(liveInformation.endTime).format('YYYY-MM-DD HH:mm') : '-'}</p>
             </div>
             <div className="align-items-center ms-2 align-items-center">
-              <p className="fw-medium me-1">{multiLang?.LiveManagementRegistrationLive?.time}</p>
-              <p>{liveInformation.time ? moment(liveInformation.time).format('HH:mm:s') : '-'}</p>
+              <h5 className="fw-medium me-1 text-center">{multiLang?.LiveManagementRegistrationLive?.time}</h5>
+              <p className='text-center'>{liveInformation.time ? moment(liveInformation.time).format('HH:mm:s') : '-'}</p>
             </div>
             <div className="align-items-center ms-2 align-items-center">
-              <p className="fw-medium me-1">{multiLang?.LiveManagementRegistrationLive?.uniqueVisitor}</p>
-              <p>{liveInformation.Uv ? liveInformation.Uv : '-'}</p>
+              <h5 className="fw-medium me-1 text-center">{multiLang?.LiveManagementRegistrationLive?.uniqueVisitor}</h5>
+              <p className='text-center'>{liveInformation.Uv ? liveInformation.Uv : '-'}</p>
             </div>
             <div className="align-items-center ms-2 align-items-center">
-              <p className="fw-medium me-1">{multiLang?.LiveManagementRegistrationLive?.pageView}</p>
-              <p>{liveInformation.Pv ? liveInformation.Pv : '-'}</p>
+              <h5 className="fw-medium me-1 text-center">{multiLang?.LiveManagementRegistrationLive?.pageView}</h5>
+              <p className='text-center'>{liveInformation.Pv ? liveInformation.Pv : '-'}</p>
             </div>
             <div className="align-items-center ms-2 align-items-center">
-              <p className="fw-medium me-1">{multiLang?.LiveManagementRegistrationLive?.like}</p>
-              <p>{liveInformation.like ? liveInformation.like : '-'}</p>
+              <h5 className="fw-medium me-1 text-center">{multiLang?.LiveManagementRegistrationLive?.like}</h5>
+              <p className='text-center'>{liveInformation.like ? liveInformation.like : '-'}</p>
             </div>
             <div className="align-items-center ms-2 align-items-center">
-              <p className="fw-medium me-1">{multiLang?.LiveManagementRegistrationLive?.chat}</p>
-              <p>{liveInformation.Chats ? liveInformation.Chats : '-'}</p>
+              <h5 className="fw-medium me-1 text-center">{multiLang?.LiveManagementRegistrationLive?.chat}</h5>
+              <p className='text-center'>{liveInformation.Chats ? liveInformation.Chats : '-'}</p>
             </div>
             <div className="align-items-center ms-2 align-items-center">
-              <p className="fw-medium me-1">{multiLang?.LiveManagementRegistrationLive?.creator}</p>
-              <p>{liveInformation.author ? liveInformation.author : '-'}</p>
+              <h5 className="fw-medium me-1 text-center">{multiLang?.LiveManagementRegistrationLive?.creator}</h5>
+              <p className='text-center'>{liveInformation.author ? liveInformation.author : '-'}</p>
             </div>
 
           </div>
@@ -1065,7 +1065,7 @@ const LiveRegistration = () => {
                           </label>
                         </div>
                         <div className="formWrpInpt d-flex">
-                          <div className="d-flex formradiogroup mb-2 gap-3">
+                          <div className="d-flex formradiogroup mb-2 gap-3 w-50">
                             <CFormInput
                               type="text"
                               value={liveRegisterTitle}
@@ -1162,8 +1162,8 @@ const LiveRegistration = () => {
                               />
                             </div>
                             {selectedImage ? (
-                              <div className="uploadImgWrap">
-                                <i className="icon-close" onClick={() => setSelectedImage('')} style={{ cursor: 'pointer' }} />
+                              <div className="uploadImgWrap uploadImgWrapBox" >
+                                <i className="icon-close uploadImgWrapclose" onClick={() => setSelectedImage('')} style={{ cursor: 'pointer' }} />
                                 <div>
                                   <img src={URL.createObjectURL(selectedImage)} alt="" />
                                 </div>
@@ -1199,7 +1199,8 @@ const LiveRegistration = () => {
                             {participateToggle === true &&
                               <div className='d-flex align-items-center gap-3'>
                                 <CFormInput
-                                  className='w-75'
+                                  style={{width:50}}
+                                  className='text-center'
                                   type="text"
                                   placeholder={multiLang?.LiveManagementRegistrationLive?.Enter_number}
                                   name='Points'
@@ -1255,7 +1256,8 @@ const LiveRegistration = () => {
                             {secretToggle === true &&
                               <div className='d-flex w-100 gap-3'>
                                 <CFormInput
-                                  className='w-25'
+                                  style={{width:100}}
+                                  className='text-center'
                                   type="text"
                                   placeholder={multiLang?.LiveManagementRegistrationLive?.Enter_number}
                                   name='Points'
@@ -1295,7 +1297,7 @@ const LiveRegistration = () => {
                   <div className="card-body">
                     <div className="formWraper">
                       <div className="form-outline form-white d-flex ">
-                        <div className='d-flex col-md-6'>
+                        <div className='d-flex col-md-12'>
                           <div className="formWrpLabel" >
                             <label className="fw-bolder ">
                               {multiLang?.LiveManagementRegistrationQuiz?.Quiz}
@@ -1316,7 +1318,7 @@ const LiveRegistration = () => {
                       {quizToggle === true &&
                         <div>
                           <div className="form-outline form-white d-flex ">
-                            <div className='d-flex col-md-6'>
+                            <div className='d-flex col-md-12'>
                               <div className="formWrpLabel" >
                                 <label className="fw-bolder ">
                                   {multiLang?.LiveManagementRegistrationQuiz?.Reward_Points}
@@ -1350,12 +1352,12 @@ const LiveRegistration = () => {
                                 </div>
                                 {rewardPointsToggle &&
                                   <div className="gap-2 ms-2">
-                                    <CFormCheck type="radio" name="rewardPoints" id="exampleRadios1" label={multiLang?.LiveManagementRegistrationQuiz?.Points_shared_by_all}
+                                    <CFormCheck type="radio" className='mb-2' name="rewardPoints" id="exampleRadios1" label={multiLang?.LiveManagementRegistrationQuiz?.Points_shared_by_all}
                                       value={rewardPointsCheckBox}
                                       checked={rewardPointsCheckBox === true}
                                       onChange={() => setrewardPointsCheckBox(true)}
                                     />
-                                    <CFormCheck type="radio" name="visibility" id="exampleRadios2" label={multiLang?.LiveManagementRegistrationQuiz?.Points_given_by_all}
+                                    <CFormCheck type="radio" className='mb-2' name="visibility" id="exampleRadios2" label={multiLang?.LiveManagementRegistrationQuiz?.Points_given_by_all}
                                       value={rewardPointsCheckBox}
                                       checked={rewardPointsCheckBox === false}
                                       onChange={() => setrewardPointsCheckBox(false)}
@@ -1368,7 +1370,7 @@ const LiveRegistration = () => {
                           </div>
 
                           <div className="form-outline form-white d-flex ">
-                            <div className='d-flex col-md-6'>
+                            <div className='d-flex col-md-12'>
                               <div className="formWrpLabel" >
                                 <label className="fw-bolder ">
 
@@ -1377,13 +1379,14 @@ const LiveRegistration = () => {
                               </div>
                               <div className="formWrpInpt  w-100 align-items-center gap-2">
                                 <ul >
-                                  {mainQuizs?.length > 0 &&
-                                    mainQuizs?.map((data, i) => (
-                                      <li key={i} className='d-flex gap-3 align-items-center'>
+                                  {mainQuizs.length > 0 &&
+                                    mainQuizs.map((data, i) => (
+                                      <li key={i} className='d-flex gap-2 align-items-center mb-2'>
                                         <span>{i + 1}</span>
-                                        <p>{data?.type}</p>
-                                        <p onClick={() => editQuiz(data, i)}>{data?.title}</p>
-                                        <i role='button' onClick={() => { setQuizIdToDelete(data?.id); confirmationDeleteHandler(true, i) }} className="icon-close"></i>
+                                        <b className='greenTxt createQuizTitle'>{data.type}</b>
+                                        <p className='createQuizTitleClickable' onClick={() => editQuiz(data, i)}>{data?.title}</p>
+                                        <i role='button'  onClick={() => { setQuizIdToDelete(data?.id); confirmationDeleteHandler(true, i) }} className="icon-close primTxt"></i>
+                                  
                                       </li>
                                     ))
                                   }
@@ -1498,8 +1501,8 @@ const LiveRegistration = () => {
                         {selectedRadio !== null &&
                           <div className='answer'>
                             <h5>{multiLang?.LiveManagementRegistrationQuiz?.answer}</h5>
-                            {selectedRadio === 'TrueOrFalse' &&
-                              <div className='d-flex quizCheckBox'>
+                            {selectedRadio === 'trueOrFalse' &&
+                              <div className='d-flex quizCheckBox mt-2'>
                                 <CButton color="light" className="d-flex align-items-center justify-content-between p-2  gap-2" onClick={() => setAnswerSelectedRadio(true)}>
                                   <CFormCheck
                                     className='w-50 gap-2'
@@ -1540,17 +1543,26 @@ const LiveRegistration = () => {
                             {selectedRadio === 'imageMultipleChoice' &&
                               <div className='mt-2 mb-2'>
                                 {uploadedImages?.length > 0 && (
-                                  <div className="upload-images-container uploadImgWrap">
-                                    {uploadedImages?.map((imgFile, index) => (
-                                      <div key={index}>
-                                        <div>
-                                          <CButton color="light" className="d-flex align-items-center gap-2" onClick={() => imageAnswerHandler(index)}>
-                                            <CFormCheck
+                                  <div className=" imageMultipleChoiceWrap d-flex flex-wrap mb-4">
+                                    {uploadedImages.map((imgFile, index) => (
+                                      <div key={index} className='imageMultipleChoice'>
+                                       
+                                          <div className="d-flex align-items-center gap-2 mb-2" onClick={() => imageAnswerHandler(index)}>
+                                          <div className='imageMultipleChoiceCheck d-flex align-items-center gap-2 flex-column'>
+                                          <CFormCheck
                                               className='w-50 gap-2'
                                               type="radio"
                                               id="radioButton4"
                                               checked={uploadedImages[index]?.value === true}
                                             />
+  {uploadedImages[index].value === true &&
+                                            <label
+                                              className="btn btn-success text-white btn-sm flex-end"
+                                            >
+                                              {multiLang?.LiveManagementRegistrationQuiz?.correct}
+                                            </label>
+                                          }
+                                          </div>
                                             <div
                                               className='remaining-img-container'
                                             >
@@ -1561,27 +1573,23 @@ const LiveRegistration = () => {
                                               >
                                                 <i className="icon-close"></i>
                                               </button>
-                                              <div className='d-flex'>
-                                                <CFormInput
+                                            
+                                            </div>
+
+                                          </div>
+                                          <div className='d-flex gap-3 align-items-center'>
+                                              <div className='imgchoiseInput'>
+                                              <CFormInput
                                                   type="text"
                                                   value={uploadedImages[index].title}
                                                   placeholder={multiLang?.LiveManagementRegistrationLive?.Title_placeholder}
                                                   // name='Title'
                                                   onChange={(e) => titleHandler(index, e?.target?.value)}
                                                 />
-                                                <span>{uploadedImages[index]?.title?.length} / 15 {multiLang?.LiveManagementRegistrationQuiz?.byte}</span>
+                                                <span className='text-nowrap'>{uploadedImages[index]?.title?.length} / 15 {multiLang?.LiveManagementRegistrationQuiz?.byte}</span>
                                               </div>
-                                            </div>
-
-                                          </CButton>
-                                          {uploadedImages[index].value === true &&
-                                            <label
-                                              className="btn btn-success text-white btn-sm flex-end"
-                                            >
-                                              {multiLang?.LiveManagementRegistrationQuiz?.correct}
-                                            </label>
-                                          }
-                                        </div>
+                                              </div>
+                                       
                                       </div>
 
                                     ))}
@@ -1683,10 +1691,10 @@ const LiveRegistration = () => {
                           </div>
                         }
 
-                        <div className='answer d-flex align-items-center gap-2'>
+                        <div className='answer d-flex align-items-center gap-2 mt-3'>
                           <h5>{multiLang?.LiveManagementRegistrationQuiz?.timelimit}</h5>
                           <CFormInput
-                            className='w-25'
+                            style={{width:70, textAlign:'center'}}
                             type='text'
                             value={timeLimit}
                             onChange={handleTimeInputChange}
@@ -1701,13 +1709,13 @@ const LiveRegistration = () => {
                         <div>
                           <div className='container mt-3'>
                             <div className='p-3'>
-                              <CCard className="text-center">
+                              <CCard >
                                 <CCardBody>
                                   {/* <CCardTitle>Centered Card Title</CCardTitle> */}
-                                  <CCardText>
+                                  <CCardTitle className='text-left'>
                                     {quizQuestion}
-                                  </CCardText>
-                                  {selectedRadio === 'TrueOrFalse' &&
+                                  </CCardTitle>
+                                  {selectedRadio === 'trueOrFalse' &&
                                     <div className='gap-2 mt-3 d-flex justify-content-center gap-3'>
                                       <div className='trueFlaseBtn d-flex justify-content-center align-items-center'>
                                         <CFormCheck className='ms-2' button={{ color: 'secondary' }} type="radio" name="options" id="option3" autoComplete="off" label="True" disabled />
@@ -1718,19 +1726,20 @@ const LiveRegistration = () => {
                                     </div>
                                   }
                                   {selectedRadio === 'imageMultipleChoice' &&
-                                    <div className='gap-2 mt-3 d-flex justify-content-center gap-3'>
+                                    <div className='gap-2 mt-2 d-flex  gap-3'>
                                       {uploadedImages?.length > 0 && (
-                                        <div className="upload-images-container uploadImgWrap">
+                                        <div className="d-flex ">
                                           {uploadedImages.map((input, index) => (
-                                            <div key={index}>
-                                              <div>
+                                            <div key={index} className='w-50 p-2 mb-2'>
+                                            
                                                 <div
-                                                  className='remaining-img-container'
+                                                  className='remaining-img-container ansImgChoise'
                                                 >
+                                                 
                                                   <img crossOrigin='anonymous' src={input.id ? imageUrl + input.image : URL.createObjectURL(uploadedImages[index].image)} alt="" />
-                                                  <p>{input.question}</p>
+                                                  <p className='mt-1'>{input.question}</p>
                                                 </div>
-                                              </div>
+                                           
                                             </div>
 
                                           ))}

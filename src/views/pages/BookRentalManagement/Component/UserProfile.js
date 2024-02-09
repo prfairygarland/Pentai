@@ -135,7 +135,7 @@ const UserProfile = ({ userInfoData }) => {
                                                         {userInfoData.suppliesInfo?.map((data, i) => (
                                                             <div className='d-flex justify-content-between py-1' key={i}>
                                                                 <p className=''>{data.name ? data?.name : 'NA'}</p>
-                                                                <p className='w-50 text-center'> {data?.startDateTime ? `${moment(data?.startDateTime).format("YYYY-MM-DD")} 
+                                                                <p className='w-50 '> {data?.startDateTime ? `${moment(data?.startDateTime).format("YYYY-MM-DD")} 
                                                                   ${moment(data?.endDateTime).format("YYYY-MM-DD")}`
                                                                     : 'NA'}</p>
                                                             </div>
@@ -145,13 +145,13 @@ const UserProfile = ({ userInfoData }) => {
                                                 </div>
                                                 <div className='w-100'>
                                                     <div className='formWrpLabel' style={{maxWidth:'100%'}}>
-                                                        <label className="fw-bolder">Book Renatl :{userInfoData.bookRentalCount ? userInfoData.bookRentalCount : 'NA'} </label>
+                                                        <label className="fw-bolder">Book Rental :{userInfoData.bookRentalCount ? userInfoData.bookRentalCount : 'NA'} </label>
                                                     </div>
                                                     <div className="border-start px-1">
                                                         {userInfoData.bookRentalInfo?.map((data, i) => (
                                                             <div className='d-flex justify-content-between py-1' key={i}>
-                                                                <p className='text-center w-50'>{data.title ? data?.title : 'NA'}</p>
-                                                                <p className='w-50 text-center'> {data?.startDateTime ? `${moment(data?.startDateTime).format("YYYY-MM-DD")} ${moment(data?.endDateTime).format("YYYY-MM-DD")}`
+                                                                <p className=' w-50'>{data.title ? data?.title : 'NA'}</p>
+                                                                <p className='w-50 '> {data?.startDateTime ? `${moment(data?.startDateTime).format("YYYY-MM-DD")} ${moment(data?.endDateTime).format("YYYY-MM-DD")}`
                                                                     : 'NA'}</p>
                                                             </div>
                                                         ))}

@@ -138,7 +138,7 @@ const RentalStatus = ({ RentalStatusData, setRentalStatusData, setUserInfoPopup 
                                             <div className='formWrpInpt'>{RentalStatusData?.returnDate ? `${moment(RentalStatusData?.returnDate).format("YYYY-MM-DD HH:mm:ss")}` : '-'}
                                             </div>
                                         </div>
-                                        <div className="form-outline form-white d-flex justify-content-center">
+                                        <div className="form-outline form-white d-flex ">
                                             <div className='p-3'>
                                                 <label className="fw-bolder">Change Rental status</label>
                                             </div>
@@ -171,10 +171,10 @@ const RentalStatus = ({ RentalStatusData, setRentalStatusData, setUserInfoPopup 
                                 </p>
                             </CModalBody>
                             <CModalFooter className='d-flex justify-content-center gap-md-4 border-0 '>
-                                <CButton  color="secondary" onClick={() => setVisible(false)}>
+                                <CButton  className="btn-black" onClick={() => setVisible(false)}>
                                     Cancel
                                 </CButton>
-                                <CButton className='px-4' color="primary" onClick={handleChangeRentalStatus}>Yes</CButton>
+                                <CButton  onClick={handleChangeRentalStatus}>Yes</CButton>
                             </CModalFooter>
                         </CModal>
                     </div>

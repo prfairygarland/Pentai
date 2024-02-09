@@ -546,7 +546,7 @@ const AllBook = () => {
             <div style={{ display: 'flex', borderRadius: 10, padding: 5, width: '100%' }}>
                 <div className='col-md-4'>
                     <CSidebar className='w-100 pe-3'>
-                        <CSidebarBrand className=' black-text d-flex justify-content-start p-3' style={{ color: 'black', background: 'none' }}><h5 style={{ fontSize: '15px' }}>Category Hierarchy</h5></CSidebarBrand>
+                        <CSidebarBrand className=' black-text d-flex justify-content-start p-3 ps-0' style={{ color: 'black', background: 'none' }}><h5 style={{ fontSize: '15px' }}>Category Hierarchy</h5></CSidebarBrand>
                         <div className=' black-text d-flex justify-content-between mb-2 p-2' style={{ color: 'black', borderBottom: '1px solid #000', background: 'none', alignItems: 'center' }}>
                             <b onClick={() => setCategories('AllBooks')} role='button'>All Books</b>
                         </div>
@@ -687,10 +687,10 @@ const AllBook = () => {
                     library={library} />}
                 {categories === 'AllBooks' &&
                     <div className='col-md-8' style={{ padding: 5, minHeight: '100%' }}>
-                        <div className='d-flex justify-content-end m-1 '>
+                        <div className='d-flex justify-content-end  '>
                             <CButton onClick={getUserListExport} className='btn-success'>Export</CButton>
                         </div>
-                        <div className='d-flex justify-content-end px-4 py-2'>
+                        <div className='d-flex justify-content-end py-3'>
                             <div className='d-flex'>
                                 <CFormSelect
                                     className='mx-3 px-8'
@@ -849,11 +849,11 @@ const AllBook = () => {
                     <CModalBody>
                         <p>Are you sure you want to delete this book</p>
                     </CModalBody>
-                    <CModalFooter>
+                    <CModalFooter className='d-flex justify-content-center'>
                         <CButton color="primary" onClick={() => deleteBook(deletebookId)}>Delete</CButton>
-                        <CButton onClick={() => setdeleteVisible(false)} color="secondary">
+                        {/* <CButton onClick={() => setdeleteVisible(false)} >
                             Cancel
-                        </CButton>
+                        </CButton> */}
                     </CModalFooter>
                 </CModal>
             </div></>

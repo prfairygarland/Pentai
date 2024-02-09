@@ -239,12 +239,14 @@ const AddRoom = ({ setModal, getMod, Modal, removeIds, buildingId, getVal, floor
   }
 
   return (
-    <div className="col-md-9">
+    <div className="col-md-8 ps-3">
       {isLoading && <Loader />}
       <div>
         {floorId && (
-          <div className="d-flex justify-content-end">
-            <CButton onClick={() => setDeleteVisible(true)}>Delete</CButton>
+          <div className="d-flex justify-content-end mb-3">
+            <CButton onClick={() => setDeleteVisible(true)} className="btn-black">
+              Delete
+            </CButton>
           </div>
         )}
         <div className="card-body">
@@ -430,19 +432,8 @@ const AddRoom = ({ setModal, getMod, Modal, removeIds, buildingId, getVal, floor
           </div>
         </div>
       </div>
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          margin: '5%',
-          gap: 10,
-        }}
-      >
-        <CButton
-          onClick={() => cancelHandler()}
-          style={{ marginRight: '2%', background: '#ccc', border: 'none' }}
-        >
+      <div className="d-flex justify-content-center align-items-center gap-3 my-3">
+        <CButton onClick={() => cancelHandler()} className="btn-black">
           Cancel
         </CButton>
         <CButton onClick={() => saveRoomHandler()}>Save</CButton>
@@ -460,11 +451,11 @@ const AddRoom = ({ setModal, getMod, Modal, removeIds, buildingId, getVal, floor
         <CModalBody>
           <p>Are you sure you want to delete this room?</p>
         </CModalBody>
-        <CModalFooter>
-          <CButton color="primary" onClick={() => deleteRoom()}>
-            Delete
+        <CModalFooter className="d-flex justify-content-center">
+          <CButton className="btn-primary" onClick={() => deleteRoom()}>
+            Confirm
           </CButton>
-          <CButton color="secondary" onClick={() => setDeleteVisible(false)}>
+          <CButton className="btn-black" onClick={() => setDeleteVisible(false)}>
             Cancel
           </CButton>
         </CModalFooter>

@@ -246,7 +246,18 @@ const BulletinBoard = () => {
       <section>
         <div className="d-flex w-100">
           <div className="col-md-4">
-            <div className="d-flex justify-content-end pt-3 pb-3 gap-2">
+           
+            <div className="d-flex justify-content-center gap-2 mt-3">
+              <CCol  className="w-100" >
+                <CFormInput
+                  type="text"
+                  id="inputPassword2"
+                  placeholder="Search"
+                  onFocus={handleSearchFocus}
+                  onChange={handleSearchChange}
+                />
+             
+              </CCol>
               <CButton
                 type="submit"
                 className=" text-white "
@@ -264,16 +275,7 @@ const BulletinBoard = () => {
                 </CButton>
               )}
             </div>
-            <div className="d-flex justify-content-center">
-              <CCol xs="auto" className="w-100" style={{ width: 'auto' }}>
-                <CFormInput
-                  type="text"
-                  id="inputPassword2"
-                  placeholder="Search"
-                  onFocus={handleSearchFocus}
-                  onChange={handleSearchChange}
-                />
-                {searchData.length > 0 && (
+            {searchData.length > 0 && (
                   <ul className="p-2 sidebarMenuLink">
                     {filteredData.map((item) => (
                       <li className="p-2" key={item.id} onClick={() => handleItemClick(item)} draggable={true}>
@@ -282,15 +284,12 @@ const BulletinBoard = () => {
                     ))}
                   </ul>
                 )}
-              </CCol>
-            </div>
           </div>
           {addBulletinBoard == true ? (
-            <div className="w-75 p-4">
-              <div>
+            <div className="col-md-8">
+              
                 <div className="w-100 p-3">
-                  <main>
-                    <div>
+                  
                       <div className="card-body">
                         <div className="formWraper">
                           <div className="form-outline form-white d-flex">
@@ -396,17 +395,21 @@ const BulletinBoard = () => {
                           </div>
                         </div>
                       </div>
-                    </div>
-                  </main>
+                      {addBulletinBoard && (
+          <div className="save-cancel-btn-container justify-content-end">
+            <CButton className="btn save-cancel-btn" onClick={() => validate()}>
+            {translationObject?.translation?.communityBoardManagement?.save}
+            </CButton>
+          </div>
+        )}
                 </div>
-              </div>
+             
             </div>
           ) : (
             <div className="col-md-8">
               <div>
-                <div className="p-3">
-                  <main>
-                    <div>
+                <div className="w-100 p-3">
+                
                       <div className="card-body">
                         <div className="formWraper">
                           <div className="form-outline form-white d-flex">
@@ -480,16 +483,18 @@ const BulletinBoard = () => {
                             </div>
                           </div>
                           <div className="prohabitinfo mt-2 p-3">
-                            <p>※ {translationObject?.translation?.communityBoardManagement?.guideForSettingPoints}​</p>
-                            <p>{translationObject?.translation?.communityBoardManagement?.guideForSettingPointsPointOne}​</p>
-                            <p>{translationObject?.translation?.communityBoardManagement?.guideForSettingPointsPointTwo}​</p>
-                            <p>{translationObject?.translation?.communityBoardManagement?.guideForSettingPointsPointThree}</p>
+                            <b>※ {translationObject?.translation?.communityBoardManagement?.guideForSettingPoints}​</b>
+                            <ol type='1' className='olNumListing'>
+                              <li>{translationObject?.translation?.communityBoardManagement?.guideForSettingPointsPointOne}</li>
+                              <li>{translationObject?.translation?.communityBoardManagement?.guideForSettingPointsPointTwo}​</li>
+                              <li>{translationObject?.translation?.communityBoardManagement?.guideForSettingPointsPointThree}</li>
+                            </ol>
+                           
                           </div>
                         </div>
                       </div>
-                    </div>
-                  </main>
-                  <div className="save-cancel-btn-container">
+                
+                  <div className="save-cancel-btn-container justify-content-end">
                     <CButton
                       className="btn btn-primary mt-3"
                       
@@ -504,13 +509,7 @@ const BulletinBoard = () => {
           )}
         </div>
 
-        {addBulletinBoard && (
-          <div className="save-cancel-btn-container">
-            <CButton className="btn save-cancel-btn" color="dark" onClick={() => validate()}>
-            {translationObject?.translation?.communityBoardManagement?.save}
-            </CButton>
-          </div>
-        )}
+       
 
         <CModal
           backdrop="static"
@@ -519,16 +518,16 @@ const BulletinBoard = () => {
           aria-labelledby="StaticBackdropExampleLabel"
         >
           <CModalHeader>
-            <CModalTitle id="StaticBackdropExampleLabel">{translationObject?.translation?.communityBoardManagement?.savedTheSettings}</CModalTitle>
+            <CModalTitle id="StaticBackdropExampleLabel">{translationObject?.translation?.communityBoardManagement?.saveTheSettings} </CModalTitle>
           </CModalHeader>
           <CModalBody>
             <p>{translationObject?.translation?.communityBoardManagement?.areYouSureToSave}</p>
           </CModalBody>
-          <CModalFooter>
-            <CButton color="secondary" onClick={() => setVisible(false)}>
+          <CModalFooter className='d-flex justify-content-center'>
+            <CButton className='btn-black' onClick={() => setVisible(false)}>
             {translationObject?.translation?.communityBoardManagement?.close}
             </CButton>
-            <CButton onClick={() => saveBoard()} color="primary">
+            <CButton onClick={() => saveBoard()} >
             {translationObject?.translation?.communityBoardManagement?.save}
             </CButton>
           </CModalFooter>
