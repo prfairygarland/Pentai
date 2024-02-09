@@ -3,6 +3,7 @@ import { BrowserRouter, HashRouter, Route, Routes } from 'react-router-dom'
 import './scss/style.scss'
 import BoardManagement from './views/pages/communityManagement/BoardManagement'
 import { SnackbarProvider } from 'notistack'
+import LiveConsole from './views/pages/LiveManagement/Component/LiveConsole'
 
 const loading = (
   <div className="pt-3 text-center">
@@ -15,7 +16,7 @@ const DefaultLayout = React.lazy(() => import('./layout/DefaultLayout'))
 
 // Pages
 const Login = React.lazy(() => import('./views/pages/login/Login'))
-const LiveConsole = React.lazy(() => import('./views/pages/LiveManagement/Component/LiveConsole'))
+// const LiveConsole = React.lazy(() => import('./views/pages/LiveManagement/Component/LiveConsole'))
 const SixMonthPasswordChange = React.lazy(() => import('./views/pages/login/SixMonthPasswordChange'))
 const Register = React.lazy(() => import('./views/pages/register/Register'))
 const Page404 = React.lazy(() => import('./views/pages/page404/Page404'))
@@ -37,7 +38,7 @@ class App extends Component {
         <Suspense fallback={loading}>
           <Routes>
             <Route exact path="/login" name="Login Page" element={<Login />} />
-            <Route exact path="/LiveManagement/liveConsole" name="Login Page" element={<LiveConsole />} />
+            <Route exact path="/LiveManagement/liveConsole/:streamId" name="Login Page" element={<LiveConsole />} />
             <Route exact path="/SixMonthPasswordChange" name="Password Change" element={<SixMonthPasswordChange />} />
             {/* <Route exact path="/register" name="Register Page" element={<Register />} /> */}
             <Route exact path='/auth' name="auth" element={<AuthLayout/>}/>

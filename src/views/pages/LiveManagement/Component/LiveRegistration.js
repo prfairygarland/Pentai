@@ -17,6 +17,7 @@ const LiveRegistration = () => {
   const { t, i18n } = useTranslation();
   const translationObject = i18n.getDataByLanguage(i18n.language);
   const multiLang = translationObject?.translation
+  const [maxDate, setMaxDate] = useState('')
 
   const navigate = useNavigate()
   const location = useLocation()
@@ -48,7 +49,7 @@ const LiveRegistration = () => {
   const [rewardPointsToggle, setrewardPointsToggle] = useState(false)
   const [rewardPointsCheckBox, setrewardPointsCheckBox] = useState(true)
   const [uploadedImages, setUploadedImages] = useState([])
-  const [inputValues, setInputValues] = useState([]);
+  const [inputValues, setInputValues] = useState([{value: '', answer: true}]);
   const [shortAnswer, setShortAnswer] = useState('')
   const [timeLimit, setTimeLimit] = useState(10)
   const [mainQuizs, setMainQuizs] = useState([])
@@ -91,6 +92,9 @@ const LiveRegistration = () => {
     } else if (new Date(liveRegisterStartDate + 'T' + liveRegisterStartHours + ':' + liveRegisterStartMins) > new Date(liveRegisterEndDate + 'T' + liveRegisterEndHours + ':' + liveRegisterEndMins)) {
       enqueueSnackbar('End time can not be earlier than start time', { variant: 'error' })
       return false
+    } else if (liveRegisterStartDate !== liveRegisterEndDate) {
+      enqueueSnackbar('Start date and end date must be same!', { variant: 'error' })
+      return false
     } else if (selectedImage === '') {
       enqueueSnackbar('Please upload image', { variant: 'error' })
       return false
@@ -113,9 +117,9 @@ const LiveRegistration = () => {
     setModalProps({
       isModalOpen: isOpen,
       content: 'Are you sure to save?',
-      cancelBtn: 'Close',
+      cancelBtn: 'No',
       cancelBtnHandler: cancelConfirmation,
-      successBtn: 'Ok',
+      successBtn: 'Yes',
       successBtnHandler: () => saveLiveRegisterHandler(),
       modalCloseHandler: confirmationSaveLiveRegisterModalHandler,
     })
@@ -536,7 +540,8 @@ const LiveRegistration = () => {
 
   }
 
-  const resetQuiz = async () => {
+  const resetQuiz = () => {
+    setCurrentQuizeIndex(null)
     setQuizQuestion('')
     setSelectedRadio('TrueOrFalse')
     setAnswerSelectedRadio(true)
@@ -560,7 +565,7 @@ const LiveRegistration = () => {
 
     if (selectedRadio === 'TrueOrFalse') {
       quizData['type'] = "TrueOrFalse"
-      quizData['options'] = [{ "title": "True" }, { "title": "False" }]
+      quizData['options'] = [{ "title": "True", "isCorrect": answerSelectedRadio ? 1 : 0 }, { "title": "False", "isCorrect": answerSelectedRadio ? 0 : 1 }]
       quizData['isCorrect'] = answerSelectedRadio
     }
 
@@ -626,10 +631,28 @@ const LiveRegistration = () => {
     // setInputValues(data?.options)
 
     if (data?.type === 'TrueOrFalse') {
-      data?.options?.map((val) => {
-        console.log('first', val)
-        setAnswerSelectedRadio(val?.isCorrect === 0 ? false : true)
+      // let fromEdit = false;
+      const filteredOpt = data?.options?.filter(val => {
+        return val.isCorrect === 1
       })
+      console.log('filteredOpt :: ', filteredOpt)
+      if (filteredOpt?.title === 'True') {
+        setAnswerSelectedRadio(true)
+      } else if (filteredOpt?.title === 'False') {
+        setAnswerSelectedRadio(false)
+      } else {
+        setAnswerSelectedRadio(data?.isCorrect ? true : false)
+      }
+      // data?.options?.map((val) => {
+      //   console.log('first', val)
+      //   if(val?.isCorrect) {
+      //     fromEdit = true
+      //   }
+      //   setAnswerSelectedRadio(val?.isCorrect === 0 ? false : true)
+      // })
+      // if (!fromEdit) {
+      //     setAnswerSelectedRadio(data?.isCorrect)
+      // }    
     }
     if (data?.type === 'imageMultipleChoice') {
       const inputva = data?.options?.map(val => ({
@@ -644,8 +667,8 @@ const LiveRegistration = () => {
     }
     if (data?.type === 'multipleChoice') {
       const inputval = data?.options?.map(val => ({
-        value: val?.title,
-        answer: val.isCorrect === 0 ? false : true
+        value: val?.title ? val?.title : val?.value,
+        answer: (val.isCorrect ? val.isCorrect : val.answer) ? true : false
       }))
 
       setInputValues(inputval)
@@ -955,17 +978,17 @@ const LiveRegistration = () => {
     return new File([blob], fileName, { type: blob.type })
   }
 
-  const consoleLiveHandler = async () => {
-    try {
-      // let url = `${API_ENDPOINT.startLiveStream}?streamId=${location?.state?.streamId}`
-      // await patchApi(url)
-      navigate('../LiveManagement/liveConsole', { state: { streamId: location?.state?.streamId }})
-    } catch (error) {
-      console.log(error)
-    }
+  const consoleLiveHandler = () => {
+    console.log('streamId :: ', location?.state?.streamId)
+    // navigate('../LiveManagement/liveConsole', { state: { streamId: location?.state?.streamId }})
+    window.open('../LiveManagement/liveConsole/' + location?.state?.streamId)
+    // navigate('../LiveManagement')
   }
 
   useEffect(() => {
+    let maxDate = new Date()
+    maxDate.setMonth(new Date().getMonth() + 1)
+    setMaxDate(maxDate)
     if (location?.state?.streamId !== undefined) {
       getStreamDetails()
     }
@@ -1090,6 +1113,8 @@ const LiveRegistration = () => {
                             <div className="formWrpInpt d-flex w-100 flex-column">
                               <div className="d-flex formradiogroup mb-2 gap-1 w-100">
                                 <DatePicker value={liveRegisterStartDate}
+                                  minDate={new Date()}
+                                  maxDate={maxDate}
                                   onChange={(event) => handleLiveRegisterStartDate(event)}
                                 />
                                 <input
@@ -1118,6 +1143,8 @@ const LiveRegistration = () => {
                             <div className="formWrpInpt d-flex w-100 flex-column">
                               <div className="d-flex formradiogroup mb-2 gap-1 w-100">
                                 <DatePicker value={liveRegisterEndDate}
+                                  minDate={new Date()}
+                                  maxDate={maxDate}
                                   onChange={(event) => handleLiveRegisterEndDate(event)} />
                                 <input
                                   type="time"

@@ -51,6 +51,9 @@ const LiveManagement = () => {
     }
   }, [filterData.search])
 
+  const consoleLiveHandler = (streamId) => {
+    window.open('../LiveManagement/liveConsole/' + streamId)
+  }
 
   const columns = useMemo(() => [
     {
@@ -105,7 +108,7 @@ const LiveManagement = () => {
       Cell: ({ row }) =>
         <div>
           {row.original.status !== 'cancelled' && row.original.status !== 'ended' &&
-            <CButton>Console</CButton>
+            <CButton onClick={() => consoleLiveHandler(row.original.id)}>Console</CButton>
           }
         </div>
     },

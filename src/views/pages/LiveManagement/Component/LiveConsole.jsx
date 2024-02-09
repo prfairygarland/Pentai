@@ -6,25 +6,28 @@ import LiveConsoleQuestions from './LiveConsoleQuestions'
 import LiveConsoleVideoView from './LiveConsoleVideoView'
 import LiveConsoleChatContainer from './LiveConsoleChatContainer'
 import { CButton } from '@coreui/react'
+import { useParams } from 'react-router'
 
 const LiveConsole = () => {
   const location = useLocation()
   const navigate = useNavigate()
+  const { streamId } = useParams()
 
-  const streamId = location?.state?.streamId
+  // const streamId = location?.state?.streamId
   const [questions, setQuestions] = useState({})
   const [playbackUrl, setPlaybackUrl] = useState('')
   const [title, setTitle] = useState('')
   const [socketURL, setSocketURL] = useState('')
   const [isLive, setIsLive] = useState(0)
+  const [txtCopied, setTxtCopied] = useState('')
   const endLiveStream = async () => {
-    let url = `${API_ENDPOINT.endLiveStream}?streamId=${location?.state?.streamId}`
+    let url = `${API_ENDPOINT.endLiveStream}?streamId=${streamId}`
     await patchApi(url)
-    navigate('../LiveManagement')
+    window.close()
   }
   const startLiveStream = async () => {
     setIsLive(1)
-    let url = `${API_ENDPOINT.startLiveStream}?streamId=${location?.state?.streamId}`
+    let url = `${API_ENDPOINT.startLiveStream}?streamId=${streamId}`
     await patchApi(url)
   }
   const getStreamDetails = async () => {
@@ -42,6 +45,15 @@ const LiveConsole = () => {
       console.log(error)
     }
   }
+
+  const copyAndPaste = (copyFor) => {
+    navigator.clipboard.writeText(playbackUrl)
+    setTxtCopied(copyFor)
+    setTimeout(() => {
+      setTxtCopied('')
+    }, 10000)
+  }
+
   useEffect(() => {
     if (streamId !== undefined) {
       getStreamDetails()
@@ -56,6 +68,53 @@ const LiveConsole = () => {
           <p>
             <b>Title</b> : {title}
           </p>
+        </div>
+        <div style={{ display: 'flex' }}>
+          <div>
+            <CButton
+              color="primary"
+              disabled={txtCopied === 'playback'}
+              style={{
+                borderRadius: '20px',
+                color: '#fff',
+                width: '200px',
+                margin: '0px 10px',
+              }}
+              onClick={() => copyAndPaste('playback')}
+            >
+              {txtCopied === 'playback' ? 'Copied URL...' : 'Copy Playback URL'}
+            </CButton>
+          </div>
+          <div>
+            <CButton
+              disabled={txtCopied === 'stream'}
+              color="primary"
+              style={{
+                borderRadius: '20px',
+                color: '#fff',
+                width: '200px',
+                margin: '0px 10px',
+              }}
+              onClick={() => copyAndPaste('stream')}
+            >
+              {txtCopied === 'stream' ? 'Copied URL...' : 'Copy Stream URL'}
+            </CButton>
+          </div>
+          <div>
+            <CButton
+              disabled={txtCopied === 'secret'}
+              color="primary"
+              style={{
+                borderRadius: '20px',
+                color: '#fff',
+                width: '200px',
+                margin: '0px 10px',
+              }}
+              onClick={() => copyAndPaste('secret')}
+            >
+              {txtCopied === 'secret' ? 'Copied Code...' : 'Copy Code'}
+            </CButton>
+          </div>
         </div>
         <div className="w-50 d-flex  justify-content-end">
           {isLive === 0 && <CButton onClick={startLiveStream}>Start</CButton>}
