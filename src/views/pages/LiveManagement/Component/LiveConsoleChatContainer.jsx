@@ -47,7 +47,7 @@ const LiveConsoleChatContainer = ({ streamId, socketURL, isLive }) => {
     if (isLive === 1) {
       getChatToken()
     }
-  }, [])
+  }, [isLive])
 
   const [adminChatText, setAdminChatText] = useState('')
 
