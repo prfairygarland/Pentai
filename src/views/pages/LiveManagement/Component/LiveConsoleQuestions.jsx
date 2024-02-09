@@ -10,7 +10,7 @@ import { patchApi } from 'src/utils/Api'
 import { ALL_CONSTANTS, API_ENDPOINT } from 'src/utils/config'
 import { enqueueSnackbar } from 'notistack'
 
-const LiveConsoleQuestions = ({ questions, isLive }) => {
+const LiveConsoleQuestions = ({ questions, isLive, quizRewardPoints, quizRewardType }) => {
   const readyQuestionStyles = {
     marginRight: '5px',
     padding: '0px 5px',
@@ -82,12 +82,17 @@ const LiveConsoleQuestions = ({ questions, isLive }) => {
     <div className="col-md-4">
       <div className=" bg-light p-3 mb-3">
         <div>
-          <h4>Quiz (1/10)</h4>
+          <h4>
+            Quiz ({questStatusAndBtn?.filter((ques) => ques.quesStatus === 'end')?.length} /{' '}
+            {questions?.length})
+          </h4>
           <p>
             <b>Winner:100</b>
           </p>
-          <p>Reward Points: 1,000 Points</p>
-          <p>*Points shared by all</p>
+          <p>Reward Points: {quizRewardPoints} Points</p>
+          <p>
+            {quizRewardType === 'sharedByAll' ? '*Points shared by all' : '*Points given to all'}
+          </p>
         </div>
         <div>
           <CAccordion alwaysOpen activeItemKey={1} className="mt-2">
