@@ -1010,7 +1010,7 @@ const LiveRegistration = () => {
             <p>{multiLang?.LiveManagementRegistrationLive?.liveDetails}</p>
           </div> */}
           <div className='d-flex gap-3'>
-            <CButton onClick={consoleLiveHandler}>{multiLang?.LiveManagementRegistrationLive?.console}  <CIcon icon={cilAudio}></CIcon> </CButton>
+            {!(liveStatus === 'ended' || liveStatus === 'cancelled') && <CButton onClick={consoleLiveHandler}>{multiLang?.LiveManagementRegistrationLive?.console}  <CIcon icon={cilAudio}></CIcon> </CButton>}
             {liveStatus === 'ready' && <CButton className='btn-black'>{multiLang?.LiveManagementRegistrationLive?.liveCancel}</CButton>}
           </div>
 

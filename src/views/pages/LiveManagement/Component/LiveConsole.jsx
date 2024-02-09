@@ -20,6 +20,8 @@ const LiveConsole = () => {
   const [socketURL, setSocketURL] = useState('')
   const [isLive, setIsLive] = useState(0)
   const [txtCopied, setTxtCopied] = useState('')
+  const [quizRewardPoints, setQuizRewardPoints] = useState('')
+  const [quizRewardType, setQuizRewardType] = useState('')
   const endLiveStream = async () => {
     let url = `${API_ENDPOINT.endLiveStream}?streamId=${streamId}`
     await patchApi(url)
@@ -40,6 +42,8 @@ const LiveConsole = () => {
         setTitle(res?.data?.title)
         setSocketURL(res?.data?.socket)
         setIsLive(res?.data?.isLive)
+        setQuizRewardPoints(res?.data?.quizRewardPoints)
+        setQuizRewardType(res?.data?.quizRewardType)
       }
     } catch (error) {
       console.log(error)
@@ -123,7 +127,12 @@ const LiveConsole = () => {
       </div>
       <div style={{ display: 'flex', justifyContent: 'space-between', padding: '5px 20px' }}></div>
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <LiveConsoleQuestions questions={questions} isLive={isLive} />
+        <LiveConsoleQuestions
+          questions={questions}
+          isLive={isLive}
+          quizRewardPoints={quizRewardPoints}
+          quizRewardType={quizRewardType}
+        />
         <LiveConsoleVideoView playbackUrl={playbackUrl} isLive={isLive} />
         <LiveConsoleChatContainer streamId={streamId} socketURL={socketURL} isLive={isLive} />
       </div>
