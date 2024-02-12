@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 const LiveConsoleVideoView = ({ playbackUrl, isLive }) => {
   const videoStyles = {
@@ -8,6 +8,7 @@ const LiveConsoleVideoView = ({ playbackUrl, isLive }) => {
     // top: '0',
     // position: 'fixed',
   }
+  const [likes, setLikes] = useState(0)
 
   ;(async function (IVSPlayerPackage) {
     // First, check if the browser supports the IVS player.
@@ -41,9 +42,13 @@ const LiveConsoleVideoView = ({ playbackUrl, isLive }) => {
     player.addEventListener(PlayerEventType.TEXT_METADATA_CUE, (cue) => {
       const metadataText = cue.text
       const position = player.getPosition().toFixed(2)
-      console.log(
-        `PlayerEvent - TEXT_METADATA_CUE: "${metadataText}". Observed ${position}s after playback started.`,
-      )
+      // console.log(
+      //   `PlayerEvent - TEXT_METADATA_CUE: "${metadataText}". Observed ${position}s after playback started.`,
+      // )
+      const ekVariable = JSON.parse(unescape(metadataText))
+      if (ekVariable.type === 'info') {
+        setLikes(ekVariable?.data?.likes)
+      }
     })
 
     player.addEventListener(PlayerState.BUFFERING, function () {

@@ -60,7 +60,7 @@ const LiveConsoleQuestions = ({ questions, isLive, quizRewardPoints, quizRewardT
       let url = `${API_ENDPOINT.endQuizQuestion}?questionId=${quesId}`
       await patchApi(url)
       const filteredQuesStatus = [...questStatusAndBtn]
-      filteredQuesStatus[index] = { quesId: quesId, quesStatus: 'end' }
+      filteredQuesStatus[index] = { quesId: quesId, quesStatus: 'ended' }
       setQuestStatusAndBtn(filteredQuesStatus)
     } catch (error) {
       console.log(error)
@@ -71,7 +71,7 @@ const LiveConsoleQuestions = ({ questions, isLive, quizRewardPoints, quizRewardT
     if (Array.isArray(questions)) {
       const quesStatus = []
       questions.forEach((quesData) => {
-        quesStatus.push({ quesId: quesData?.id, quesStatus: 'ready' })
+        quesStatus.push({ quesId: quesData?.id, quesStatus: quesData.state })
       })
       setQuestStatusAndBtn(quesStatus)
     }
@@ -83,7 +83,7 @@ const LiveConsoleQuestions = ({ questions, isLive, quizRewardPoints, quizRewardT
       <div className=" bg-light p-3 mb-3">
         <div>
           <h4>
-            Quiz ({questStatusAndBtn?.filter((ques) => ques.quesStatus === 'end')?.length} /{' '}
+            Quiz ({questStatusAndBtn?.filter((ques) => ques.quesStatus === 'ended')?.length} /{' '}
             {questions?.length})
           </h4>
           <p>
@@ -109,8 +109,8 @@ const LiveConsoleQuestions = ({ questions, isLive, quizRewardPoints, quizRewardT
                         <span className="now">Now</span>
                       )}{' '}
                     {questStatusAndBtn[index]?.quesId === quesData?.id &&
-                      questStatusAndBtn[index]?.quesStatus === 'end' && (
-                        <span className="end">End</span>
+                      questStatusAndBtn[index]?.quesStatus === 'ended' && (
+                        <span className="end">Ended</span>
                       )}{' '}
                     {quesData?.title}
                   </CAccordionHeader>

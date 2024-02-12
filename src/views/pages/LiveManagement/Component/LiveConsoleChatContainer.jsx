@@ -3,13 +3,23 @@ import React, { useEffect, useState } from 'react'
 import { getApi, postApi } from 'src/utils/Api'
 import { API_ENDPOINT } from 'src/utils/config'
 import { enqueueSnackbar } from 'notistack'
+import moment from 'moment'
 
-const LiveConsoleChatContainer = ({ streamId, socketURL, isLive }) => {
+const LiveConsoleChatContainer = ({
+  streamId,
+  socketURL,
+  isLive,
+  scheduledAt,
+  scheduledUpto,
+  serverTime,
+  broadcastStart,
+}) => {
   const [chatToken, setChatToken] = useState('')
   const [chatData, setChatData] = useState([])
+  const [currentTime, setCurrentTime] = useState(serverTime)
 
   useEffect(() => {
-    if (chatToken && isLive === 1) {
+    if (chatToken && isLive === 1 && socketURL) {
       const socket = new WebSocket(socketURL, chatToken)
       try {
         // Connection opened
@@ -32,6 +42,26 @@ const LiveConsoleChatContainer = ({ streamId, socketURL, isLive }) => {
     }
   }, [chatToken])
 
+  const [currentDate, setCurrentDate] = useState(new Date())
+
+  const incrementDateByOneSecond = () => {
+    setCurrentDate((prevDate) => {
+      if (prevDate?.getTime) {
+        return new Date(prevDate.getTime() + 1000)
+      } else {
+        return new Date(new Date(prevDate).getTime() + 1000)
+      }
+    })
+  }
+
+  // Effect to update the date every second
+  useEffect(() => {
+    const intervalId = setInterval(incrementDateByOneSecond, 1000)
+
+    // Clean up the interval on component unmount
+    return () => clearInterval(intervalId)
+  }, [])
+
   const getChatToken = async () => {
     try {
       const res = await postApi(API_ENDPOINT.getChatToken, { streamId: streamId })
@@ -44,6 +74,7 @@ const LiveConsoleChatContainer = ({ streamId, socketURL, isLive }) => {
   }
 
   useEffect(() => {
+    setCurrentDate(new Date(serverTime).toLocaleString())
     if (isLive === 1) {
       getChatToken()
     }
@@ -66,35 +97,35 @@ const LiveConsoleChatContainer = ({ streamId, socketURL, isLive }) => {
   }
 
   return (
-    // <div style={{ width: '26%', display: 'flex', flexDirection: 'column' }}>
     <div className="col-md-4 p-2">
-      {/* <div
-        style={{
-          border: '1px solid black',
-          borderRadius: '10px',
-          padding: '5px',
-          margin: '10px',
-          height: '22vh',
-        }}
-      > */}
       <div className="statusBox">
         <p>
           <b> Status :</b>{' '}
-          <span style={{ color: 'red' }}>
-            <b>On AIR</b>
-          </span>
+          {isLive === 0 && (
+            <span style={{ color: 'green' }}>
+              <b>Ready</b>
+            </span>
+          )}
+          {isLive === 1 && (
+            <span style={{ color: 'red' }}>
+              <b>On AIR</b>
+            </span>
+          )}
         </p>
         <p>
-          <b>Scheduled :</b> YYYY-MM-DD 00:00 ~ YYYY-MM-DD 00:00
+          <b>Scheduled :</b> {moment(scheduledAt).format('YYYY-MM-DD HH:mm:ss')} ~{' '}
+          {moment(scheduledUpto).format('YYYY-MM-DD HH:mm:ss')}
         </p>
         <p>
-          <b>Current time :</b> 00:00:00 PM
+          <b>Current time :</b> {currentDate.toLocaleString()}
         </p>
         <p>
-          <b>Start time :</b> 00:00:00 PM
+          <b>Start time :</b>{' '}
+          {broadcastStart !== null ? moment(broadcastStart).format('YYYY-MM-DD HH:mm:ss') : '-'}
         </p>
         <p>
-          <b>Elapsed time :</b> 00:00:00
+          <b>Elapsed time :</b>{' '}
+          {broadcastStart !== null ? moment(broadcastStart).format('YYYY-MM-DD HH:mm:ss') : '-'}
         </p>
         <p>
           <b>UV l PV l Like :</b> 000 l 000 l 000
