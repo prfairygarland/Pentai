@@ -263,6 +263,7 @@ const LiveRegistration = () => {
     if (month.length < 2) month = '0' + month
     if (day.length < 2) day = '0' + day
     setLiveRegisterStartDate([year, month, day].join('-'))
+    setLiveRegisterEndDate([year, month, day].join('-'))
   }
 
   const liveRegisterStartTimeHandler = (e) => {
@@ -743,7 +744,7 @@ const LiveRegistration = () => {
                 } else if (mainQuizs[obj].type === 'imageMultipleChoice') {
                   // images.push(mainQuizs[obj].options[i].image)
                   formData.append(`options[${i}][title]`, mainQuizs[obj].options[i].title)
-                  if (mainQuizs[obj].options[i].value === true) {
+                  if (mainQuizs[obj].options[i].value === true || mainQuizs[obj].options[i].isCorrect === 1) {
                     formData.append(`options[${i}][isCorrect]`, 1)
                   } else {
                     formData.append(`options[${i}][isCorrect]`, 0)
@@ -1072,9 +1073,8 @@ const LiveRegistration = () => {
                             <div className="formWrpInpt d-flex w-100 flex-column">
                               <div className="d-flex formradiogroup mb-2 gap-1 w-100">
                                 <DatePicker value={liveRegisterEndDate}
-                                  minDate={new Date()}
-                                  maxDate={maxDate}
-                                  onChange={(event) => handleLiveRegisterEndDate(event)} />
+                                  disabled={true} />
+                                  {/* onChange={(event) => handleLiveRegisterEndDate(event)}  */}
                                 <input
                                   type="time"
                                   name="time"

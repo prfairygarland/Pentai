@@ -16,9 +16,15 @@ const LiveConsole = () => {
   // const streamId = location?.state?.streamId
   const [questions, setQuestions] = useState({})
   const [playbackUrl, setPlaybackUrl] = useState('')
+  const [streamingUrl, setStreamingUrl] = useState('')
+  const [streamKey, setStreamKey] = useState('')
   const [title, setTitle] = useState('')
   const [socketURL, setSocketURL] = useState('')
   const [isLive, setIsLive] = useState(0)
+  const [scheduledAt, setScheduledAt] = useState('')
+  const [scheduledUpto, setScheduledUpto] = useState('')
+  const [serverTime, setServerTime] = useState('')
+  const [broadcastStart, setBroadcastStart] = useState('')
   const [txtCopied, setTxtCopied] = useState('')
   const [quizRewardPoints, setQuizRewardPoints] = useState('')
   const [quizRewardType, setQuizRewardType] = useState('')
@@ -32,6 +38,7 @@ const LiveConsole = () => {
     setIsLive(1)
     let url = `${API_ENDPOINT.startLiveStream}?streamId=${streamId}`
     await patchApi(url)
+    getStreamDetails()
   }
   const getStreamDetails = async () => {
     try {
@@ -40,9 +47,15 @@ const LiveConsole = () => {
       if (res.status === 200) {
         setQuestions(res?.data?.questions)
         setPlaybackUrl(res?.data?.playbackUrl)
+        setStreamingUrl(res?.data?.credentials?.streamingUrl)
+        setStreamKey(res?.data?.credentials?.streamKey)
         setTitle(res?.data?.title)
         setSocketURL(res?.data?.socket)
-        setIsLive(res?.data?.isLive)
+        setScheduledAt(res?.data?.scheduledAt)
+        setScheduledUpto(res?.data?.scheduledUpto)
+        setServerTime(res?.data?.serverTime)
+        setBroadcastStart(res?.data?.broadcastStart)
+        setIsLive(res?.data?.status === 'ready' ? 0 : 1)
         setQuizRewardPoints(res?.data?.quizRewardPoints)
         setQuizRewardType(res?.data?.quizRewardType)
       }
@@ -52,7 +65,13 @@ const LiveConsole = () => {
   }
 
   const copyAndPaste = (copyFor) => {
-    navigator.clipboard.writeText(playbackUrl)
+    if (copyFor === 'playback') {
+      navigator.clipboard.writeText(playbackUrl)
+    } else if (copyFor === 'stream') {
+      navigator.clipboard.writeText(streamingUrl)
+    } else {
+      navigator.clipboard.writeText(streamKey)
+    }
     setTxtCopied(copyFor)
     setTimeout(() => {
       setTxtCopied('')
@@ -112,7 +131,7 @@ const LiveConsole = () => {
               style={{
                 borderRadius: '20px',
                 color: '#fff',
-                width: '200px',
+                width: '230px',
                 margin: '0px 10px',
               }}
               onClick={() => copyAndPaste('secret')}
@@ -135,7 +154,15 @@ const LiveConsole = () => {
           quizRewardType={quizRewardType}
         />
         <LiveConsoleVideoView playbackUrl={playbackUrl} isLive={isLive} />
-        <LiveConsoleChatContainer streamId={streamId} socketURL={socketURL} isLive={isLive} />
+        <LiveConsoleChatContainer
+          streamId={streamId}
+          socketURL={socketURL}
+          isLive={isLive}
+          scheduledAt={scheduledAt}
+          scheduledUpto={scheduledUpto}
+          serverTime={serverTime}
+          broadcastStart={broadcastStart}
+        />
       </div>
     </>
   )
