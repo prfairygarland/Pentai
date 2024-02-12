@@ -72,7 +72,7 @@ const Login = () => {
                               localStorage.setItem('roleWisePermission', JSON.stringify(res.data.rolePermissions))
                               setIsLoading(false)
                               setValidCredential(false)
-                              navigate('../Dashboard', {
+                              navigate('../User', {
                                 state: {
                                   enqueueSnackbarMsg: multiLang?.Login_succesfull,
                                   variant: 'success',
@@ -85,7 +85,7 @@ const Login = () => {
                               sessionStorage.setItem('roleWisePermission', JSON.stringify(res.data.rolePermissions))
                               setIsLoading(false)
                               setValidCredential(false)
-                              navigate('../Dashboard', {
+                              navigate('../User', {
                                 state: {
                                   enqueueSnackbarMsg: multiLang?.Login_succesfull,
                                   variant: 'success',
