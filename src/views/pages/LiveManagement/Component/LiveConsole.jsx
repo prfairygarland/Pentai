@@ -25,7 +25,8 @@ const LiveConsole = () => {
   const endLiveStream = async () => {
     let url = `${API_ENDPOINT.endLiveStream}?streamId=${streamId}`
     await patchApi(url)
-    window.close()
+    navigate('../LiveManagement')
+    // window.close()
   }
   const startLiveStream = async () => {
     setIsLive(1)
@@ -101,7 +102,7 @@ const LiveConsole = () => {
               }}
               onClick={() => copyAndPaste('stream')}
             >
-              {txtCopied === 'stream' ? 'Copied URL...' : 'Copy Stream URL'}
+              {txtCopied === 'stream' ? 'Copied URL...' : 'Copy Streaming URL'}
             </CButton>
           </div>
           <div>
@@ -116,7 +117,7 @@ const LiveConsole = () => {
               }}
               onClick={() => copyAndPaste('secret')}
             >
-              {txtCopied === 'secret' ? 'Copied Code...' : 'Copy Code'}
+              {txtCopied === 'secret' ? 'Copied Password...' : 'Copy Streaming Password'}
             </CButton>
           </div>
         </div>

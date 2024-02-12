@@ -52,7 +52,8 @@ const LiveManagement = () => {
   }, [filterData.search])
 
   const consoleLiveHandler = (streamId) => {
-    window.open('../LiveManagement/liveConsole/' + streamId)
+    // window.open('../LiveManagement/liveConsole/' + streamId)
+    navigate('../LiveManagement/liveConsole/' + streamId)
   }
 
   const columns = useMemo(() => [
@@ -270,7 +271,7 @@ const LiveManagement = () => {
                 <CNavLink role='button' className={activeTab === 'ended' ? 'active' : ''} onClick={() => handleTabClick('ended')}>{multiLang?.LiveManagement?.Ended}</CNavLink>
               </CNavItem>
               <CNavItem >
-                <CNavLink role='button' className={activeTab === 'cancelled' ? 'active' : ''} onClick={() => handleTabClick('cancelled')}>{multiLang?.LiveManagement?.Cancel}</CNavLink>
+                <CNavLink role='button' className={activeTab === 'cancelled' ? 'active' : ''} onClick={() => handleTabClick('cancelled')}>{multiLang?.LiveManagement?.Cancelled}</CNavLink>
               </CNavItem>
             </CNav>
           </div>

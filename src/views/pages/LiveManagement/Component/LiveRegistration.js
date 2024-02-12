@@ -12,6 +12,7 @@ import ConfirmationModal from 'src/utils/ConfirmationModal';
 import { ALL_CONSTANTS, API_ENDPOINT } from 'src/utils/config';
 import { imageUrl } from '../../BookRentalManagement/BookRentalStatus';
 import moment from 'moment/moment';
+import emptyImage from '../../../../assets/images/empty-image.png'
 
 const LiveRegistration = () => {
   const { t, i18n } = useTranslation();
@@ -57,24 +58,18 @@ const LiveRegistration = () => {
   const [rewardPoints, setRewardPoints] = useState(null)
   const [questionsId, setQuestionsId] = useState(null)
   const [streamId, setStreamId] = useState(null)
-  const [quizIdTodelete, setQuizIdToDelete] = useState(null)
+  const [quizIdTodelete, setQuizIdToDelete] = useState([])
   const [type, setType] = useState('')
   const [live, setLive] = useState(0)
   const [liveInformation, setLiveInformation] = useState({})
   const [modifyImage, setModifyImage] = useState('')
 
-  console.log('modifyImage', modifyImage)
-
-  console.log('live', live)
 
   const handleTimeInputChange = (e) => {
     const sanitizedValue = e.target.value.replace(/[^0-9]/g, '');
     const newValue = sanitizedValue
     setTimeLimit(newValue);
   };
-
-  console.log('quizIdTodelete', quizIdTodelete)
-  console.log('mainQuizs', mainQuizs)
 
   const validateLiveRegister = () => {
     if (liveRegisterTitle.trim() === '') {
@@ -200,7 +195,6 @@ const LiveRegistration = () => {
       if (secret !== null) {
         formData.append('password', secret)
       }
-      console.log('form data =>', formData);
       if (location?.state?.streamId) {
         formData.append('id', location?.state?.streamId)
         const res = await putApi(API_ENDPOINT.editLiveStream, formData)
@@ -215,7 +209,6 @@ const LiveRegistration = () => {
       }
       else {
         const res = await postApi(API_ENDPOINT.createLiveStream, formData)
-        console.log(' new =>', res)
         if (res.status === 200) {
           if (res?.data?.status === 500) {
             enqueueSnackbar(res?.data?.msg, { variant: 'error' })
@@ -233,11 +226,8 @@ const LiveRegistration = () => {
     })
   }
 
-  console.log('upload', uploadedImages)
-
   const handleTabClick = (value) => {
     try {
-      console.log('value =>', value);
       if (value === 'Quiz') {
         setLiveRegisterTitle('')
         setLiveRegisterStartDate('')
@@ -258,7 +248,6 @@ const LiveRegistration = () => {
         setActiveTab(value);
         getStreamDetails()
       }
-
     } catch (error) {
       console.error('Error fetching data:', error);
     }
@@ -392,9 +381,7 @@ const LiveRegistration = () => {
       } else {
         files.push({ title: '', value: false, image: file })
       }
-    
     })
-
 
     e.target.value = null
     setUploadedImages(files)
@@ -403,10 +390,7 @@ const LiveRegistration = () => {
   const deleteUploadedImageHandler = (e, imgFileIndex) => {
     e.stopPropagation()
     const arrUploadedImages = [...uploadedImages]
-    console.log('arrUploadedImages =>', arrUploadedImages);
     if (arrUploadedImages[imgFileIndex].value === true) {
-      console.log('1 =>', arrUploadedImages[imgFileIndex + 1]);
-      console.log('2 =>', arrUploadedImages[imgFileIndex - 1]);
       if (arrUploadedImages[imgFileIndex - 1] === undefined) {
         arrUploadedImages[imgFileIndex + 1].value = true
       } else if (arrUploadedImages[imgFileIndex + 1] === undefined) {
@@ -427,7 +411,6 @@ const LiveRegistration = () => {
     const arrUploadedImages = [...uploadedImages]
     for (let i = 0; i < arrUploadedImages.length; i++) {
       if (i === index) {
-        console.log('test');
         arrUploadedImages[index].value = true
       } else {
         arrUploadedImages[i].value = false
@@ -459,7 +442,6 @@ const LiveRegistration = () => {
     const arrMultipleAnswer = [...inputValues]
     for (let i = 0; i < arrMultipleAnswer.length; i++) {
       if (i === index) {
-        console.log('test');
         arrMultipleAnswer[index].answer = true
       } else {
         arrMultipleAnswer[i].answer = false
@@ -511,7 +493,6 @@ const LiveRegistration = () => {
       return false
     }
     else if (selectedRadio === 'imageMultipleChoice' && uploadedImages.some(img => img.title === '')) {
-      console.log('hhs');
       enqueueSnackbar('Enter image title', { variant: 'error' })
       return false
     }
@@ -571,13 +552,25 @@ const LiveRegistration = () => {
 
     if (selectedRadio === 'imageMultipleChoice') {
       quizData['type'] = "imageMultipleChoice"
-      quizData['options'] = uploadedImages
+      // quizData['options'] = uploadedImages
       for (let index = 0; index < uploadedImages.length; index++) {
         if (uploadedImages[index].value === true) {
           quizData['isCorrect'] = { title: uploadedImages[index].title, image: imageUrl + uploadedImages[index].image }
         }
       }
-
+      const imageOptions = [...uploadedImages]
+      uploadedImages.forEach(async (img, index) => {
+        if(typeof img.image !== 'string' && questionsId) {
+          const formData = new FormData()
+          formData.append('images', img.image)
+          const changedImage = await postApi(API_ENDPOINT.uploadQuizImage, formData)
+          img['image'] = await changedImage?.data?.data[0]?.path
+        }
+        img['isCorrect'] = img.value ? 1 : 0
+        imageOptions[index] = img
+      })
+      quizData['options'] = imageOptions
+      // setUploadedImages(imageOptions)
     }
 
     if (selectedRadio === 'multipleChoice') {
@@ -596,16 +589,12 @@ const LiveRegistration = () => {
       quizData['isCorrect'] = shortAnswer
     }
 
-    console.log('quizData =>', quizData);
-
     if (currentQuizeIndex !== null) {
       const getData = [...mainQuizs]
-      console.log('getData', getData)
       getData[currentQuizeIndex] = quizData
       setMainQuizs(getData)
       enqueueSnackbar('Update succesfully.', { variant: 'success' })
       setCurrentQuizeIndex(null)
-
     } else {
       const allQuizData = mainQuizs ? [...mainQuizs] : []
       allQuizData.push(quizData)
@@ -617,10 +606,8 @@ const LiveRegistration = () => {
     resetQuiz()
   }
 
-  console.log('ans', questionsId)
 
   const editQuiz = useCallback(async (data, index) => {
-    console.log('edit data =>', data);
     setQuestionsId(data?.id)
     setCurrentQuizeIndex(index)
     setQuizQuestion(data.title)
@@ -629,22 +616,19 @@ const LiveRegistration = () => {
     setStreamId(data?.streamId)
     setType(data.type)
     // setInputValues(data?.options)
-
     if (data?.type === 'TrueOrFalse') {
       // let fromEdit = false;
       const filteredOpt = data?.options?.filter(val => {
         return val.isCorrect === 1
       })
-      console.log('filteredOpt :: ', filteredOpt)
-      if (filteredOpt?.title === 'True') {
+      if (filteredOpt[0]?.title === 'True') {
         setAnswerSelectedRadio(true)
-      } else if (filteredOpt?.title === 'False') {
+      } else if (filteredOpt[0]?.title === 'False') {
         setAnswerSelectedRadio(false)
       } else {
         setAnswerSelectedRadio(data?.isCorrect ? true : false)
       }
       // data?.options?.map((val) => {
-      //   console.log('first', val)
       //   if(val?.isCorrect) {
       //     fromEdit = true
       //   }
@@ -683,8 +667,6 @@ const LiveRegistration = () => {
     setVisible(true)
   }, [visible])
 
-  console.log('input', uploadedImages)
-
   const deleteQuiz = async (index) => {
     const originalData = [...mainQuizs]
     originalData.splice(index, 1)
@@ -721,22 +703,15 @@ const LiveRegistration = () => {
 
   const saveQuizRegistration = async () => {
     setIsLoading(true)
-    console.log('mainQuizs =>', mainQuizs)
-
-    try {
-      let url = `${API_ENDPOINT.deleteQuizQuestion}?questionId=${quizIdTodelete}`
-      const res = await deleteApi(url)
-      if (res?.data?.status === 200) {
-        //  enqueueSnackbar('Quiz question deleted successfully', { variant: 'success' })
-        getStreamDetails()
-      //  navigate('/LiveManagement')
+    // return
+    quizIdTodelete.forEach(async quesId => {
+      try {
+        let url = `${API_ENDPOINT.deleteQuizQuestion}?questionId=${quesId}`
+        await deleteApi(url)
+      } catch (error) {
+        console.log(error)
       }
-      else {
-        //  enqueueSnackbar('Failed to delete the Quiz question', { variant: 'error' })
-      }
-    } catch (error) {
-
-    }
+    })   
 
     try {
       let data = {
@@ -744,100 +719,61 @@ const LiveRegistration = () => {
         quizRewardPoints: rewardPoints !== null ? rewardPoints : 0,
         quizRewardType: rewardPointsCheckBox === true ? 'sharedByAll' : 'givenToAll'
       }
-      console.log('form data =>', data);
 
       const responce = await putApi(API_ENDPOINT.updateQuizInfo, data)
       if(responce?.status === 200){
-        navigate('/LiveManagement')
-      }
-      console.log(' new =>', responce)
-
-      console.log('test', mainQuizs);
-
-
-
-      for (let obj in mainQuizs) {
-        const formData = new FormData()
-        console.log('obj', mainQuizs[obj].question);
-        formData.append('streamId', location?.state?.streamId)
-        formData.append('title', mainQuizs[obj].title)
-        formData.append('type', mainQuizs[obj].type)
-        formData.append('timeLimitSeconds', mainQuizs[obj].timeLimitSeconds)
-        formData.append('order', obj)
+          for (let obj in mainQuizs) {
+            const formData = new FormData()
+            formData.append('streamId', location?.state?.streamId)
+            formData.append('title', mainQuizs[obj].title)
+            formData.append('type', mainQuizs[obj].type)
+            formData.append('timeLimitSeconds', mainQuizs[obj].timeLimitSeconds)
+            formData.append('order', obj)
 
 
-        console.log('mainQuizs[obj].options =>', mainQuizs[obj].options);
-        if (mainQuizs[obj].type === 'shortAnswer') {
-          formData.append(`options[${0}][title]`, mainQuizs[obj].options[0].title)
-          formData.append(`options[${0}][isCorrect]`, 1)
+            if (mainQuizs[obj].type === 'shortAnswer') {
+              formData.append(`options[${0}][title]`, mainQuizs[obj].options[0].title)
+              formData.append(`options[${0}][isCorrect]`, 1)
 
-        } else {
-          for (let i in mainQuizs[obj].options) {
-            console.log('i =>', mainQuizs[obj].options[i]);
-            if (mainQuizs[obj].type === 'TrueOrFalse') {
-              formData.append(`options[${i}][title]`, mainQuizs[obj].options[i].title)
-              if (mainQuizs[obj].isCorrect === true || mainQuizs[obj].options[i].isCorrect === 1) {
-                formData.append(`options[${i}][isCorrect]`, 1)
-              }
-              else {
-                formData.append(`options[${i}][isCorrect]`, 0)
-              }
-            } else if (mainQuizs[obj].type === 'imageMultipleChoice') {
-              // images.push(mainQuizs[obj].options[i].image)
-              formData.append(`options[${i}][title]`, mainQuizs[obj].options[i].title)
-              if (mainQuizs[obj].options[i].value === true) {
-                formData.append(`options[${i}][isCorrect]`, 1)
-              } else {
-                formData.append(`options[${i}][isCorrect]`, 0)
-              }
-
-              formData.append('images', mainQuizs[obj].options[i].image)
-              console.log("type =>", typeof mainQuizs[obj].options[i].image);
-            } else if (mainQuizs[obj].type === 'multipleChoice') {
-              formData.append(`options[${i}][title]`, mainQuizs[obj].options[i].value ? mainQuizs[obj].options[i].value : mainQuizs[obj].options[i].title)
-              if (mainQuizs[obj].options[i].answer === true || mainQuizs[obj].options[i].isCorrect === 1) {
-                formData.append(`options[${i}][isCorrect]`, 1)
-              } else {
-                formData.append(`options[${i}][isCorrect]`, 0)
+            } else {
+              for (let i in mainQuizs[obj].options) {
+                if (mainQuizs[obj].type === 'TrueOrFalse') {
+                  formData.append(`options[${i}][title]`, mainQuizs[obj].options[i].title)
+                  formData.append(`options[${i}][isCorrect]`, mainQuizs[obj].options[i].isCorrect)
+                } else if (mainQuizs[obj].type === 'imageMultipleChoice') {
+                  // images.push(mainQuizs[obj].options[i].image)
+                  formData.append(`options[${i}][title]`, mainQuizs[obj].options[i].title)
+                  if (mainQuizs[obj].options[i].value === true) {
+                    formData.append(`options[${i}][isCorrect]`, 1)
+                  } else {
+                    formData.append(`options[${i}][isCorrect]`, 0)
+                  }
+                  if (mainQuizs[obj].id) {
+                    formData.append(`options[${i}][image]`, mainQuizs[obj].options[i].image)
+                  } else {
+                    formData.append('images', mainQuizs[obj].options[i].image)
+                  }
+                } else if (mainQuizs[obj].type === 'multipleChoice') {
+                  formData.append(`options[${i}][title]`, mainQuizs[obj].options[i].value ? mainQuizs[obj].options[i].value : mainQuizs[obj].options[i].title)
+                  if (mainQuizs[obj].options[i].answer === true || mainQuizs[obj].options[i].isCorrect === 1) {
+                    formData.append(`options[${i}][isCorrect]`, 1)
+                  } else {
+                    formData.append(`options[${i}][isCorrect]`, 0)
+                  }
+                }
               }
             }
-          }
-        }
 
-        console.log('ids1', mainQuizs[obj].id)
-        // console.log('ids2', questionsId)
-        console.log('type', type)
-        let res = ''
-        if (mainQuizs[obj].id) {
-          formData.append('questionId', mainQuizs[obj].id)
-          res = await putApi(API_ENDPOINT.editQuizQuestion, formData)
-          if (res?.status == 200) {
-            getStreamDetails()
-            // enqueueSnackbar('Quiz question Updated Successfully', { variant: 'success' })
-            // navigate('/LiveManagement')
-            setIsLoading(false)
-          }
-          else {
-            enqueueSnackbar('Request failed', { variant: 'error' })
-          }
-        }
-        else {
-          res = await postApi(API_ENDPOINT.addQuizQuestion, formData)
-          if (res?.status === 200) {
-            navigate('/LiveManagement')
-            getStreamDetails()
-            if (res?.data?.status === 400) {
-              enqueueSnackbar(res?.data?.msg, { variant: 'error' })
-            } else if (res?.data?.status !== 200) {
-              enqueueSnackbar(res?.data?.error, { variant: 'error' })
+            let res = ''
+            if (mainQuizs[obj].id) {
+              formData.append('questionId', mainQuizs[obj].id)
+              res = await putApi(API_ENDPOINT.editQuizQuestion, formData)
             }
-            else if (res?.data?.status === 200) {
-              enqueueSnackbar('Quiz question Added Successfully', { variant: 'success' })
-              setIsLoading(false)
-              // setIsLoading(false)
+            else {
+              res = await postApi(API_ENDPOINT.addQuizQuestion, formData)
             }
           }
-        }
+          navigate('/LiveManagement')
       }
     } catch (error) {
       console.log(error)
@@ -849,7 +785,6 @@ const LiveRegistration = () => {
   }
 
   const checkFormat = (url) => {
-    console.log("url =>", url);
     return typeof url
   }
 
@@ -871,7 +806,6 @@ const LiveRegistration = () => {
     try {
       let url = `${API_ENDPOINT.getStreamDetails}?streamId=${location?.state?.streamId}`
       const res = await getApi(url)
-      console.log("res", res)
       if (res.status === 200) {
         setLiveStatus(res?.data?.status)
         setLiveRegisterTitle(res?.data?.title)
@@ -889,7 +823,6 @@ const LiveRegistration = () => {
         }
         // quizRewardType
         setIsLoading(false)
-        console.log('questions', res?.data?.questions)
         // if (res?.data?.questions?.length > 0) {
         setMainQuizs(res?.data?.questions)
         setLive(res?.data?.isLive)
@@ -904,7 +837,6 @@ const LiveRegistration = () => {
           Chats: res?.data?.chats
         })
         // res?.data?.question?.map((val) => {
-        //   console.log('val', val)
         //   setQuizQuestion(val?.title)
         //   setSelectedRadio(val?.type)
         //   setTimeLimit(val?.timeLimitSeconds)
@@ -912,7 +844,6 @@ const LiveRegistration = () => {
         // })
         // }
         // setQuizQuestion
-        // console.log(new Date(res?.data?.scheduledAt))
 
         let startDateTime = new Date(res?.data?.scheduledAt),
           startMonth = '' + (startDateTime.getMonth() + 1),
@@ -964,8 +895,6 @@ const LiveRegistration = () => {
     }
   }
 
-  console.log('uploadedImages', uploadedImages)
-
   async function urlToBlob(url) {
     const response = await fetch(url)
     const blob = await response.blob()
@@ -979,9 +908,9 @@ const LiveRegistration = () => {
   }
 
   const consoleLiveHandler = () => {
-    console.log('streamId :: ', location?.state?.streamId)
     // navigate('../LiveManagement/liveConsole', { state: { streamId: location?.state?.streamId }})
-    window.open('../LiveManagement/liveConsole/' + location?.state?.streamId)
+    // window.open('../LiveManagement/liveConsole/' + location?.state?.streamId)
+    navigate('../LiveManagement/liveConsole/' + location?.state?.streamId)
     // navigate('../LiveManagement')
   }
 
@@ -1010,7 +939,7 @@ const LiveRegistration = () => {
             <p>{multiLang?.LiveManagementRegistrationLive?.liveDetails}</p>
           </div> */}
           <div className='d-flex gap-3'>
-            {!(liveStatus === 'ended' || liveStatus === 'cancelled') && <CButton onClick={consoleLiveHandler}>{multiLang?.LiveManagementRegistrationLive?.console}  <CIcon icon={cilAudio}></CIcon> </CButton>}
+            {(liveStatus === 'onair' || liveStatus === 'ready') && <CButton onClick={consoleLiveHandler}>{multiLang?.LiveManagementRegistrationLive?.console}  <CIcon icon={cilAudio}></CIcon> </CButton>}
             {liveStatus === 'ready' && <CButton className='btn-black'>{multiLang?.LiveManagementRegistrationLive?.liveCancel}</CButton>}
           </div>
 
@@ -1198,7 +1127,7 @@ const LiveRegistration = () => {
                             ) : (
                               <label className="uploadImgWrap" htmlFor="imageFiles">
                                 <div className='thumbnailLiveImg'>
-                                  <img src='https://www.beelights.gr/assets/images/empty-image.png' style={{ height: '100%', width: '100%' }} />
+                                  <img src={emptyImage} style={{ height: '100%', width: '100%' }} alt=""/>
                                 </div>
                               </label>
 
@@ -1412,7 +1341,7 @@ const LiveRegistration = () => {
                                         <span>{i + 1}</span>
                                         <b className='greenTxt createQuizTitle'>{data.type}</b>
                                         <p className='createQuizTitleClickable' onClick={() => editQuiz(data, i)}>{data?.title}</p>
-                                        <i role='button'  onClick={() => { setQuizIdToDelete(data?.id); confirmationDeleteHandler(true, i) }} className="icon-close primTxt"></i>
+                                        <i role='button'  onClick={() => { setQuizIdToDelete((prev) => [...prev, data?.id]); confirmationDeleteHandler(true, i) }} className="icon-close primTxt"></i>
                                   
                                       </li>
                                     ))
@@ -1434,7 +1363,7 @@ const LiveRegistration = () => {
                 {location?.state?.streamId !== undefined &&
                   <CButton onClick={() => navigateToList()} >{multiLang?.LiveManagementRegistrationLive?.list}</CButton>
                 }
-                {live === 0 && <CButton onClick={confirmationCloseModalHandler} className='btn-black'>{multiLang?.LiveManagementRegistrationQuiz?.Cancel}</CButton>}
+                {/* {live === 0 && <CButton onClick={confirmationCloseModalHandler} className='btn-black'>{multiLang?.LiveManagementRegistrationQuiz?.Cancel}</CButton>} */}
                 {live === 0 && <CButton onClick={() => validateAllRegistration()}>{multiLang?.LiveManagementRegistrationQuiz?.Save}</CButton>}
               </div>
 
@@ -1528,7 +1457,7 @@ const LiveRegistration = () => {
                         {selectedRadio !== null &&
                           <div className='answer'>
                             <h5>{multiLang?.LiveManagementRegistrationQuiz?.answer}</h5>
-                            {selectedRadio === 'trueOrFalse' &&
+                            {selectedRadio === 'TrueOrFalse' &&
                               <div className='d-flex quizCheckBox mt-2'>
                                 <CButton color="light" className="d-flex align-items-center justify-content-between p-2  gap-2" onClick={() => setAnswerSelectedRadio(true)}>
                                   <CFormCheck
@@ -1742,7 +1671,7 @@ const LiveRegistration = () => {
                                   <CCardTitle className='text-left'>
                                     {quizQuestion}
                                   </CCardTitle>
-                                  {selectedRadio === 'trueOrFalse' &&
+                                  {selectedRadio === 'TrueOrFalse' &&
                                     <div className='gap-2 mt-3 d-flex justify-content-center gap-3'>
                                       <div className='trueFlaseBtn d-flex justify-content-center align-items-center'>
                                         <CFormCheck className='ms-2' button={{ color: 'secondary' }} type="radio" name="options" id="option3" autoComplete="off" label="True" disabled />
