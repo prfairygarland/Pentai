@@ -80,11 +80,11 @@ const PushNotificationManagement = () => {
         <div>
             <div className='d-flex justify-content-between  pageTitle mb-3 pb-2'>
                 <h2>Push Notification Management</h2>
-                <CButton onClick={() => navigate('createPushNotificationRegistration')}>Create</CButton>
+                <CButton onClick={() => navigate('createPushNotificationRegistration')} className='btn-success'>Create</CButton>
             </div>
            {isLoading && <Loader />} <div>
         <div className='container bg-light p-3 mb-3'>
-          <div className='d-flex mb-3'>
+          <div className='d-flex mb-3 align-items-center'>
             <div className='me-5'>
               <label className='me-3'>Classification</label>
               <CDropdown className='dropDownbackground drpBtn'>

@@ -1155,7 +1155,7 @@ const LiveRegistration = () => {
                             {participateToggle === true &&
                               <div className='d-flex align-items-center gap-3'>
                                 <CFormInput
-                                  style={{width:50}}
+                                  style={{width:100}}
                                   className='text-center'
                                   type="text"
                                   placeholder={multiLang?.LiveManagementRegistrationLive?.Enter_number}

@@ -75,7 +75,7 @@ const LiveManagement = () => {
     {
       Header: multiLang?.LiveManagement?.Status,
       accessor: 'status',
-      Cell: ({ row }) => <p style={{ textTransform: 'capitalize' }}>{row.original.status ? row.original.status : '-'}</p>
+      Cell: ({ row }) => <p className='text-center'>{row.original.status ? row.original.status : '-'}</p>
     },
     {
       Header: multiLang?.LiveManagement?.Title,
@@ -91,7 +91,7 @@ const LiveManagement = () => {
     {
       Header: multiLang?.LiveManagement?.Creator,
       accessor: 'authorId',
-      Cell: ({ row }) => <p>{row.original.authorName ? row.original.authorName : '-'}</p>
+      Cell: ({ row }) => <p className='text-center'>{row.original.authorName ? row.original.authorName : '-'}</p>
     },
     {
       Header: multiLang?.LiveManagement?.UV,

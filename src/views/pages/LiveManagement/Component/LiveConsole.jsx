@@ -99,7 +99,6 @@ const LiveConsole = () => {
               color="primary"
               disabled={txtCopied === 'playback'}
               style={{
-                borderRadius: '20px',
                 color: '#fff',
                 width: '200px',
                 margin: '0px 10px',
@@ -114,7 +113,6 @@ const LiveConsole = () => {
               disabled={txtCopied === 'stream'}
               color="primary"
               style={{
-                borderRadius: '20px',
                 color: '#fff',
                 width: '200px',
                 margin: '0px 10px',
@@ -129,7 +127,6 @@ const LiveConsole = () => {
               disabled={txtCopied === 'secret'}
               color="primary"
               style={{
-                borderRadius: '20px',
                 color: '#fff',
                 width: '230px',
                 margin: '0px 10px',

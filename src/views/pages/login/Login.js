@@ -38,7 +38,8 @@ const Login = () => {
 
   return (
     <>
-      {isLoading && <Loader />}
+    {/* <Loader className="lodeingjs" style={{width:'100%'}} /> */}
+      {isLoading && <Loader  />}
       <section className="bg-light min-vh-100 d-flex flex-row align-items-center">
         <div className='container'>
           <div className="row justify-content-center">

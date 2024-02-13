@@ -81,6 +81,9 @@ color: ($white);
     font-size: 14px;
     white-space: nowrap;
     vertical-align: top;
+    p{
+      text-transform: capitalize;
+    }
 a{
   text-decoration: underline !important;
 }

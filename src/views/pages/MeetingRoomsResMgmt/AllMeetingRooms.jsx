@@ -395,7 +395,7 @@ const AllMeetingRooms = () => {
               <h6>All Meetings</h6>
             </CSidebarBrand> */}
             <CSidebarBrand
-              className=" black-text d-flex justify-content-between mb-2"
+              className=" black-text d-flex justify-content-between mb-2 pe-1"
               style={{
                 color: 'black',
                 borderBottom: '1px solid #000',
@@ -407,7 +407,7 @@ const AllMeetingRooms = () => {
                 {multiLangObj?.allMeetingRooms}
               </p>
               <CButton
-                className="text-center btn-sm"
+                className="text-center btn-sm suppplyBtn"
                 style={{
                   whiteSpace: 'nowrap',
                   textOverflow: 'ellipsis',
@@ -418,7 +418,8 @@ const AllMeetingRooms = () => {
               </CButton>
             </CSidebarBrand>
             <CSidebarNav
-              style={{ color: 'black', padding: '3px', maxHeight: '500px', overflow: 'auto' }}
+              className="pe-1"
+              style={{ color: 'black', maxHeight: '500px', overflow: 'auto' }}
             >
               {buildingLists.map((tab) => (
                 <CNavItem className="mb-3" key={tab?.id} onClick={() => handleTabClick(tab?.id)}>
@@ -455,7 +456,7 @@ const AllMeetingRooms = () => {
                         </div>
                         <div>
                           <CButton
-                            className="btn-sm"
+                            className="btn-sm suppplyBtn"
                             onClick={() => (
                               setBuildingId(tab?.id),
                               setBuildingName(tab?.name),
@@ -505,7 +506,7 @@ const AllMeetingRooms = () => {
                                   </div>
                                   <div>
                                     <CButton
-                                      className="btn-sm"
+                                      className="btn-sm suppplyBtn"
                                       onClick={() => (
                                         setBuildingId(tab?.id),
                                         handleSetModal('addRoom', 'add'),
@@ -560,7 +561,7 @@ const AllMeetingRooms = () => {
               </CButton>
             </div>
             <div className="d-flex justify-content-between align-items-center my-4">
-              <div className="mx-1 d-flex">
+              <div className="mx-1 d-flex mt-3">
                 <input
                   className="form-control me-3"
                   value={filterData.search}
@@ -569,7 +570,7 @@ const AllMeetingRooms = () => {
                 />
                 <CButton onClick={handleAllMeetingData}>Search</CButton>
               </div>
-              <div className="d-flex me-5 gap-1">
+              <div className="d-flex gap-1">
                 <div>
                   <p style={{ fontWeight: 'bolder', paddingLeft: '23px' }}>Item Status</p>
                   <CFormSelect
@@ -611,7 +612,7 @@ const AllMeetingRooms = () => {
                 </div>
               </div>
             </div>
-            <div className="mb-4">
+            <div className="mb-2">
               <p style={{ fontSize: 'medium' }}>Total: {totalCount > 0 ? totalCount : '0'}</p>
             </div>
             <ReactTable

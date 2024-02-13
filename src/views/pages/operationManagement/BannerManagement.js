@@ -11,6 +11,7 @@ import moment from 'moment/moment'
 import Loader from 'src/components/common/Loader'
 import { enqueueSnackbar } from 'notistack'
 import emptyImg from '../../../assets/images/empty-image.png'
+import { node } from 'prop-types'
 const BannerManagement = () => {
 
     const [isLoading, setIsLoading] = useState(false)
@@ -243,7 +244,7 @@ const BannerManagement = () => {
         {
             Header: 'Title',
             accessor: 'title',
-            Cell: ({ row }) => <p style={{ cursor: 'pointer' }} onClick={() => setBanner(true)}>{row?.original?.title}</p>
+            Cell: ({ row }) => <a style={{ cursor: 'pointer' }} onClick={() => setBanner(true)}>{row?.original?.title}</a>
         },
         {
             Header: 'Posting Period',
@@ -282,7 +283,7 @@ const BannerManagement = () => {
                 <div>
                     <label className='fw-bold'>Auto Slide Banner</label>
                 </div>
-                <div className="push-notification-container gap-3">
+                <div className="push-notification-container gap-3 py-0">
                     <CFormCheck className='d-flex gap-2' type="radio" name="visibility" id="exampleRadios1" label="Yes"
                         defaultChecked={bannerSetting?.isEnabled}
                         onClick={ updateBannerSlider}
@@ -387,12 +388,12 @@ const BannerManagement = () => {
                                 <div className="upload-image-main-container">
                                     <div className="upload-img-btn-and-info">
                                         {uploadedBannerImage ? (
-                                            <div className="upload-images-container uploadImgWrap" style={{maxWidth:300}}>
-                                                <div className="thubmnail-img-container" >
+                                            <div className="upload-images-container uploadImgWrap w-50" style={{borderWidth:0}} >
+                                                <div className="thubmnail-img-container" style={{maxWidth:300}} >
                                                     <img src={URL.createObjectURL(uploadedBannerImage)} alt="NA" />
                                                 </div>
                                             </div>
-                                        ) : <div className="upload-images-container uploadImgWrap">
+                                        ) : <div className="upload-images-container uploadImg Wrap w-50" style={{borderWidth:0}}>
                                             <div className="thubmnail-img-container" style={{maxWidth:300}}>
                                                 <img alt='' src={emptyImg} style={{ height: '100%', width: '100%' }} />
                                             </div>

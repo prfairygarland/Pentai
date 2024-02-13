@@ -297,6 +297,7 @@ button:focus {
     height: 38px;
   border-radius: 0;
   padding: 6px 20px;
+  text-transform: capitalize;
   }
 .btn-success{
     background: ($green);
@@ -307,9 +308,12 @@ button:focus {
   }
   .btn-black,.btn-black:hover,.btn-black:active,.btn-black:disabled{
     color: ($white);
-    background: ($black);
-    border-color: ($black);
+    background: ($black) !important;
+    border-color: ($black) !important;
   }
 .btn-success:hover,.btn.btn-success:disabled,.btn-success:active{
     color: ($white);
+  }
+  body.modal-open{
+    overflow: inherit !important;
   }
