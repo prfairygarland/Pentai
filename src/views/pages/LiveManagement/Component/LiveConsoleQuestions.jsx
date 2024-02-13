@@ -79,7 +79,7 @@ const LiveConsoleQuestions = ({ questions, isLive, quizRewardPoints, quizRewardT
 
   return (
     // <div style={{ width: '37%' }}>
-    <div className="col-md-4">
+    <div className="col-md-4 px-2">
       <div className=" bg-light p-3 mb-3">
         <div>
           <h4>

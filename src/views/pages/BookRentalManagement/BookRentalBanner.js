@@ -375,7 +375,7 @@ const BookRentalBanner = () => {
         {
             Header: 'Title',
             accessor: 'title',
-            Cell: ({ row }) => <p style={{cursor:'pointer'}} onClick={() => editClubBannerHandler(row.original.id)}>{row.original.title}</p>
+            Cell: ({ row }) => <a style={{cursor:'pointer'}} onClick={() => editClubBannerHandler(row.original.id)}>{row.original.title}</a>
         },
         {
             Header: 'Posting Period',
@@ -480,6 +480,7 @@ const BookRentalBanner = () => {
                 onClose={() => {
                     setAddModifyClubBannerModal(false)
                 }}
+                scrollable
                 backdrop="static"
                 aria-labelledby="LiveDemoExampleLabel"
             >
@@ -498,7 +499,7 @@ const BookRentalBanner = () => {
                                     <label className="fw-bolder ">Thumbnail Image</label>
                                 </div>
                                 <div className="upload-image-main-container">
-                                    <div className="upload-img-btn-and-info">
+                                    <div className="upload-img-btn-and-info flex-column">
                                         <div className="upload-container-btn">
                                             <label className="btn btn-primary" style={{paddingLeft:20}} htmlFor="imageFiles">
                                                 Upload
@@ -514,7 +515,8 @@ const BookRentalBanner = () => {
                                         </div>
                                         {uploadedBannerImage && (
                                             <div className="upload-images-container uploadImgWrap">
-                                                <div className="thubmnail-img-container">
+                                                {/* <div className="thubmnail-img-container"> */}
+                                                <div >
                                                     <img src={URL.createObjectURL(uploadedBannerImage)} alt="NA" />
                                                 </div>
                                             </div>

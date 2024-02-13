@@ -156,7 +156,7 @@ const GreetingMessageManagement = () => {
                                                 <span className="txt-byte-information">
                                                     {value.description?.length ? value.description?.length : 0} / 40 byte
                                                 </span>
-                                                {GreetingMessages.length > 1 && <button onClick={() => { setDeleteID(value?.id); setDeleteVisible(true); setIndex(index) }}>
+                                                {GreetingMessages.length > 1 && <button className='greetingClsBtn' onClick={() => { setDeleteID(value?.id); setDeleteVisible(true); setIndex(index) }}>
                                                     <i className='icon-close'></i>
                                                 </button>}
                                             </div>

@@ -460,14 +460,14 @@ const AllSupplies = () => {
         <div className='col-md-4'>
           <CSidebar className='w-100 pe-3'>
             <CSidebarBrand className=' black-text d-flex justify-content-start p-3 ps-0' style={{ color: 'black', background: 'none' }}><h5>{multiLang?.categoryHierarchy}</h5></CSidebarBrand>
-            <CSidebarBrand className=' black-text d-flex justify-content-between mb-2' style={{ color: 'black', borderBottom: '1px solid #000', background: 'none', alignItems: 'center' }}>
+            <CSidebarBrand className=' black-text d-flex justify-content-between mb-2 pe-1' style={{ color: 'black', borderBottom: '1px solid #000', background: 'none', alignItems: 'center' }}>
               <p role='button' onClick={() => handleSetModal('allList')}>{multiLang?.allSupplies}</p>
-              <CButton className='text-center btn-sm' style={{
+              <CButton className='text-center btn-sm suppplyBtn' style={{
                 whiteSpace: 'nowrap',
                 textOverflow: 'ellipsis',
               }} onClick={() => handleSetModal('addSupplyType', 'add')}>{multiLang?.addSupply}</CButton>
             </CSidebarBrand>
-            <CSidebarNav style={{ color: 'black', padding: '3px', maxHeight: '500px', overflow: 'auto' }}>
+            <CSidebarNav className='pe-1' style={{ color: 'black',  maxHeight: '500px', overflow: 'auto' }}>
               {mainCategoryData.map((tab) => (
                 <CNavItem className='mb-3' key={tab.id} onClick={() => (handleTabClick(tab.id))}>
                   <div className='d-flex w-100'>
@@ -479,7 +479,7 @@ const AllSupplies = () => {
                           <p role='button' onClick={() => (setIds(tab.id), handleSetModal('addSupplyType'))}>{tab.name}</p>
                         </div>
                         <div>
-                          <CButton className='btn-sm' onClick={() => { setSuppyId(tab.id); handleSetModal('addCategory', 'add') }}>{multiLang?.addCategory}</CButton>
+                          <CButton className='btn-sm suppplyBtn' onClick={() => { setSuppyId(tab.id); handleSetModal('addCategory', 'add') }}>{multiLang?.addCategory}</CButton>
                         </div>
                       </div>
                       <div>
