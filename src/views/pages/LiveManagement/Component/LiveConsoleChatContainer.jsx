@@ -16,7 +16,6 @@ const LiveConsoleChatContainer = ({
 }) => {
   const [chatToken, setChatToken] = useState('')
   const [chatData, setChatData] = useState([])
-  const [currentTime, setCurrentTime] = useState(serverTime)
 
   useEffect(() => {
     if (chatToken && isLive === 1 && socketURL) {
@@ -42,23 +41,19 @@ const LiveConsoleChatContainer = ({
     }
   }, [chatToken])
 
-  const [currentDate, setCurrentDate] = useState(new Date())
-
+  const [currentDate, setCurrentDate] = useState()
   const incrementDateByOneSecond = () => {
     setCurrentDate((prevDate) => {
       if (prevDate?.getTime) {
         return new Date(prevDate.getTime() + 1000)
       } else {
-        return new Date(new Date(prevDate).getTime() + 1000)
+        return new Date(serverTime)
       }
     })
   }
 
-  // Effect to update the date every second
   useEffect(() => {
     const intervalId = setInterval(incrementDateByOneSecond, 1000)
-
-    // Clean up the interval on component unmount
     return () => clearInterval(intervalId)
   }, [])
 
@@ -113,11 +108,12 @@ const LiveConsoleChatContainer = ({
           )}
         </p>
         <p>
-          <b>Scheduled :</b> {moment(scheduledAt).format('YYYY-MM-DD HH:mm:ss')} ~{' '}
-          {moment(scheduledUpto).format('YYYY-MM-DD HH:mm:ss')}
+          <b>Scheduled :</b> {moment(scheduledAt).format('YYYY-MM-DD HH:mm:ss')}{' '}
+          {scheduledUpto ? ~moment(scheduledUpto).format('YYYY-MM-DD HH:mm:ss') : ''}
         </p>
         <p>
-          <b>Current time :</b> {currentDate.toLocaleString()}
+          <b>Current time :</b>{' '}
+          {new Date(currentDate).getTime() ? currentDate.toLocaleString() : ''}
         </p>
         <p>
           <b>Start time :</b>{' '}

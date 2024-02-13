@@ -252,6 +252,7 @@ export let API_ENDPOINT = {
   deleteQuizQuestion : ALL_CONSTANTS.API_URL + "/api/admin/lounge/quizQuestion/delete",
   startLiveStream: ALL_CONSTANTS.API_URL + "/api/admin/lounge/startStream",
   endLiveStream: ALL_CONSTANTS.API_URL + "/api/admin/lounge/endStream",
+  cancelLiveStream: ALL_CONSTANTS.API_URL + "/api/admin/lounge/cancelStream",
   uploadQuizImage: ALL_CONSTANTS.API_URL + "/api/uploadImage",
 
 
