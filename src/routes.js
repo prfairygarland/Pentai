@@ -29,6 +29,7 @@ import BannerManagement from './views/pages/operationManagement/BannerManagement
 import HomeContentManagement from './views/pages/operationManagement/HomeContentManagement'
 import PushNotificationManagement from './views/pages/operationManagement/PushNotificationManagement'
 import CreatePushNotificationRegistration from './views/pages/operationManagement/Component/CreatePushNotificationRegistration'
+import AdministratorList from './views/pages/AdministratorManagement/AdministratorList'
 
 const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
 
@@ -92,7 +93,10 @@ const routes = [
   { path: '/BannerManagement', name: 'Banner Management', element: BannerManagement },
   { path: '/HomeContentManagement', name: 'Home Content Management', element: HomeContentManagement },
   { path: '/PushNotificationManagement', name: 'Push Notification Management', element: PushNotificationManagement },
-  { path: '/PushNotificationManagement/createPushNotificationRegistration', name: 'Push Notification Registration', element: CreatePushNotificationRegistration }
+  { path: '/PushNotificationManagement/createPushNotificationRegistration', name: 'Push Notification Registration', element: CreatePushNotificationRegistration },
+
+  // Administrator Management
+  { path: '/AdministratorList', name: 'Administrator Management', element: AdministratorList },
 
 ]
 

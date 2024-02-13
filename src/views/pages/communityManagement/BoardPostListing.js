@@ -237,6 +237,7 @@ const BoardPostListing = () => {
       return {
         ...prev,
         posttype: value,
+        classification: ''
       }
     })
   }
@@ -392,6 +393,7 @@ const BoardPostListing = () => {
         accessor: 'PostTitle',
         Cell: ({ row }) => (
           <div className="d-flex gap-1 align-items-center">
+            {row.original.lessParticipantsDeadline === 1 ? <div className='participant-mark'></div> : ''}
             {row.original.isAnnouncement > 0 && <i className="icon-announce"></i>}
             <Link
               to={`/BulletinBoardPostDetails/${row.original.postId}/${row.original.boardId}`}
@@ -422,13 +424,14 @@ const BoardPostListing = () => {
         Header: multiLangObj?.writter,
         accessor: 'englishname',
         Cell: ({ row }) => (
-          <Link
-            onClick={() => handleShowWritterInfo(row.original.userId)}
-            className=" text-center"
-            style={{ curser: 'pointer' }}
-          >
-            {row.original.englishName ? row.original.englishName : <p>{'-'}</p>}
-          </Link>
+          row.original.englishName === 'anonymous' ? <p>{row.original.englishName.charAt(0).toUpperCase() + row.original.englishName.slice(1)}</p> :
+            <Link
+              onClick={() => handleShowWritterInfo(row.original.userId)}
+              className="text-dark text-center"
+              style={{ curser: 'pointer' }}
+            >
+              {row.original.englishName ? row.original.englishName : <p>{'-'}</p>}
+            </Link>
         ),
       },
       {
@@ -514,13 +517,13 @@ const BoardPostListing = () => {
   return (
     <>
       {isLoading && <Loader />}
-      <main>  
+      <main>
       <div className="pageTitle mb-3 pb-2">
           <h2>{multiLangObj?.bulletinBoardInfo}</h2>
         </div>
         <div>
           <div className="d-flex justify-content-end align-items-center">
-            
+
             <CButton onClick={createPostHandler} className='btn-success'>{multiLangObj?.createPost}</CButton>
           </div>
           <div className="d-flex p-3 justify-content-between h-100 w-100 bg-light  mt-2">
@@ -529,7 +532,7 @@ const BoardPostListing = () => {
                 {multiLangObj?.board}
               </p>
               <CFormSelect
-                
+
                 aria-label="Default select example"
                 options={boardSelectOptions}
                 onChange={handleSelectBoardChange}
@@ -567,7 +570,7 @@ const BoardPostListing = () => {
                 <CFormSelect
                   className="w-50 me-2"
                   aria-label="Default select example"
-                  options={boardDetails?.annonymousBoard === 0 ? [
+                  options={boardDetails?.annonymousBoard === 0 || boardID === 0 ? [
                     { label: 'Title', value: 'title' },
                     { label: 'Writter', value: 'writter' },
                   ] : [{ label: 'Title', value: 'title' },]}
@@ -607,7 +610,7 @@ const BoardPostListing = () => {
                 <CFormSelect
                   className="me-2"
                   aria-label="Default select example"
-                  options={[
+                  options={filterData.posttype === '' ? [{ label: 'All', value: '' }, ...(classificationsTypeOptions['default'] || [])] : [
                     { label: 'All', value: '' },
                     ...(classificationsTypeOptions[filterData.posttype] || []),
                   ]}
