@@ -481,6 +481,12 @@ const UserList = () => {
 
   }
 
+  const resetImportHistory = async () => {
+    setStartDate('')
+    setEndDate('')
+    setSearchImportInputValue('')
+  }
+
   const getImportHistoryData = async (currentImportHistoryPage) => {
     setIsLoading(true)
     try {
@@ -733,8 +739,8 @@ const UserList = () => {
                   {fileSize && <p className='text-danger text-center'>{multiLang?.Upload_File_Size_Error}</p>}
 
                   {/* <div className='p-1'>
-                    <p>Download Sample File</p> 
-                   
+                    <p>Download Sample File</p>
+
                   </div> */}
 
                 </CModalBody>
@@ -763,7 +769,7 @@ const UserList = () => {
                   {fileFormat && <p className='text-danger text-center'>{multiLang?.Upload_Header_Error}</p>}
                   {fileSize && <p className='text-danger text-center'>{multiLang?.Upload_File_Size_Error}</p>}
 
-               
+
                 </CModalBody>
                 <CModalFooter  className='d-flex justify-content-center'>
                 <CButton className='btn btn-primary' onClick={() => sampleOrgExportFile()}>{multiLang?.Sample_File} </CButton>
@@ -783,17 +789,17 @@ const UserList = () => {
                 <CModalBody>
                   {dataIds?.length > 0 ? <p>{multiLang?.Selected_User_Data}</p> : <p>{multiLang?.All_User_Data}</p>}
 
-              
+
                 </CModalBody>
                 <CModalFooter className='d-flex justify-content-center'>
-                
+
                     <CButton onClick={() => getUserListExport()} >{multiLang?.Export}</CButton>
-               
+
                   {fileFormat && <p className='text-danger text-center'>{multiLang?.Upload_Header_Error}</p>}
 
                 </CModalFooter>
               </CModal>
-           
+
             </div>
           </div>
         </div>
@@ -841,7 +847,7 @@ const UserList = () => {
                 alignment="center"
                 size="lg"
                 visible={importVisible}
-                onClose={() => setImportVisible(false)}
+                onClose={() => (setImportVisible(false), resetImportHistory())}
                 aria-labelledby="LiveDemoExampleLabel">
                 <CModalHeader onClose={() => setImportVisible(false)}>
                   <CModalTitle>{multiLang?.Import_History}</CModalTitle>
@@ -856,7 +862,7 @@ const UserList = () => {
                     <div>
                       <div className="d-flex form-inline w-100">
                         <input className="form-control mr-sm-10 me-2" onChange={handleImportInputChange} type="search" placeholder={multiLang?.Search} aria-label="Search" />
-                        <button className="btn btn-primary my-2 my-sm-0" disabled={searchImportInput == ''} type="submit" onClick={() => { handleImportInputvalue() }}>{multiLang?.Search}</button>
+                        <button className="btn btn-primary my-2 my-sm-0" disabled={searchImportInput == ''} type="submit" onClick={() => { handleImportInputvalue() }}>{multiLang?.search}</button>
                       </div>
                     </div>
                   </div>

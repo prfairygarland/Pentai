@@ -55,6 +55,15 @@ export const classificationsTypeOptions = {
     { label: 'Proceeding', value: 'proceeding' },
     { label: 'Closed', value: 'closed' }
   ],
+  default: [
+    { label: 'Deleted', value: 'deleted' },
+    { label: 'Deleted(Admin)', value: 'deletedAdmin' },
+    { label: 'Recruiting', value: 'recruiting' },
+    { label: 'Announcement', value: 'winner' },
+    { label: 'Closed', value: 'closed' },
+    { label: 'Winner', value: 'winner' },
+    { label: 'Cancelled', value: 'cancelled' },
+    { label: 'Proceeding', value: 'proceeding' },]
 };
 
 export const paginationItemPerPageOptions = [
