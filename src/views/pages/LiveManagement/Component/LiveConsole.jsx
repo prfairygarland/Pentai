@@ -40,6 +40,9 @@ const LiveConsole = () => {
     await patchApi(url)
     getStreamDetails()
   }
+  const backLiveStream = () => {
+    navigate('../LiveManagement')
+  }
   const getStreamDetails = async () => {
     try {
       let url = `${API_ENDPOINT.getStreamDetails}?streamId=${streamId}`
@@ -138,6 +141,11 @@ const LiveConsole = () => {
           </div>
         </div>
         <div className="w-50 d-flex  justify-content-end">
+          {isLive === 0 && (
+            <CButton style={{ margin: '0px 10px' }} onClick={backLiveStream}>
+              Back
+            </CButton>
+          )}
           {isLive === 0 && <CButton onClick={startLiveStream}>Start</CButton>}
           {isLive === 1 && <CButton onClick={endLiveStream}>End</CButton>}
         </div>
@@ -151,15 +159,17 @@ const LiveConsole = () => {
           quizRewardType={quizRewardType}
         />
         <LiveConsoleVideoView playbackUrl={playbackUrl} isLive={isLive} />
-        <LiveConsoleChatContainer
-          streamId={streamId}
-          socketURL={socketURL}
-          isLive={isLive}
-          scheduledAt={scheduledAt}
-          scheduledUpto={scheduledUpto}
-          serverTime={serverTime}
-          broadcastStart={broadcastStart}
-        />
+        {serverTime && (
+          <LiveConsoleChatContainer
+            streamId={streamId}
+            socketURL={socketURL}
+            isLive={isLive}
+            scheduledAt={scheduledAt}
+            scheduledUpto={scheduledUpto}
+            serverTime={serverTime}
+            broadcastStart={broadcastStart}
+          />
+        )}
       </div>
     </>
   )

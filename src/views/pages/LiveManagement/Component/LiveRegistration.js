@@ -7,7 +7,7 @@ import DatePicker from 'react-date-picker';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Loader from 'src/components/common/Loader'
-import { deleteApi, getApi, postApi, putApi } from 'src/utils/Api';
+import { deleteApi, getApi, patchApi, postApi, putApi } from 'src/utils/Api';
 import ConfirmationModal from 'src/utils/ConfirmationModal';
 import { ALL_CONSTANTS, API_ENDPOINT } from 'src/utils/config';
 import { imageUrl } from '../../BookRentalManagement/BookRentalStatus';
@@ -84,11 +84,8 @@ const LiveRegistration = () => {
     } else if (new Date() > new Date(liveRegisterStartDate + 'T' + liveRegisterStartHours + ':' + liveRegisterStartMins)) {
       enqueueSnackbar('Start time can not be earlier than current time', { variant: 'error' })
       return false
-    } else if (new Date(liveRegisterStartDate + 'T' + liveRegisterStartHours + ':' + liveRegisterStartMins) > new Date(liveRegisterEndDate + 'T' + liveRegisterEndHours + ':' + liveRegisterEndMins)) {
+    } else if (liveRegisterEndHours && new Date(liveRegisterStartDate + 'T' + liveRegisterStartHours + ':' + liveRegisterStartMins) > new Date(liveRegisterEndDate + 'T' + liveRegisterEndHours + ':' + liveRegisterEndMins)) {
       enqueueSnackbar('End time can not be earlier than start time', { variant: 'error' })
-      return false
-    } else if (liveRegisterStartDate !== liveRegisterEndDate) {
-      enqueueSnackbar('Start date and end date must be same!', { variant: 'error' })
       return false
     } else if (selectedImage === '') {
       enqueueSnackbar('Please upload image', { variant: 'error' })
@@ -188,7 +185,7 @@ const LiveRegistration = () => {
       const formData = new FormData()
       formData.append('title', liveRegisterTitle)
       formData.append('scheduledAt', new Date(new Date(liveRegisterStartDate + 'T' + liveRegisterStartHours + ':' + liveRegisterStartMins)).toISOString())
-      formData.append('scheduledUpto', (liveRegisterEndDate !== '' ? new Date(new Date(liveRegisterEndDate + 'T' + liveRegisterEndHours + ':' + liveRegisterEndMins)).toISOString() : ''))
+      formData.append('scheduledUpto', (liveRegisterEndHours !== '' ? new Date(new Date(liveRegisterEndDate + 'T' + liveRegisterEndHours + ':' + liveRegisterEndMins)).toISOString() : ''))
       formData.append('images', selectedImage)
       formData.append('content', description)
       formData.append('participationRewardPoints', (points !== null ? points : 0))
@@ -864,23 +861,30 @@ const LiveRegistration = () => {
           setLiveRegisterStartMins(startDateTime.getMinutes())
         }
 
-        let endDateTime = new Date(res?.data?.scheduledUpto),
-          endMonth = '' + (endDateTime.getMonth() + 1),
-          endDay = '' + endDateTime.getDate(),
-          endYear = endDateTime.getFullYear()
-        if (endMonth.length < 2) endMonth = '0' + endMonth
-        if (endDay.length < 2) endDay = '0' + endDay
-        setLiveRegisterEndDate([endYear, endMonth, endDay].join('-'))
-        if (endDateTime.getHours() < 10) {
-          setLiveRegisterEndHours('0' + (endDateTime.getHours()))
+        if(res?.data?.scheduledUpto) {
+          let endDateTime = new Date(res?.data?.scheduledUpto),
+            endMonth = '' + (endDateTime.getMonth() + 1),
+            endDay = '' + endDateTime.getDate(),
+            endYear = endDateTime.getFullYear()
+          if (endMonth.length < 2) endMonth = '0' + endMonth
+          if (endDay.length < 2) endDay = '0' + endDay
+          setLiveRegisterEndDate([endYear, endMonth, endDay].join('-'))
+          if (endDateTime.getHours() < 10) {
+            setLiveRegisterEndHours('0' + (endDateTime.getHours()))
+          } else {
+            setLiveRegisterEndHours(endDateTime.getHours())
+          }
+          if (endDateTime.getMinutes() < 10) {
+            setLiveRegisterEndMins('0' + endDateTime.getMinutes())
+          } else {
+            setLiveRegisterEndMins(endDateTime.getMinutes())
+          }
         } else {
-          setLiveRegisterEndHours(endDateTime.getHours())
+          setLiveRegisterEndDate('')
+          setLiveRegisterEndHours('')
+          setLiveRegisterEndMins('')
         }
-        if (endDateTime.getMinutes() < 10) {
-          setLiveRegisterEndMins('0' + endDateTime.getMinutes())
-        } else {
-          setLiveRegisterEndMins(endDateTime.getMinutes())
-        }
+        
         const image = await urlToFile(res?.data?.background)
         setSelectedImage(image)
 
@@ -908,6 +912,21 @@ const LiveRegistration = () => {
     return new File([blob], fileName, { type: blob.type })
   }
 
+  const cancelLiveHandler = async () => {
+     try {   
+       let url = `${API_ENDPOINT.cancelLiveStream}?streamId=${location?.state?.streamId}`
+       const res = await patchApi(url)
+       if (res?.status === 201) {
+          enqueueSnackbar('Live stream cancelled successfully', { variant: 'success' })
+          navigate('../LiveManagement')
+       }
+       else {
+         enqueueSnackbar('Something went wrong', { variant: 'error' })
+       }
+     } catch (error) {
+      console.log(error)
+     }
+  }
   const consoleLiveHandler = () => {
     // navigate('../LiveManagement/liveConsole', { state: { streamId: location?.state?.streamId }})
     // window.open('../LiveManagement/liveConsole/' + location?.state?.streamId)
@@ -941,7 +960,7 @@ const LiveRegistration = () => {
           </div> */}
           <div className='d-flex gap-3'>
             {(liveStatus === 'onair' || liveStatus === 'ready') && <CButton onClick={consoleLiveHandler}>{multiLang?.LiveManagementRegistrationLive?.console}  <CIcon icon={cilAudio}></CIcon> </CButton>}
-            {liveStatus === 'ready' && <CButton className='btn-black'>{multiLang?.LiveManagementRegistrationLive?.liveCancel}</CButton>}
+            {liveStatus === 'ready' && <CButton className='btn-black' onClick={cancelLiveHandler}>{multiLang?.LiveManagementRegistrationLive?.liveCancel}</CButton>}
           </div>
 
         </div>
@@ -1155,10 +1174,10 @@ const LiveRegistration = () => {
                             {participateToggle === true &&
                               <div className='d-flex align-items-center gap-3'>
                                 <CFormInput
-                                  style={{width:100}}
+                                  style={{width:150}}
                                   className='text-center'
                                   type="text"
-                                  placeholder={multiLang?.LiveManagementRegistrationLive?.Enter_number}
+                                  placeholder={multiLang?.LiveManagementRegistrationLive?.Enter_points}
                                   name='Points'
                                   value={points}
                                   onChange={(e) => handleChange(e, 'points')}
@@ -1212,10 +1231,10 @@ const LiveRegistration = () => {
                             {secretToggle === true &&
                               <div className='d-flex w-100 gap-3'>
                                 <CFormInput
-                                  style={{width:100}}
+                                  style={{width:150}}
                                   className='text-center'
                                   type="text"
-                                  placeholder={multiLang?.LiveManagementRegistrationLive?.Enter_number}
+                                  placeholder={multiLang?.LiveManagementRegistrationLive?.Enter_secret}
                                   name='Points'
                                   value={secret}
                                   onChange={(e) => handleChange(e, 'secret')}
@@ -1239,7 +1258,7 @@ const LiveRegistration = () => {
                   <CButton onClick={() => navigateToList()} >{multiLang?.LiveManagementRegistrationLive?.list}</CButton>
                 }
 
-                {live === 0 &&<CButton onClick={confirmationCloseModalHandler} className='btn-black'>{multiLang?.LiveManagementRegistrationLive?.Cancel}</CButton>}
+                {/* {live === 0 &&<CButton onClick={confirmationCloseModalHandler} className='btn-black'>{multiLang?.LiveManagementRegistrationLive?.Cancel}</CButton>} */}
                 {live === 0 && <CButton onClick={validateLiveRegister}>{multiLang?.LiveManagementRegistrationLive?.Save}</CButton>}
               </div>
             </div>
@@ -1296,7 +1315,7 @@ const LiveRegistration = () => {
                                         <CFormInput
                                           className='w-75'
                                           type="text"
-                                          placeholder={multiLang?.LiveManagementRegistrationLive?.Enter_number}
+                                          placeholder={multiLang?.LiveManagementRegistrationLive?.Enter_points}
                                           name='Points'
                                           value={rewardPoints}
                                           onChange={(e) => handleChange(e, 'quiz')}
@@ -1667,7 +1686,7 @@ const LiveRegistration = () => {
                             <div className='p-3'>
                               <CCard >
                                 <CCardBody>
-                                  {/* <CCardTitle>Centered Card Title</CCardTitle> */}
+                                  {timeLimit && <CCardTitle className='text-left'>Time : {timeLimit} {multiLang?.LiveManagementRegistrationQuiz?.seconds}</CCardTitle>}
                                   <CCardTitle className='text-left'>
                                     {quizQuestion}
                                   </CCardTitle>
