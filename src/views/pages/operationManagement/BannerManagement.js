@@ -14,13 +14,14 @@ import emptyImg from '../../../assets/images/empty-image.png'
 import { node } from 'prop-types'
 const BannerManagement = () => {
 
+
     const [isLoading, setIsLoading] = useState(false)
     const [currentPage, setCurrentPage] = useState(0)
     const [itemsPerPage, setItemPerPage] = useState(5)
     const [banner, setBanner] = useState(false)
     const [bannerId, setBannerId] = useState(null)
     const [bannerList, setBannerList] = useState([])
-    const [bannerSetting, setBannerSetting] = useState()
+    const [bannerSetting, setBannerSetting] = useState({isEnabled:true})
     const [bannerTitle, setBannerTitle] = useState('')
     const [bannerStartDate, setBannerStartDate] = useState('')
     const [bannerStartHours, setBannerStartHours] = useState('00')
@@ -35,9 +36,7 @@ const BannerManagement = () => {
     const [bannerUpdateId, setBannerUpdateId] = useState('')
     const [deleteVisible, setDeleteVisible] = useState(false)
     const [deleteId, setDeleteId] = useState(null)
-
-    console.log('bannerSetting', bannerSetting)
-
+    const [maxDate, setMaxDate] = useState('')
 
 
     const handleSelectionChange = useCallback((selectedRowsIds) => {
@@ -54,21 +53,17 @@ const BannerManagement = () => {
 
     }, []);
 
-    const bannerLis = [
-        { id: 1 }
-    ]
-
-    async function urlToBlob(url){
-     const response = await fetch(url)
-     const blob = await response.blob()
-     return blob
+    async function urlToBlob(url) {
+        const response = await fetch(url)
+        const blob = await response.blob()
+        return blob
     }
 
-    const urlsToFiles = async (url) =>{
-        if(!url) return
+    const urlsToFiles = async (url) => {
+        if (!url) return
         const blob = await urlToBlob(imageUrl + url)
         const fileName = url
-        return new File([blob], fileName, {type: blob.type})
+        return new File([blob], fileName, { type: blob.type })
     }
 
 
@@ -83,18 +78,18 @@ const BannerManagement = () => {
             }
         } catch (error) {
             console.log(error)
+            
+        }
+        finally{
             setIsLoading(false)
         }
     }
 
-    // console.log('bannerList', bannerList)
 
     //autoSlideBanner
     const GetAutoSlideBanner = async () => {
         const response = await getApi(API_ENDPOINT.get_OperationMangementAutoSlide)
         if (response?.status === 200) {
-            //    setBannerSetting(response?.data)
-            console.log('res', response?.data)
             setBannerSetting(response?.data)
             // setBannerId(response?.data?.id)
         }
@@ -103,16 +98,33 @@ const BannerManagement = () => {
     useEffect(() => {
         handleGetbannerList()
         GetAutoSlideBanner()
-    }, [])
+    }, [bannerUpdateId])
 
-    const updateBannerSlider = async () => {
-         setIsLoading(true)
+    useEffect(() => {
+        let maxDate = new Date()
+        maxDate.setMonth(new Date().getMonth() + 1)
+        setMaxDate(maxDate)
+        // if (location?.state?.streamId !== undefined) {
+        //   getStreamDetails()
+        // }
+      }, [])
+
+    const updateBannerSlider = async (val) => {
+        setBannerSetting((prev) =>{
+            return {
+                ...prev, 
+                isEnabled: val === 1 ? true : false
+            }
+        })
+        setIsLoading(true)
         let url = API_ENDPOINT.update_OperationManagementAutoSlide
 
         const body = {
             id: bannerSetting?.id,
-            isEnabled: !bannerSetting.isEnabled
+            isEnabled: val === 1 ? true : false
         }
+
+
         try {
             const response = await putApi(url, body)
             console.log(response)
@@ -129,19 +141,24 @@ const BannerManagement = () => {
         } catch (error) {
             console.log(error)
         }
-        finally{
+        finally {
             setIsLoading(false)
         }
     }
 
     const handleBannerStartDate = (event) => {
-        let d = new Date(event),
-            month = '' + (d.getMonth() + 1),
-            day = '' + d.getDay(),
-            year = d.getFullYear()
-        if (month.length < 2) month = '0' + month
-        if (day.length < 2) day = '0' + day
-        setBannerStartDate([year, month, day].join('-'))
+        if(event!=null){
+            let d = new Date(event),
+                month = '' + (d.getMonth() + 1),
+                day = '' + d.getDate(),
+                year = d.getFullYear()
+            if (month.length < 2) month = '0' + month
+            if (day.length < 2) day = '0' + day
+            setBannerStartDate([year, month, day].join('-'))
+        }
+        else{
+            setBannerStartDate('')
+        }
     }
 
     const bannerStartTimeHandler = (e) => {
@@ -150,13 +167,18 @@ const BannerManagement = () => {
     }
 
     const handleBannerEndDate = (event) => {
-        let d = new Date(event),
-            month = '' + (d.getMonth() + 1),
-            day = '' + d.getDate(),
-            year = d.getFullYear()
-        if (month.length < 2) month = '0' + month
-        if (day.length < 2) day = '0' + day
-        setBannerEndDate([year, month, day].join('-'))
+        if(event!=null){
+            let d = new Date(event),
+                month = '' + (d.getMonth() + 1),
+                day = '' + d.getDate(),
+                year = d.getFullYear()
+            if (month.length < 2) month = '0' + month
+            if (day.length < 2) day = '0' + day
+            setBannerEndDate([year, month, day].join('-'))
+        }
+        else{
+            setBannerEndDate('')
+        }
     }
 
     const bannerEndTimeHandler = (e) => {
@@ -173,50 +195,161 @@ const BannerManagement = () => {
                 enqueueSnackbar('Banner Deleted Successfully', { variant: 'success' })
                 setDeleteVisible(false)
             } else {
-                enqueueSnackbar('Something went wrong, please try later!', { variant: 'success' })
+                enqueueSnackbar('Something went wrong, please try later!', { variant: 'error' })
             }
         } catch (error) {
             console.log(error)
         }
     }
 
-    const getData = () =>{
-        
+    const handleNewBookBannaer = () => {
+        setBannerUpdateId('')
+        setBannerTitle('')
+        setBannerStartDate('')
+        setBannerStartHours('')
+        setBannerStartMins('')
+        setBannerEndDate('')
+        setBannerEndHours('')
+        setBannerEndMins('')
+        setUploadedBannerImage('')
+        setImageType('bannerImageOnly')
+        setLinkToUrl('')
+        setPopupImage('')
+        setBanner(true)
     }
 
-    const saveBannerManagement = async () =>{
+    const editClubBannerHandler = async (id) => {
+
+        const response = await getApi(API_ENDPOINT.get_OperationMangementBannerLis)
+        let res = await response?.data?.find((item) => item?.id.toString() === id.toString())
+        // let res = url
+        if (res) {
+            setBannerTitle(res?.title)
+            const startTime = new Date(res?.startDateTime)
+            let month = '' + (startTime.getMonth() + 1),
+                day = '' + startTime.getDate(),
+                year = startTime.getFullYear()
+            if (month.length < 2) month = '0' + month
+            if (day.length < 2) day = '0' + day
+            setBannerStartDate([year, month, day].join('-'))
+            if (startTime.getHours() + 1 < 10) {
+                setBannerStartHours('0' + startTime.getHours())
+            } else {
+                setBannerStartHours(startTime.getHours())
+            }
+            if (startTime.getMinutes() < 10) {
+                setBannerStartMins('0' + startTime.getMinutes())
+            } else {
+                setBannerStartMins(startTime.getMinutes())
+            }
+
+            const endTime = new Date(res?.endDateTime)
+            month = '' + (endTime.getMonth() + 1)
+            day = '' + endTime.getDate()
+            year = endTime.getFullYear()
+            if (month.length < 2) month = '0' + month
+            if (day.length < 2) day = '0' + day
+            setBannerEndDate([year, month, day].join('-'))
+            if (endTime.getHours() + 1 < 10) {
+                setBannerEndHours('0' + endTime.getHours())
+            } else {
+                setBannerEndHours(endTime.getHours())
+            }
+            if (endTime.getMinutes() < 10) {
+                setBannerEndMins('0' + endTime.getMinutes())
+            } else {
+                setBannerEndMins(endTime.getMinutes())
+            }
+            const bannerImage = await urlsToFiles(res?.thumbnail)
+            setUploadedBannerImage(bannerImage)
+            setImageType(res?.type)
+            setLinkToUrl(res?.url)
+            const popUpImage = await urlsToFiles(res?.image)
+            setPopupImage(popUpImage)
+            setBannerUpdateId(res?.id)
+            setBanner(true)
+        }
+
+    }
+
+    const validateClubPeriodHandler = () => {
+        if (bannerTitle.trim() === '') {
+            enqueueSnackbar("Please enter title", { variant: 'error' })
+            return false
+        } else if (bannerStartDate === '') {
+            enqueueSnackbar('Please select Start date', { variant: 'error' })
+            return false
+        } else if (bannerStartHours === '00' && bannerStartMins === '00') {
+            enqueueSnackbar('Please select End date', { variant: 'error' })
+            return false
+        } else if (!bannerUpdateId && new Date() > new Date(bannerStartDate + 'T' + bannerStartHours + ':' + bannerStartMins)) {
+            enqueueSnackbar("Start time cannot be earlier than current time", { variant: 'error' })
+            return false
+        } else if (bannerEndDate === '') {
+            enqueueSnackbar('Please select end date', { variant: 'error' })
+            return false
+        } else if (bannerEndHours === '00' && bannerEndMins === '00') {
+            enqueueSnackbar('Please select end time', { variant: 'error' })
+            return false
+        } else if (!bannerUpdateId && new Date(bannerStartDate + 'T' + bannerStartHours + ':' + bannerStartMins) > new Date(bannerEndDate + 'T' + bannerEndHours + ':' + bannerEndMins)) {
+            enqueueSnackbar("End time cannot be earlier than start time", { variant: 'error' })
+            return false
+        } else if (uploadedBannerImage === '') {
+            enqueueSnackbar("Please upload a banner image", { variant: 'error' })
+            return false
+        } else if (imageType === 'linkTo' && linkToUrl === '') {
+            enqueueSnackbar("Please enter URL for Link to post", { variant: 'error' })
+            return false
+        } else if (imageType === 'popUpImage' && popupImage === '') {
+            enqueueSnackbar("Please add pop-up image for banner", { variant: 'error' })
+            return false
+        } else {
+            saveBannerManagement()
+        }
+      }
+
+
+    const saveBannerManagement = async () => {
         setIsLoading(true)
         try {
-         const formData = new FormData()
-         formData.append('title', bannerTitle)
-         formData.append('startDateTime', new Date(bannerStartDate + 'T' + bannerStartHours + ':' + bannerStartMins))
-        formData.append('endDateTime', new Date(bannerEndDate + 'T' + bannerEndHours + ':' + bannerEndHours))
-         formData.append('image', uploadedBannerImage)
-         formData.append('type', imageType)
-         formData.append('imageOrder', 1)
-         if(imageType === 'linkTo'){
-            formData.append('linkUrl', )
-         }
-         if(imageType === 'popUpImage'){
-            formData.append('popUpImage', popupImage)
-         }
-         if(uploadedBannerImage === ''){
-            enqueueSnackbar('Please upload a bannner image', {variant:'error'})
-            return false
-         }
-         if (bannerTitle.trim() === '') {
-            enqueueSnackbar('Please enter title', { variant: 'error' })
-            return false
-        }
-        let res = ''
-        if (bannerUpdateId) {
-            formData.append('id', bannerUpdateId)
-            res = await putApi(API_ENDPOINT.update_OperationManagementBanner, formData)
-        } else {
-            res = await postApi(API_ENDPOINT.create_OperationManagementBanner, formData)
-        }
+            const formData = new FormData()
+            formData.append('title', bannerTitle)
+            formData.append('startDateTime', new Date(bannerStartDate + 'T' + bannerStartHours + ':' + bannerStartMins))
+            formData.append('endDateTime', new Date(bannerEndDate + 'T' + bannerEndHours + ':' + bannerEndHours))
+            formData.append('image', uploadedBannerImage)
+            formData.append('type', imageType)
+            // formData.append('imageOrder', 1)
+            if (imageType === 'linkTo') {
+                formData.append('linkUrl', linkToUrl)
+            }
+            if (imageType === 'popUpImage') {
+                formData.append('popUpImage', popupImage)
+            }
+           
+            let res = ''
+            if (bannerUpdateId) {
+                formData.append('id', bannerUpdateId)
+                res = await putApi(API_ENDPOINT.update_OperationManagementBanner, formData)
+            } else {
+                res = await postApi(API_ENDPOINT.create_OperationManagementBanner, formData)
+            }
+            if (res.status === 200) {
+                setBanner(false)
+                if (res?.data?.status === 400) {
+                    enqueueSnackbar(res?.data?.msg, { variant: 'error' })
+                } else if (res?.data?.status !== 200) {
+                    enqueueSnackbar(res?.data?.error, { variant: 'error' })
+                } else {
+                    bannerUpdateId ?
+                        enqueueSnackbar('Banner Updated Successfully', { variant: 'success' }) :
+                        enqueueSnackbar('Banner Added Successfully', { variant: 'success' })
+                    setIsLoading(false)
+                }
+                setBanner(false)
+                handleGetbannerList()
+            }
         } catch (error) {
-            
+
         }
     }
 
@@ -244,7 +377,7 @@ const BannerManagement = () => {
         {
             Header: 'Title',
             accessor: 'title',
-            Cell: ({ row }) => <a style={{ cursor: 'pointer' }} onClick={() => setBanner(true)}>{row?.original?.title}</a>
+            Cell: ({ row }) => <p style={{ cursor: 'pointer' }} onClick={() => editClubBannerHandler(row?.original?.id)}>{row?.original?.title}</p>
         },
         {
             Header: 'Posting Period',
@@ -255,12 +388,12 @@ const BannerManagement = () => {
         {
             Header: 'Status',
             accessor: 'status',
-             Cell: ({ row }) => <p>{row?.original?.status}</p>,
+            Cell: ({ row }) => <p>{row?.original?.status}</p>,
         },
         {
             Header: 'Type',
             accessor: 'type',
-             Cell: ({ row }) => <p>{row?.original?.type}</p>,
+            Cell: ({ row }) => <p>{row?.original?.type}</p>,
 
         },
         {
@@ -276,7 +409,7 @@ const BannerManagement = () => {
         <div>
             <div className='d-flex justify-content-between  pageTitle mb-3 pb-2'>
                 <h2>Banner Management</h2>
-                <CButton onClick={() => setBanner(true)} className='btn-success'>Create</CButton>
+                <CButton onClick={handleNewBookBannaer} className='btn-success'>Create</CButton>
             </div>
             {isLoading && <Loader />}
             <div className='d-flex align-items-center '>
@@ -285,13 +418,15 @@ const BannerManagement = () => {
                 </div>
                 <div className="push-notification-container gap-3 py-0">
                     <CFormCheck className='d-flex gap-2' type="radio" name="visibility" id="exampleRadios1" label="Yes"
-                        defaultChecked={bannerSetting?.isEnabled}
-                        onClick={ updateBannerSlider}
+                        defaultChecked={bannerSetting.isEnabled}
+                        // checked={bannerSetting.isEnabled}
+                        onClick={() => updateBannerSlider(1)}
                         value={true}
                     />
                     <CFormCheck className='d-flex gap-2' type="radio" name="visibility" id="exampleRadios2" label="No"
-                        defaultChecked={!bannerSetting?.isEnabled}
-                        onClick={ updateBannerSlider}
+                        defaultChecked={!bannerSetting.isEnabled}
+                        // checked={!bannerSetting.isEnabled}
+                        onClick={() => updateBannerSlider(0)}
                         value={false}
                     />
                 </div>
@@ -300,7 +435,7 @@ const BannerManagement = () => {
                 <ReactTable columns={columns} data={bannerList} showCheckbox={false} onSelectionChange={handleSelectionChange} />
             </div>
             <CModal
-            scrollable
+                scrollable
                 visible={banner}
                 className='modal-lg'
                 alignment='center'
@@ -346,6 +481,9 @@ const BannerManagement = () => {
                                             <DatePicker
                                                 value={bannerStartDate}
                                                 onChange={(event) => handleBannerStartDate(event)}
+                                                minDate={new Date()}
+                                                maxDate={maxDate}
+                                                
                                             />
 
                                             <input
@@ -363,6 +501,8 @@ const BannerManagement = () => {
                                             <DatePicker
                                                 value={bannerEndDate}
                                                 onChange={(event) => handleBannerEndDate(event)}
+                                                minDate={new Date()}
+                                                //  maxDate={maxDate}
                                             />
 
                                             <input
@@ -481,28 +621,28 @@ const BannerManagement = () => {
                                             label="Pop-up Image"
                                         />
                                         <div className='w-25'>
-                                        <label
-                                            className="btn btn-primary "
-                                            
-                                            htmlFor="popupImg"
-                                            style={{ display: `${imageType === 'popUpImage' ? '' : 'none'}`, paddingLeft:20 }}
-                                        >
-                                            Upload
-                                            <input
-                                                type="file"
-                                                name="popupImg"
-                                                id="popupImg"
-                                                style={{ display: 'none', disabled: 'true' }}
-                                                accept=".png, .jpg, .jpeg, .gif"
-                                                onChange={(e) => setPopupImage(e.target.files[0])}
-                                            />
-                                        </label>
+                                            <label
+                                                className="btn btn-primary "
+
+                                                htmlFor="popupImg"
+                                                style={{ display: `${imageType === 'popUpImage' ? '' : 'none'}`, paddingLeft: 20 }}
+                                            >
+                                                Upload
+                                                <input
+                                                    type="file"
+                                                    name="popupImg"
+                                                    id="popupImg"
+                                                    style={{ display: 'none', disabled: 'true' }}
+                                                    accept=".png, .jpg, .jpeg, .gif"
+                                                    onChange={(e) => setPopupImage(e.target.files[0])}
+                                                />
+                                            </label>
                                         </div>
 
                                     </div>
                                     {imageType === 'popUpImage' && popupImage && (
                                         <div className="upload-images-container uploadImgWrap " >
-                                            <div className="thubmnail-img-container p-3" style={{height:500, maxWidth:"100%", borderWidth:0, marginRight:0}}>
+                                            <div className="thubmnail-img-container p-3" style={{ height: 500, maxWidth: "100%", borderWidth: 0, marginRight: 0 }}>
                                                 <img src={URL.createObjectURL(popupImage)} alt="" />
                                             </div>
                                         </div>
@@ -515,7 +655,9 @@ const BannerManagement = () => {
                 <CModalFooter>
                     <div className="d-flex justify-content-center gap-3 w-100 ">
                         <CButton className='btn-black' onClick={() => setBanner(false)}>Cancel</CButton>
-                        <CButton >
+                        <CButton
+                            onClick={validateClubPeriodHandler}
+                        >
                             {bannerUpdateId ? 'Update' : 'Save'}
                         </CButton>
                     </div>

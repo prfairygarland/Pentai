@@ -266,6 +266,9 @@ export let API_ENDPOINT = {
   delete_OperationManagementBanner: ALL_CONSTANTS.API_URL + "/api/admin/Operation/deleteBanner",
   create_OperationManagementBanner: ALL_CONSTANTS.API_URL + "/api/admin/Operation/createBanner",
   update_OperationManagementBanner: ALL_CONSTANTS.API_URL + "/api/admin/Operation/updateBanner",
+  get_homeUsageStatus: ALL_CONSTANTS.API_URL + "/api/admin/Operation/homeUsageStatus",
+  update_homeUsageStatus : ALL_CONSTANTS.API_URL + "/api/admin/Operation/updateHomeUsageStatus",
+  get_pushNotificationList : ALL_CONSTANTS.API_URL + "/api/admin/Operation/pushNotificationList",
 
 
 

@@ -18,29 +18,10 @@ const GreetingMessageManagement = () => {
 
 
     const handleRemoveInput = async () => {
-        if (deleteID) {
-            let url = `${API_ENDPOINT.delete_GreetingMessages}?id=${deleteID}`
-            try {
-                const response = await deleteApi(url)
-                if (response?.data?.status === 200) {
-                    enqueueSnackbar('Message deleted successfully', { variant: 'success' })
-                    handleGetGreetingMessages()
-                    setDeleteVisible(false)
-                }
-                else {
-                    enqueueSnackbar('Failed to delete the message', { variant: 'error' })
-                    setDeleteVisible(false)
-                }
-            } catch (error) {
-                console.log(error)
-            }
-        }
-        else {
-            const newList = [...GreetingMessages];
-            newList.splice(index, 1);
-            setGreetingMessages(newList)
-            setDeleteVisible(false)
-        }
+        const newList = [...GreetingMessages];
+        newList.splice(index, 1);
+        setGreetingMessages(newList)
+        setDeleteVisible(false)
 
     }
 
@@ -84,7 +65,7 @@ const GreetingMessageManagement = () => {
 
     const handleGetGreetingMessages = async () => {
         setIsLoading(true)
-    
+
         try {
             const response = await getApi(API_ENDPOINT.get_GreetingMessages)
             if (response?.status === 200) {
@@ -103,34 +84,34 @@ const GreetingMessageManagement = () => {
 
     const handleCreateGreetingMessages = async () => {
         setIsLoading(true)
-        let url = API_ENDPOINT.create_GreetingMessages
-
-        const des = GreetingMessages.map((item) => item.description)
-
-        const body = {
-            description: des
-        }
-
-        console.log('body', body)
-
-        console.log('body', body)
 
         try {
-            const response = await postApi(url, body)
-            if (response?.data?.status === 200) {
-                // enqueueSnackbar('Greeting message created successfully', {variant:'success'})
-                enqueueSnackbar('It has been saved', { variant: 'success' })
-                handleGetGreetingMessages()
-                setIsLoading(false)
+            const des = GreetingMessages.map((item) => item.description)
+
+            const body = {
+                description: des
+            }
+            let response
+            if (deleteID) {
+                let url = `${API_ENDPOINT.delete_GreetingMessages}?id=${deleteID}`
+                response = await deleteApi(url)
             }
             else {
-                enqueueSnackbar('Failed to create Greeting message', { variant: 'error' })
+                response = await postApi(API_ENDPOINT.create_GreetingMessages, body)
+            }
+            if (response?.status === 200) {
+                if (response?.data?.status === 409) {
+                    enqueueSnackbar(response?.data?.msg, { variant: 'error' })
+                }
+                else {
+                    enqueueSnackbar('It has been saved', { variant: 'success' })
+                }
+                setIsLoading(false)
+                setDeleteID(null)
+                setDeleteVisible(false)
             }
         } catch (error) {
             console.log(error)
-        }
-        finally {
-            setIsLoading(false)
         }
     }
 
@@ -146,6 +127,7 @@ const GreetingMessageManagement = () => {
                         <label className="fw-bolder ">Greeting Message</label>
                     </div>
                     <div className="formWrpInpt">
+                        <p className=''>※ It is randomly displayed in the greeting area. You can create up to five</p>
                         <div className="d-flex w-100 mt-4 flex-column">
                             <div style={{ height: '300px' }} className="prowordsection">
                                 <div className="d-flex flex-wrap">
@@ -165,8 +147,8 @@ const GreetingMessageManagement = () => {
                             </div>
                             <div className="d-flex justify-content-end mt-2">
                                 <CCol xs="auto">
-                                    <CButton type="submit" disabled={GreetingMessages.length >= 5} onClick={handleAddInput} className="mb-3 btn-black">
-                                        add
+                                    <CButton type="submit" onClick={handleAddInput} className="mb-3 btn-black">
+                                        Add
                                     </CButton>
                                 </CCol>
                             </div>
@@ -183,7 +165,7 @@ const GreetingMessageManagement = () => {
             </div>
             <CModal
                 visible={visible}
-                onClose={() => setDeleteVisible(false)}
+                onClose={() => setVisible(false)}
             >
                 <CModalHeader>
                     <CModalTitle>Save confirmation</CModalTitle>
