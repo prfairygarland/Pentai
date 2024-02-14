@@ -1,5 +1,8 @@
-import { CButton, CFormInput, CFormSelect, CModal, CModalBody, CModalHeader, CModalTitle, CNav, CNavItem, CNavLink } from '@coreui/react'
+import { cilInfo } from '@coreui/icons'
+import CIcon from '@coreui/icons-react'
+import { CButton, CFormInput, CFormSelect, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle, CNav, CNavItem, CNavLink, CTooltip } from '@coreui/react'
 import moment from 'moment'
+import { enqueueSnackbar } from 'notistack'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import DatePicker from 'react-date-picker'
 import { useTranslation } from 'react-i18next'
@@ -7,7 +10,7 @@ import ReactPaginate from 'react-paginate'
 import { NavLink } from 'react-router-dom'
 import Loader from 'src/components/common/Loader'
 import ReactTable from 'src/components/common/ReactTable'
-import { getApi } from 'src/utils/Api'
+import { deleteApi, getApi, postApi, putApi } from 'src/utils/Api'
 import { ALL_CONSTANTS, API_ENDPOINT } from 'src/utils/config'
 import { paginationItemPerPageOptions } from 'src/utils/constant'
 
@@ -32,7 +35,7 @@ const AdministratorList = () => {
   const [totalData, setTotalDarta] = useState(0)
   const [itemsPerPage, setItemsPerPage] = useState(10)
   const [administratorListData, setAdministratorListData] = useState([])
-  const [groupData, setGroupData] = useState()
+  const [groupData, setGroupData] = useState([])
   const [currentHistoryPage, setCurrentHistoryPage] = useState(1)
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
@@ -42,6 +45,16 @@ const AdministratorList = () => {
   const [searchHistoryInput, setHistorySearchInput] = useState('');
   const [searchHistoryInputValue, setSearchHistoryInputValue] = useState('')
   const [historyData, setHistoryData] = useState([])
+  const [visible, setVisible] = useState(false)
+  const [id, setId] = useState('')
+  const [password, setPassword] = useState('')
+  const [levelId, setLevelId] = useState('')
+  const [groupId, setGroupId] = useState(null)
+  const [saveModal, setSaveModal] = useState(false)
+  const [cancelModal, setCancelModal] = useState(false)
+  const [adminId, setAdminId] = useState(null)
+  const [deleteAdmin, setDeleteAdmin] = useState(null)
+  const [deleteModal, setDeleteModal] = useState(false)
 
   const perPageValue = [
     { label: '10', value: 10 },
@@ -50,6 +63,12 @@ const AdministratorList = () => {
     { label: '100', value: 100 }
 
   ]
+
+  const vars = {
+    '--my-css-var': 10,
+    '--my-another-css-var': "red",
+    '--cui-tooltip-max-width': '300px',
+  }
 
   useEffect(() => {
     getGroup()
@@ -102,9 +121,10 @@ const AdministratorList = () => {
     },
     {
       Header: multiLang?.action,
+      // accessor: 'id',
       Cell: ({ row }) => <div className='d-flex gap-2'>
-        <CButton >{multiLang?.modify}</CButton>
-        <CButton >{multiLang?.delete}</CButton>
+        <CButton onClick={() => getAdminData(row.original.id)} >{multiLang?.modify}</CButton>
+        <CButton onClick={() => (setDeleteAdmin(row.original.authUserRoleMappingsId), setDeleteModal(true))} >{multiLang?.delete}</CButton>
       </div>
 
     }
@@ -151,10 +171,10 @@ const AdministratorList = () => {
     try {
       let url = API_ENDPOINT.getAdministratorHistory + `?pageNo=${currentHistoryPage}&limit=${5}`
       if (startDate) {
-        url = url + `&startDate=${startDate}`
+        url = url + `&startDate=${moment(startDate).add(1, 'd').toISOString().split('T')[0] + `T00:00:00.000Z`}`
       }
       if (endDate) {
-        url = url + `&endDate=${endDate}`
+        url = url + `&endDate=${moment(endDate).add(1, 'd').toISOString().split('T')[0] + `T23:59:59.000Z`}`
       }
       // if (searchHistoryInputValue != '') {
       //   url = url + `&filename=${searchHistoryInputValue}`
@@ -174,6 +194,28 @@ const AdministratorList = () => {
       // setIsLoading(false)
     }
   };
+
+  const getAdminData = async (ids) => {
+    setAdminId(ids)
+    console.log('id =>', ids);
+    try {
+      let url = API_ENDPOINT.getAdminData + `?id=${ids}`
+
+      const response = await getApi(url)
+      console.log('res =>', response);
+      if (response.status == 200) {
+        setId(response.data[0].email)
+        setLevelId(response.data[0].roleId == 2 ? 'Super' : 'Sub')
+        setGroupId(response.data[0].groupId)
+        setPassword(response.data[0].password)
+        setVisible(true)
+        // setIsLoading(false)
+      }
+
+    } catch (error) {
+      // setIsLoading(false)
+    }
+  }
 
   const resetHistory = async () => {
     setStartDate('')
@@ -196,9 +238,7 @@ const AdministratorList = () => {
           return { 'label': op?.groupName, 'value': op?.id }
 
         })
-        setGroupData((pre) => {
-          return [{ label: multiLang?.all, value: 0 }, ...data]
-        })
+        setGroupData(data)
       }
     } catch (error) {
       console.log(error)
@@ -261,17 +301,6 @@ const AdministratorList = () => {
     }
   }
 
-  const handleTabClick = (value) => {
-    console.log('value =>', value);
-    setFilterData({
-      search: '',
-      Status: '',
-      startDate: '',
-      endDate: ''
-    })
-    setItemsPerPage(10);
-    setCurrentPage(0)
-  };
 
   const handleSearch = (e) => {
     const value = e.target.value
@@ -383,6 +412,121 @@ const AdministratorList = () => {
     setSearchHistoryInputValue(searchHistoryInput)
   }
 
+  const validateID = async (id) => {
+    const validFormat = /^[a-z0-9]{4,12}$/;
+    const forbiddenWords = /(admin|sub|super|master)/;
+
+    if (!validFormat.test(id)) {
+      return "ID must be 4 to 12 lowercase letters and numbers.";
+    } else if (forbiddenWords.test(id)) {
+      return "ID cannot contain 'admin', 'sub', 'super', or 'master'.";
+    }
+
+    return "";
+  }
+
+  const validate = async () => {
+    console.log('pass word =>', password);
+    if (id === '') {
+      enqueueSnackbar('Please enter Id', { variant: 'error' })
+      return
+    }
+
+    // validateID(id).then((test) => {
+    // if (test != '') {
+    //   enqueueSnackbar(test, { variant: 'error' })
+    //   return
+    // }
+
+    else if (password === '') {
+      enqueueSnackbar('Please enter password', { variant: 'error' })
+      return
+    } else if (levelId === '') {
+      enqueueSnackbar('Please select level', { variant: 'error' })
+      return
+    } else if (levelId == 'Select') {
+      enqueueSnackbar('Please select level', { variant: 'error' })
+      return
+    } else if (groupId === null) {
+      enqueueSnackbar('Please select Group', { variant: 'error' })
+    } else if (groupId == 0) {
+      enqueueSnackbar('Please select Group', { variant: 'error' })
+    } else {
+      setSaveModal(true)
+    }
+    // })
+  }
+
+  const adminAccountRegistration = async () => {
+    setIsLoading(true)
+    const data = {
+      username: id,
+      password: password,
+      groupId: groupId
+    }
+
+    data['roleId'] = levelId === 'Super' ? 2 : 3
+
+    let res;
+    if (adminId) {
+      data['comment'] = 'Test'
+      res = await putApi(API_ENDPOINT.updateAdmin, data)
+    } else {
+      res = await postApi(API_ENDPOINT.createAdmin, data)
+    }
+
+    console.log('testrt =>', res);
+
+    if (res.status === 200) {
+      if (adminId) {
+        enqueueSnackbar('Update successfully', { variant: 'success' })
+      } else {
+        enqueueSnackbar('Create successfully', { variant: 'success' })
+      }
+      resetValues()
+      setIsLoading(false)
+      getAdministratorListData()
+      setAdminId(null)
+    } else {
+      resetValues()
+      setIsLoading(false)
+      getAdministratorListData()
+      setAdminId(null)
+    }
+  }
+
+  const resetValues = async () => {
+    setId('');
+    setPassword('');
+    setGroupId(null);
+    setLevelId('');
+    setSaveModal(false)
+    setCancelModal(false)
+    setVisible(false)
+    setAdminId(null)
+
+  }
+
+
+  const deleteAdminData = async (deleteAdmin) => {
+    console.log('delete admin =>', deleteAdmin);
+    try {
+      let url = API_ENDPOINT.deleteAdminuser
+      const response = await deleteApi(url, `?roleMappingId=${deleteAdmin}`)
+      console.log('test new =>', response);
+      if (response?.status === 200) {
+        // setUserInfoPopup(true)
+        enqueueSnackbar('Delete succefully', { variant: 'success' })
+        setDeleteModal(false)
+        setDeleteAdmin(null)
+        await getAdministratorListData()
+      }
+    } catch (error) {
+      enqueueSnackbar('Something Went Wrong', { variant: 'error' })
+      console.log(error)
+    }
+  }
+
   return (
     <div className='mb-5'>
       {isLoading && <Loader />}
@@ -390,7 +534,7 @@ const AdministratorList = () => {
         <div className='d-flex justify-content-between mb-2'>
           <h3>{multiLang?.administratorList}</h3>
           <div>
-            <NavLink><CButton className='btn-success'>{multiLang?.create}</CButton></NavLink>
+            <NavLink><CButton onClick={() => setVisible(!visible)} className='btn-success'>{multiLang?.create}</CButton></NavLink>
           </div>
         </div>
         <div className="d-flex p-4  flex-column bg-light  mt-3">
@@ -405,7 +549,6 @@ const AdministratorList = () => {
                     { label: multiLang?.all, value: 'All' },
                     { label: multiLang?.super, value: 'Super' },
                     { label: multiLang?.Sub, value: 'Sub' }
-
                   ]}
                   onChange={handleLevelChange}
                   value={filterData.level}
@@ -417,7 +560,7 @@ const AdministratorList = () => {
                 <CFormSelect
                   className="me-2"
                   aria-label="Default select example"
-                  options={groupData}
+                  options={groupData.length > 0 ? [{ label: multiLang?.all, value: 0 }, ...groupData] : [{ label: multiLang?.all, value: 0 }]}
                   onChange={handleGroupChange}
                   value={filterData.group}
                 />
@@ -547,6 +690,182 @@ const AdministratorList = () => {
           </CModal>
         </div>
 
+        <div>
+          <CModal
+            backdrop="static"
+            visible={visible}
+            onClose={() => setVisible(false)}
+            aria-labelledby="StaticBackdropExampleLabel"
+          >
+            <CModalHeader>
+              <CModalTitle id="StaticBackdropExampleLabel">{multiLang?.AdminRegistrationTitle}</CModalTitle>
+            </CModalHeader>
+            <CModalBody>
+              <div className="card-body">
+                <div className="formWraper">
+                  <div className="form-outline form-white  d-flex ">
+                    <div className="formWrpLabel">
+                      <label className="fw-bolder ">
+                        {multiLang?.id}
+                        <CTooltip style={vars}
+                          content={multiLang?.idInfo}
+                          placement="bottom"
+                        >
+                          <CIcon icon={cilInfo} size="lg" />
+                        </CTooltip>
+                      </label>
+                    </div>
+                    <div className="formWrpInpt">
+                      <div className="d-flex formradiogroup mb-2 gap-3">
+                        <CFormInput
+                          type="text"
+                          placeholder={multiLang?.id}
+                          name="title"
+                          value={id}
+                          onChange={(e) => setId(e.target.value)}
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="form-outline form-white  d-flex ">
+                    <div className="formWrpLabel">
+                      <label className="fw-bolder ">
+                        {multiLang?.password}
+                      </label>
+                    </div>
+                    <div className="formWrpInpt">
+                      <div className="d-flex formradiogroup mb-2 gap-3">
+                        <CFormInput
+                          type="password"
+                          placeholder={multiLang?.password}
+                          name="title"
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="form-outline form-white  d-flex ">
+                    <div className="formWrpLabel">
+                      <label className="fw-bolder ">
+                        {multiLang?.level}
+                      </label>
+                    </div>
+                    <div className="formWrpInpt">
+                      <div className="d-flex formradiogroup mb-2 gap-3">
+                        <CFormSelect
+                          className="me-2"
+                          options={[
+                            { label: multiLang?.select, value: 'Select' },
+                            { label: multiLang?.super, value: 'Super' },
+                            { label: multiLang?.Sub, value: 'Sub' }
+                          ]}
+                          value={levelId}
+                          onChange={(e) => setLevelId(e.target.value)}
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="form-outline form-white  d-flex ">
+                    <div className="formWrpLabel">
+                      <label className="fw-bolder ">
+                        {multiLang?.group}
+                      </label>
+                    </div>
+                    <div className="formWrpInpt">
+                      <div className="d-flex formradiogroup mb-2 gap-3">
+                        <CFormSelect
+                          className="me-2"
+                          aria-label="Default select example"
+                          options={[{ label: multiLang?.select, value: 0 }, ...groupData]}
+                          value={groupId}
+                          onChange={(e) => setGroupId(e.target.value)}
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+
+                </div>
+              </div>
+            </CModalBody>
+            <CModalFooter className='d-flex justify-content-center'>
+              <CButton color="secondary" onClick={() => setCancelModal(true)}>
+                {multiLang?.cancel}
+              </CButton>
+              <CButton disabled={id === '' || password === ''} onClick={() => validate()} color="primary">{multiLang?.save}</CButton>
+            </CModalFooter>
+          </CModal>
+        </div>
+
+        <div>
+          <CModal
+            backdrop="static"
+            visible={saveModal}
+            onClose={() => setSaveModal(false)}
+            aria-labelledby="StaticBackdropExampleLabel"
+          >
+            <CModalHeader>
+              <CModalTitle id="StaticBackdropExampleLabel">{multiLang?.save}</CModalTitle>
+            </CModalHeader>
+            <CModalBody>
+              {multiLang?.saveMsg}
+            </CModalBody>
+            <CModalFooter>
+              <CButton color="secondary" onClick={() => setSaveModal(false)}>
+                {multiLang?.no}
+              </CButton>
+              <CButton onClick={() => adminAccountRegistration()} color="primary">{multiLang?.yes}</CButton>
+            </CModalFooter>
+          </CModal>
+        </div>
+
+        <div>
+          <CModal
+            backdrop="static"
+            visible={cancelModal}
+            onClose={() => setCancelModal(false)}
+            aria-labelledby="StaticBackdropExampleLabel"
+          >
+            <CModalHeader>
+              <CModalTitle id="StaticBackdropExampleLabel">{multiLang?.cancel}</CModalTitle>
+            </CModalHeader>
+            <CModalBody>
+              {multiLang?.cancelMsg}
+            </CModalBody>
+            <CModalFooter>
+              <CButton color="secondary" onClick={() => setCancelModal(false)}>
+                {multiLang?.no}
+              </CButton>
+              <CButton onClick={() => resetValues()} color="primary">{multiLang?.yes}</CButton>
+            </CModalFooter>
+          </CModal>
+        </div>
+
+        <div>
+          <CModal
+            backdrop="static"
+            visible={deleteModal}
+            onClose={() => (setDeleteAdmin(null), setDeleteModal(false))}
+            aria-labelledby="StaticBackdropExampleLabel"
+          >
+            <CModalHeader>
+              <CModalTitle id="StaticBackdropExampleLabel">{multiLang?.delete}</CModalTitle>
+            </CModalHeader>
+            <CModalBody>
+              {multiLang?.deletMsg}
+            </CModalBody>
+            <CModalFooter>
+              <CButton color="secondary" onClick={() => (setDeleteAdmin(null), setDeleteModal(false))}>
+                {multiLang?.no}
+              </CButton>
+              <CButton onClick={() => deleteAdminData(deleteAdmin)} color="primary">{multiLang?.yes}</CButton>
+            </CModalFooter>
+          </CModal>
+        </div>
 
       </main >
     </div >

@@ -492,10 +492,10 @@ const UserList = () => {
     try {
       let url = `https://ptkapi.experiencecommerce.com/api/adminPanel/importModifiedHistory?pageNo=${currentImportHistoryPage}&limit=${itemsPerPage}`;
       if (startDate) {
-        url = url + `&startDate=${startDate}`
+        url = url + `&startDate=${moment(startDate).add(1, 'd').toISOString().split('T')[0] + `T00:00:00.000Z`}`
       }
       if (endDate) {
-        url = url + `&endDate=${endDate}`
+        url = url + `&endDate=${moment(endDate).add(1, 'd').toISOString().split('T')[0] + `T23:59:59.000Z`}`
       }
       if (searchImportInputValue != '') {
         url = url + `&filename=${searchImportInputValue}`

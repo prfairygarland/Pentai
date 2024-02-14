@@ -245,11 +245,11 @@ export let API_ENDPOINT = {
   startQuizQuestion: ALL_CONSTANTS.API_URL + "/api/admin/lounge/quizQuestion/start",
   endQuizQuestion: ALL_CONSTANTS.API_URL + "/api/admin/lounge/quizQuestion/end",
   sendAdminChatText: ALL_CONSTANTS.API_URL + "/api/lounge/sendMessages",
-  uploadImageChoiceImage : ALL_CONSTANTS.API_URL + "api/uploadImage",
+  uploadImageChoiceImage: ALL_CONSTANTS.API_URL + "api/uploadImage",
   getChatToken: ALL_CONSTANTS.API_URL + "/api/lounge/createChatToken",
   editLiveStream: ALL_CONSTANTS.API_URL + "/api/admin/lounge/updateLiveStream",
   editQuizQuestion: ALL_CONSTANTS.API_URL + "/api/admin/lounge/quizQuestion/edit",
-  deleteQuizQuestion : ALL_CONSTANTS.API_URL + "/api/admin/lounge/quizQuestion/delete",
+  deleteQuizQuestion: ALL_CONSTANTS.API_URL + "/api/admin/lounge/quizQuestion/delete",
   startLiveStream: ALL_CONSTANTS.API_URL + "/api/admin/lounge/startStream",
   endLiveStream: ALL_CONSTANTS.API_URL + "/api/admin/lounge/endStream",
   cancelLiveStream: ALL_CONSTANTS.API_URL + "/api/admin/lounge/cancelStream",
@@ -260,15 +260,15 @@ export let API_ENDPOINT = {
   get_GreetingMessages: ALL_CONSTANTS.API_URL + "/api/admin/Operation/greetingMessage",
   create_GreetingMessages: ALL_CONSTANTS.API_URL + "/api/admin/Operation/addGreeting",
   delete_GreetingMessages: ALL_CONSTANTS.API_URL + "/api/admin/Operation/deleteGreeting",
-  get_OperationMangementBannerLis : ALL_CONSTANTS.API_URL + "/api/admin/Operation/getBannerList",
+  get_OperationMangementBannerLis: ALL_CONSTANTS.API_URL + "/api/admin/Operation/getBannerList",
   get_OperationMangementAutoSlide: ALL_CONSTANTS.API_URL + "/api/admin/Operation/autoSlideBanner",
   update_OperationManagementAutoSlide: ALL_CONSTANTS.API_URL + "/api/admin/Operation/updateAutoSlide",
   delete_OperationManagementBanner: ALL_CONSTANTS.API_URL + "/api/admin/Operation/deleteBanner",
   create_OperationManagementBanner: ALL_CONSTANTS.API_URL + "/api/admin/Operation/createBanner",
   update_OperationManagementBanner: ALL_CONSTANTS.API_URL + "/api/admin/Operation/updateBanner",
   get_homeUsageStatus: ALL_CONSTANTS.API_URL + "/api/admin/Operation/homeUsageStatus",
-  update_homeUsageStatus : ALL_CONSTANTS.API_URL + "/api/admin/Operation/updateHomeUsageStatus",
-  get_pushNotificationList : ALL_CONSTANTS.API_URL + "/api/admin/Operation/pushNotificationList",
+  update_homeUsageStatus: ALL_CONSTANTS.API_URL + "/api/admin/Operation/updateHomeUsageStatus",
+  get_pushNotificationList: ALL_CONSTANTS.API_URL + "/api/admin/Operation/pushNotificationList",
 
 
 
@@ -276,6 +276,10 @@ export let API_ENDPOINT = {
   getGroup: ALL_CONSTANTS.API_URL + "/api/adminPanel/getGroup",
   getAdministratorList: ALL_CONSTANTS.API_URL + "/api/adminPanel/administratorList",
   getAdministratorHistory: ALL_CONSTANTS.API_URL + "/api/adminPanel/historyModifiedList",
+  createAdmin: ALL_CONSTANTS.API_URL + "/api/adminPanel/createAdmin",
+  getAdminData: ALL_CONSTANTS.API_URL + "/api/adminPanel/getAdmin",
+  updateAdmin: ALL_CONSTANTS.API_URL + "/api/adminPanel/updateAdmin",
+  deleteAdminuser: ALL_CONSTANTS.API_URL + "/api/adminPanel/deleteAdmin"
 
 
 
