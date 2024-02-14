@@ -63,6 +63,7 @@ const LiveRegistration = () => {
   const [live, setLive] = useState(0)
   const [liveInformation, setLiveInformation] = useState({})
   const [modifyImage, setModifyImage] = useState('')
+  const [displayTime, setDisplayTime] = useState(0)
 
 
   const handleTimeInputChange = (e) => {
@@ -799,6 +800,18 @@ const LiveRegistration = () => {
     }
   }
 
+  const secondsToHms = (seconds) => {
+    seconds = Number(seconds);
+    var h = Math.floor(seconds / 3600);
+    var m = Math.floor(seconds % 3600 / 60);
+    var s = Math.floor(seconds % 3600 % 60);
+
+    var hDisplay = h > 0 ? (h < 10 ? '0'+h : h) : "00";
+    var mDisplay = m > 0 ? (m < 10 ? '0'+m : m) : "00";
+    var sDisplay = s > 0 ? (s < 10 ? '0'+s : s) : "00";
+    return hDisplay + ':' + mDisplay + ':' + sDisplay; 
+  }
+
   const getStreamDetails = async () => {
     setIsLoading(true)
     try {
@@ -825,8 +838,8 @@ const LiveRegistration = () => {
         setMainQuizs(res?.data?.questions)
         setLive(res?.data?.isLive)
         setLiveInformation({
-          startTime: res?.data?.scheduledAt,
-          endTime: res?.data?.scheduledUpto,
+          startTime: res?.data?.broadcastStart,
+          endTime: res?.data?.broadcastEnd,
           time: res?.data?.serverTime,
           like: res?.data?.likes,
           author: res?.data?.authorName,
@@ -834,6 +847,12 @@ const LiveRegistration = () => {
           Pv: res?.data?.pv,
           Chats: res?.data?.chats
         })
+
+        if(res?.data?.scheduledAt && res?.data?.scheduledUpto) {
+          const seconds = Math.floor((new Date(res?.data?.broadcastEnd).getTime() - new Date(res?.data?.broadcastStart).getTime())/ (1000))
+          setDisplayTime(secondsToHms(seconds))
+        }
+
         // res?.data?.question?.map((val) => {
         //   setQuizQuestion(val?.title)
         //   setSelectedRadio(val?.type)
@@ -979,7 +998,7 @@ const LiveRegistration = () => {
             </div>
             <div className="align-items-center ms-2 align-items-center">
               <h5 className="fw-medium me-1 text-center">{multiLang?.LiveManagementRegistrationLive?.time}</h5>
-              <p className='text-center'>{liveInformation.time ? moment(liveInformation.time).format('HH:mm:s') : '-'}</p>
+              <p className='text-center'>{(liveInformation.startTime && liveInformation.endTime) ? displayTime : '-'}</p>
             </div>
             <div className="align-items-center ms-2 align-items-center">
               <h5 className="fw-medium me-1 text-center">{multiLang?.LiveManagementRegistrationLive?.uniqueVisitor}</h5>
@@ -1178,7 +1197,7 @@ const LiveRegistration = () => {
                                   style={{width:150}}
                                   className='text-center'
                                   type="text"
-                                  placeholder={multiLang?.LiveManagementRegistrationLive?.Enter_points}
+                                  placeholder={multiLang?.LiveManagementRegistrationLive?.Enter_number}
                                   name='Points'
                                   value={points}
                                   onChange={(e) => handleChange(e, 'points')}
@@ -1235,13 +1254,13 @@ const LiveRegistration = () => {
                                   style={{width:150}}
                                   className='text-center'
                                   type="text"
-                                  placeholder={multiLang?.LiveManagementRegistrationLive?.Enter_secret}
+                                  placeholder={multiLang?.LiveManagementRegistrationLive?.Enter_number}
                                   name='Points'
                                   value={secret}
                                   onChange={(e) => handleChange(e, 'secret')}
                                 />
                                 <div className='d-flex align-items-center gap-5'>
-                                  <p >{secret?.length} / 4</p>
+                                  <p >{secret?.length ? secret?.length : 0} / 4</p>
                                   <p>{multiLang?.LiveManagementRegistrationLive?.Secret_description}</p>
                                 </div>
                               </div>
@@ -1316,7 +1335,7 @@ const LiveRegistration = () => {
                                         <CFormInput
                                           className='w-75'
                                           type="text"
-                                          placeholder={multiLang?.LiveManagementRegistrationLive?.Enter_points}
+                                          placeholder={multiLang?.LiveManagementRegistrationLive?.Enter_number}
                                           name='Points'
                                           value={rewardPoints}
                                           onChange={(e) => handleChange(e, 'quiz')}
@@ -1380,10 +1399,10 @@ const LiveRegistration = () => {
               </div>
               <div
                 className='d-flex justify-content-center align-items-center gap-3 my-3'>
-                {location?.state?.streamId !== undefined &&
+                {/* {location?.state?.streamId !== undefined &&
                   <CButton onClick={() => navigateToList()} >{multiLang?.LiveManagementRegistrationLive?.list}</CButton>
-                }
-                {/* {live === 0 && <CButton onClick={confirmationCloseModalHandler} className='btn-black'>{multiLang?.LiveManagementRegistrationQuiz?.Cancel}</CButton>} */}
+                } */}
+                {location?.state?.streamId !== undefined && <CButton onClick={confirmationCloseModalHandler} className='btn-black'>{multiLang?.LiveManagementRegistrationQuiz?.Cancel}</CButton>}
                 {live === 0 && <CButton onClick={() => validateAllRegistration()}>{multiLang?.LiveManagementRegistrationQuiz?.Save}</CButton>}
               </div>
 
