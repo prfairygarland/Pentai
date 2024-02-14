@@ -75,7 +75,7 @@ const LiveManagement = () => {
     {
       Header: multiLang?.LiveManagement?.Status,
       accessor: 'status',
-      Cell: ({ row }) => <p className='text-center'>{row.original.status ? row.original.status : '-'}</p>
+      Cell: ({ row }) => <p className='text-center' style={row.original.status.toString() === 'onair' ? {color: 'red', fontWeight: 'bold'} : row.original.status.toString() === 'ready' ? {color: '#13e213', fontWeight: 'bold'} : row.original.status.toString() === 'ended' ? {color: 'black', fontWeight: 'bold'} : {color: 'gray', fontWeight: 'bold'}}>{row.original.status ? row.original.status : '-'}</p>
     },
     {
       Header: multiLang?.LiveManagement?.Title,
@@ -86,7 +86,7 @@ const LiveManagement = () => {
     {
       Header: multiLang?.LiveManagement?.Scheduled_start_time,
       accessor: 'scheduledAt',
-      Cell: ({ row }) => <p>{row.original.scheduledAt ? moment(row.original.scheduledAt).format('YYYY-MM-DD HH:mm:ss') : '-'}</p>
+      Cell: ({ row }) => <p>{row.original.scheduledAt ? moment(row.original.scheduledAt).format('YYYY-MM-DD') + ' (' + moment(row.original.scheduledAt).format('dddd').toString().substring(0, 3) + ') ' + moment(row.original.scheduledAt).format('HH:mm:ss') : '-'}</p>
     },
     {
       Header: multiLang?.LiveManagement?.Creator,

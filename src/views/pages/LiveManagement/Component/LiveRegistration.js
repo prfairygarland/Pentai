@@ -1092,7 +1092,8 @@ const LiveRegistration = () => {
                             <div className="formWrpInpt d-flex w-100 flex-column">
                               <div className="d-flex formradiogroup mb-2 gap-1 w-100">
                                 <DatePicker value={liveRegisterEndDate}
-                                  disabled={true} />
+                                  disabled={true} 
+                                  minDate={new Date()}/>
                                   {/* onChange={(event) => handleLiveRegisterEndDate(event)}  */}
                                 <input
                                   type="time"
