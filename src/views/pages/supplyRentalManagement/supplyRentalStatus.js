@@ -770,8 +770,8 @@ const SupplyRentalStatus = () => {
                 onChange={handleSupplyType} />
             </div>
             <div className='d-flex p-2 gap-3'>
-              <DatePicker value={filterData.startDate} format='DD/MM/YYYY' onChange={handleStartDate} />
-              <DatePicker value={filterData.endDate} format='DD/MM/YYYY' onChange={handleEndDate} />
+              <DatePicker value={filterData.startDate}  onChange={handleStartDate} />
+              <DatePicker value={filterData.endDate}  onChange={handleEndDate} />
             </div>
           </div>
           <div>
