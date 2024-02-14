@@ -175,10 +175,10 @@ const SupplyRentalStatus = () => {
       // Cell: ({ row }) => <button>Confirm</button>
       // onClick={() => { { confirmSupply('Rental', row.original.id) } }}
       Cell: ({ row }) =>
-        
-          <a className='primTxt' onClick={() => handleConfirmRentalSupply(row.original.id)} style={{ cursor: 'pointer' }}>Confirm</a>
 
-        
+        <a className='primTxt' onClick={() => handleConfirmRentalSupply(row.original.id)} style={{ cursor: 'pointer' }}>Confirm</a>
+
+
 
 
     }
@@ -770,8 +770,8 @@ const SupplyRentalStatus = () => {
                 onChange={handleSupplyType} />
             </div>
             <div className='d-flex p-2 gap-3'>
-              <DatePicker value={filterData.startDate}  onChange={handleStartDate} />
-              <DatePicker value={filterData.endDate}  onChange={handleEndDate} />
+              <DatePicker value={filterData.startDate} onChange={handleStartDate} />
+              <DatePicker value={filterData.endDate} onChange={handleEndDate} />
             </div>
           </div>
           <div>
@@ -813,7 +813,7 @@ const SupplyRentalStatus = () => {
                     onChange={(event) => {
                       setItemsPerPage(parseInt(event?.target?.value));
                       setCurrentPage(0);
-                    } } />
+                    }} />
                   <label>{multiLang?.lists}</label>
                 </div>
               </div>}
@@ -828,7 +828,7 @@ const SupplyRentalStatus = () => {
               setUserInfoData({});
               setRentalDetailsData({});
               setGetsupplyIdAndid({ supplyRentalId: null, id: null });
-            } }
+            }}
             backdrop="static"
             aria-labelledby="LiveDemoExampleLabel">
             <CModalHeader onClose={() => {
@@ -836,8 +836,8 @@ const SupplyRentalStatus = () => {
               setUserInfoData({});
               setRentalDetailsData({});
               setGetsupplyIdAndid({ supplyRentalId: null, id: null });
-              
-            } }>
+
+            }}>
               {popUp === 'userDetails' && <CModalTitle className='p-1'>{multiLang?.userInformation}</CModalTitle>}
               {popUp === 'RentalD' && <CModalTitle className='p-1'>{multiLang?.rentalDetails}</CModalTitle>}
               {popUp === 'RenatlH' && <CModalTitle className='p-1'>{multiLang?.rentalHistory}</CModalTitle>}
@@ -905,7 +905,7 @@ const SupplyRentalStatus = () => {
               <p>{multiLang?.rentalConfirmPopUp}</p>
             </CModalBody>
             <CModalFooter>
-              <CButton onClick={() => { setUserInfoPopup(true); setPopUp('RentalD'); handleShowRentalDetails(confirmId); } } color="primary">{multiLang?.goToRentalDetails}</CButton>
+              <CButton onClick={() => { setUserInfoPopup(true); setPopUp('RentalD'); handleShowRentalDetails(confirmId); }} color="primary">{multiLang?.goToRentalDetails}</CButton>
             </CModalFooter>
           </CModal>
         </div>

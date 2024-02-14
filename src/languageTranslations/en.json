@@ -709,7 +709,7 @@
     "registrationDate": "Registration Date",
     "id": "ID",
     "search": "Search",
-    "no": "No.",
+    "no": "No",
     "action": "Action",
     "total": "Total",
     "previous": "Previous",
@@ -720,6 +720,17 @@
     "modifiedDate": "Modified Date",
     "modifiedBy": "Modified by",
     "modify": "Modify",
-    "delete": "Delete"
+    "delete": "Delete",
+    "idInfo": " - Only 4 to 12 lowercase letters and numbers are allowed. - ID cannot contain 'admin' or 'sub','super','master'.",
+    "password": "Password",
+    "select": "Select",
+    "cancel": "Cancel",
+    "save": "Save",
+    "saveMsg": "Are you sure to save?",
+    "yes": "Yes",
+    "cancelMsg": "Are you sure to cancel?",
+    "AdminModificationTitle": "Administrator Account Modification",
+    "AdminRegistrationTitle": "Administrator Account Registration",
+    "deletMsg": "Are you sure to delete?"
   }
 }
