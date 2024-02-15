@@ -1,9 +1,11 @@
-import { CAccordion, CAccordionBody, CAccordionHeader, CAccordionItem, CButton, CCol, CFormCheck, CFormInput, CFormSwitch } from '@coreui/react'
+import { CAccordion, CAccordionBody, CAccordionHeader, CAccordionItem, CButton, CCol, CFormCheck, CFormInput, CFormSwitch, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle } from '@coreui/react'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import Loader from 'src/components/common/Loader'
 import { getApi, putApi } from 'src/utils/Api'
 import { API_ENDPOINT } from 'src/utils/config'
+import { enqueueSnackbar } from 'notistack'
+
 
 const MenuAccessPermission = () => {
 
@@ -111,6 +113,8 @@ const MenuAccessPermission = () => {
   const [superAdmin, setSuperAdmin] = useState(false)
   const [subAdmin, setSubAdmin] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [saveModal, setSaveModal] = useState(false)
+
 
 
   useEffect(() => {
@@ -121,10 +125,8 @@ const MenuAccessPermission = () => {
     const term = event.target.value.toLowerCase()
     setSearchTerm(term)
     console.log('teue =>', term)
-    const filtered = searchData?.filter((item) =>
-      Object.values(item.departMentName).some(
-        (value) => value.toLowerCase().includes(term),
-      ),
+    const filtered = searchData?.filter((item) => (
+      item.departMentName.toLowerCase().includes(term.toLowerCase()))
     )
     console.log('filtered =>', filtered);
     setFilteredData(filtered)
@@ -167,40 +169,78 @@ const MenuAccessPermission = () => {
       if (menuId !== undefined) {
         current.administratorManagement.administratorMenuId = menuId
       }
+      if (val === false) {
+        current.administratorManagement.administratorList = false
+        current.administratorManagement.menuAccessPermission = false
+      }
       current.administratorManagement.isAdminToggleOn = val
     } else if (mode === 'userManagement') {
       if (menuId !== undefined) {
         current.userManagement.userMenuId = menuId
+      }
+      if (val === false) {
+        current.userManagement.user = false
+        current.userManagement.userInformation = false
       }
       current.userManagement.isUserToggleOn = val
     } else if (mode === 'OperationManagement') {
       if (menuId !== undefined) {
         current.oprationManagement.oprationMenuId = menuId
       }
+      if (val === false) {
+        current.oprationManagement.greetingMessage = false
+        current.oprationManagement.banner = false
+        current.oprationManagement.homeContent = false
+        current.oprationManagement.pushNotification = false
+      }
       current.oprationManagement.isOperationToggleOn = val
     } else if (mode === 'MeetingRoomReservationManagement') {
       if (menuId !== undefined) {
         current.reservationManagement.reservationMenuId = menuId
+      }
+      if (val === false) {
+        current.reservationManagement.meetingRoom = false
+        current.reservationManagement.suppliesRental = false
+        current.reservationManagement.bookRental = false
       }
       current.reservationManagement.isReservationToggleOn = val
     } else if (mode === 'CommunityManagement') {
       if (menuId !== undefined) {
         current.communityManagement.communityMenuId = menuId
       }
+      if (val === false) {
+        current.communityManagement.boardManagement = false
+        current.communityManagement.bulletinBoard = false
+        current.communityManagement.clubManagement = false
+        current.communityManagement.welfareManagement = false
+      }
       current.communityManagement.isCommunityToggleOn = val
     } else if (mode === 'LiveManagement') {
       if (menuId !== undefined) {
         current.liveManagement.liveMenuId = menuId
+      }
+      if (val === false) {
+        current.liveManagement.allMenu = false
       }
       current.liveManagement.isLiveToggleOn = val
     } else if (mode === 'RewardManagement') {
       if (menuId !== undefined) {
         current.rewardManagement.rewardMenuId = menuId
       }
+      if (val === false) {
+        current.rewardManagement.roulette = false
+        current.rewardManagement.luckyDraw = false
+        current.rewardManagement.ranking = false
+        current.rewardManagement.point = false
+      }
       current.rewardManagement.isRewardToggleOn = val
     } else if (mode === 'support') {
       if (menuId !== undefined) {
         current.supportManagement.supportMenuId = menuId
+      }
+      if (val === false) {
+        current.supportManagement.faq = false
+        current.supportManagement.support = false
       }
       current.supportManagement.isSupportToggleOn = val
     }
@@ -543,9 +583,12 @@ const MenuAccessPermission = () => {
       setSuperAdmin(false)
       setIntialMainAccess(mainAccess)
       handleAdminSearchData()
+      enqueueSnackbar(multiLang?.successMsg, { variant: 'success' })
       setIsLoading(false)
+      setSaveModal(false)
     } else {
       setIsLoading(false)
+      setSaveModal(false)
     }
 
 
@@ -557,11 +600,11 @@ const MenuAccessPermission = () => {
       {isLoading && <Loader />}
 
       <div>
-      <div className="pageTitle mb-3 pb-2 d-flex justify-content-between align-items-center">
-            <h2>{multiLang?.MenuAccessPermission}</h2>
-          
-          </div>
-        
+        <div className="pageTitle mb-3 pb-2 d-flex justify-content-between align-items-center">
+          <h2>{multiLang?.MenuAccessPermission}</h2>
+
+        </div>
+
         <div className='d-flex w-100'>
           <div className="col-md-4">
             <div className="d-flex justify-content-center gap-2 mt-5 pt-1">
@@ -589,7 +632,7 @@ const MenuAccessPermission = () => {
                               <CAccordionHeader>{multiLang?.superAdmin}</CAccordionHeader>
                               <CAccordionBody>
                                 {item.superAdmin.map((data) => (
-                                  <a  key={data.id} onClick={() => handleAccess(data.roleId, data.groupId)}>{data.username}</a>
+                                  <a key={data.id} onClick={() => handleAccess(data.roleId, data.groupId)}>{data.username}</a>
                                 ))}
                               </CAccordionBody>
                             </CAccordionItem>
@@ -602,7 +645,7 @@ const MenuAccessPermission = () => {
                               <CAccordionHeader>{multiLang?.subAdmin}</CAccordionHeader>
                               <CAccordionBody>
                                 {item.subAdmin.map((data) => (
-                                  <a  key={data.id} onClick={() => handleAccess(data.roleId, data.groupId)} >{data.username}</a>
+                                  <a key={data.id} onClick={() => handleAccess(data.roleId, data.groupId)} >{data.username}</a>
                                 ))}
                               </CAccordionBody>
                             </CAccordionItem>
@@ -625,12 +668,12 @@ const MenuAccessPermission = () => {
           <div className="col-md-8">
             {/* <h4>Super Admin Configuration</h4> */}
 
-          
+
             <div className="p-3">
               {superAdmin === true &&
-              <><div className='d-flex align-items-center gap-3 mb-2'>
+                <><div className='d-flex align-items-center gap-3 mb-2'>
                   <h4>Super Admin Configuration</h4>
-                  <span style={{color:"#999"}}>* Configuration exclusive to the Super Admin.</span>
+                  <span style={{ color: "#999" }}>* Configuration exclusive to the Super Admin.</span>
                 </div><div className="card-body">
                     <div className="formWraper">
                       <div className="form-outline form-white d-flex">
@@ -916,10 +959,32 @@ const MenuAccessPermission = () => {
                   </div>
 
                   <div className='d-flex align-items-center gap-3 my-3'>
-                    <CButton onClick={() => saveAdminAccess()}>{multiLang?.save}</CButton>
+                    <CButton onClick={() => setSaveModal(true)} >{multiLang?.save}</CButton>
                   </div>
                 </div>
               }
+
+              <div>
+                <CModal
+                  backdrop="static"
+                  visible={saveModal}
+                  onClose={() => setSaveModal(false)}
+                  aria-labelledby="StaticBackdropExampleLabel"
+                >
+                  <CModalHeader>
+                    <CModalTitle id="StaticBackdropExampleLabel">{multiLang?.save}</CModalTitle>
+                  </CModalHeader>
+                  <CModalBody>
+                    {multiLang?.saveMsg}
+                  </CModalBody>
+                  <CModalFooter>
+                    <CButton color="secondary" onClick={() => setSaveModal(false)}>
+                      {multiLang?.no}
+                    </CButton>
+                    <CButton onClick={() => saveAdminAccess()} color="primary">{multiLang?.yes}</CButton>
+                  </CModalFooter>
+                </CModal>
+              </div>
             </div>
           </div>
         </div>

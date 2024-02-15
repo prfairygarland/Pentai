@@ -283,6 +283,10 @@ export let API_ENDPOINT = {
   menuAcessPermision: ALL_CONSTANTS.API_URL + "/api/adminPanel/menuAcessPermision",
   menuAcessPermisionConfiguration: ALL_CONSTANTS.API_URL + "/api/adminPanel/getConfiguration",
   updateAcessPermisionConfiguration: ALL_CONSTANTS.API_URL + "/api/adminPanel/updateConfiguration",
+  getAllAdminGroup: ALL_CONSTANTS.API_URL + "/api/adminPanel/getAdminGroup",
+  getFeatureManagement: ALL_CONSTANTS.API_URL + "/api/adminPanel/getFeatureManagement",
+  updateFeatureManagement: ALL_CONSTANTS.API_URL + "/api/adminPanel/updateFeatureManagement",
+
 
 
   //Reward Management

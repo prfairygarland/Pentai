@@ -858,6 +858,11 @@
     "pTKLounge": "PTK Lounge",
     "community": "Community",
     "superAdmin": "Super Admin",
-    "subAdmin": "Sub Admin"
+    "subAdmin": "Sub Admin",
+    "saveMsg": "Are you sure to save?",
+    "cancel": "Cancel",
+    "successMsg": "It has been saved.",
+    "yes": "Yes",
+    "no": "No"
   }
 }
