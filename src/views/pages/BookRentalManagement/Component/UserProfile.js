@@ -16,10 +16,7 @@ const UserProfile = ({ userInfoData }) => {
     return (
         <div className=''>
             <section className="d-flex flex-row align-items-center">
-               
                     <div className=" w-100">
-                      
-                       
                             <div className="card p-2">
                                 <div className='card-body p-0'>
                                     <div className='formWraper'>

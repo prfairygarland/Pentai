@@ -8,7 +8,7 @@ export let ALL_CONSTANTS = {
   // BASE_URL: "",       // API URL Live
   // API_URL: "",    // API URL Live
 
-  IS_PRODUCTION: false,
+  // IS_PRODUCTION: false,
   // BASE_URL: "http://192.168.9.175:3000",       // Local
   // API_URL: "http://192.168.9.175:3000",    // Local
 }
@@ -279,7 +279,15 @@ export let API_ENDPOINT = {
   createAdmin: ALL_CONSTANTS.API_URL + "/api/adminPanel/createAdmin",
   getAdminData: ALL_CONSTANTS.API_URL + "/api/adminPanel/getAdmin",
   updateAdmin: ALL_CONSTANTS.API_URL + "/api/adminPanel/updateAdmin",
-  deleteAdminuser: ALL_CONSTANTS.API_URL + "/api/adminPanel/deleteAdmin"
+  deleteAdminuser: ALL_CONSTANTS.API_URL + "/api/adminPanel/deleteAdmin",
+
+
+  //Reward Management
+  get_RouletteEvents : ALL_CONSTANTS.API_URL + "/api/admin/lounge/rouletteEvent/get",
+
+
+
+
 
 
 
