@@ -32,6 +32,8 @@ import HomeContentManagement from './views/pages/operationManagement/HomeContent
 import PushNotificationManagement from './views/pages/operationManagement/PushNotificationManagement'
 import CreatePushNotificationRegistration from './views/pages/operationManagement/Component/CreatePushNotificationRegistration'
 import AdministratorList from './views/pages/AdministratorManagement/AdministratorList'
+import MenuAccessPermission from './views/pages/AdministratorManagement/MenuAccessPermission'
+import FeatureManagement from './views/pages/AdministratorManagement/FeatureManagement'
 
 const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
 
@@ -101,6 +103,9 @@ const routes = [
 
   // Administrator Management
   { path: '/AdministratorList', name: 'Administrator Management', element: AdministratorList },
+  { path: '/MenuAcessPermission', name: 'Menu Access Permission', element: MenuAccessPermission },
+  { path: '/FeatureManagement', name: 'Feature Management', element: FeatureManagement }
+
 
 ]
 
