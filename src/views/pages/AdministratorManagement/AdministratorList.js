@@ -122,11 +122,10 @@ const AdministratorList = () => {
     {
       Header: multiLang?.action,
       // accessor: 'id',
-      Cell: ({ row }) => <div className='d-flex gap-2'>
+      Cell: ({ row }) => <div className='d-flex gap-2 justify-content-center'>
         <a className='greenTxt' onClick={() => getAdminData(row.original.id)} >{multiLang?.modify}</a>
         <a className='primTxt' onClick={() => (setDeleteAdmin(row.original.authUserRoleMappingsId), setDeleteModal(true))} >{multiLang?.delete}</a>
       </div>
-
     }
 
   ], [currentPage, itemsPerPage])
@@ -535,7 +534,7 @@ const AdministratorList = () => {
             <h2>{multiLang?.administratorList}</h2>
             <NavLink><CButton onClick={() => setVisible(!visible)} className='btn-success'>{multiLang?.create}</CButton></NavLink>
           </div>
-       
+
         <div className="d-flex p-4  flex-column bg-light  mt-3">
           <div className="d-flex justify-content-between align-items-center w-100">
             <div className='d-flex'>

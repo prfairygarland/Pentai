@@ -863,6 +863,11 @@
     "cancel": "Cancel",
     "successMsg": "It has been saved.",
     "yes": "Yes",
-    "no": "No"
+    "no": "No",
+    "AdminGroupManagement": "Admin Group Management",
+    "add": "Add",
+    "name": "Name",
+    "action": "Action",
+    "delete": "Delete"
   }
 }
