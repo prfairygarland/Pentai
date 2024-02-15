@@ -24,6 +24,8 @@ import MeetingRoomsReservationStatus from './views/pages/MeetingRoomsResMgmt/Mee
 import AllMeetingRooms from './views/pages/MeetingRoomsResMgmt/AllMeetingRooms'
 import RouletteeventManagementListing from './views/pages/RewardManagement/RouletteeventManagementListing'
 import RouletteEventDetails from './views/pages/RewardManagement/RouletteEventDetails'
+import LuckyDrawEventManagement from './views/pages/RewardManagement/LuckyDrawEventManagement'
+import LuckyDrawEventRegistration from './views/pages/RewardManagement/LuckyDrawEventRegistration'
 import RouletteEventManagementRegistration from './views/pages/RewardManagement/RouletteEventManagementRegistration'
 import DataImport from './views/pages/BookRentalManagement/DataImport'
 import GreetingMessageManagement from './views/pages/operationManagement/GreetingMessageManagement'
@@ -92,6 +94,11 @@ const routes = [
   { path: '/RouletteEventManagement', name: 'Roulette event Management', element: RouletteeventManagementListing },
   { path: '/RouletteEventManagementRegistration', name: 'Roulette Event Management - Registration', element: RouletteEventManagementRegistration },
   { path: '/RouletteEventDetails', name: 'Roulette Event Details', element: RouletteEventDetails },
+  { path: '/LuckyDrawEventManagement', name: 'Lucky Draw Event Management', element: LuckyDrawEventManagement },
+  { path: '/LuckyDrawEventRegistration', name: 'Lucky Draw Event Registration', element: LuckyDrawEventRegistration },
+
+  
+  
 
 
   // Operation Management
