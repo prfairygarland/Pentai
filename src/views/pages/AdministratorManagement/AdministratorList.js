@@ -123,8 +123,8 @@ const AdministratorList = () => {
       Header: multiLang?.action,
       // accessor: 'id',
       Cell: ({ row }) => <div className='d-flex gap-2'>
-        <CButton onClick={() => getAdminData(row.original.id)} >{multiLang?.modify}</CButton>
-        <CButton onClick={() => (setDeleteAdmin(row.original.authUserRoleMappingsId), setDeleteModal(true))} >{multiLang?.delete}</CButton>
+        <a className='greenTxt' onClick={() => getAdminData(row.original.id)} >{multiLang?.modify}</a>
+        <a className='primTxt' onClick={() => (setDeleteAdmin(row.original.authUserRoleMappingsId), setDeleteModal(true))} >{multiLang?.delete}</a>
       </div>
 
     }
@@ -531,15 +531,11 @@ const AdministratorList = () => {
     <div className='mb-5'>
       {isLoading && <Loader />}
       <main>
-        <div className='d-flex justify-content-between mb-2'>
-        <div className="pageTitle mb-3 pb-2">
+      <div className="pageTitle mb-3 pb-2 d-flex justify-content-between align-items-center">
             <h2>{multiLang?.administratorList}</h2>
-          </div>
-    
-          <div>
             <NavLink><CButton onClick={() => setVisible(!visible)} className='btn-success'>{multiLang?.create}</CButton></NavLink>
           </div>
-        </div>
+       
         <div className="d-flex p-4  flex-column bg-light  mt-3">
           <div className="d-flex justify-content-between align-items-center w-100">
             <div className='d-flex'>
@@ -591,7 +587,7 @@ const AdministratorList = () => {
           </div>
 
         </div>
-        <div className='mt-4'>
+        <div className='mt-4 mb-2'>
           <label className="me-3 fw-medium">{multiLang?.total} {totalData}</label>
         </div>
         <ReactTable showCheckbox={false} columns={columns} data={administratorListData} totalCount={10} onSelectionChange={handleSelectionChange} />
@@ -648,7 +644,7 @@ const AdministratorList = () => {
               <CModalTitle>{multiLang?.history}</CModalTitle>
             </CModalHeader>
             <CModalBody>
-              <div className='d-flex w-100 gap-3 mb-3 justify-content-end align-items-center'>
+              <div className='d-flex w-100 gap-3 mb-3 justify-content-between align-items-center'>
                 <p>{multiLang?.total}: {totalHistory} </p>
                 <div className='d-flex gap-3'>
                   <DatePicker value={startDate} onChange={handleStartDateChange} />

@@ -504,3 +504,56 @@ padding-right: 80px;
       object-fit: cover;
     }
   }
+  .menuaccesspermissionSidebar{
+    max-height: 600px;
+    overflow-y: auto;
+  .accordion{
+    .accordion-item{
+    border-radius: 0 !important;
+    .accordion-header{
+      .accordion-button{
+    border-radius: 0 !important;
+        &[aria-expanded="false"]{
+          background: ($gray2);
+          color: ($primary);
+          border-bottom: 1px solid #ccc;
+        }
+        &::after{
+          content: '\e913';
+          font-family: 'icomoon';
+          background-image: none;
+        }
+        &:focus{
+          box-shadow: none !important;
+          
+        }
+      }
+    }
+    .accordion-body{
+      a{
+        margin-bottom: 10px;
+        &:last-child{
+          margin-bottom: 0;
+        }
+      }
+    }
+    }
+  }
+  &::-webkit-scrollbar-track
+  {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    border-radius: 10px;
+    background-color: transparent;
+  }
+  &::-webkit-scrollbar
+  {
+    width: 4px;
+    background-color: transparent;
+  }
+  &::-webkit-scrollbar-thumb
+{
+	border-radius: 10px;
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+	background-color: ($primary);
+}
+}

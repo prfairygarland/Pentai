@@ -557,12 +557,14 @@ const MenuAccessPermission = () => {
       {isLoading && <Loader />}
 
       <div>
-        <div className='heading d-flex mb-4'>
-          <h4>{multiLang?.MenuAccessPermission}</h4>
-        </div>
+      <div className="pageTitle mb-3 pb-2 d-flex justify-content-between align-items-center">
+            <h2>{multiLang?.MenuAccessPermission}</h2>
+          
+          </div>
+        
         <div className='d-flex w-100'>
           <div className="col-md-4">
-            <div className="d-flex justify-content-center gap-2 mt-3">
+            <div className="d-flex justify-content-center gap-2 mt-5 pt-1">
               <CCol className="w-100" >
                 <CFormInput
                   type="text"
@@ -575,7 +577,7 @@ const MenuAccessPermission = () => {
               </CCol>
             </div>
             {searchData.length > 0 && (
-              <ul className="p-2 sidebarMenuLink">
+              <div className="mt-2 menuaccesspermissionSidebar">
                 <CAccordion activeItemKey={1}>
                   {filteredData.map((item) => (
                     <CAccordionItem key={item.id}>
@@ -587,7 +589,7 @@ const MenuAccessPermission = () => {
                               <CAccordionHeader>{multiLang?.superAdmin}</CAccordionHeader>
                               <CAccordionBody>
                                 {item.superAdmin.map((data) => (
-                                  <p key={data.id} onClick={() => handleAccess(data.roleId, data.groupId)}>{data.username}</p>
+                                  <a  key={data.id} onClick={() => handleAccess(data.roleId, data.groupId)}>{data.username}</a>
                                 ))}
                               </CAccordionBody>
                             </CAccordionItem>
@@ -600,7 +602,7 @@ const MenuAccessPermission = () => {
                               <CAccordionHeader>{multiLang?.subAdmin}</CAccordionHeader>
                               <CAccordionBody>
                                 {item.subAdmin.map((data) => (
-                                  <p key={data.id} onClick={() => handleAccess(data.roleId, data.groupId)} >{data.username}</p>
+                                  <a  key={data.id} onClick={() => handleAccess(data.roleId, data.groupId)} >{data.username}</a>
                                 ))}
                               </CAccordionBody>
                             </CAccordionItem>
@@ -615,50 +617,53 @@ const MenuAccessPermission = () => {
                   ))}
                 </CAccordion>
 
-              </ul>
+              </div>
             )}
           </div>
 
 
           <div className="col-md-8">
             {/* <h4>Super Admin Configuration</h4> */}
+
+          
             <div className="p-3">
               {superAdmin === true &&
-                <div className="card-body">
-                  <div className="formWraper">
-                    <div className="form-outline form-white d-flex">
-                      <div className="formWrpLabel" style={{ minWidth: '170px' }}>
-                        <label className="fw-bolder ">{multiLang?.administratorManagement}</label>
-                        <CFormSwitch
-                          className="mx-1 me-2 mt-1"
-                          color="success"
-                          shape="pill"
-                          variant="opposite"
-                          checked={initialMainAccess.administratorManagement.isAdminToggleOn}
-                          onChange={() => handleToggleChange('AdministratorManagement', !initialMainAccess.administratorManagement.isAdminToggleOn)}
-                        />
-                      </div>
-                      <div className={initialMainAccess.administratorManagement.isAdminToggleOn ? "formWrpInpt" : "disabled formWrpInpt"}>
-                        <div className="d-flex formradiogroup gap-3 flex-wrap">
-                          <CFormCheck
-                            value={initialMainAccess.administratorManagement.administratorList}
-                            defaultChecked={initialMainAccess.administratorManagement.administratorList}
-                            onClick={(e) => handleCheckboxChange('AdministratorList', e.target.checked)}
-                            id="administratorList"
-                            label={multiLang?.administratorList}
-                          />
+              <><div className='d-flex align-items-center gap-3 mb-2'>
+                  <h4>Super Admin Configuration</h4>
+                  <span style={{color:"#999"}}>* Configuration exclusive to the Super Admin.</span>
+                </div><div className="card-body">
+                    <div className="formWraper">
+                      <div className="form-outline form-white d-flex">
+                        <div className="formWrpLabel gap-2" >
+                          <label className="fw-bolder ">{multiLang?.administratorManagement}</label>
+                          <CFormSwitch
+                            className="mx-1 me-2 mt-1"
+                            color="success"
+                            shape="pill"
+                            variant="opposite"
+                            checked={initialMainAccess.administratorManagement.isAdminToggleOn}
+                            onChange={() => handleToggleChange('AdministratorManagement', !initialMainAccess.administratorManagement.isAdminToggleOn)} />
+                        </div>
+                        <div className={initialMainAccess.administratorManagement.isAdminToggleOn ? "formWrpInpt" : "disabled formWrpInpt"}>
+                          <div className="d-flex formradiogroup flex-wrap">
+                            <CFormCheck className='w-50 pe-1 mt-2'
+                              value={initialMainAccess.administratorManagement.administratorList}
+                              defaultChecked={initialMainAccess.administratorManagement.administratorList}
+                              onClick={(e) => handleCheckboxChange('AdministratorList', e.target.checked)}
+                              id="administratorList"
+                              label={multiLang?.administratorList} />
 
-                          <CFormCheck
-                            value={initialMainAccess.administratorManagement.menuAccessPermission}
-                            defaultChecked={initialMainAccess.administratorManagement.menuAccessPermission}
-                            onClick={(e) => handleCheckboxChange('MenuAcessPermission', e.target.checked)}
-                            id="menuAccessPermission"
-                            label={multiLang?.MenuAccessPermission} />
+                            <CFormCheck className='w-50 pe-1 mt-2'
+                              value={initialMainAccess.administratorManagement.menuAccessPermission}
+                              defaultChecked={initialMainAccess.administratorManagement.menuAccessPermission}
+                              onClick={(e) => handleCheckboxChange('MenuAcessPermission', e.target.checked)}
+                              id="menuAccessPermission"
+                              label={multiLang?.MenuAccessPermission} />
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                </div>
+                  </div></>
               }
 
               {subAdmin === true &&
@@ -670,7 +675,7 @@ const MenuAccessPermission = () => {
                   <div className="card-body">
                     <div className="formWraper">
                       <div className="form-outline form-white d-flex">
-                        <div className="formWrpLabel" style={{ minWidth: '170px' }}>
+                        <div className="formWrpLabel gap-2" >
                           <label className="fw-bolder ">{multiLang?.userManagement}</label>
                           <CFormSwitch
                             className="mx-1 me-2 mt-1"
@@ -682,13 +687,13 @@ const MenuAccessPermission = () => {
                           />
                         </div>
                         <div className={initialMainAccess.userManagement.isUserToggleOn ? "formWrpInpt" : "disabled formWrpInpt"}>
-                          <div className="d-flex formradiogroup  gap-3">
-                            <CFormCheck
+                          <div className="d-flex formradiogroup  flex-wrap">
+                            <CFormCheck className='w-50 pe-1 mt-2'
                               value={initialMainAccess.userManagement.user}
                               defaultChecked={initialMainAccess.userManagement.user}
                               onClick={(e) => handleCheckboxChange('User', e.target.checked)}
                               id="user" label={multiLang?.user} />
-                            <CFormCheck
+                            <CFormCheck className='w-50 pe-1 mt-2'
                               value={initialMainAccess.userManagement.userInformation}
                               defaultChecked={initialMainAccess.userManagement.userInformation}
                               onClick={(e) => handleCheckboxChange('UserInformationSettings', e.target.checked)}
@@ -698,7 +703,7 @@ const MenuAccessPermission = () => {
                       </div>
 
                       <div className="form-outline form-white d-flex">
-                        <div className="formWrpLabel" style={{ minWidth: '170px' }}>
+                        <div className="formWrpLabel gap-2" >
                           <label className="fw-bolder ">{multiLang?.operationManagement}</label>
                           <CFormSwitch
                             className="mx-1 me-2 mt-1"
@@ -739,7 +744,7 @@ const MenuAccessPermission = () => {
                       </div>
 
                       <div className="form-outline form-white d-flex">
-                        <div className="formWrpLabel" style={{ minWidth: '170px' }}>
+                        <div className="formWrpLabel gap-2" >
                           <label className="fw-bolder ">{multiLang?.reservationManagement}</label>
                           <CFormSwitch
                             className="mx-1 me-2 mt-1"
@@ -752,19 +757,19 @@ const MenuAccessPermission = () => {
                         </div>
                         <div className={initialMainAccess.reservationManagement.isReservationToggleOn ? "formWrpInpt" : "disabled formWrpInpt"} >
                           <div className="d-flex formradiogroup flex-wrap">
-                            <CFormCheck className='w-25 pe-1 mt-2' id="meetingRoom"
+                            <CFormCheck className='w-50 pe-1 mt-2' id="meetingRoom"
                               value={initialMainAccess.reservationManagement.meetingRoom}
                               defaultChecked={initialMainAccess.reservationManagement.meetingRoom}
                               onClick={(e) => handleCheckboxChange('meetingRoom', e.target.checked)}
                               label={multiLang?.meetingRoom} />
 
-                            <CFormCheck className='w-25 pe-1 mt-2' id="suppliesRental"
+                            <CFormCheck className='w-50 pe-1 mt-2' id="suppliesRental"
                               value={initialMainAccess.reservationManagement.suppliesRental}
                               defaultChecked={initialMainAccess.reservationManagement.suppliesRental}
                               onClick={(e) => handleCheckboxChange('suppliesRental', e.target.checked)}
                               label={multiLang?.suppliesRental} />
 
-                            <CFormCheck className='w-25 pe-1 mt-2' id="bookRental"
+                            <CFormCheck className='w-50 pe-1 mt-2' id="bookRental"
                               value={initialMainAccess.reservationManagement.bookRental}
                               defaultChecked={initialMainAccess.reservationManagement.bookRental}
                               onClick={(e) => handleCheckboxChange('bookRental', e.target.checked)}
@@ -774,7 +779,7 @@ const MenuAccessPermission = () => {
                       </div>
 
                       <div className="form-outline form-white d-flex">
-                        <div className="formWrpLabel" style={{ minWidth: '170px' }}>
+                        <div className="formWrpLabel gap-2" >
                           <label className="fw-bolder ">{multiLang?.communityManagement}</label>
                           <CFormSwitch
                             className="mx-1 me-2 mt-1"
@@ -815,7 +820,7 @@ const MenuAccessPermission = () => {
                       </div>
 
                       <div className="form-outline form-white d-flex">
-                        <div className="formWrpLabel" style={{ minWidth: '170px' }}>
+                        <div className="formWrpLabel gap-2" >
                           <label className="fw-bolder ">{multiLang?.liveManagement}</label>
                           <CFormSwitch
                             className="mx-1 me-2 mt-1"
@@ -838,7 +843,7 @@ const MenuAccessPermission = () => {
                       </div>
 
                       <div className="form-outline form-white d-flex">
-                        <div className="formWrpLabel" style={{ minWidth: '170px' }}>
+                        <div className="formWrpLabel gap-2" >
                           <label className="fw-bolder ">{multiLang?.rewardManagement}</label>
                           <CFormSwitch
                             className="mx-1 me-2 mt-1"
@@ -879,7 +884,7 @@ const MenuAccessPermission = () => {
                       </div>
 
                       <div className="form-outline form-white d-flex">
-                        <div className="formWrpLabel" style={{ minWidth: '170px' }}>
+                        <div className="formWrpLabel gap-2" >
                           <label className="fw-bolder ">{multiLang?.supportManagement}</label>
                           <CFormSwitch
                             className="mx-1 me-2 mt-1"
@@ -891,14 +896,14 @@ const MenuAccessPermission = () => {
                           />
                         </div>
                         <div className={initialMainAccess.supportManagement.isSupportToggleOn ? "formWrpInpt" : "disabled formWrpInpt"} >
-                          <div className="d-flex formradiogroup  gap-3">
-                            <CFormCheck id="faq"
+                          <div className="d-flex formradiogroup flex-wrap">
+                            <CFormCheck id="faq" className='w-50 pe-1 mt-2'
                               value={initialMainAccess.supportManagement.faq}
                               defaultChecked={initialMainAccess.supportManagement.faq}
                               onClick={(e) => handleCheckboxChange('faq', e.target.checked)}
                               label={multiLang?.faq} />
 
-                            <CFormCheck id="support"
+                            <CFormCheck id="support" className='w-50 pe-1 mt-2'
                               value={initialMainAccess.supportManagement.support}
                               defaultChecked={initialMainAccess.supportManagement.support}
                               onClick={(e) => handleCheckboxChange('support', e.target.checked)}
