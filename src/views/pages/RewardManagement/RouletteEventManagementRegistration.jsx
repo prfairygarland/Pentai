@@ -65,6 +65,11 @@ const RouletteEventManagementRegistration = ({ eventId = '' }) => {
     navigate('../RouletteEventManagement')
   }
 
+  const updateRouletteEvent = () => {
+    enqueueSnackbar(`Data updated successfully!`, { variant: 'success' })
+    navigate('../RouletteEventManagement')
+  }
+
   const saveRouletteEvent = async () => {
     const rewardsBody = []
     rewardSettings.forEach((reward) => {
@@ -86,7 +91,6 @@ const RouletteEventManagementRegistration = ({ eventId = '' }) => {
         })
       }
     })
-    console.log()
     const body = {
       title,
       start: new Date(new Date(startDate + 'T' + startHour + ':' + startMins)).toISOString(),
@@ -115,7 +119,6 @@ const RouletteEventManagementRegistration = ({ eventId = '' }) => {
       return prod.value === Number(event.target.value)
     })[0]?.price
     currentRewardSettings[index].prodId = event.target.value
-    console.log(currentRewardSettings)
     setRewardSettings(currentRewardSettings)
   }
 
@@ -263,6 +266,91 @@ const RouletteEventManagementRegistration = ({ eventId = '' }) => {
       { prodId: 'product', productPrice: '', points: '', quantity: '', probability: '12.5' },
     ])
   }, [])
+
+  const getEventDetails = async () => {
+    try {
+      const res = await getApi(API_ENDPOINT.getRouletteDetails + '?eventId=' + eventId)
+
+      if (res.status === 201) {
+        setTitle(res?.data?.title)
+        let startDateTime = new Date(res?.data?.startTime),
+          startMonth = '' + (startDateTime.getMonth() + 1),
+          startDay = '' + startDateTime.getDate(),
+          startYear = startDateTime.getFullYear()
+        if (startMonth.length < 2) startMonth = '0' + startMonth
+        if (startDay.length < 2) startDay = '0' + startDay
+        setStartDate([startYear, startMonth, startDay].join('-'))
+        if (startDateTime.getHours() < 10) {
+          setStartHour('0' + startDateTime.getHours())
+        } else {
+          setStartHour(startDateTime.getHours())
+        }
+        if (startDateTime.getMinutes() < 10) {
+          setStartMins('0' + startDateTime.getMinutes())
+        } else {
+          setStartMins(startDateTime.getMinutes())
+        }
+        if (res?.data?.endTime) {
+          let endDateTime = new Date(res?.data?.endTime),
+            endMonth = '' + (endDateTime.getMonth() + 1),
+            endDay = '' + endDateTime.getDate(),
+            endYear = endDateTime.getFullYear()
+          if (endMonth.length < 2) endMonth = '0' + endMonth
+          if (endDay.length < 2) endDay = '0' + endDay
+          setEndDate([endYear, endMonth, endDay].join('-'))
+          if (endDateTime.getHours() < 10) {
+            setEndHour('0' + endDateTime.getHours())
+          } else {
+            setEndHour(endDateTime.getHours())
+          }
+          if (endDateTime.getMinutes() < 10) {
+            setEndMins('0' + endDateTime.getMinutes())
+          } else {
+            setEndMins(endDateTime.getMinutes())
+          }
+        }
+        setParticipationPoints(res?.data?.participationPoints)
+        setParticipationLimit(res?.data?.participationLimitPerDay)
+        setDescription(res?.data?.description)
+        const rewardsBody = []
+        res?.data?.rewards?.forEach((reward, index) => {
+          if (reward.rewardType === 'points') {
+            rewardsBody.push({
+              type: 'points',
+              prodId: 'points',
+              productPrice: reward.price,
+              points: reward.points,
+              quantity: index === 7 ? '' : reward.quantity,
+              probability: reward.probability,
+              limitPerDay: reward.limitPerDay,
+            })
+          } else if (reward.rewardType === 'noLuck') {
+            rewardsBody.push({ type: 'noLuck', prodId: 'noLuck' })
+          } else {
+            rewardsBody.push({
+              type: 'product',
+              prodId: reward.id,
+              productPrice: reward.price,
+              points: reward.points,
+              quantity: index === 7 ? '' : reward.quantity,
+              probability: reward.probability,
+              limitPerDay: reward.limitPerDay,
+            })
+          }
+        })
+        setRewardSettings(rewardsBody)
+        console.log('data :: ', res?.data?.rewards)
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  useEffect(() => {
+    if (eventId) {
+      getEventDetails()
+    }
+  }, [eventId])
   return (
     <>
       <main>
@@ -424,7 +512,6 @@ const RouletteEventManagementRegistration = ({ eventId = '' }) => {
                             Registration +
                           </button>
                         )}
-                        {console.log('item.productPrice :: ', item.productPrice)}
                         {item.prodId !== 'product' &&
                           item.prodId !== 'points' &&
                           item.prodId !== 'noLuck' && <p>{item.productPrice} KRW</p>}
@@ -470,7 +557,7 @@ const RouletteEventManagementRegistration = ({ eventId = '' }) => {
                           id="club_banner"
                           className="cFormSwitch"
                           onClick={() => setLimitPerDayToggle(index)}
-                          defaultChecked={item.limitPerDay}
+                          checked={Number(item.limitPerDay) ? true : false}
                         />
                         {item.limitPerDay && (
                           <input
@@ -494,9 +581,16 @@ const RouletteEventManagementRegistration = ({ eventId = '' }) => {
           <CButton className="btn btn-black" color="dark" onClick={backToListing}>
             Cancel
           </CButton>
-          <CButton className="btn " onClick={saveRouletteEvent}>
-            Save
-          </CButton>
+          {!eventId && (
+            <CButton className="btn " onClick={saveRouletteEvent}>
+              Save
+            </CButton>
+          )}
+          {eventId && (
+            <CButton className="btn " onClick={updateRouletteEvent}>
+              Update
+            </CButton>
+          )}
         </div>
       </main>
     </>
