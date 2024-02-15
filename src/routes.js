@@ -23,6 +23,7 @@ import LiveRegistration from './views/pages/LiveManagement/Component/LiveRegistr
 import MeetingRoomsReservationStatus from './views/pages/MeetingRoomsResMgmt/MeetingRoomsReservationStatus'
 import AllMeetingRooms from './views/pages/MeetingRoomsResMgmt/AllMeetingRooms'
 import RouletteeventManagementListing from './views/pages/RewardManagement/RouletteeventManagementListing'
+import RouletteEventManagementRegistration from './views/pages/RewardManagement/RouletteEventManagementRegistration'
 import DataImport from './views/pages/BookRentalManagement/DataImport'
 import GreetingMessageManagement from './views/pages/operationManagement/GreetingMessageManagement'
 import BannerManagement from './views/pages/operationManagement/BannerManagement'
@@ -86,6 +87,7 @@ const routes = [
 
   //{ Reward Management}
   { path: '/RouletteEventManagement', name: 'Roulette event Management', element: RouletteeventManagementListing },
+  { path: '/RouletteEventManagementRegistration', name: 'Roulette Event Management - Registration', element: RouletteEventManagementRegistration },
 
 
   // Operation Management

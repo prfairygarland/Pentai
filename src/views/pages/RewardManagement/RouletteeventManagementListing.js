@@ -223,7 +223,7 @@ const RouletteeventManagementListing = () => {
             </CNav>
           </div>
           <div>
-            <NavLink to='./LiveRegistration'><CButton className='btn-success'>{multiLang?.registration}</CButton></NavLink>
+            <NavLink to='../RouletteEventManagementRegistration'><CButton className='btn-success'>{multiLang?.registration}</CButton></NavLink>
           </div>
         </div>
         <div className='d-flex justify-content-between mb-2 mt-3'>
