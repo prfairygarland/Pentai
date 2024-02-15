@@ -456,6 +456,7 @@ const AllReservationListing = () => {
         backdrop="static"
         onClose={() => setShowMeetingRoomDetails(false)}
         aria-labelledby="LiveDemoExampleLabel"
+        scrollable
       >
         <CModalHeader onClose={() => setShowMeetingRoomDetails(false)}>
           <CModalTitle>Meeting Room Information</CModalTitle>

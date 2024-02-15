@@ -17,7 +17,7 @@ const CreatePushNotificationRegistration = () => {
                                     </label>
                                 </div>
                                 <div className="formWrpInpt">
-                                    <div className="d-flex formradiogroup mb-2 gap-3">
+                                    <div className="d-flex formradiogroup mb-2 gap-3 w-50">
                                         <CFormSelect
                                             type="text"
                                             placeholder="Library"
@@ -81,12 +81,14 @@ const CreatePushNotificationRegistration = () => {
                                     <CFormCheck 
                                     type='radio'
                                      label="immediate"
+                                     id='immediate'
                                     />
                                     <div className='d-flex w-100 gap-2 align-items-center'>
                                         {/* <div> */}
                                             <CFormCheck 
                                              label="Send date"
                                              type='radio'
+                                             id='sendDate'
                                             />
                                             <DatePicker
                                                 // value={bannerStartDate}
@@ -139,7 +141,8 @@ const CreatePushNotificationRegistration = () => {
                                                 // checked={data.noLink}
                                                 // onChange={handleChangeNoLink}
                                                 // value={data.noLink} 
-                                                label="All users"
+                                                label="All users" 
+                                                id='allUsrs'
                                             />
                                          
                                         </div>
@@ -149,6 +152,7 @@ const CreatePushNotificationRegistration = () => {
                                                     type="radio"
                                                     name="isVisible"
                                                     label="Select target"
+                                                    id='selectTarget'
                                                 />
                                                 <CButton>Add</CButton>
                                                 

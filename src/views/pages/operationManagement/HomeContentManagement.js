@@ -117,7 +117,7 @@ const HomeContentManagement = () => {
         {
             Header: 'Content',
             accessor: '',
-            Cell: ({ row }) => <p style={row?.original?.isEnabled === 0 ? {pointerEvents:'none', opacity:'0.4'} : null} className='text-start'>{row?.original?.type}</p>
+            Cell: ({ row }) => <p style={row?.original?.isEnabled === 0 ? {pointerEvents:'none', opacity:'0.4'} : null} className='text-center'>{row?.original?.type}</p>
 
 
         },

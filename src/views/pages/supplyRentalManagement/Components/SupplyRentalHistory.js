@@ -61,7 +61,7 @@ const SupplyRentalHistory = ({ RentalHistoryData, RentalStatusData, totalCount, 
 
   return (
     <div>
-      <div className='p-md-4'>
+      <div className='px-2 pb-2'>
         <div className='d-flex align-content-center g-2'>
           <p style={{ fontSize: 'medium' }}>Model Name:</p>
           <p style={{ fontSize: 'medium', paddingLeft: 5, fontWeight: '600' }}>{RentalStatusData?.modelName}</p>

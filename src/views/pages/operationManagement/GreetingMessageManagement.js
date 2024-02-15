@@ -128,7 +128,7 @@ const GreetingMessageManagement = () => {
                     </div>
                     <div className="formWrpInpt">
                         <p className=''>※ It is randomly displayed in the greeting area. You can create up to five</p>
-                        <div className="d-flex w-100 mt-4 flex-column">
+                        <div className="d-flex w-100 mt-2 flex-column">
                             <div style={{ height: '300px' }} className="prowordsection">
                                 <div className="d-flex flex-wrap">
                                     {inputList &&
@@ -147,7 +147,7 @@ const GreetingMessageManagement = () => {
                             </div>
                             <div className="d-flex justify-content-end mt-2">
                                 <CCol xs="auto">
-                                    <CButton type="submit" onClick={handleAddInput} className="mb-3 btn-black">
+                                    <CButton type="submit" onClick={handleAddInput} className="mb-3 btn-primary">
                                         Add
                                     </CButton>
                                 </CCol>

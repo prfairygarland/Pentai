@@ -280,7 +280,7 @@ const PushNotificationManagement = () => {
           </div>
         </div>
         <div>
-          <div className='d-flex justify-content-between align-items-center mb-3'>
+          <div className='d-flex justify-content-between align-items-center mb-2'>
             <p style={{ margin: 0 }}>Total : {totalCount}</p>
           </div>
         </div>

@@ -454,6 +454,7 @@ const MyReservationListing = () => {
         backdrop="static"
         onClose={() => setShowMeetingRoomDetails(false)}
         aria-labelledby="LiveDemoExampleLabel"
+        scrollable
       >
         <CModalHeader onClose={() => setShowMeetingRoomDetails(false)}>
           <CModalTitle>Meeting Room Information</CModalTitle>
@@ -526,6 +527,7 @@ const MyReservationListing = () => {
           backdrop="static"
           onClose={() => setShowUserDetails(false)}
           aria-labelledby="LiveDemoExampleLabel"
+          scrollable
         >
           <CModalHeader onClose={() => setShowUserDetails(false)}>
             <CModalTitle>User Information</CModalTitle>
@@ -533,16 +535,12 @@ const MyReservationListing = () => {
           <CModalBody>
             <div className="card-body">
               <div className="formWraper">
-                <div className="form-outline form-white  d-flex ">
+                <div className="form-outline form-white  d-flex gap-2">
                   <div className="formWrpLabel">
                     <label className="fw-bolder ">Profile Image</label>
                   </div>
-                  <div className="room-image-container">
-                    <img
-                      style={{ width: '100px', height: '100px' }}
-                      src={URL.createObjectURL(userDetailImage)}
-                      alt=""
-                    />
+                  <div className="room-image-container my-2 mx-3">
+                    <img src={URL.createObjectURL(userDetailImage)} alt="" />
                   </div>
                 </div>
                 <div className="form-outline form-white  d-flex ">

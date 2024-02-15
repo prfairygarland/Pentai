@@ -1,4 +1,4 @@
-import { CButton, CFormSelect, CNav, CNavItem, CNavLink } from '@coreui/react'
+import { CButton, CFormSelect, CFormSwitch, CNav, CNavItem, CNavLink } from '@coreui/react'
 import moment from 'moment'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import DatePicker from 'react-date-picker'
@@ -245,14 +245,14 @@ const RouletteeventManagementListing = () => {
             <NavLink to='../RouletteEventManagementRegistration'><CButton className='btn-success'>{multiLang?.registration}</CButton></NavLink>
           </div>
         </div>
-        <div className='d-flex justify-content-between mb-2 mt-3'>
+        <div className='d-flex justify-content-between mb-2 mt-3 gap-2'>
 
-          <div className='mx-1 d-flex'>
+          <div className='me-1 d-flex w-50'>
             <input className='form-control me-3' placeholder='Title' value={filterData.search} onChange={handleSearch} />
-            <CButton onClick={getRouletteEvents}>{multiLang?.search}</CButton>
+            <CButton >{multiLang?.search}</CButton>
           </div>
 
-          <div className='d-flex p-2 gap-3 align-items-center'>
+          <div className='d-flex ps-2  gap-3 align-items-center'>
             <p>{multiLang?.startTime}</p>
             <DatePicker value={filterData.startDate} onChange={handleStartDate} />
             <DatePicker value={filterData.endDate} onChange={handleEndDate} />
