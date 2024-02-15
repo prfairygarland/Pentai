@@ -11,8 +11,11 @@ import {
 } from '@coreui/react'
 import { useNavigate } from 'react-router-dom'
 import DatePicker from 'react-date-picker'
+import { API_ENDPOINT } from 'src/utils/config'
+import { getApi, postApi } from 'src/utils/Api'
+import { enqueueSnackbar } from 'notistack'
 
-const RouletteEventManagementRegistration = () => {
+const RouletteEventManagementRegistration = ({ eventId = '' }) => {
   const [title, setTitle] = useState('')
   const [startDate, setStartDate] = useState('')
   const [startHour, setStartHour] = useState('')
@@ -62,9 +65,63 @@ const RouletteEventManagementRegistration = () => {
     navigate('../RouletteEventManagement')
   }
 
+  const saveRouletteEvent = async () => {
+    const rewardsBody = []
+    rewardSettings.forEach((reward) => {
+      if (reward.prodId === 'points') {
+        rewardsBody.push({
+          type: 'points',
+          points: reward.points ? reward.points : 10,
+          quantity: reward.quantity ? reward.quantity : 10,
+          limitPerDay: reward.limitPerDay ? reward.limitPerDay : 1,
+        })
+      } else if (reward.prodId === 'noLuck') {
+        rewardsBody.push({ type: 'noLuck' })
+      } else {
+        rewardsBody.push({
+          type: 'product',
+          productId: reward.prodId,
+          quantity: reward.quantity ? reward.quantity : 10,
+          limitPerDay: reward.limitPerDay ? reward.limitPerDay : 1,
+        })
+      }
+    })
+    console.log()
+    const body = {
+      title,
+      start: new Date(new Date(startDate + 'T' + startHour + ':' + startMins)).toISOString(),
+      end: new Date(new Date(endDate + 'T' + endHour + ':' + endMins)).toISOString(),
+      participationPoints,
+      description,
+      limitPerDay: participationLimit,
+      rewards: rewardsBody,
+    }
+    try {
+      const res = await postApi(API_ENDPOINT.createRewardRoulette, body)
+      if (res?.data?.status === 201) {
+        enqueueSnackbar(`Data saved successfully!`, { variant: 'success' })
+        backToListing()
+      } else {
+        enqueueSnackbar(`Enter all fields`, { variant: 'error' })
+      }
+    } catch (error) {
+      enqueueSnackbar(`Something Went wrong!`, { variant: 'error' })
+    }
+  }
+
   const setProductId = (event, index) => {
     const currentRewardSettings = [...rewardSettings]
+    currentRewardSettings[index].productPrice = productList.filter((prod) => {
+      return prod.value === Number(event.target.value)
+    })[0]?.price
     currentRewardSettings[index].prodId = event.target.value
+    console.log(currentRewardSettings)
+    setRewardSettings(currentRewardSettings)
+  }
+
+  const setPoints = (event, index) => {
+    const currentRewardSettings = [...rewardSettings]
+    currentRewardSettings[index].points = event.target.value
     setRewardSettings(currentRewardSettings)
   }
 
@@ -119,7 +176,24 @@ const RouletteEventManagementRegistration = () => {
     }
   }
 
+  const getAllProducts = async () => {
+    try {
+      const res = await getApi(API_ENDPOINT.getAllProducts)
+
+      if (res.status === 200) {
+        setProductList([
+          { label: 'Product', value: 'product' },
+          { label: 'Points', value: 'points' },
+          { label: 'No Luck', value: 'noLuck' },
+          ...res?.data,
+        ])
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
   useEffect(() => {
+    getAllProducts()
     setProductList([
       { label: 'Product', value: 'product' },
       { label: 'Points', value: 'points' },
@@ -130,20 +204,69 @@ const RouletteEventManagementRegistration = () => {
       { value: 4, label: 'Product 4' },
     ])
     setRewardSettings([
-      { prodId: 'product', points: '', quantity: '10', probability: '12.5', limitPerDay: '' },
-      { prodId: 'product', points: '', quantity: '10', probability: '12.5', limitPerDay: '' },
-      { prodId: 'product', points: '', quantity: '10', probability: '12.5', limitPerDay: '' },
-      { prodId: 'product', points: '', quantity: '10', probability: '12.5', limitPerDay: '' },
-      { prodId: 'product', points: '', quantity: '10', probability: '12.5', limitPerDay: '' },
-      { prodId: 'product', points: '', quantity: '10', probability: '12.5', limitPerDay: '' },
-      { prodId: 'product', points: '', quantity: '10', probability: '12.5', limitPerDay: '' },
-      { prodId: 'product', points: '', quantity: '', probability: '12.5', limitPerDay: '' },
+      {
+        prodId: 'product',
+        productPrice: '',
+        points: '',
+        quantity: '10',
+        probability: '12.5',
+        limitPerDay: '',
+      },
+      {
+        prodId: 'product',
+        productPrice: '',
+        points: '',
+        quantity: '10',
+        probability: '12.5',
+        limitPerDay: '',
+      },
+      {
+        prodId: 'product',
+        productPrice: '',
+        points: '',
+        quantity: '10',
+        probability: '12.5',
+        limitPerDay: '',
+      },
+      {
+        prodId: 'product',
+        productPrice: '',
+        points: '',
+        quantity: '10',
+        probability: '12.5',
+        limitPerDay: '',
+      },
+      {
+        prodId: 'product',
+        productPrice: '',
+        points: '',
+        quantity: '10',
+        probability: '12.5',
+        limitPerDay: '',
+      },
+      {
+        prodId: 'product',
+        productPrice: '',
+        points: '',
+        quantity: '10',
+        probability: '12.5',
+        limitPerDay: '',
+      },
+      {
+        prodId: 'product',
+        productPrice: '',
+        points: '',
+        quantity: '10',
+        probability: '12.5',
+        limitPerDay: '',
+      },
+      { prodId: 'product', productPrice: '', points: '', quantity: '', probability: '12.5' },
     ])
   }, [])
   return (
     <>
       <main>
-        <h4>Roulette event Registration</h4>
+        {!eventId && <h4>Roulette event Registration</h4>}
         <div className="card-body">
           <div className="formWraper">
             <div className="form-outline form-white  d-flex ">
@@ -301,12 +424,17 @@ const RouletteEventManagementRegistration = () => {
                             Registration +
                           </button>
                         )}
+                        {console.log('item.productPrice :: ', item.productPrice)}
                         {item.prodId !== 'product' &&
                           item.prodId !== 'points' &&
-                          item.prodId !== 'noLuck' && <p>1.100 KRW</p>}
+                          item.prodId !== 'noLuck' && <p>{item.productPrice} KRW</p>}
                         {item.prodId === 'points' && (
                           <div className="pointsWrap d-flex align-items-center ">
-                            <input className="form-control me-2 w-50" />
+                            <input
+                              className="form-control me-2 w-50"
+                              value={item.points}
+                              onChange={(e) => setPoints(e, index)}
+                            />
                             <span>P</span>
                           </div>
                         )}
@@ -336,24 +464,26 @@ const RouletteEventManagementRegistration = () => {
                     </div>
                   </td>
                   <td>
-                    <div className="d-flex align-items-center gap-2 justify-content-center">
-                      <CFormSwitch
-                        id="club_banner"
-                        className="cFormSwitch"
-                        onClick={() => setLimitPerDayToggle(index)}
-                        defaultChecked={item.limitPerDay}
-                      />
-                      {item.limitPerDay && (
-                        <input
-                          type="number"
-                          min={1}
-                          className="form-control"
-                          value={item.limitPerDay}
-                          style={{ width: 100 }}
-                          onChange={(event) => setLimitPerDay(event.target.value, index)}
+                    {index < 7 && (
+                      <div className="d-flex align-items-center gap-2 justify-content-center">
+                        <CFormSwitch
+                          id="club_banner"
+                          className="cFormSwitch"
+                          onClick={() => setLimitPerDayToggle(index)}
+                          defaultChecked={item.limitPerDay}
                         />
-                      )}
-                    </div>
+                        {item.limitPerDay && (
+                          <input
+                            type="number"
+                            min={1}
+                            className="form-control"
+                            value={item.limitPerDay}
+                            style={{ width: 100 }}
+                            onChange={(event) => setLimitPerDay(event.target.value, index)}
+                          />
+                        )}
+                      </div>
+                    )}
                   </td>
                 </tr>
               ))}
@@ -364,7 +494,7 @@ const RouletteEventManagementRegistration = () => {
           <CButton className="btn btn-black" color="dark" onClick={backToListing}>
             Cancel
           </CButton>
-          <CButton className="btn " onClick={() => alert('save')}>
+          <CButton className="btn " onClick={saveRouletteEvent}>
             Save
           </CButton>
         </div>

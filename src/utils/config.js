@@ -284,6 +284,8 @@ export let API_ENDPOINT = {
 
   //Reward Management
   get_RouletteEvents : ALL_CONSTANTS.API_URL + "/api/admin/lounge/rouletteEvent/get",
+  getAllProducts: ALL_CONSTANTS.API_URL + "/api/admin/lounge/rewardProducts/get",
+  createRewardRoulette: ALL_CONSTANTS.API_URL + "/api/admin/lounge/rouletteEvent/create",
 
 
 
