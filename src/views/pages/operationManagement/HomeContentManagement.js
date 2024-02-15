@@ -156,7 +156,7 @@ const HomeContentManagement = () => {
                 <h2>Home Content Management</h2>
             </div>
             <div className=''>
-                <h2>Usage</h2>
+                <h2>Usage Status</h2>
             </div>
             {isLoading && <Loader />}
             {usageStatus.length > 0 && <div className='my-3'>

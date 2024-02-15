@@ -12,10 +12,13 @@ import Loader from 'src/components/common/Loader'
 import { enqueueSnackbar } from 'notistack'
 import emptyImg from '../../../assets/images/empty-image.png'
 import { node } from 'prop-types'
+import ConfirmationModal from 'src/utils/ConfirmationModal'
+
+
 const BannerManagement = () => {
 
-
     const [isLoading, setIsLoading] = useState(false)
+    const [modalProps, setModalProps] = useState({})
     const [currentPage, setCurrentPage] = useState(0)
     const [itemsPerPage, setItemPerPage] = useState(5)
     const [banner, setBanner] = useState(false)
@@ -202,6 +205,32 @@ const BannerManagement = () => {
         }
     }
 
+    const confirmationCloseModalHandler = (isOpen) => {
+        setModalProps({
+          isModalOpen: isOpen,
+          title: '',
+          content: "Are you sure you want to leave this page? If you leave this page, changes you made may not be saved.",
+          cancelBtn: 'Close',
+          cancelBtnHandler: cancelConfirmation,
+          successBtn: 'Ok',
+          successBtnHandler: () => cancelModalHandler(),
+          modalCloseHandler: confirmationCloseModalHandler,
+        })
+      }
+
+      const cancelConfirmation = () => {
+        setModalProps({
+          isModalOpen: false
+        })
+      }
+
+      const cancelModalHandler = () => {
+        setBanner(false)
+        setModalProps({
+          isModalOpen: false
+        })
+      }
+
     const handleNewBookBannaer = () => {
         setBannerUpdateId('')
         setBannerTitle('')
@@ -377,7 +406,7 @@ const BannerManagement = () => {
         {
             Header: 'Title',
             accessor: 'title',
-            Cell: ({ row }) => <a style={{ cursor: 'pointer' }} onClick={() => setBanner(true)}>{row?.original?.title}</a>
+            Cell: ({ row }) => <a style={{ cursor: 'pointer' }} onClick={() => editClubBannerHandler(row?.original?.id)}>{row?.original?.title}</a>
         },
         {
             Header: 'Posting Period',
@@ -412,6 +441,7 @@ const BannerManagement = () => {
                 <CButton onClick={handleNewBookBannaer} className='btn-success'>Create</CButton>
             </div>
             {isLoading && <Loader />}
+            <ConfirmationModal modalProps={modalProps} />
             <div className='d-flex align-items-center '>
                 <div>
                     <label className='fw-bold'>Auto Slide Banner</label>
@@ -654,7 +684,7 @@ const BannerManagement = () => {
                 </CModalBody>
                 <CModalFooter>
                     <div className="d-flex justify-content-center gap-3 w-100 ">
-                        <CButton className='btn-black' onClick={() => setBanner(false)}>Cancel</CButton>
+                        <CButton className='btn-black' onClick={confirmationCloseModalHandler}>Cancel</CButton>
                         <CButton
                             onClick={validateClubPeriodHandler}
                         >
