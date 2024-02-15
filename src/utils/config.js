@@ -253,7 +253,7 @@ export let API_ENDPOINT = {
   startLiveStream: ALL_CONSTANTS.API_URL + "/api/admin/lounge/startStream",
   endLiveStream: ALL_CONSTANTS.API_URL + "/api/admin/lounge/endStream",
   cancelLiveStream: ALL_CONSTANTS.API_URL + "/api/admin/lounge/cancelStream",
-  uploadQuizImage: ALL_CONSTANTS.API_URL + "/api/uploadImage",
+  uploadImage: ALL_CONSTANTS.API_URL + "/api/uploadImage",
 
 
   //Operation Management
@@ -297,8 +297,8 @@ export let API_ENDPOINT = {
   getAllProducts: ALL_CONSTANTS.API_URL + "/api/admin/lounge/rewardProducts/get",
   createRewardRoulette: ALL_CONSTANTS.API_URL + "/api/admin/lounge/rouletteEvent/create",
   getRouletteDetails: ALL_CONSTANTS.API_URL + "/api/admin/lounge/rouletteEvent/details",
-  getRankingEvent: ALL_CONSTANTS.API_URL + "/api/admin/lounge/rankingEvent/get"
-
+  getRankingEvent: ALL_CONSTANTS.API_URL + "/api/admin/lounge/rankingEvent/get",
+  createRewardRanking: ALL_CONSTANTS.API_URL + "/api/admin/lounge/rankingEvent/create",
 
 
 
