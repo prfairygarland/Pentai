@@ -1,8 +1,10 @@
-import { CButton, CCol, CFormCheck } from '@coreui/react'
+import { CButton, CCol, CFormCheck, CModal, CModalBody, CModalFooter, CModalHeader, CModalTitle } from '@coreui/react'
+import { enqueueSnackbar } from 'notistack';
 import React, { useState } from 'react'
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { getApi } from 'src/utils/Api';
+import Loader from 'src/components/common/Loader';
+import { getApi, putApi } from 'src/utils/Api';
 import { API_ENDPOINT } from 'src/utils/config';
 
 const FeatureManagement = () => {
@@ -12,6 +14,9 @@ const FeatureManagement = () => {
   const translationObject = i18n.getDataByLanguage(i18n.language);
   const multiLang = translationObject?.translation?.MenuAccessPermission
   const [featureManagementData, setFeatureManagementData] = useState([])
+  const [saveModal, setSaveModal] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+
 
   useEffect(() => {
     getFeatureManagementData()
@@ -28,7 +33,7 @@ const FeatureManagement = () => {
     if (res?.status === 200) {
       setFeatureManagementData(res.data)
     } else {
-      // setAdminGroupData([])
+      setFeatureManagementData([])
     }
   }
 
@@ -39,8 +44,31 @@ const FeatureManagement = () => {
     setFeatureManagementData(updatedValues);
   };
 
+  const save = async () => {
+    setIsLoading(true)
+    let data = {}
+
+    for (let obj in featureManagementData) {
+      data[featureManagementData[obj].name] = { id: featureManagementData[obj].id, isEnabled: featureManagementData[obj].isEnabled }
+    }
+
+    const res = await putApi(API_ENDPOINT.updateFeatureManagement, data)
+
+    if (res.status === 200) {
+      enqueueSnackbar(multiLang?.successMsg, { variant: 'success' })
+      setIsLoading(false)
+      setSaveModal(false)
+      getFeatureManagementData()
+    } else {
+      setIsLoading(false)
+      setSaveModal(false)
+    }
+  }
+
   return (
     <div>
+      {isLoading && <Loader />}
+      <h4>Feature Management</h4>
       <div className="formWraper mt-3">
         <div className="form-outline form-white  d-flex ">
           <div className="formWrpLabel">
@@ -87,11 +115,34 @@ const FeatureManagement = () => {
           <CButton
             type="submit"
             className="mb-3  mb-3 text-white "
+            onClick={() => setSaveModal(true)}
           // onClick={handleUpdateStatus}
           >
             {multiLang?.save}
           </CButton>
         </CCol>
+      </div>
+
+      <div>
+        <CModal
+          backdrop="static"
+          visible={saveModal}
+          onClose={() => setSaveModal(false)}
+          aria-labelledby="StaticBackdropExampleLabel"
+        >
+          <CModalHeader>
+            <CModalTitle id="StaticBackdropExampleLabel">{multiLang?.save}</CModalTitle>
+          </CModalHeader>
+          <CModalBody>
+            {multiLang?.saveMsg}
+          </CModalBody>
+          <CModalFooter>
+            <CButton color="secondary" onClick={() => setSaveModal(false)}>
+              {multiLang?.no}
+            </CButton>
+            <CButton onClick={() => save()} color="primary">{multiLang?.yes}</CButton>
+          </CModalFooter>
+        </CModal>
       </div>
     </div>
   )

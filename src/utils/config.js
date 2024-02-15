@@ -1,6 +1,6 @@
 export let ALL_CONSTANTS = {
 
-  // IS_PRODUCTION: false,
+  IS_PRODUCTION: false,
   BASE_URL: "https://ptkapi.experiencecommerce.com",       // API URL staging
   API_URL: "https://ptkapi.experiencecommerce.com",    // API URL staging
 
@@ -286,17 +286,18 @@ export let API_ENDPOINT = {
   getAllAdminGroup: ALL_CONSTANTS.API_URL + "/api/adminPanel/getAdminGroup",
   getFeatureManagement: ALL_CONSTANTS.API_URL + "/api/adminPanel/getFeatureManagement",
   updateFeatureManagement: ALL_CONSTANTS.API_URL + "/api/adminPanel/updateFeatureManagement",
+  addGroup: ALL_CONSTANTS.API_URL + "/api/adminPanel/addGroup",
 
 
 
   //Reward Management
-  get_RouletteEvents : ALL_CONSTANTS.API_URL + "/api/admin/lounge/rouletteEvent/get",
-  getRouletteParticipantsDetails : ALL_CONSTANTS.API_URL + "/api/admin/lounge/rouletteEvent/participants",
-  getRouletteEventEventDetails : ALL_CONSTANTS.API_URL + "/api/admin/lounge/rouletteEvent/details",
+  get_RouletteEvents: ALL_CONSTANTS.API_URL + "/api/admin/lounge/rouletteEvent/get",
+  getRouletteParticipantsDetails: ALL_CONSTANTS.API_URL + "/api/admin/lounge/rouletteEvent/participants",
+  getRouletteEventEventDetails: ALL_CONSTANTS.API_URL + "/api/admin/lounge/rouletteEvent/details",
   getAllProducts: ALL_CONSTANTS.API_URL + "/api/admin/lounge/rewardProducts/get",
   createRewardRoulette: ALL_CONSTANTS.API_URL + "/api/admin/lounge/rouletteEvent/create",
   getRouletteDetails: ALL_CONSTANTS.API_URL + "/api/admin/lounge/rouletteEvent/details",
-  getRankingEvent : ALL_CONSTANTS.API_URL + "/api/admin/lounge/rankingEvent/get"
+  getRankingEvent: ALL_CONSTANTS.API_URL + "/api/admin/lounge/rankingEvent/get"
 
 
 
