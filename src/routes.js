@@ -38,6 +38,7 @@ import CreatePushNotificationRegistration from './views/pages/operationManagemen
 import AdministratorList from './views/pages/AdministratorManagement/AdministratorList'
 import MenuAccessPermission from './views/pages/AdministratorManagement/MenuAccessPermission'
 import FeatureManagement from './views/pages/AdministratorManagement/FeatureManagement'
+import AdminGroupManagement from './views/pages/AdministratorManagement/AdminGroupManagement'
 
 const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
 
@@ -101,8 +102,8 @@ const routes = [
   { path: '/RankingEventManagement', name: 'Ranking Event Management', element: RankingEventManagement },
   { path: '/RankingEventRegistration', name: 'Ranking Event Registration', element: RankingEventRegistration },
 
-  
-  
+
+
 
 
   // Operation Management
@@ -115,7 +116,9 @@ const routes = [
   // Administrator Management
   { path: '/AdministratorList', name: 'Administrator Management', element: AdministratorList },
   { path: '/MenuAcessPermission', name: 'Menu Access Permission', element: MenuAccessPermission },
-  { path: '/FeatureManagement', name: 'Feature Management', element: FeatureManagement }
+  { path: '/FeatureManagement', name: 'Feature Management', element: FeatureManagement },
+  { path: '/AdminGroupManagement', name: 'Admin Group Management', element: AdminGroupManagement }
+
 
 
 ]

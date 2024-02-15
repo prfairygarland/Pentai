@@ -486,7 +486,7 @@ const ItemNumber = ({ bookItemDetail, setIconSubSet, setIconSubBookSet, setSideS
                 </div>
                 <div className="formWrpInpt d-flex">
                   <div className='addItemImage'>
-                    {data.itemImage ? <img alt='' {...imageProps} src={data?.itemImage}  /> : <img alt='' src='https://www.beelights.gr/assets/images/empty-image.png'  />}
+                    {data.itemImage ? <img alt='' {...imageProps} src={data?.itemImage} /> : <img alt='' src='https://www.beelights.gr/assets/images/empty-image.png' />}
                     <input style={{ display: 'none' }} type="file" name="upload" accept=".png, .jpg, .jpeg" ref={inputRef} onChange={handleUpload} />
                   </div>
                   {/* <div className='ms-4'>
@@ -512,22 +512,22 @@ const ItemNumber = ({ bookItemDetail, setIconSubSet, setIconSubBookSet, setSideS
                 />
               </div>
 
-                            <div style={!data.customSetting ? { pointerEvents: 'none', opacity: 0.6 } : null}>
-                                <div className="form-outline form-white  d-flex ">
-                                    <div className="formWrpLabel" >
-                                        <label className="fw-bolder ">
-                                            Rental Duration
-                                        </label>
-                                    </div>
-                                    <div className="formWrpInpt">
-                                        <div className="d-flex formradiogroup mb-2 align-items-center   gap-5">
-                                            <p>
-                                                Max. Rentable Weeks
-                                            </p>
-                                            <p>
-                                                <CFormInput placeholder='0' type='number' className='text-center' name='rentalDuration'
-                                                    value={data.RentalDuration}
-                                                    onChange={handleChangeRentalDuration}
+              <div style={!data.customSetting ? { pointerEvents: 'none', opacity: 0.6 } : null}>
+                <div className="form-outline form-white  d-flex ">
+                  <div className="formWrpLabel" >
+                    <label className="fw-bolder ">
+                      Rental Duration
+                    </label>
+                  </div>
+                  <div className="formWrpInpt">
+                    <div className="d-flex formradiogroup mb-2 align-items-center   gap-5">
+                      <p>
+                        Max. Rentable Weeks
+                      </p>
+                      <p>
+                        <CFormInput placeholder='0' type='number' className='text-center' name='rentalDuration'
+                          value={data.RentalDuration}
+                          onChange={handleChangeRentalDuration}
 
                           style={{ width: '30%' }} />
                       </p>
