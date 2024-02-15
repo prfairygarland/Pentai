@@ -1,16 +1,16 @@
 export let ALL_CONSTANTS = {
 
   // IS_PRODUCTION: false,
-  // BASE_URL: "https://ptkapi.experiencecommerce.com",       // API URL staging
-  // API_URL: "https://ptkapi.experiencecommerce.com",    // API URL staging
+  BASE_URL: "https://ptkapi.experiencecommerce.com",       // API URL staging
+  API_URL: "https://ptkapi.experiencecommerce.com",    // API URL staging
 
   // IS_PRODUCTION: true,
   // BASE_URL: "",       // API URL Live
   // API_URL: "",    // API URL Live
 
   IS_PRODUCTION: false,
-  BASE_URL: "http://192.168.9.175:3000",       // Local
-  API_URL: "http://192.168.9.175:3000",    // Local
+  // BASE_URL: "http://192.168.9.175:3000",       // Local
+  // API_URL: "http://192.168.9.175:3000",    // Local
 }
 
 
@@ -289,6 +289,7 @@ export let API_ENDPOINT = {
   get_RouletteEvents: ALL_CONSTANTS.API_URL + "/api/admin/lounge/rouletteEvent/get",
   getAllProducts: ALL_CONSTANTS.API_URL + "/api/admin/lounge/rewardProducts/get",
   createRewardRoulette: ALL_CONSTANTS.API_URL + "/api/admin/lounge/rouletteEvent/create",
+  getRouletteDetails: ALL_CONSTANTS.API_URL + "/api/admin/lounge/rouletteEvent/details",
 
 
 
