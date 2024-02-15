@@ -26,6 +26,8 @@ import RouletteeventManagementListing from './views/pages/RewardManagement/Roule
 import RouletteEventDetails from './views/pages/RewardManagement/RouletteEventDetails'
 import LuckyDrawEventManagement from './views/pages/RewardManagement/LuckyDrawEventManagement'
 import LuckyDrawEventRegistration from './views/pages/RewardManagement/LuckyDrawEventRegistration'
+import RankingEventManagement from './views/pages/RewardManagement/RankingEventManagement'
+import RankingEventRegistration from './views/pages/RewardManagement/RankingEventRegistration'
 import RouletteEventManagementRegistration from './views/pages/RewardManagement/RouletteEventManagementRegistration'
 import DataImport from './views/pages/BookRentalManagement/DataImport'
 import GreetingMessageManagement from './views/pages/operationManagement/GreetingMessageManagement'
@@ -96,6 +98,8 @@ const routes = [
   { path: '/RouletteEventDetails', name: 'Roulette Event Details', element: RouletteEventDetails },
   { path: '/LuckyDrawEventManagement', name: 'Lucky Draw Event Management', element: LuckyDrawEventManagement },
   { path: '/LuckyDrawEventRegistration', name: 'Lucky Draw Event Registration', element: LuckyDrawEventRegistration },
+  { path: '/RankingEventManagement', name: 'Ranking Event Management', element: RankingEventManagement },
+  { path: '/RankingEventRegistration', name: 'Ranking Event Registration', element: RankingEventRegistration },
 
   
   

@@ -8,7 +8,7 @@ import { API_ENDPOINT } from 'src/utils/config'
 import { getApi, postApi } from 'src/utils/Api'
 import { enqueueSnackbar } from 'notistack'
 
-const LuckyDrawEventRegistration = ({ eventId = '' }) => {
+const RankingEventRegistration = ({ eventId = '' }) => {
   const [title, setTitle] = useState('')
   const [startDate, setStartDate] = useState('')
   const [startHour, setStartHour] = useState('')
@@ -286,4 +286,4 @@ const LuckyDrawEventRegistration = ({ eventId = '' }) => {
   )
 }
 
-export default LuckyDrawEventRegistration
+export default RankingEventRegistration
