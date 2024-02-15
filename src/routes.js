@@ -24,6 +24,7 @@ import MeetingRoomsReservationStatus from './views/pages/MeetingRoomsResMgmt/Mee
 import AllMeetingRooms from './views/pages/MeetingRoomsResMgmt/AllMeetingRooms'
 import RouletteeventManagementListing from './views/pages/RewardManagement/RouletteeventManagementListing'
 import RouletteEventDetails from './views/pages/RewardManagement/RouletteEventDetails'
+import RankingEventDetails from './views/pages/RewardManagement/RankingEventDetails'
 import LuckyDrawEventManagement from './views/pages/RewardManagement/LuckyDrawEventManagement'
 import LuckyDrawEventRegistration from './views/pages/RewardManagement/LuckyDrawEventRegistration'
 import RankingEventManagement from './views/pages/RewardManagement/RankingEventManagement'
@@ -101,7 +102,9 @@ const routes = [
   { path: '/LuckyDrawEventRegistration', name: 'Lucky Draw Event Registration', element: LuckyDrawEventRegistration },
   { path: '/RankingEventManagement', name: 'Ranking Event Management', element: RankingEventManagement },
   { path: '/RankingEventRegistration', name: 'Ranking Event Registration', element: RankingEventRegistration },
+  { path: '/RankingEventDetails', name: 'Ranking Event Details', element: RankingEventDetails },
 
+  
 
 
 

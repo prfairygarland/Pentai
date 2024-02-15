@@ -562,7 +562,7 @@ const LiveRegistration = () => {
         if(typeof img.image !== 'string' && questionsId) {
           const formData = new FormData()
           formData.append('images', img.image)
-          const changedImage = await postApi(API_ENDPOINT.uploadQuizImage, formData)
+          const changedImage = await postApi(API_ENDPOINT.uploadImage, formData)
           img['image'] = await changedImage?.data?.data[0]?.path
         }
         img['isCorrect'] = img.value ? 1 : 0

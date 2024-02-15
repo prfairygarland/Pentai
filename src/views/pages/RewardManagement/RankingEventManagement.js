@@ -103,6 +103,13 @@ const RankingEventManagement = () => {
     getRankingEvents()
   }, [])
 
+  const viewHandler = (id) => {
+    navigate("/RankingEventDetails", {
+      state: {
+        eventId: id
+      }
+    })
+  }
 
   const columns = useMemo(() => [
 
@@ -119,7 +126,7 @@ const RankingEventManagement = () => {
     {
       Header: "Title",
       accessor: 'title',
-      Cell: ({ row }) => <a className='Livetitle' style={{ cursor: 'pointer' }}> {row.original.title ? row.original.title : '-'}</a>
+      Cell: ({ row }) => <a className='Livetitle' style={{ cursor: 'pointer' }} onClick={() => viewHandler(row?.original?.id)}> {row.original.title ? row.original.title : '-'}</a>
     },
     {
       Header: "Period",
@@ -255,7 +262,7 @@ const RankingEventManagement = () => {
               </CNav>
             </div>
             <div>
-              <NavLink to='../RouletteEventManagementRegistration'><CButton className='btn-success'>Registration</CButton></NavLink>
+              <NavLink to='../RankingEventRegistration'><CButton className='btn-success'>Registration</CButton></NavLink>
             </div>
           </div>
           <div className='d-flex justify-content-between mb-2 mt-3 gap-2'>
