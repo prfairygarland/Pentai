@@ -2,6 +2,7 @@ import { CNav, CNavItem, CNavLink } from '@coreui/react'
 import React, { useState } from 'react'
 import RouletteEventManagementRegistration from './RouletteEventManagementRegistration'
 import { useLocation } from 'react-router-dom'
+import RoulettParticipationDetails from './RoulettParticipationDetails'
 
 const RouletteEventDetails = () => {
   const [activeTab, setActiveTab] = useState('')
@@ -48,7 +49,7 @@ const RouletteEventDetails = () => {
       {activeTab === '' && (
         <RouletteEventManagementRegistration eventId={location?.state?.eventId} />
       )}
-      {activeTab === 'partiDetails' && <h2>Participation Details</h2>}
+      {activeTab === 'partiDetails' && <RoulettParticipationDetails />}
     </>
   )
 }
