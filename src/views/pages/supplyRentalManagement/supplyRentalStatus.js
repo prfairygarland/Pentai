@@ -854,7 +854,7 @@ const SupplyRentalStatus = () => {
               {popUp === 'RenatlH' ?
                 // <SupplyRentalHistory setCurrentPage={setCurrentPage} currentPage={currentPage} handleShowRentalHistory={handleShowRentalHistory} RentalHistoryData={supplyRentalHistoryData} page={page} setPage={setPage} RentalStatusData={RentalDetailsData} totalCount={totalCount} HistotalPages={HistotalPages} />
                 <div>
-                  <div className='p-md-4'>
+                  <div className='px-2 pb-2'>
                     <div className='d-flex align-content-center g-2'>
                       <p style={{ fontSize: 'medium' }}>{multiLang?.modelName}:</p>
                       <p style={{ fontSize: 'medium', paddingLeft: 5, fontWeight: '600' }}>{RentalDetailsData?.modelName}</p>

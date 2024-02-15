@@ -514,12 +514,12 @@ const AddItem = ({ getVal, setCat, setSubIcon, setModalIcon, setModal, getMod, m
             <div className="form-outline form-white   d-flex ">
               <div className="formWrpLabel">
                 <label className="fw-bolder ">
-                  {multiLang?.itemImage}
+                  {multiLang?.itemImage} 
                 </label>
               </div>
               <div className="formWrpInpt d-flex">
-                <div style={{ width: '180px', overflow: 'hidden', marginBottom: '5%' }} >
-                  {showSelectedImage != null ? <CImage alt='' crossorigin="anonymous" src={showSelectedImage} style={{ height: '100%', width: '100%' }} /> : <img src='https://www.beelights.gr/assets/images/empty-image.png' style={{ height: '100%', width: '100%' }} />}
+                <div className='addItemImage'  >
+                  {showSelectedImage != null ? <CImage alt='' crossorigin="anonymous" src={showSelectedImage}  /> : <img src='https://www.beelights.gr/assets/images/empty-image.png'  />}
                   <input style={{ display: 'none' }} type="file" name="upload" accept=".png, .jpg, .jpeg" ref={inputRef} onChange={handleImageChange} />
                 </div>
                 <div className='ms-4'>
@@ -557,7 +557,7 @@ const AddItem = ({ getVal, setCat, setSubIcon, setModalIcon, setModal, getMod, m
                       {multiLang?.maxRentableWeeks}
                     </p>
                     <p>
-                      <CFormInput placeholder='0' type='number' name='rentalDuration'
+                      <CFormInput placeholder='0' type='number' className='text-center' name='rentalDuration'
                         value={addItemData.rentalDuration}
                         onChange={(e) => {
                           handleInputChange(e)

@@ -377,7 +377,7 @@ const BannerManagement = () => {
         {
             Header: 'Title',
             accessor: 'title',
-            Cell: ({ row }) => <p style={{ cursor: 'pointer' }} onClick={() => editClubBannerHandler(row?.original?.id)}>{row?.original?.title}</p>
+            Cell: ({ row }) => <a style={{ cursor: 'pointer' }} onClick={() => setBanner(true)}>{row?.original?.title}</a>
         },
         {
             Header: 'Posting Period',

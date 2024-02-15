@@ -700,15 +700,16 @@ const WelfareBoardPostListing = () => {
           </CModalHeader>
           <CModalBody>
             <div className="">
-              <p>
-                {multiLangObj?.userName} :{' '}
+              <p className="mb-2">
+                <b>{multiLangObj?.userName} :</b>{' '}
                 {userInfoData.englishName ? userInfoData.englishName : '-'}
               </p>
-              <p>
-                {multiLangObj?.grpTeam} : {userInfoData.teamName ? userInfoData.teamName : '-'}{' '}
+              <p className="mb-2">
+                <b>{multiLangObj?.grpTeam} :</b>{' '}
+                {userInfoData.teamName ? userInfoData.teamName : '-'}{' '}
               </p>
               <p>
-                {multiLangObj?.emailAdd} : {userInfoData.email ? userInfoData.email : '-'}
+                <b>{multiLangObj?.emailAdd} :</b> {userInfoData.email ? userInfoData.email : '-'}
               </p>
             </div>
           </CModalBody>

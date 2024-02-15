@@ -532,7 +532,10 @@ const AdministratorList = () => {
       {isLoading && <Loader />}
       <main>
         <div className='d-flex justify-content-between mb-2'>
-          <h3>{multiLang?.administratorList}</h3>
+        <div className="pageTitle mb-3 pb-2">
+            <h2>{multiLang?.administratorList}</h2>
+          </div>
+    
           <div>
             <NavLink><CButton onClick={() => setVisible(!visible)} className='btn-success'>{multiLang?.create}</CButton></NavLink>
           </div>
@@ -588,7 +591,7 @@ const AdministratorList = () => {
           </div>
 
         </div>
-        <div>
+        <div className='mt-4'>
           <label className="me-3 fw-medium">{multiLang?.total} {totalData}</label>
         </div>
         <ReactTable showCheckbox={false} columns={columns} data={administratorListData} totalCount={10} onSelectionChange={handleSelectionChange} />
@@ -793,10 +796,10 @@ const AdministratorList = () => {
               </div>
             </CModalBody>
             <CModalFooter className='d-flex justify-content-center'>
-              <CButton color="secondary" onClick={() => setCancelModal(true)}>
+              <CButton className='btn-black' onClick={() => setCancelModal(true)}>
                 {multiLang?.cancel}
               </CButton>
-              <CButton disabled={id === '' || password === ''} onClick={() => validate()} color="primary">{multiLang?.save}</CButton>
+              <CButton disabled={id === '' || password === ''} onClick={() => validate()} >{multiLang?.save}</CButton>
             </CModalFooter>
           </CModal>
         </div>

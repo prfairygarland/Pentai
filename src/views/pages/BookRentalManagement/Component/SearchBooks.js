@@ -55,7 +55,7 @@ const SearchBooks = ({ searchBooks,
                 <input className='form-control py-1 ' value={searchBookFilter.title} onChange={handleChange} />
                 <CButton onClick={SearchBookList} >search</CButton>
             </div>
-            <div>
+            <div className='ptk-table'>
 
                 <table border="1" className="table table-bordered mt-3">
                     {searchBooks.length > 0 && <thead>

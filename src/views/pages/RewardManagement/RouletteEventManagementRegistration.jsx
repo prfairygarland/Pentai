@@ -354,7 +354,11 @@ const RouletteEventManagementRegistration = ({ eventId = '' }) => {
   return (
     <>
       <main>
-        {!eventId && <h4>Roulette event Registration</h4>}
+        {!eventId && (
+          <div className="pageTitle mb-3 pb-2">
+            <h2>Roulette event Registration</h2>
+          </div>
+        )}
         <div className="card-body">
           <div className="formWraper">
             <div className="form-outline form-white  d-flex ">
@@ -374,7 +378,9 @@ const RouletteEventManagementRegistration = ({ eventId = '' }) => {
                       setTitle(e.target.value.substring(0, 42))
                     }}
                   />
-                  <span className="txt-byte-information">{title.length} / 42</span>
+                  <span className="txt-byte-information justify-content-start">
+                    {title.length} / 42
+                  </span>
                 </div>
               </div>
             </div>
@@ -384,8 +390,8 @@ const RouletteEventManagementRegistration = ({ eventId = '' }) => {
                   Period <span className="mandatory-red-asterisk">*</span>
                 </label>
               </div>
-              <div className="formWrpInpt">
-                <div className="d-flex formradiogroup mb-2 gap-1 w-100">
+              <div className="formWrpInpt ">
+                <div className="d-flex formradiogroup mb-2 gap-1 w-100 align-items-center">
                   <DatePicker
                     value={startDate}
                     minDate={new Date()}
@@ -423,7 +429,7 @@ const RouletteEventManagementRegistration = ({ eventId = '' }) => {
                     Participation Points <span className="mandatory-red-asterisk">*</span>
                   </label>
                 </div>
-                <div className="push-notification-container gap-3">
+                <div className="push-notification-container gap-3 align-items-center">
                   <CFormInput
                     type="text"
                     name="title"
@@ -431,6 +437,7 @@ const RouletteEventManagementRegistration = ({ eventId = '' }) => {
                     onChange={(e) => {
                       setParticipationPoints(e.target.value)
                     }}
+                    style={{ width: 150, textAlign: 'center' }}
                   />{' '}
                   Points
                 </div>
@@ -449,6 +456,7 @@ const RouletteEventManagementRegistration = ({ eventId = '' }) => {
                     onChange={(e) => {
                       setParticipationLimit(e.target.value)
                     }}
+                    style={{ width: 100, textAlign: 'center' }}
                   />
                 </div>
               </div>
@@ -472,15 +480,17 @@ const RouletteEventManagementRegistration = ({ eventId = '' }) => {
             </div>
           </div>
         </div>
-        <div className="table-responsive ptk-table">
+
+        <h4 className="mt-3">Rewards Settings</h4>
+        <div className="table-responsive ptk-table ">
           <table className="table table-bordered">
             <thead>
               <tr>
                 <th></th>
                 <th>Reward</th>
-                <th>Quantity</th>
-                <th>Probability</th>
-                <th>Limit per day</th>
+                <th width="130">Quantity</th>
+                <th width="170">Probability</th>
+                <th width="170">Limit per day</th>
               </tr>
             </thead>
             <tbody>
@@ -506,7 +516,7 @@ const RouletteEventManagementRegistration = ({ eventId = '' }) => {
                           value={item.prodId}
                         />
                       </div>
-                      <div className="w-50">
+                      <div className="w-50 d-flex justify-content-start">
                         {item.prodId === 'product' && (
                           <button className="btn btn-primary" onClick={() => alert('WIP')}>
                             Registration +
@@ -551,31 +561,34 @@ const RouletteEventManagementRegistration = ({ eventId = '' }) => {
                     </div>
                   </td>
                   <td>
-                    {index < 7 && (
-                      <div className="d-flex align-items-center gap-2 justify-content-center">
-                        <CFormSwitch
-                          id="club_banner"
-                          className="cFormSwitch"
-                          onClick={() => setLimitPerDayToggle(index)}
-                          checked={Number(item.limitPerDay) ? true : false}
+                    <div className="d-flex align-items-center gap-2 ">
+                      <CFormSwitch
+                        id="club_banner"
+                        className="cFormSwitch"
+                        onClick={() => setLimitPerDayToggle(index)}
+                        defaultChecked={item.limitPerDay}
+                      />
+                      {item.limitPerDay && (
+                        <input
+                          type="number"
+                          min={1}
+                          className="form-control"
+                          value={item.limitPerDay}
+                          style={{ width: 100 }}
+                          onChange={(event) => setLimitPerDay(event.target.value, index)}
                         />
-                        {item.limitPerDay && (
-                          <input
-                            type="number"
-                            min={1}
-                            className="form-control"
-                            value={item.limitPerDay}
-                            style={{ width: 100 }}
-                            onChange={(event) => setLimitPerDay(event.target.value, index)}
-                          />
-                        )}
-                      </div>
-                    )}
+                      )}
+                    </div>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
+        </div>
+        <div>
+          <p>
+            <b>* When the specified quantity is run out, earn a Reward 8.</b>
+          </p>
         </div>
         <div className="save-cancel-btn-container gap-3 my-3">
           <CButton className="btn btn-black" color="dark" onClick={backToListing}>

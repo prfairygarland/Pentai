@@ -494,7 +494,7 @@ const AllSupplies = () => {
                                     <p role='button' onClick={() => (setSuppyId(tab.id), setCatIds(catTab.id), handleSetModal('addCategory'))}>{catTab.name}</p>
                                   </div>
                                   <div>
-                                    <CButton className='btn-sm' onClick={() => { setCatId(catTab.id); handleSetModal('addSubCategory', 'add') }}>{multiLang?.addSubCategory}</CButton>
+                                    <CButton className='btn-sm suppplyBtn' onClick={() => { setCatId(catTab.id); handleSetModal('addSubCategory', 'add') }}>{multiLang?.addSubCategory}</CButton>
                                   </div>
                                 </div>
                                 <div>
@@ -509,7 +509,7 @@ const AllSupplies = () => {
                                               <p role='button' onClick={() => (setCatId(catTab.id), setSubCatIds(subCatTab.id), handleSetModal('addSubCategory'))}>{subCatTab.name}</p>
                                             </div>
                                             <div>
-                                              <CButton className='btn-sm' onClick={() => { setModalId(subCatTab.id); handleSetModal('addModal', 'add') }}>{multiLang?.addModel}</CButton>
+                                              <CButton className='btn-sm suppplyBtn' onClick={() => { setModalId(subCatTab.id); handleSetModal('addModal', 'add') }}>{multiLang?.addModel}</CButton>
                                             </div>
                                           </div>
                                           {sideModelId === subCatTab.id &&
@@ -524,7 +524,7 @@ const AllSupplies = () => {
                                                       <p role='button' onClick={() => (setModalId(subCatTab.id), setModalIds(modalTab.id), handleSetModal('addModal'))}>{modalTab.name}</p>
                                                     </div>
                                                     <div>
-                                                      <CButton className='btn-sm' onClick={() => { setCategoryId(catTab.id); setSubCategoryId(subCatTab.id); setMainID(tab.id); setItemName(modalTab.name); setGetModalId(modalTab.id); handleSetModal('addItem', 'add') }}>{multiLang?.addItem}</CButton>
+                                                      <CButton className='btn-sm suppplyBtn' onClick={() => { setCategoryId(catTab.id); setSubCategoryId(subCatTab.id); setMainID(tab.id); setItemName(modalTab.name); setGetModalId(modalTab.id); handleSetModal('addItem', 'add') }}>{multiLang?.addItem}</CButton>
                                                     </div>
                                                   </div>
                                                   {sideItemId === modalTab.id &&

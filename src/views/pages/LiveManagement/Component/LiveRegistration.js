@@ -1194,7 +1194,7 @@ const LiveRegistration = () => {
                             {participateToggle === true &&
                               <div className='d-flex align-items-center gap-3'>
                                 <CFormInput
-                                  style={{width:150}}
+                                  style={{width:100}}
                                   className='text-center'
                                   type="text"
                                   placeholder={multiLang?.LiveManagementRegistrationLive?.Enter_number}
@@ -1386,7 +1386,7 @@ const LiveRegistration = () => {
                                     ))
                                   }
                                 </ul>
-                                <CButton onClick={() => setVisible(!visible)}>{multiLang?.LiveManagementRegistrationQuiz?.Create} +</CButton>
+                                <CButton className='w-50' onClick={() => setVisible(!visible)}>{multiLang?.LiveManagementRegistrationQuiz?.Create} +</CButton>
                               </div>
                             </div>
                           </div>
@@ -1701,13 +1701,16 @@ const LiveRegistration = () => {
 
 
                       <div className='col-md-6'>
-                        <div>
-                          <div className='container mt-3'>
-                            <div className='p-3'>
-                              <CCard >
+                    
+                            <div className='p-3 h-100'>
+                              <CCard className='h-100 quizWrap'>
                                 <CCardBody>
-                                  {timeLimit && <CCardTitle className='text-left'>Time : {timeLimit} {multiLang?.LiveManagementRegistrationQuiz?.seconds}</CCardTitle>}
-                                  <CCardTitle className='text-left'>
+                                 <div className='quizWrapQusBox'>
+                                   {/* <CCardTitle>Centered Card Title</CCardTitle> */}
+                                   <div className='quizWrapQusBoxTimer'>
+                                    <span>{timeLimit} </span>
+                                   </div>
+                                   <CCardTitle className='text-center'>
                                     {quizQuestion}
                                   </CCardTitle>
                                   {selectedRadio === 'TrueOrFalse' &&
@@ -1723,18 +1726,18 @@ const LiveRegistration = () => {
                                   {selectedRadio === 'imageMultipleChoice' &&
                                     <div className='gap-2 mt-2 d-flex  gap-3'>
                                       {uploadedImages?.length > 0 && (
-                                        <div className="d-flex ">
+                                        <div className="d-flex flex-wrap">
                                           {uploadedImages.map((input, index) => (
-                                            <div key={index} className='w-50 p-2 mb-2'>
+                                            <div key={index} className='w-50 ps-2 mb-2'>
                                             
                                                 <div
                                                   className='remaining-img-container ansImgChoise'
                                                 >
                                                  
                                                   <img crossOrigin='anonymous' src={input.id ? imageUrl + input.image : URL.createObjectURL(uploadedImages[index].image)} alt="" />
-                                                  <p className='mt-1'>{input.question}</p>
+                                                 
                                                 </div>
-                                           
+                                                <p >{input?.title}</p>
                                             </div>
 
                                           ))}
@@ -1749,7 +1752,7 @@ const LiveRegistration = () => {
                                         <div className="upload-images-container uploadImgWrap d-block">
                                           {inputValues.map((input, index) => (
                                             <div key={index} >
-                                              <div>
+                                              <div className='multipleChoiceQueBox'>
                                                 <p>{input?.value}</p>
                                               </div>
                                             </div>
@@ -1769,14 +1772,14 @@ const LiveRegistration = () => {
                                       )}
                                     </div>
                                   }
+                                 </div>
                                 </CCardBody>
                               </CCard>
                             </div>
                           </div>
 
                         </div>
-                      </div>
-                    </div>
+                
                   </CModalBody>
                   <CModalFooter className='d-flex justify-content-center'>
                     <CButton className='btn-black' onClick={() => { setVisible(false); resetQuiz() }}>

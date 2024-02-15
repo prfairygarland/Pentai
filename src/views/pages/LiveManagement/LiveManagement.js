@@ -75,7 +75,7 @@ const LiveManagement = () => {
     {
       Header: multiLang?.LiveManagement?.Status,
       accessor: 'status',
-      Cell: ({ row }) => <p className='text-center' style={row.original.status.toString() === 'onair' ? {color: 'red', fontWeight: 'bold'} : row.original.status.toString() === 'ready' ? {color: '#13e213', fontWeight: 'bold'} : row.original.status.toString() === 'ended' ? {color: 'black', fontWeight: 'bold'} : {color: 'gray', fontWeight: 'bold'}}>{row.original.status ? row.original.status : '-'}</p>
+      Cell: ({ row }) => <p className={'text-center ' + (row.original.status.toString() === 'onair' ? 'primTxt' : row.original.status.toString() === 'ready' ? 'greenTxt' : row.original.status.toString() === 'ended' ? 'blackTxt' : 'grayTxt')} ><b>{row.original.status ? row.original.status : '-'}</b></p>
     },
     {
       Header: multiLang?.LiveManagement?.Title,
@@ -96,12 +96,12 @@ const LiveManagement = () => {
     {
       Header: multiLang?.LiveManagement?.UV,
       accessor: 'participants',
-      Cell: ({ row }) => <p>{row.original.participants ? row.original.participants : '-'}</p>
+      Cell: ({ row }) => <p className='text-center'>{row.original.participants ? row.original.participants : '-'}</p>
     },
     {
       Header: multiLang?.LiveManagement?.Like,
       accessor: 'likes',
-      Cell: ({ row }) => <p>{row.original.likes ? row.original.likes : '-'}</p>
+      Cell: ({ row }) => <p className='text-center'>{row.original.likes ? row.original.likes : '-'}</p>
     },
     {
       Header: multiLang?.LiveManagement?.Console,
