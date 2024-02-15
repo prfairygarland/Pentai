@@ -54,7 +54,7 @@ const FeatureManagement = () => {
 
     const res = await putApi(API_ENDPOINT.updateFeatureManagement, data)
 
-    if (res.status === 200) {
+    if (res?.status === 200) {
       enqueueSnackbar(multiLang?.successMsg, { variant: 'success' })
       setIsLoading(false)
       setSaveModal(false)
@@ -84,7 +84,7 @@ const FeatureManagement = () => {
                 </h5>
                 <CFormCheck
                   type="radio"
-                  id='one'
+                  id={"one" + index}
                   name={"checkBox" + index}
                   checked={item.isEnabled === true}
                   onChange={() =>
@@ -95,7 +95,7 @@ const FeatureManagement = () => {
                 />
                 <CFormCheck
                   type="radio"
-                  id='two'
+                  id={"two" + index}
                   name={"checkBox" + index}
                   checked={item.isEnabled === false}
                   onChange={() =>
