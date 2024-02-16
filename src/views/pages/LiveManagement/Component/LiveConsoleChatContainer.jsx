@@ -92,7 +92,7 @@ const LiveConsoleChatContainer = ({
   }
 
   return (
-    <div className="col-md-4 p-2">
+    <div className="col-md-4 px-2">
       <div className="statusBox">
         <p>
           <b> Status :</b>{' '}
@@ -127,17 +127,7 @@ const LiveConsoleChatContainer = ({
           <b>UV l PV l Like :</b> 000 l 000 l 000
         </p>
       </div>
-      {/* <div
-        style={{
-          border: '1px solid black',
-          borderRadius: '10px',
-          padding: '5px',
-          margin: '10px',
-          height: '40vh',
-          maxHeight: '40vh',
-          overflowX: 'auto',
-        }}
-      > */}
+
       <div className="chatBoxWrp">
         <h5>Chat (1000)</h5>
         <div className="chatBoxList">
@@ -149,15 +139,7 @@ const LiveConsoleChatContainer = ({
             ))}
         </div>
       </div>
-      {/* <div
-        style={{
-          border: '1px solid black',
-          borderRadius: '10px',
-          padding: '5px',
-          margin: '10px',
-          height: '20vh',
-        }}
-      > */}
+
       <div className="adminChat">
         <h5>Admin Chat</h5>
         <div>

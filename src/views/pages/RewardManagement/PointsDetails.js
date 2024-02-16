@@ -300,7 +300,7 @@ const PointsDetails = () => {
             </div>
             <div className="formWrpInpt d-flex gap-3 align-items-center">
               <p>{userData[0]?.availablePoints}</p>
-              <CButton className='btn-black' onClick={() => setVisible(!visible)}>{multiLang?.changePoints}</CButton>
+              <CButton onClick={() => setVisible(!visible)}>{multiLang?.changePoints}</CButton>
             </div>
           </div>
         </div>
@@ -333,7 +333,9 @@ const PointsDetails = () => {
             </CNav>
           </div>
         </div>
+        <div className='pointsDetailTable'>
         <ReactTable showCheckbox={false} columns={columns} data={pointHistoryData} totalCount={10} onSelectionChange={handleSelectionChange} />
+        </div>
         <div>
           <div className='d-flex justify-content-center align-items-center mt-3 mb-2 gap-3'>
             {pointHistoryData.length > 0 &&
@@ -420,7 +422,7 @@ const PointsDetails = () => {
                     <div className="d-flex formradiogroup mb-2 gap-3">
                       <CFormTextarea
                         type="text"
-                        placeholder="Enter title"
+                        placeholder="Enter reason"
                         name="title"
                         value={reason}
                         onChange={(e) => {
@@ -437,7 +439,7 @@ const PointsDetails = () => {
             </div>
           </CModalBody>
           <CModalFooter className='d-flex justify-content-center'>
-            <CButton color="secondary" onClick={() => (resetValues(), setVisible(false))}>
+            <CButton className='btn-black' onClick={() => (resetValues(), setVisible(false))}>
               {multiLang?.close}
             </CButton>
             <CButton color="primary" onClick={() => validate()}>{multiLang?.save}</CButton>

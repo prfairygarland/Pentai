@@ -240,16 +240,16 @@ const LuckyDrawEventManagement = () => {
                 </CNavLink>
               </CNavItem>
               <CNavItem>
-                <CNavLink role='button' className={activeTab === 'upcoming' ? 'active' : ''} onClick={() => handleTabClick('upcoming')}>upcoming</CNavLink>
+                <CNavLink role='button' className={activeTab === 'upcoming' ? 'active' : ''} onClick={() => handleTabClick('upcoming')}>Upcoming</CNavLink>
               </CNavItem>
               <CNavItem >
-                <CNavLink role='button' className={activeTab === 'ongoing' ? 'active' : ''} onClick={() => handleTabClick('ongoing')}>ongoing</CNavLink>
+                <CNavLink role='button' className={activeTab === 'ongoing' ? 'active' : ''} onClick={() => handleTabClick('ongoing')}>Ongoing</CNavLink>
               </CNavItem>
               <CNavItem >
-                <CNavLink role='button' className={activeTab === 'closed' ? 'active' : ''} onClick={() => handleTabClick('closed')}>closed</CNavLink>
+                <CNavLink role='button' className={activeTab === 'closed' ? 'active' : ''} onClick={() => handleTabClick('closed')}>Closed</CNavLink>
               </CNavItem>
               <CNavItem >
-                <CNavLink role='button' className={activeTab === 'canceled' ? 'active' : ''} onClick={() => handleTabClick('cancelled')}>cancelled</CNavLink>
+                <CNavLink role='button' className={activeTab === 'canceled' ? 'active' : ''} onClick={() => handleTabClick('cancelled')}>Cancelled</CNavLink>
               </CNavItem>
             </CNav>
           </div>

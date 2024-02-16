@@ -376,8 +376,8 @@ const RankingEventRegistration = ({ eventId = '' }) => {
                 <label className="fw-bolder ">Reward</label>
               </div>
               <div className="formWrpInpt">
-                <div className="d-flex formradiogroup mb-2 gap-3">
-                  1st:{' '}
+                <div className="d-flex formradiogroup align-items-center mb-2 gap-3">
+                  <span>1st:</span>
                   <CFormSelect
                     className="me-2"
                     aria-label="Default select example"
@@ -387,8 +387,8 @@ const RankingEventRegistration = ({ eventId = '' }) => {
                   />
                 </div>
                 {rewardCount >= 2 && (
-                  <div className="d-flex formradiogroup mb-2 gap-3">
-                    2nd:{' '}
+                  <div className="d-flex formradiogroup align-items-center mb-2 gap-3">
+                    <span>2nd:</span>
                     <CFormSelect
                       className="me-2"
                       aria-label="Default select example"
@@ -399,8 +399,8 @@ const RankingEventRegistration = ({ eventId = '' }) => {
                   </div>
                 )}
                 {rewardCount === 3 && (
-                  <div className="d-flex formradiogroup mb-2 gap-3">
-                    3rd:{' '}
+                  <div className="d-flex formradiogroup align-items-center mb-2 gap-3">
+                    <span>3rd:</span>
                     <CFormSelect
                       className="me-2"
                       aria-label="Default select example"

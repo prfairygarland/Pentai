@@ -978,7 +978,7 @@ const MenuAccessPermission = () => {
                     {multiLang?.saveMsg}
                   </CModalBody>
                   <CModalFooter>
-                    <CButton color="secondary" onClick={() => setSaveModal(false)}>
+                    <CButton className='btn-black' onClick={() => setSaveModal(false)}>
                       {multiLang?.no}
                     </CButton>
                     <CButton onClick={() => saveAdminAccess()} color="primary">{multiLang?.yes}</CButton>

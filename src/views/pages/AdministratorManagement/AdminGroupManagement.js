@@ -70,12 +70,15 @@ const AdminGroupManagement = () => {
   return (
     <div>
       {isLoading && <Loader />}
-      <h4 className='mb-4'>{multiLang?.AdminGroupManagement}</h4>
+      <div className="pageTitle mb-3 pb-2 d-flex justify-content-between align-items-center">
+          <h2>{multiLang?.AdminGroupManagement}</h2>
+        </div>
+
       <div className='ptk-table w-100'>
         <table className='table'>
           <thead>
             <tr>
-              <th>
+              <th className='d-flex justify-content-start'>
                 <CButton onClick={() => addGroup()}>{multiLang?.add}</CButton>
               </th>
               <th>{multiLang?.name}</th>
@@ -97,9 +100,11 @@ const AdminGroupManagement = () => {
                 </td>
                 <td>{item.superAdminCount}</td>
                 <td>{item.subAdminCount}</td>
-                <td>
-                  <CButton >{multiLang?.delete}</CButton>
-                </td>
+                {item.subAdminCount == 0 &&
+                  <td>
+                    <a className='primTxt'>{multiLang?.delete} </a>
+                  </td>
+                }
               </tr>
             ))}
           </tbody>

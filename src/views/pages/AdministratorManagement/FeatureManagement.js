@@ -68,7 +68,9 @@ const FeatureManagement = () => {
   return (
     <div>
       {isLoading && <Loader />}
-      <h4>Feature Management</h4>
+      <div className="pageTitle mb-3 pb-2 d-flex justify-content-between align-items-center">
+          <h2>Feature Management</h2>
+        </div>
       <div className="formWraper mt-3">
         <div className="form-outline form-white  d-flex ">
           <div className="formWrpLabel">
