@@ -385,7 +385,7 @@ const PointsManagement = () => {
         <div>
           <div className='d-flex justify-content-between align-items-center mb-3'>
             <p style={{ margin: 0 }}>{multiLang?.total}:{total}</p>
-            <CButton className='btn-black' disabled={dataIds?.length === 0} onClick={() => setVisible(!visible)}>{multiLang?.changePoints}</CButton>
+            <CButton className='' disabled={dataIds?.length === 0} onClick={() => setVisible(!visible)}>{multiLang?.changePoints}</CButton>
           </div>
         </div>
         <div>
@@ -494,7 +494,7 @@ const PointsManagement = () => {
                         <div className="d-flex formradiogroup mb-2 gap-3">
                           <CFormTextarea
                             type="text"
-                            placeholder="Enter title"
+                            placeholder="Enter reason"
                             name="title"
                             value={reason}
                             onChange={(e) => {
@@ -511,7 +511,7 @@ const PointsManagement = () => {
                 </div>
               </CModalBody>
               <CModalFooter className='d-flex justify-content-center'>
-                <CButton color="secondary" onClick={() => (resetValues(), setVisible(false))}>
+                <CButton className='btn-black' onClick={() => (resetValues(), setVisible(false))}>
                   {multiLang?.close}
                 </CButton>
                 <CButton color="primary" onClick={() => validate()}>{multiLang?.save}</CButton>

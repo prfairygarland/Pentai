@@ -116,7 +116,10 @@ const RankingEventManagement = () => {
     {
       Header: "Image",
       accessor: 'image',
-      Cell: ({ row }) => <img crossOrigin='anonymous' src={row?.original?.image ? imageUrl + row?.original?.image : null} alt=" " />
+      Cell: ({ row }) =>
+      <div className='rankEvntMgmtImg'>
+         <img crossOrigin='anonymous' src={row?.original?.image ? imageUrl + row?.original?.image : null} alt=" " />
+      </div>
     },
     {
       Header: "Status",

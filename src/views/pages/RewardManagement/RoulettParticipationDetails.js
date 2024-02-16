@@ -1,3 +1,5 @@
+import { cilDataTransferDown } from '@coreui/icons'
+import CIcon from '@coreui/icons-react'
 import { CButton, CFormSelect } from '@coreui/react'
 import moment from 'moment/moment'
 import React, { useEffect, useMemo, useState } from 'react'
@@ -247,50 +249,45 @@ const RoulettParticipationDetails = () => {
                     </div>
                 </div>
             </div>
-            <div className='container p-3 justify-align-content-around w-100 mt-3'>
-                <div className='d-flex '>
-                    <div className='d-flex  align-items-center justify-content-between w-100 gap-3 '>
+            <div className=' justify-align-content-around w-100 my-3'>
+                <div className='d-flex justify-content-between'>
+                    <div className='d-flex  align-items-center justify-content-between  gap-3 '>
                         <div className="d-flex align-items-center w-100 gap-2">
                             <label className="fw-medium  " style={{ 'white-space': 'nowrap' }}>
                                 Reward
                             </label>
                             <CFormSelect
                                 className="me-2"
+                                style={{width:200}}
                                 aria-label="Default select example"
                                 options={rewards}
                                 onChange={handleRewardChange}
                                 value={filterData.reward}
                             />
                         </div>
-                        <div className='d-flex align-items-center w-100'>
-                            <div className="d-flex align-items-center ">
-                                {/* <label className="fw-medium me-3 " style={{ 'white-space': 'nowrap' }}>
-                                Name
-                            </label> */}
-                                <CFormSelect
-                                    className="me-2"
+                       
+                    </div>
+                    <div className='d-flex  align-items-center justify-content-between  ' style={{flex:1}}>
+                    <div className='d-flex  align-items-center  w-100'>
+                    <CFormSelect
+                                    style={{width:200}}
                                     aria-label="Default select example"
                                     options={name}
                                     onChange={handleChnageName}
                                     value={filterData.name}
                                 />
-                            </div>
+                            
+                                <div className="d-flex form-inline w-100 gap-2">
+                                    <input className="form-control mr-sm-10 " value={filterData.search} onChange={handleSearch} type="search" placeholder="Search" aria-label="Search" />
+                                    <CButton onClick={getParticipantsDetails} className="btn btn-primary my-2 my-sm-0" type="submit" >Search</CButton>
+                                </div>
+                            
                         </div>
                     </div>
-
-                    <div className='d-flex  align-items-center justify-content-between w-100 gap-3 '>
-                        <div className='d-flex  align-items-center gap-3 w-100'>
-                            <div className=''>
-                                {/* <label>Title</label> */}
-                            </div>
-                            <div className="col-md-12">
-                                <div className="d-flex form-inline w-100">
-                                    <input className="form-control mr-sm-10 me-2" value={filterData.search} onChange={handleSearch} type="search" placeholder="Search" aria-label="Search" />
-                                </div>
-                            </div>
-                        </div>
-                        <CButton onClick={getParticipantsDetails} className="btn btn-primary my-2 my-sm-0" type="submit" >Search</CButton>
-                        <CButton className="w-50" type="submit" >List Download</CButton>
+                    <div className='d-flex  align-items-center justify-content-end  gap-3 ps-2'>
+                        
+                    
+                        <CButton className=" d-flex gap-2 align-items-center justify-content-center" type="submit" >List Download <CIcon icon={cilDataTransferDown} size="md" /></CButton>
                     </div>
                 </div>
             </div>

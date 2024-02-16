@@ -557,3 +557,31 @@ padding-right: 80px;
 	background-color: ($primary);
 }
 }
+
+.adminGrpMgmtTable{
+thead{
+  tr{
+    th{
+      &:first-child{
+        text-align: left;
+      }
+    }
+  }
+}
+}
+.rankEvntMgmtImg{
+  width: 100px;
+  height: 100px;
+  img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+.pointsDetailTable {
+  table{
+    td{
+      white-space: inherit !important;
+    }
+  }
+}

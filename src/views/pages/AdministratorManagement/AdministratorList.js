@@ -703,13 +703,13 @@ const AdministratorList = () => {
                 <div className="formWraper">
                   <div className="form-outline form-white  d-flex ">
                     <div className="formWrpLabel">
-                      <label className="fw-bolder ">
+                      <label className="fw-bolder d-flex gap-2">
                         {multiLang?.id}
                         <CTooltip style={vars}
                           content={multiLang?.idInfo}
                           placement="bottom"
                         >
-                          <CIcon icon={cilInfo} size="lg" />
+                          <CIcon icon={cilInfo} size="md" style={{cursor:'pointer'}} />
                         </CTooltip>
                       </label>
                     </div>
