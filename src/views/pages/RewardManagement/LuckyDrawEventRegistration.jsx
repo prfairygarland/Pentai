@@ -105,7 +105,18 @@ const LuckyDrawEventRegistration = ({ eventId = '' }) => {
       rewardId,
       rewardQuantity,
       image: imagePath,
-      limitPerDay: participationLimit ? participationLimit : participationLimitMode,
+      limitPerDay:
+        participationLimitMode === 'noLimit'
+          ? null
+          : participationLimitMode === 'oncePerUser'
+          ? null
+          : participationLimit,
+      limitPerUser:
+        participationLimitMode === 'noLimit'
+          ? null
+          : participationLimitMode === 'oncePerUser'
+          ? 1
+          : null,
       announcementTime: new Date(new Date(endDate + 'T' + endHour + ':' + endMins)).toISOString(),
     }
     try {
@@ -194,6 +205,8 @@ const LuckyDrawEventRegistration = ({ eventId = '' }) => {
         setParticipationPoints(res?.data?.participationPoints)
         setDescription(res?.data?.description)
         setWinnerDescription(res?.data?.winnerDescription)
+        setRewardId(res?.data?.reward?.id)
+        setRewardQuantity(res?.data?.reward?.quantity)
 
         const allRewards = []
         const rewardsFromDB = res?.data?.rewards

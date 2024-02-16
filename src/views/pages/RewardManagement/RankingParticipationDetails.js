@@ -108,23 +108,6 @@ const RankingParticipationDetails = () => {
 
     }
 
-    // const getEventDetails = async () => {
-    //     let url = `${API_ENDPOINT.getRankingParticipants}?eventId=${location?.state?.eventId}`
-
-    //     const response = await getApi(url)
-    //     console.log('resparticipants::', response)
-    //     if (response?.status === 201) {
-    //         if (response?.data?.rewards) {
-    //             const data = await response?.data?.rewards?.map((op) => {
-    //                 return { 'label': op.name, 'value': op.id }
-
-    //             })
-    //             setRewards((pre) => {
-    //                 return [{ label: 'All', value: '' }, ...data]
-    //             })
-    //         }
-    //     }
-    // }
 
     useEffect(() => {
         getParticipantsDetails()
@@ -206,7 +189,7 @@ const RankingParticipationDetails = () => {
     {isLoading && <Loader />}
    <div className="w-100">
        <div className="card border-0 ">
-           <div className='card-body p-0'>
+           {participantsDetails.length > 0 && <div className='card-body p-0'>
                <div className='formWraper'>
                    <div>
                        <div className='d-flex'>
@@ -251,7 +234,7 @@ const RankingParticipationDetails = () => {
                        </div>
                    </div>
                </div>
-           </div>
+           </div>}
        </div>
    </div>
    <div className='container p-3 justify-align-content-around w-100 mt-3'>

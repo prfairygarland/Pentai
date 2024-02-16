@@ -314,6 +314,7 @@ export let API_ENDPOINT = {
   getLuckyDrawWinnerDetails: ALL_CONSTANTS.API_URL + "/api/admin/lounge/luckyDrawEvent/winners",
   createRewardLuckyDraw: ALL_CONSTANTS.API_URL + "/api/admin/lounge/luckyDrawEvent/create",
   getLuckyDrawDetails: ALL_CONSTANTS.API_URL + "/api/admin/lounge/luckyDrawEvent/details",
+  getRewardProduct : ALL_CONSTANTS.API_URL + "/api/admin/lounge/rewardProducts/get",
   createRewardProduct: ALL_CONSTANTS.API_URL + "/api/admin/lounge/rewardProducts/create",
 
 

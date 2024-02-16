@@ -47,6 +47,12 @@ const LuckyDrawWinnerDetails = () => {
         getRankingWinnerDetails()
     }, [itemsPerPage, currentPage])
 
+    useEffect(() => {
+        if (filterData?.search === '') {
+            getRankingWinnerDetails()
+        }
+    }, [filterData.search])
+
     const getRankingWinnerDetails = async () => {
         setIsLoading(true)
         let url = `${API_ENDPOINT.getLuckyDrawWinnerDetails}?eventId=${location?.state?.eventId}&pageNo=${currentPage + 1}&pageSize=${itemsPerPage}`
@@ -166,7 +172,7 @@ const LuckyDrawWinnerDetails = () => {
         <section className="flex-row align-items-center mb-3">
             {isLoading && <Loader />}
             <div className="w-100">
-                <div className="card border-0 ">
+                {participantsDetails.length > 0 && <div className="card border-0 ">
                     <div className='card-body p-0'>
                         <div className='formWraper'>
                             <div>
@@ -213,7 +219,7 @@ const LuckyDrawWinnerDetails = () => {
                             </div>
                         </div>
                     </div>
-                </div>
+                </div>}
             </div>
             <div className='container p-3 justify-align-content-around w-100 mt-3'>
                 <div className='d-flex '>

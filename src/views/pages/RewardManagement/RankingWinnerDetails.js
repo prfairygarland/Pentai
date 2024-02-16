@@ -149,7 +149,7 @@ const RankingWinnerDetails = () => {
     <section className="flex-row align-items-center mb-3">
     {isLoading && <Loader />}
    <div className="w-100">
-       <div className="card border-0 ">
+      {participantsDetails.length > 0 && <div className="card border-0 ">
            <div className='card-body p-0'>
                <div className='formWraper'>
                    <div>
@@ -196,13 +196,13 @@ const RankingWinnerDetails = () => {
                    </div>
                </div>
            </div>
-       </div>
+       </div>}
    </div>
    <div className='container p-3 justify-align-content-around w-100 mt-3'>
        <div className='d-flex '>
-           <div className='d-flex  align-items-center justify-content-end  w-100 gap-3 '>
+           {participantsDetails.length > 0 && <div className='d-flex  align-items-center justify-content-end  w-100 gap-3 '>
                <CButton className="w-50" type="submit" >List Download</CButton>
-           </div>
+           </div>}
        </div>
    </div>
    <div>
