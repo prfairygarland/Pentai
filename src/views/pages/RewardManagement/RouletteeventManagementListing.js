@@ -115,8 +115,9 @@ const RouletteeventManagementListing = () => {
       const response = await getApi(url)
       console.log('data get =>', response);
       if (response?.status === 201) {
+        console.log('response?.total', response?.total)
         setRouletteEvents(response?.data)
-        setTotalPages(Math.ceil(30 / Number(itemsPerPage)))
+        setTotalPages(Math.ceil(response?.total / Number(itemsPerPage)))
         setIsLoading(false)
       } else {
         setRouletteEvents([])

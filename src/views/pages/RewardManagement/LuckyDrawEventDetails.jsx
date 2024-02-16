@@ -2,6 +2,8 @@ import { CNav, CNavItem, CNavLink } from '@coreui/react'
 import React, { useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import LuckyDrawEventRegistration from './LuckyDrawEventRegistration'
+import LuckyDrawParticipationDetails from './LuckyDrawParticipationDetails'
+import LuckyDrawWinnerDetails from './LuckyDrawWinnerDetails'
 
 const LuckyDrawEventDetails = () => {
   const [activeTab, setActiveTab] = useState('')
@@ -54,8 +56,8 @@ const LuckyDrawEventDetails = () => {
         </main>
       </div>
       {activeTab === '' && <LuckyDrawEventRegistration eventId={location?.state?.eventId} />}
-      {activeTab === 'partiDetails' && <>Participation</>}
-      {activeTab === 'winner' && <>Winner</>}
+      {activeTab === 'partiDetails' && <LuckyDrawParticipationDetails />}
+      {activeTab === 'winner' && <LuckyDrawWinnerDetails />}
     </>
   )
 }

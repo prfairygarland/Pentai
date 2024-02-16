@@ -53,6 +53,7 @@ const RankingWinnerDetails = () => {
             const response = await getApi(url)
             console.log('reswinner::', response)
             if (response?.status === 201) {
+                console.log('response?.total::', response?.total)
                 setParticipantsDetails(response?.data)
                 setTotalPages(Math.ceil(response?.total / Number(itemsPerPage)))
                 setIsLoading(false)
