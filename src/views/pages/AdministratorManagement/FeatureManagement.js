@@ -65,6 +65,14 @@ const FeatureManagement = () => {
     }
   }
 
+  const titleCase = (str) => {
+    str = str.toLowerCase().split(' ');
+    for (let i = 0; i < str.length; i++) {
+      str[i] = str[i].charAt(0).toUpperCase() + str[i].slice(1);
+    }
+    return str.join(' ');
+  }
+
   return (
     <div>
       {isLoading && <Loader />}
@@ -82,7 +90,7 @@ const FeatureManagement = () => {
                 className="d-flex formradiogroup mb-2 gap-2"
               >
                 <h5 className="radiolabel" htmlFor="Bulletin board">
-                  {item.name}
+                  {titleCase(item.name)}
                 </h5>
                 <CFormCheck
                   type="radio"

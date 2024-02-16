@@ -393,7 +393,7 @@ const PointsManagement = () => {
           <ReactTable columns={columns} data={getPointAllData} totalCount={10} onSelectionChange={handleSelectionChange} />
           <div>
             <div className='d-flex justify-content-center align-items-center mt-3 mb-2 gap-3'>
-              {getPointAllData.length > 0 &&
+              {getPointAllData?.length > 0 &&
                 <div className='d-flex gap-4'>
                   <div className='userlist-pagination'>
                     <div className='userlist-pagination dataTables_paginate'>
@@ -471,7 +471,7 @@ const PointsManagement = () => {
                           </div>
                           <div className='d-flex align-items-center gap-3'>
                             <CFormInput
-                              style={{ width: 100 }}
+                              // style={{ width: 100 }}
                               className='text-center'
                               type="text"
                               placeholder={multiLang?.enterNumber}
@@ -498,11 +498,11 @@ const PointsManagement = () => {
                             name="title"
                             value={reason}
                             onChange={(e) => {
-                              setReason(e.target.value.substring(0, 42))
+                              setReason(e.target.value.substring(0, 100))
                             }}
                           />
                           <span className="txt-byte-information justify-content-start">
-                            {reason.length} / 100
+                            {reason?.length} / 100
                           </span>
                         </div>
                       </div>

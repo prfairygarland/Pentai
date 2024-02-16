@@ -55,6 +55,7 @@ const AdministratorList = () => {
   const [adminId, setAdminId] = useState(null)
   const [deleteAdmin, setDeleteAdmin] = useState(null)
   const [deleteModal, setDeleteModal] = useState(false)
+  const [loginUserData, setLoginUserData] = useState()
 
   const perPageValue = [
     { label: '10', value: 10 },
@@ -72,7 +73,10 @@ const AdministratorList = () => {
 
   useEffect(() => {
     getGroup()
+    setLoginUserData(localStorage.getItem('userdata') ? JSON.parse(localStorage.getItem('userdata')) : JSON.parse(sessionStorage.getItem('sessionUserdata')))
   }, [])
+
+  // console.log('login data =>', loginUserData?.isSuperAdmin)
 
   useEffect(() => {
     getHistoryData(1).then((item) => {
@@ -537,34 +541,37 @@ const AdministratorList = () => {
 
         <div className="d-flex p-4  flex-column bg-light  mt-3">
           <div className="d-flex justify-content-between align-items-center w-100">
-            <div className='d-flex'>
-              <div className="d-flex align-items-center me-5">
-                <label className="me-3 fw-medium">{multiLang?.level}</label>
-                <CFormSelect
-                  className="me-2"
-                  aria-label="Default select example"
-                  options={[
-                    { label: multiLang?.all, value: 'All' },
-                    { label: multiLang?.super, value: 'Super' },
-                    { label: multiLang?.Sub, value: 'Sub' }
-                  ]}
-                  onChange={handleLevelChange}
-                  value={filterData.level}
-                />
+            {loginUserData?.isSuperAdmin !== 1 &&
+              <div className='d-flex'>
+                <div className="d-flex align-items-center me-5">
+                  <label className="me-3 fw-medium">{multiLang?.level}</label>
+                  <CFormSelect
+                    className="me-2"
+                    aria-label="Default select example"
+                    options={[
+                      { label: multiLang?.all, value: 'All' },
+                      { label: multiLang?.super, value: 'Super' },
+                      { label: multiLang?.Sub, value: 'Sub' }
+                    ]}
+                    onChange={handleLevelChange}
+                    value={filterData.level}
+                  />
 
-              </div>
-              <div className="d-flex align-items-center me-5">
-                <label className="me-3 fw-medium">{multiLang?.group}</label>
-                <CFormSelect
-                  className="me-2"
-                  aria-label="Default select example"
-                  options={groupData.length > 0 ? [{ label: multiLang?.all, value: 0 }, ...groupData] : [{ label: multiLang?.all, value: 0 }]}
-                  onChange={handleGroupChange}
-                  value={filterData.group}
-                />
+                </div>
+                <div className="d-flex align-items-center me-5">
+                  <label className="me-3 fw-medium">{multiLang?.group}</label>
+                  <CFormSelect
+                    className="me-2"
+                    aria-label="Default select example"
+                    options={groupData?.length > 0 ? [{ label: multiLang?.all, value: 0 }, ...groupData] : [{ label: multiLang?.all, value: 0 }]}
+                    onChange={handleGroupChange}
+                    value={filterData.group}
+                  />
 
+                </div>
               </div>
-            </div>
+            }
+
             <div className="d-flex align-items-center">
               <label className="me-3 fw-medium">{multiLang?.registrationDate}</label>
               <div className="d-flex p-2 gap-3">
@@ -591,7 +598,7 @@ const AdministratorList = () => {
         </div>
         <ReactTable showCheckbox={false} columns={columns} data={administratorListData} totalCount={10} onSelectionChange={handleSelectionChange} />
 
-        {administratorListData.length > 0 &&
+        {administratorListData?.length > 0 &&
           <div className='d-flex w-100 justify-content-center gap-3 mt-4'>
             <div className='d-flex gap-3'>
               <div className='userlist-pagination'>
@@ -628,9 +635,11 @@ const AdministratorList = () => {
           </div>
         }
 
+        {loginUserData?.isSuperAdmin !== 1 &&
         <div>
           <CButton className='btn btn-success mb-3' onClick={() => { setHistoryVisible(!historyVisible); getHistoryData(1) }}>{multiLang?.history}</CButton>
         </div>
+        }
         <div>
           <CModal
             backdrop="static"
@@ -660,7 +669,7 @@ const AdministratorList = () => {
                 <ReactTable showCheckbox={false} columns={historyColumns} data={historyData} totalCount={10} onSelectionChange={handleSelectionChange} />
 
                 <div className='mt-3'>
-                  {historyData.length > 0 &&
+                  {historyData?.length > 0 &&
                     <div className='userlist-pagination'>
                       <div className='userlist-pagination dataTables_paginate'>
                         <ReactPaginate
@@ -760,7 +769,8 @@ const AdministratorList = () => {
                             { label: multiLang?.super, value: 'Super' },
                             { label: multiLang?.Sub, value: 'Sub' }
                           ]}
-                          value={levelId}
+                          disabled={loginUserData?.isSuperAdmin === 1}
+                          value={loginUserData?.isSuperAdmin === 1 ? 'Sub' : levelId}
                           onChange={(e) => setLevelId(e.target.value)}
                         />
                       </div>
@@ -779,7 +789,8 @@ const AdministratorList = () => {
                           className="me-2"
                           aria-label="Default select example"
                           options={[{ label: multiLang?.select, value: 0 }, ...groupData]}
-                          value={groupId}
+                          disabled={loginUserData?.isSuperAdmin === 1}
+                          value={loginUserData?.groupId === 1 ? loginUserData?.groupId : groupId}
                           onChange={(e) => setGroupId(e.target.value)}
                         />
                       </div>

@@ -110,7 +110,7 @@ const routes = [
   { path: '/RankingEventDetails', name: 'Ranking Event Details', element: RankingEventDetails },
   { path: '/PointManagement', name: 'Point Management', element: PointsManagement },
   { path: '/PointManagement/PointsDetails', name: 'Point Detail', element: PointsDetails },
-  { path : '/ProductManagement', name: 'Product Management', element: ProductManagement},
+  { path: '/ProductManagement', name: 'Product Management', element: ProductManagement },
 
   // Operation Management
   { path: '/GreetingMessageManagement', name: 'Greeting Message Management', element: GreetingMessageManagement },
