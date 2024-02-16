@@ -254,7 +254,7 @@ const PointsManagement = () => {
 
   const handleChangePoint = async () => {
     setIsLoading(true)
-    let url = API_ENDPOINT.changePoint
+    let url = API_ENDPOINT.multiplePoint
     try {
       // for (let obj in dataIds) {
       //   let data = {
@@ -267,8 +267,12 @@ const PointsManagement = () => {
       //   let responce = await postApi(data, url)
 
       // }
+      const stringArray = dataIds;
+      const numberArray = stringArray?.map(str => parseInt(str));
+      console.log(numberArray);
+
       let data = {
-        id: dataIds[0],
+        id: numberArray,
         type: type === true ? 'add' : 'deduct',
         points: points,
         reason: reason
