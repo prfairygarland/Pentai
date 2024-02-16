@@ -5,7 +5,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import DatePicker from 'react-date-picker';
 import { useTranslation } from 'react-i18next';
 import ReactPaginate from 'react-paginate';
-import { useLocation } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import Loader from 'src/components/common/Loader';
 import ReactTable from 'src/components/common/ReactTable';
 import { getApi, postApi } from 'src/utils/Api';
@@ -359,9 +359,12 @@ const PointsDetails = () => {
             }
 
           </div>
-
         </div>
-
+        <div className='d-flex justify-content-center mt-3 mb-3'>
+          <NavLink to={'/PointManagement'}>
+            <CButton className='btn-black'>List</CButton>
+          </NavLink>
+        </div>
       </div >
 
       <div>

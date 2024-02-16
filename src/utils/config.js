@@ -8,7 +8,7 @@ export let ALL_CONSTANTS = {
   // BASE_URL: "",       // API URL Live
   // API_URL: "",    // API URL Live
 
-  IS_PRODUCTION: false,
+  // IS_PRODUCTION: false,
   // BASE_URL: "http://192.168.9.175:3000",       // Local
   // API_URL: "http://192.168.9.175:3000",    // Local
 }
@@ -305,6 +305,7 @@ export let API_ENDPOINT = {
   getTeamApiData: ALL_CONSTANTS.API_URL + "/api/adminPanel/getTeam",
   getPointDetail: ALL_CONSTANTS.API_URL + "/api/admin/lounge/pointManagement/pointDetails",
   changePoint: ALL_CONSTANTS.API_URL + "/api/admin/lounge/pointManagement/changePoint",
+  multiplePoint: ALL_CONSTANTS.API_URL + "/api/admin/lounge/pointManagement/multiplePoint",
   pointHistory: ALL_CONSTANTS.API_URL + "/api/admin/lounge/pointManagement/pointHistory",
   getRankingParticipantDetails: ALL_CONSTANTS.API_URL + "/api/admin/lounge/rankingEvent/participants",
   getRankingWinnerDetails: ALL_CONSTANTS.API_URL + "/api/admin/lounge/rankingEvent/winners",
@@ -314,7 +315,7 @@ export let API_ENDPOINT = {
   getLuckyDrawWinnerDetails: ALL_CONSTANTS.API_URL + "/api/admin/lounge/luckyDrawEvent/winners",
   createRewardLuckyDraw: ALL_CONSTANTS.API_URL + "/api/admin/lounge/luckyDrawEvent/create",
   getLuckyDrawDetails: ALL_CONSTANTS.API_URL + "/api/admin/lounge/luckyDrawEvent/details",
-  getRewardProduct : ALL_CONSTANTS.API_URL + "/api/admin/lounge/rewardProducts/get",
+  getRewardProduct: ALL_CONSTANTS.API_URL + "/api/admin/lounge/rewardProducts/get",
   createRewardProduct: ALL_CONSTANTS.API_URL + "/api/admin/lounge/rewardProducts/create",
 
 
