@@ -9,7 +9,7 @@ import {
 } from '@coreui/react'
 import React, { useEffect, useState } from 'react'
 import { postApi } from 'src/utils/Api'
-import { API_ENDPOINT } from 'src/utils/config'
+import { ALL_CONSTANTS, API_ENDPOINT } from 'src/utils/config'
 import { enqueueSnackbar } from 'notistack'
 
 const ProductManagementRegistration = ({ show = false, setShow, productData }) => {
@@ -48,7 +48,30 @@ const ProductManagementRegistration = ({ show = false, setShow, productData }) =
     setShow(false)
   }
 
+  async function urlToBlob(url) {
+    const response = await fetch(url)
+    const blob = await response.blob()
+    return blob
+  }
+
+  const urlToFile = async (url) => {
+    if (!url) return
+    const blob = await urlToBlob(ALL_CONSTANTS.BASE_URL + url)
+    const fileName = url
+    return new File([blob], fileName, { type: blob.type })
+  }
+
+  const setProdData = async () => {
+    setTitle(productData?.prodTitle)
+    setPrice(productData?.prodPrice)
+    const imagePath = await urlToFile(productData?.imagePath)
+    setUploadedImage(imagePath)
+  }
   useEffect(() => {
+    if (productData && productData?.prodTitle) {
+      setProdData()
+      return
+    }
     setTitle('')
     setPrice('')
     setUploadedImage('')
