@@ -299,6 +299,8 @@ export let API_ENDPOINT = {
   getRouletteDetails: ALL_CONSTANTS.API_URL + "/api/admin/lounge/rouletteEvent/details",
   getRankingEvent: ALL_CONSTANTS.API_URL + "/api/admin/lounge/rankingEvent/get",
   createRewardRanking: ALL_CONSTANTS.API_URL + "/api/admin/lounge/rankingEvent/create",
+  getRankingParticipantDetails : ALL_CONSTANTS.API_URL + "/api/admin/lounge/rankingEvent/participants",
+  getRankingWinnerDetails : ALL_CONSTANTS.API_URL + "/api/admin/lounge/rankingEvent/winners"
 
 
 
