@@ -255,11 +255,11 @@ const AdministratorList = () => {
       }
 
       if (filterData?.startDate) {
-        url = url + `&startDate=${filterData?.startDate}`
+        url = url + `&startDate=${moment(filterData?.startDate).add(1, 'd').toISOString().split('T')[0] + `T00:00:00.000Z`}`
       }
 
       if (filterData?.endDate) {
-        url = url + `&endDate=${filterData?.endDate}`
+        url = url + `&endDate=${moment(filterData?.endDate).add(1, 'd').toISOString().split('T')[0] + `T23:59:59.000Z`}`
       }
 
       if (filterData?.level) {
