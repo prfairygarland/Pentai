@@ -5,6 +5,16 @@ import ProductManagementRegistration from './ProductManagementRegistration'
 const ProductManagement = () => {
 
     const [productModal, setProductModal] = useState(false)
+    const [productData, setProductData] = useState({
+        prodTitle : '',
+        prodPrice : '',
+        imagePath : ''
+    })
+
+    const viewHandler = (prodTitle, prodPrice, imagePath) => {
+        setProductData(prodTitle, prodPrice, imagePath)
+        setProductModal(true)
+    }
     return (
       <div>
           <div className='container p-3 justify-align-content-around w-100 mt-3'>
@@ -31,7 +41,7 @@ const ProductManagement = () => {
      </div>
 
      {
-        productModal && <ProductManagementRegistration show={productModal} setShow={setProductModal} />
+        productModal && <ProductManagementRegistration show={productModal} setShow={setProductModal} productData={productData} />
      }
       </div>
     )

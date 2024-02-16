@@ -12,7 +12,7 @@ import { postApi } from 'src/utils/Api'
 import { API_ENDPOINT } from 'src/utils/config'
 import { enqueueSnackbar } from 'notistack'
 
-const ProductManagementRegistration = ({ show = false, setShow }) => {
+const ProductManagementRegistration = ({ show = false, setShow, productData }) => {
   const [title, setTitle] = useState('')
   const [price, setPrice] = useState('')
   const [uploadedImage, setUploadedImage] = useState('')
