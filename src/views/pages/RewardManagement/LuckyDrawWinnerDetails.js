@@ -9,7 +9,7 @@ import ReactTable from 'src/components/common/ReactTable'
 import { getApi } from 'src/utils/Api'
 import { API_ENDPOINT } from 'src/utils/config'
 
-const RoulettParticipationDetails = () => {
+const LuckyDrawWinnerDetails = () => {
 
     const initialData = {
         search: '',
@@ -41,52 +41,24 @@ const RoulettParticipationDetails = () => {
         { label: 'E-mail', value: 'email' },
     ]
 
-    const handleSearch = (e) => {
-        const value = e.target.value
-        setFilterData((prev) => {
-            return {
-                ...prev,
-                search: value
-            }
-        })
-    }
+    useEffect(() => {
+        getRankingWinnerDetails()
+    }, [itemsPerPage, currentPage])
 
-    const handleRewardChange = (e) => {
-        const value = e.target.value
-        setFilterData((prev) => {
-            return {
-                ...prev,
-                reward: value
-            }
-        })
-    }
-
-    const handleChnageName = (e) => {
-        const value = e.target.value
-        setFilterData((prev) => {
-            return {
-                ...prev,
-                name: value
-            }
-        })
-    }
-
-    const getParticipantsDetails = async () => {
+    const getRankingWinnerDetails = async () => {
         setIsLoading(true)
-        let url = `${API_ENDPOINT.getRouletteParticipantsDetails}?eventId=${location?.state?.eventId}&pageNo=${currentPage + 1}&pageSize=${itemsPerPage}`
+        let url = `${API_ENDPOINT.getLuckyDrawWinnerDetails}?eventId=${location?.state?.eventId}&pageNo=${currentPage + 1}&pageSize=${itemsPerPage}`
 
+        
         if (filterData.search) {
             url = url + `&searchTerm=${filterData?.search}`
         }
 
-        if (filterData.reward) {
-            url = url + `&rewardId=${filterData?.reward}`
-        }
-
         try {
             const response = await getApi(url)
-            console.log('res::', response)
+            console.log('reswinner::', response)
             if (response?.status === 201) {
+                console.log('reswinner::', response?.total)
                 setParticipantsDetails(response?.data)
                 setTotalPages(Math.ceil(response?.total / Number(itemsPerPage)))
                 setIsLoading(false)
@@ -104,38 +76,29 @@ const RoulettParticipationDetails = () => {
 
     }
 
-    const getEventDetails = async () => {
-        let url = `${API_ENDPOINT.getRouletteEventEventDetails}?eventId=${location?.state?.eventId}`
-
-        const response = await getApi(url)
-        console.log('reseventdetails::', response)
-        if (response?.status === 201) {
-            if (response?.data?.rewards) {
-                const data = await response?.data?.rewards?.map((op) => {
-                    return { 'label': op.name, 'value': op.id }
-
-                })
-                setRewards((pre) => {
-                    return [{ label: 'All', value: '' }, ...data]
-                })
+    const handleSearch = (e) => {
+        const value = e.target.value
+        setFilterData((prev) => {
+            return {
+                ...prev,
+                search: value
             }
-        }
+        })
+    }
+
+    const handleChnageName = (e) => {
+        const value = e.target.value
+        setFilterData((prev) => {
+            return {
+                ...prev,
+                name: value
+            }
+        })
     }
 
     useEffect(() => {
-        getParticipantsDetails()
-        getEventDetails()
+        getRankingWinnerDetails()
     }, [])
-
-    useEffect(() => {
-        if (filterData?.search === '') {
-            getParticipantsDetails()
-        }
-    }, [filterData.search])
-
-    useEffect(() => {
-        getParticipantsDetails()
-      }, [itemsPerPage, currentPage])
 
 
     const handlePageChange = (selectedPage) => {
@@ -181,22 +144,25 @@ const RoulettParticipationDetails = () => {
             Cell: ({ row }) => <p className='text-center'>{row.original.teamName ? row.original.teamName : '-'}</p>
         },
         {
-            Header: 'Reward',
-            accessor: 'reward',
-            Cell: ({ row }) => <p className='text-center'>{row.original.reward ? row.original.reward : '-'}</p>
-        },
-        {
             Header: 'Time',
             accessor: 'time',
             Cell: ({ row }) => <p className='text-center'>{row.original.participationTime ? moment(row.original.participationTime).format("YYYY-MM-DD HH:mm") : '-'}</p>
-        }
+        },
+        {
+            Header: 'Status',
+            accessor: 'status',
+            Cell: ({ row }) => <p className='text-center'>{row.original.isActive ? row.original.isActive : ''}</p>
+        },
+        {
+            Header: 'Participation',
+            accessor: 'Participation',
+            Cell: ({ row }) => <p className='text-center'>{row.original.participants ? row.original.participants : '-'}</p>
+        },
     ], [])
 
     return (
-        // <div>
-    
         <section className="flex-row align-items-center mb-3">
-             {isLoading && <Loader />}
+            {isLoading && <Loader />}
             <div className="w-100">
                 <div className="card border-0 ">
                     <div className='card-body p-0'>
@@ -249,49 +215,36 @@ const RoulettParticipationDetails = () => {
             </div>
             <div className='container p-3 justify-align-content-around w-100 mt-3'>
                 <div className='d-flex '>
-                    <div className='d-flex  align-items-center justify-content-between w-100 gap-3 '>
-                        <div className="d-flex align-items-center w-100 gap-2">
-                            <label className="fw-medium  " style={{ 'white-space': 'nowrap' }}>
-                                Reward
-                            </label>
-                            <CFormSelect
-                                className="me-2"
-                                aria-label="Default select example"
-                                options={rewards}
-                                onChange={handleRewardChange}
-                                value={filterData.reward}
-                            />
-                        </div>
-                        <div className='d-flex align-items-center w-100'>
-                            <div className="d-flex align-items-center ">
-                                {/* <label className="fw-medium me-3 " style={{ 'white-space': 'nowrap' }}>
-                                Name
-                            </label> */}
-                                <CFormSelect
-                                    className="me-2"
-                                    aria-label="Default select example"
-                                    options={name}
-                                    onChange={handleChnageName}
-                                    value={filterData.name}
-                                />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className='d-flex  align-items-center justify-content-between w-100 gap-3 '>
-                        <div className='d-flex  align-items-center gap-3 w-100'>
-                            <div className=''>
-                                {/* <label>Title</label> */}
-                            </div>
-                            <div className="col-md-12">
-                                <div className="d-flex form-inline w-100">
-                                    <input className="form-control mr-sm-10 me-2" value={filterData.search} onChange={handleSearch} type="search" placeholder="Search" aria-label="Search" />
-                                </div>
-                            </div>
-                        </div>
-                        <CButton onClick={getParticipantsDetails} className="btn btn-primary my-2 my-sm-0" type="submit" >Search</CButton>
-                        <CButton className="w-50" type="submit" >List Download</CButton>
-                    </div>
+                <div className='d-flex  align-items-center justify-content-between w-100 gap-3 '>
+               <div className='d-flex align-items-center w-100'>
+                   <div className="d-flex align-items-center ">
+                       {/* <label className="fw-medium me-3 " style={{ 'white-space': 'nowrap' }}>
+                       Name
+                   </label> */}
+                       <CFormSelect
+                           className="me-2"
+                           aria-label="Default select example"
+                           options={name}
+                           onChange={handleChnageName}
+                           value={filterData.name}
+                       />
+                   </div>
+               </div>
+           </div>
+                <div className='d-flex  align-items-center justify-content-between w-100 gap-3 '>
+               <div className='d-flex  align-items-center gap-3 w-100'>
+                   <div className=''>
+                       {/* <label>Title</label> */}
+                   </div>
+                   <div className="col-md-12">
+                       <div className="d-flex form-inline w-100">
+                           <input className="form-control mr-sm-10 me-2" value={filterData.search} onChange={handleSearch} type="search" placeholder="Search" aria-label="Search" />
+                       </div>
+                   </div>
+               </div>
+               <CButton onClick={getRankingWinnerDetails} className="btn btn-primary my-2 my-sm-0" type="submit" >Search</CButton>
+                <CButton className="w-50" type="submit" >List Download</CButton>
+           </div>
                 </div>
             </div>
             <div>
@@ -337,4 +290,4 @@ const RoulettParticipationDetails = () => {
     )
 }
 
-export default RoulettParticipationDetails
+export default LuckyDrawWinnerDetails

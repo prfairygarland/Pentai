@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react"
+import React, { useEffect, useMemo, useState } from "react"
 import { CButton, CFormSelect, CNav, CNavItem, CNavLink } from "@coreui/react"
 import { useNavigate } from "react-router-dom"
 import ReactTable from "src/components/common/ReactTable"
@@ -6,6 +6,9 @@ import DatePicker from "react-date-picker"
 import Loader from "src/components/common/Loader"
 import ReactPaginate from "react-paginate"
 import moment from 'moment/moment';
+import { API_ENDPOINT } from "src/utils/config"
+import { getApi } from "src/utils/Api"
+import { imageUrl } from "../BookRentalManagement/BookRentalStatus"
 
 const LuckyDrawEventManagement = () => {
 
@@ -23,7 +26,7 @@ const LuckyDrawEventManagement = () => {
     const [currentPage, setCurrentPage] = useState(0)
     const [totalPages, setTotalPages] = useState(0)
     const [itemsPerPage, setItemsPerPage] = useState(10)
-    const [RouletteEvents, setRouletteEvents] = useState([])
+    const [LuckyDrawEvents, setLuckyDrawEvents] = useState([])
 
     const perPageValue = [
         { label: '10', value: 10 },
@@ -41,12 +44,66 @@ const LuckyDrawEventManagement = () => {
         })
       }
 
+
+      useEffect(() => {
+        getLuckyDrawEvents()
+      }, [activeTab, itemsPerPage, currentPage, filterData.Status, filterData.startDate, filterData.endDate,])
+    
+      useEffect(() => {
+        if (filterData?.search === '') {
+          getLuckyDrawEvents()
+        }
+      }, [filterData.search])
+
+      const getLuckyDrawEvents = async () => {
+        // setIsLoading(true)
+        try {
+          let url = API_ENDPOINT.getLuckyDrawEvent + `?pageNo=${currentPage + 1}&pageSize=${itemsPerPage}`
+    
+          if (filterData?.search) {
+            url = url + `&searchTerm=${filterData?.search}`
+          }
+    
+          if (filterData?.startDate) {
+            url = url + `&startDate=${filterData?.startDate}`
+          }
+    
+          if (filterData?.endDate) {
+            url = url + `&endDate=${filterData?.endDate}`
+          }
+    
+          if (activeTab !== '') {
+            url = url + `&status=${activeTab}`
+          }
+    
+          const response = await getApi(url)
+          console.log('data get =>', response);
+          if (response?.status === 201) {
+            setLuckyDrawEvents(response?.data)
+            setTotalPages(Math.ceil(30 / Number(itemsPerPage)))
+            setIsLoading(false)
+          } else {
+            setLuckyDrawEvents([])
+            setIsLoading(false)
+          }
+        } catch (error) {
+          setIsLoading(false)
+          console.log(error)
+        }
+      }
+
+      
+
+      useEffect(() =>{
+        getLuckyDrawEvents()
+      },[])
+
       const columns = useMemo(() => [
 
         {
             Header: "Image",
             accessor: 'image',
-            // Cell: ({ row }) => <p style={{ textTransform: 'capitalize' }} className='text-center'>{row.original.stauts ? row.original.stauts : '-'}</p>
+            Cell: ({ row }) => <img crossOrigin='anonymous' src={row?.original?.image ? imageUrl + row?.original?.image : null} alt=" " />
           },
         {
           Header:"Status",
@@ -68,17 +125,22 @@ const LuckyDrawEventManagement = () => {
         {
           Header: "Announcement",
           accessor: '',
+          Cell: ({ row }) => <p className='text-center'>{row.original.announcementTime ? moment(row.original.announcementTime).format("YYYY-MM-DD HH:mm") : '-'}</p>
+        },
+        {
+          Header: "Creator",
+          accessor: '',
           Cell: ({ row }) => <p className='text-center'>{row.original.authorName ? row.original.authorName : '-'}</p>
         },
         {
-          Header: "participantsPoints",
+          Header: "Participants (Points)",
           accessor: 'participants',
           Cell: ({ row }) => <><p className='text-center'>{row.original.participationPoints ? `${(row?.original?.participationPoints)}
                                                              ` : ''}</p><p className='text-center'>{row.original.participationPoints ? `
                                                           (${(row?.original?.participants * row?.original?.participationPoints)} P)` : '-'}</p></>
         },
         {
-          Header: "eventCost",
+          Header: "Event Cost",
           accessor: 'likes',
           Cell: ({ row }) => <p className='text-center'>{row.original.eventCost ? row.original.eventCost + " " + 'KRW' : '-'}</p>
         }
@@ -199,17 +261,17 @@ const LuckyDrawEventManagement = () => {
 
           <div className='me-1 d-flex w-50'>
             <input className='form-control me-3' placeholder='Title' value={filterData.search} onChange={handleSearch} />
-            <CButton >search</CButton>
+            <CButton onClick={getLuckyDrawEvents}>search</CButton>
           </div>
 
           <div className='d-flex ps-2  gap-3 align-items-center'>
-            <p>startTime</p>
+            <p>StartTime</p>
             <DatePicker value={filterData.startDate} onChange={handleStartDate} />
             <DatePicker value={filterData.endDate} onChange={handleEndDate} />
           </div>
         </div>
-        <ReactTable showCheckbox={false} columns={columns} data={RouletteEvents} totalCount={10} onSelectionChange={() => {}} />
-        {RouletteEvents.length > 0 &&
+        <ReactTable showCheckbox={false} columns={columns} data={LuckyDrawEvents} totalCount={10} onSelectionChange={() => {}} />
+        {LuckyDrawEvents.length > 0 &&
           <div className='d-flex w-100 justify-content-center mt-3  gap-3'>
             <div className='d-flex gap-3'>
               <div className='userlist-pagination'>

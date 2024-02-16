@@ -249,8 +249,9 @@ const BannerManagement = () => {
 
     const editClubBannerHandler = async (id) => {
 
-        const response = await getApi(API_ENDPOINT.get_OperationMangementBannerLis)
-        let res = await response?.data?.find((item) => item?.id.toString() === id.toString())
+        // const response = await getApi(API_ENDPOINT.get_OperationMangementBannerLis)
+        // let res = await response?.data?.find((item) => item?.id.toString() === id.toString())
+        const res = bannerList?.find((item) => item?.id.toString() === id.toString())
         // let res = url
         if (res) {
             setBannerTitle(res?.title)
@@ -311,7 +312,7 @@ const BannerManagement = () => {
         } else if (bannerStartHours === '00' && bannerStartMins === '00') {
             enqueueSnackbar('Please select End date', { variant: 'error' })
             return false
-        } else if (!bannerUpdateId && new Date() > new Date(bannerStartDate + 'T' + bannerStartHours + ':' + bannerStartMins)) {
+        } else if (new Date() > new Date(bannerStartDate + 'T' + bannerStartHours + ':' + bannerStartMins)) {
             enqueueSnackbar("Start time cannot be earlier than current time", { variant: 'error' })
             return false
         } else if (bannerEndDate === '') {
@@ -320,7 +321,7 @@ const BannerManagement = () => {
         } else if (bannerEndHours === '00' && bannerEndMins === '00') {
             enqueueSnackbar('Please select end time', { variant: 'error' })
             return false
-        } else if (!bannerUpdateId && new Date(bannerStartDate + 'T' + bannerStartHours + ':' + bannerStartMins) > new Date(bannerEndDate + 'T' + bannerEndHours + ':' + bannerEndMins)) {
+        } else if (new Date(bannerStartDate + 'T' + bannerStartHours + ':' + bannerStartMins) > new Date(bannerEndDate + 'T' + bannerEndHours + ':' + bannerEndMins)) {
             enqueueSnackbar("End time cannot be earlier than start time", { variant: 'error' })
             return false
         } else if (uploadedBannerImage === '') {
@@ -344,7 +345,7 @@ const BannerManagement = () => {
             const formData = new FormData()
             formData.append('title', bannerTitle)
             formData.append('startDateTime', new Date(bannerStartDate + 'T' + bannerStartHours + ':' + bannerStartMins))
-            formData.append('endDateTime', new Date(bannerEndDate + 'T' + bannerEndHours + ':' + bannerEndHours))
+            formData.append('endDateTime', new Date(bannerEndDate + 'T' + bannerEndHours + ':' + bannerEndMins))
             formData.append('image', uploadedBannerImage)
             formData.append('type', imageType)
             // formData.append('imageOrder', 1)
@@ -431,7 +432,7 @@ const BannerManagement = () => {
             Cell: ({ row }) => <a onClick={() => { setDeleteId(row.original.id); setDeleteVisible(true) }} className='mx-3 primTxt '>Delete</a>
 
         },
-    ], [])
+    ], [bannerList])
 
 
     return (

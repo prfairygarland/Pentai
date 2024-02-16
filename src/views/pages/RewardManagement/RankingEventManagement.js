@@ -87,7 +87,7 @@ const RankingEventManagement = () => {
       console.log('data get =>', response);
       if (response?.status === 201) {
         setRankingEvents(response?.data)
-        setTotalPages(Math.ceil(30 / Number(itemsPerPage)))
+        setTotalPages(Math.ceil(response?.total / Number(itemsPerPage)))
         setIsLoading(false)
       } else {
         setRankingEvents([])
@@ -116,7 +116,7 @@ const RankingEventManagement = () => {
     {
       Header: "Image",
       accessor: 'image',
-      Cell: ({ row }) => <img crossOrigin='anonymous' src={row?.original?.image ? imageUrl + row?.original?.image : null} alt="NA" />
+      Cell: ({ row }) => <img crossOrigin='anonymous' src={row?.original?.image ? imageUrl + row?.original?.image : null} alt=" " />
     },
     {
       Header: "Status",
@@ -131,13 +131,7 @@ const RankingEventManagement = () => {
     {
       Header: "Period",
       accessor: 'scheduledAt',
-      Cell: ({ row }) => <p>{row.original.startTime ? `${moment(row.original.startTime).format("YYYY-MM-DD HH:mm")} ~ 
-                                                             ${moment(row.original.endTime).format("YYYY-MM-DD HH:mm")}` : '-'}</p>
-    },
-    {
-      Header: "Announcement",
-      accessor: 'announcement',
-      Cell: ({ row }) => <p>{row.original.announcementTime ? `${moment(row.original.announcementTime).format("YYYY-MM-DD HH:mm")}` : '-'}</p>
+      Cell: ({ row }) => <p style={{maxWidth:150, whiteSpace:'normal'}}>{row.original.startTime ? `${moment(row.original.startTime).format("YYYY-MM-DD HH:mm")} ~ ${moment(row.original.endTime).format("YYYY-MM-DD HH:mm")}` : '-'}</p>
     },
     {
       Header: "Creator",

@@ -302,6 +302,9 @@ export let API_ENDPOINT = {
   getRankingParticipantDetails : ALL_CONSTANTS.API_URL + "/api/admin/lounge/rankingEvent/participants",
   getRankingWinnerDetails : ALL_CONSTANTS.API_URL + "/api/admin/lounge/rankingEvent/winners",
   getRankingDetails: ALL_CONSTANTS.API_URL + "/api/admin/lounge/rankingEvent/details",
+  getLuckyDrawEvent : ALL_CONSTANTS.API_URL + "/api/admin/lounge/luckyDrawEvent/get",
+  getLuckyDrawParticipantsDetails : ALL_CONSTANTS.API_URL + "/api/admin/lounge/luckyDrawEvent/participants",
+  getLuckyDrawWinnerDetails : ALL_CONSTANTS.API_URL + "/api/admin/lounge/luckyDrawEvent/winners",
 
 
 

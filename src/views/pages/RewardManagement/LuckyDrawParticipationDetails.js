@@ -1,4 +1,4 @@
-import { CButton, CFormSelect } from '@coreui/react'
+import { CButton, CFormSelect, CFormSwitch } from '@coreui/react'
 import moment from 'moment/moment'
 import React, { useEffect, useMemo, useState } from 'react'
 import DatePicker from 'react-date-picker'
@@ -9,8 +9,7 @@ import ReactTable from 'src/components/common/ReactTable'
 import { getApi } from 'src/utils/Api'
 import { API_ENDPOINT } from 'src/utils/config'
 
-const RankingParticipationDetails = () => {
-
+const LuckyDrawParticipationDetails = () => {
     const initialData = {
         search: '',
         reward: '',
@@ -75,9 +74,15 @@ const RankingParticipationDetails = () => {
         getParticipantsDetails()
       }, [itemsPerPage, currentPage])
 
+      useEffect(() => {
+        if (filterData?.search === '') {
+            getParticipantsDetails()
+        }
+      }, [filterData.search])
+
     const getParticipantsDetails = async () => {
         setIsLoading(true)
-        let url = `${API_ENDPOINT.getRankingParticipantDetails}?eventId=${location?.state?.eventId}&pageNo=${currentPage + 1}&pageSize=${itemsPerPage}`
+        let url = `${API_ENDPOINT.getLuckyDrawParticipantsDetails}?eventId=${location?.state?.eventId}&pageNo=${currentPage + 1}&pageSize=${itemsPerPage}`
 
         if (filterData.search) {
             url = url + `&searchTerm=${filterData?.search}`
@@ -129,12 +134,6 @@ const RankingParticipationDetails = () => {
     useEffect(() => {
         getParticipantsDetails()
     }, [])
-
-    useEffect(() => {
-        if (filterData?.search === '') {
-            getParticipantsDetails()
-        }
-      }, [filterData.search])
 
 
     const handlePageChange = (selectedPage) => {
@@ -195,12 +194,27 @@ const RankingParticipationDetails = () => {
             Cell: ({ row }) => <p className='text-center'>{row.original.participants ? row.original.participants : '-'}</p>
         },
         {
-            Header: 'Stars',
-            accessor: 'stars',
-            Cell: ({ row }) => <p className='text-center'>{row.original.stars ? row.original.stars : '-'}</p>
+            Header: 'Candidate',
+            accessor: 'candidate',
+            Cell: ({ row }) => <CFormSwitch
+            id="club_banner"
+            className="cFormSwitch"
+            defaultChecked={row.original.isActive === 1}
+            // onClick={() => setLimitPerDayToggle(index)}
+            // defaultChecked={item.limitPerDay}
+          />
+        //   {item.limitPerDay && (
+        //     <input
+        //       type="number"
+        //       min={1}
+        //       className="form-control"
+        //       value={item.limitPerDay}
+        //       style={{ width: 100 }}
+        //       onChange={(event) => setLimitPerDay(event.target.value, index)}
+        //     />
+        //   )}
         }
     ], [])
-
   return (
     <section className="flex-row align-items-center mb-3">
     {isLoading && <Loader />}
@@ -330,6 +344,6 @@ const RankingParticipationDetails = () => {
    }
 </section>
   )
-} 
+}
 
-export default RankingParticipationDetails
+export default LuckyDrawParticipationDetails
