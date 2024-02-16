@@ -4,7 +4,7 @@ import './rewardManagement.scss'
 import { CButton, CFormInput, CFormSelect, CFormTextarea } from '@coreui/react'
 import { useNavigate } from 'react-router-dom'
 import DatePicker from 'react-date-picker'
-import { API_ENDPOINT } from 'src/utils/config'
+import { ALL_CONSTANTS, API_ENDPOINT } from 'src/utils/config'
 import { getApi, postApi } from 'src/utils/Api'
 import { enqueueSnackbar } from 'notistack'
 
@@ -130,9 +130,92 @@ const RankingEventRegistration = ({ eventId = '' }) => {
     setRewards(allRewards)
   }
 
+  async function urlToBlob(url) {
+    const response = await fetch(url)
+    const blob = await response.blob()
+    return blob
+  }
+
+  const urlToFile = async (url) => {
+    if (!url) return
+    const blob = await urlToBlob(ALL_CONSTANTS.BASE_URL + url)
+    const fileName = url
+    return new File([blob], fileName, { type: blob.type })
+  }
+
+  const getEventDetails = async () => {
+    try {
+      const res = await getApi(API_ENDPOINT.getRankingDetails + '?eventId=' + eventId)
+      console.log('res :: ', res)
+
+      if (res.status === 201) {
+        setTitle(res?.data?.title)
+        let startDateTime = new Date(res?.data?.startTime),
+          startMonth = '' + (startDateTime.getMonth() + 1),
+          startDay = '' + startDateTime.getDate(),
+          startYear = startDateTime.getFullYear()
+        if (startMonth.length < 2) startMonth = '0' + startMonth
+        if (startDay.length < 2) startDay = '0' + startDay
+        setStartDate([startYear, startMonth, startDay].join('-'))
+        if (startDateTime.getHours() < 10) {
+          setStartHour('0' + startDateTime.getHours())
+        } else {
+          setStartHour(startDateTime.getHours())
+        }
+        if (startDateTime.getMinutes() < 10) {
+          setStartMins('0' + startDateTime.getMinutes())
+        } else {
+          setStartMins(startDateTime.getMinutes())
+        }
+        if (res?.data?.endTime) {
+          let endDateTime = new Date(res?.data?.endTime),
+            endMonth = '' + (endDateTime.getMonth() + 1),
+            endDay = '' + endDateTime.getDate(),
+            endYear = endDateTime.getFullYear()
+          if (endMonth.length < 2) endMonth = '0' + endMonth
+          if (endDay.length < 2) endDay = '0' + endDay
+          setEndDate([endYear, endMonth, endDay].join('-'))
+          if (endDateTime.getHours() < 10) {
+            setEndHour('0' + endDateTime.getHours())
+          } else {
+            setEndHour(endDateTime.getHours())
+          }
+          if (endDateTime.getMinutes() < 10) {
+            setEndMins('0' + endDateTime.getMinutes())
+          } else {
+            setEndMins(endDateTime.getMinutes())
+          }
+        }
+        const file = await urlToFile(res?.data?.image)
+        setUploadedImage(file)
+        setParticipationPoints(res?.data?.participationPoints)
+        setFromStar(res?.data?.minStars)
+        setToStar(res?.data?.maxStars)
+        setDescription(res?.data?.description)
+        setWinnerDescription(res?.data?.winnerDescription)
+        setRewardCount(res?.data?.rewards.length)
+
+        const allRewards = []
+        const rewardsFromDB = res?.data?.rewards
+        rewardsFromDB.forEach((element) => {
+          allRewards.push({ type: 'product', label: element.name, value: element.id })
+        })
+        setRewards(allRewards)
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   useEffect(() => {
     getAllProducts()
   }, [])
+
+  useEffect(() => {
+    if (eventId) {
+      getEventDetails()
+    }
+  }, [eventId])
 
   return (
     <>
@@ -311,7 +394,7 @@ const RankingEventRegistration = ({ eventId = '' }) => {
                       aria-label="Default select example"
                       options={productList}
                       onChange={(e) => setRewardsHandler(1, e.target.value)}
-                      value={rewards[1].value}
+                      value={rewards[1]?.value}
                     />
                   </div>
                 )}
@@ -323,7 +406,7 @@ const RankingEventRegistration = ({ eventId = '' }) => {
                       aria-label="Default select example"
                       options={productList}
                       onChange={(e) => setRewardsHandler(2, e.target.value)}
-                      value={rewards[2].value}
+                      value={rewards[2]?.value}
                     />
                   </div>
                 )}
