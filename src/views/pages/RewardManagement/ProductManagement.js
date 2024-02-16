@@ -1,7 +1,10 @@
-import { CButton, CFormSelect } from '@coreui/react'
-import React from 'react'
+import { CButton } from '@coreui/react'
+import React, { useState } from 'react'
+import ProductManagementRegistration from './ProductManagementRegistration'
 
 const ProductManagement = () => {
+
+    const [productModal, setProductModal] = useState(false)
     return (
       <div>
           <div className='container p-3 justify-align-content-around w-100 mt-3'>
@@ -19,13 +22,17 @@ const ProductManagement = () => {
              <div className='d-flex  align-items-center justify-content-between w-100 gap-3 '>
                  <div className='d-flex  align-items-center gap-3 w-100'>
                  </div>
-                 <CButton className="w-50" type="submit" >Registration</CButton>
+                 <CButton className="w-50" type="button" onClick={() => setProductModal(true)} >Registration</CButton>
              </div>
          </div>
              <p className='mt-3 mb-3'>Total : </p>
           <div>
           </div>
      </div>
+
+     {
+        productModal && <ProductManagementRegistration show={productModal} setShow={setProductModal} />
+     }
       </div>
     )
   }
