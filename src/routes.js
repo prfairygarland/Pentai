@@ -43,6 +43,7 @@ import FeatureManagement from './views/pages/AdministratorManagement/FeatureMana
 import AdminGroupManagement from './views/pages/AdministratorManagement/AdminGroupManagement'
 import PointsManagement from './views/pages/RewardManagement/PointsManagement'
 import PointsDetails from './views/pages/RewardManagement/PointsDetails'
+import ProductManagement from './views/pages/RewardManagement/ProductManagement'
 
 const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
 
@@ -109,13 +110,7 @@ const routes = [
   { path: '/RankingEventDetails', name: 'Ranking Event Details', element: RankingEventDetails },
   { path: '/PointManagement', name: 'Point Management', element: PointsManagement },
   { path: '/PointManagement/PointsDetails', name: 'Point Detail', element: PointsDetails },
-
-
-
-
-
-
-
+  { path : '/ProductManagement', name: 'Product Management', element: ProductManagement},
 
   // Operation Management
   { path: '/GreetingMessageManagement', name: 'Greeting Message Management', element: GreetingMessageManagement },
