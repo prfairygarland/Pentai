@@ -41,6 +41,8 @@ import AdministratorList from './views/pages/AdministratorManagement/Administrat
 import MenuAccessPermission from './views/pages/AdministratorManagement/MenuAccessPermission'
 import FeatureManagement from './views/pages/AdministratorManagement/FeatureManagement'
 import AdminGroupManagement from './views/pages/AdministratorManagement/AdminGroupManagement'
+import PointsManagement from './views/pages/RewardManagement/PointsManagement'
+import PointsDetails from './views/pages/RewardManagement/PointsDetails'
 
 const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
 
@@ -105,8 +107,12 @@ const routes = [
   { path: '/RankingEventManagement', name: 'Ranking Event Management', element: RankingEventManagement },
   { path: '/RankingEventRegistration', name: 'Ranking Event Registration', element: RankingEventRegistration },
   { path: '/RankingEventDetails', name: 'Ranking Event Details', element: RankingEventDetails },
+  { path: '/PointManagement', name: 'Point Management', element: PointsManagement },
+  { path: '/PointManagement/PointsDetails', name: 'Point Detail', element: PointsDetails },
 
-  
+
+
+
 
 
 
