@@ -619,14 +619,14 @@ const MenuAccessPermission = () => {
 
               </CCol>
             </div>
-            {searchData.length > 0 && (
+            {searchData?.length > 0 && (
               <div className="mt-2 menuaccesspermissionSidebar">
                 <CAccordion activeItemKey={1}>
                   {filteredData.map((item) => (
                     <CAccordionItem key={item.id}>
                       <CAccordionHeader>{item.departMentName}</CAccordionHeader>
                       <CAccordionBody>
-                        {item.superAdmin.length > 0 &&
+                        {item.superAdmin?.length > 0 &&
                           <CAccordion>
                             <CAccordionItem>
                               <CAccordionHeader>{multiLang?.superAdmin}</CAccordionHeader>
@@ -639,7 +639,7 @@ const MenuAccessPermission = () => {
                           </CAccordion>
                         }
 
-                        {item.subAdmin.length > 0 &&
+                        {item.subAdmin?.length > 0 &&
                           <CAccordion>
                             <CAccordionItem>
                               <CAccordionHeader>{multiLang?.subAdmin}</CAccordionHeader>

@@ -301,10 +301,10 @@ const PointsDetails = () => {
             <div className="formWrpInpt d-flex gap-3 align-items-center">
               <p>{userData[0]?.availablePoints}</p>
               <CButton onClick={() => setVisible(!visible)}>{multiLang?.changePoints}</CButton>
-            </div>
-          </div>
-        </div>
-      </div>
+            </div >
+          </div >
+        </div >
+      </div >
 
       <div>
         <div className='pageTitle mt-5 mb-3 pb-2'>
@@ -334,7 +334,7 @@ const PointsDetails = () => {
           </div>
         </div>
         <div className='pointsDetailTable'>
-        <ReactTable showCheckbox={false} columns={columns} data={pointHistoryData} totalCount={10} onSelectionChange={handleSelectionChange} />
+          <ReactTable showCheckbox={false} columns={columns} data={pointHistoryData} totalCount={10} onSelectionChange={handleSelectionChange} />
         </div>
         <div>
           <div className='d-flex justify-content-center align-items-center mt-3 mb-2 gap-3'>
@@ -362,7 +362,7 @@ const PointsDetails = () => {
 
         </div>
 
-      </div>
+      </div >
 
       <div>
         <CModal
@@ -399,7 +399,6 @@ const PointsDetails = () => {
                       </div>
                       <div className='d-flex align-items-center gap-3'>
                         <CFormInput
-                          style={{ width: 100 }}
                           className='text-center'
                           type="text"
                           placeholder={multiLang?.enterNumber}
@@ -426,11 +425,11 @@ const PointsDetails = () => {
                         name="title"
                         value={reason}
                         onChange={(e) => {
-                          setReason(e.target.value.substring(0, 42))
+                          setReason(e.target.value.substring(0, 100))
                         }}
                       />
                       <span className="txt-byte-information justify-content-start">
-                        {reason.length} / 100
+                        {reason?.length} / 100
                       </span>
                     </div>
                   </div>
@@ -444,9 +443,9 @@ const PointsDetails = () => {
             </CButton>
             <CButton color="primary" onClick={() => validate()}>{multiLang?.save}</CButton>
           </CModalFooter>
-        </CModal>
-      </div>
-    </div>
+        </CModal >
+      </div >
+    </div >
   )
 }
 

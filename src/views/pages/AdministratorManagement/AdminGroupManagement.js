@@ -41,7 +41,7 @@ const AdminGroupManagement = () => {
 
   const handleInputChange = (index, value) => {
     const updatedValues = [...newAdminGroup];
-    updatedValues[index - adminGroupData.length].groupName = value
+    updatedValues[index - adminGroupData?.length].groupName = value
     setNewAdminGroup(updatedValues);
   };
 
@@ -95,7 +95,7 @@ const AdminGroupManagement = () => {
                     type="text"
                     value={item?.groupName}
                     onChange={(e) => handleInputChange(index, e.target.value)}
-                    disabled={index < adminGroupData.length}
+                    disabled={index < adminGroupData?.length}
                   />
                 </td>
                 <td>{item.superAdminCount}</td>
