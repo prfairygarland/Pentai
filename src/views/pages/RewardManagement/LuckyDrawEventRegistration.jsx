@@ -104,7 +104,7 @@ const LuckyDrawEventRegistration = ({ eventId = '' }) => {
       <main>
         {!eventId && (
           <div className="pageTitle mb-3 pb-2">
-            <h2>Lucky Draw Event Registratio</h2>
+            <h2>Lucky Draw Event Registration</h2>
           </div>
         )}
         <div className="card-body">

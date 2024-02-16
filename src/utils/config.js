@@ -300,7 +300,8 @@ export let API_ENDPOINT = {
   getRankingEvent: ALL_CONSTANTS.API_URL + "/api/admin/lounge/rankingEvent/get",
   createRewardRanking: ALL_CONSTANTS.API_URL + "/api/admin/lounge/rankingEvent/create",
   getRankingParticipantDetails : ALL_CONSTANTS.API_URL + "/api/admin/lounge/rankingEvent/participants",
-  getRankingWinnerDetails : ALL_CONSTANTS.API_URL + "/api/admin/lounge/rankingEvent/winners"
+  getRankingWinnerDetails : ALL_CONSTANTS.API_URL + "/api/admin/lounge/rankingEvent/winners",
+  getRankingDetails: ALL_CONSTANTS.API_URL + "/api/admin/lounge/rankingEvent/details",
 
 
 

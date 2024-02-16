@@ -27,6 +27,7 @@ import RouletteEventDetails from './views/pages/RewardManagement/RouletteEventDe
 import RankingEventDetails from './views/pages/RewardManagement/RankingEventDetails'
 import LuckyDrawEventManagement from './views/pages/RewardManagement/LuckyDrawEventManagement'
 import LuckyDrawEventRegistration from './views/pages/RewardManagement/LuckyDrawEventRegistration'
+import LuckyDrawEventDetails from './views/pages/RewardManagement/LuckyDrawEventDetails'
 import RankingEventManagement from './views/pages/RewardManagement/RankingEventManagement'
 import RankingEventRegistration from './views/pages/RewardManagement/RankingEventRegistration'
 import RouletteEventManagementRegistration from './views/pages/RewardManagement/RouletteEventManagementRegistration'
@@ -100,6 +101,7 @@ const routes = [
   { path: '/RouletteEventDetails', name: 'Roulette Event Details', element: RouletteEventDetails },
   { path: '/LuckyDrawEventManagement', name: 'Lucky Draw Event Management', element: LuckyDrawEventManagement },
   { path: '/LuckyDrawEventRegistration', name: 'Lucky Draw Event Registration', element: LuckyDrawEventRegistration },
+  { path: '/LuckyDrawEventDetails', name: 'Lucky Draw Event Registration', element: LuckyDrawEventDetails },
   { path: '/RankingEventManagement', name: 'Ranking Event Management', element: RankingEventManagement },
   { path: '/RankingEventRegistration', name: 'Ranking Event Registration', element: RankingEventRegistration },
   { path: '/RankingEventDetails', name: 'Ranking Event Details', element: RankingEventDetails },
