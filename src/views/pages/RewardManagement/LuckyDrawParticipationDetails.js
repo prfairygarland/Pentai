@@ -113,24 +113,6 @@ const LuckyDrawParticipationDetails = () => {
 
     }
 
-    // const getEventDetails = async () => {
-    //     let url = `${API_ENDPOINT.getRankingParticipants}?eventId=${location?.state?.eventId}`
-
-    //     const response = await getApi(url)
-    //     console.log('resparticipants::', response)
-    //     if (response?.status === 201) {
-    //         if (response?.data?.rewards) {
-    //             const data = await response?.data?.rewards?.map((op) => {
-    //                 return { 'label': op.name, 'value': op.id }
-
-    //             })
-    //             setRewards((pre) => {
-    //                 return [{ label: 'All', value: '' }, ...data]
-    //             })
-    //         }
-    //     }
-    // }
-
     useEffect(() => {
         getParticipantsDetails()
     }, [])
@@ -201,25 +183,14 @@ const LuckyDrawParticipationDetails = () => {
             className="cFormSwitch"
             defaultChecked={row.original.isActive === 1}
             // onClick={() => setLimitPerDayToggle(index)}
-            // defaultChecked={item.limitPerDay}
           />
-        //   {item.limitPerDay && (
-        //     <input
-        //       type="number"
-        //       min={1}
-        //       className="form-control"
-        //       value={item.limitPerDay}
-        //       style={{ width: 100 }}
-        //       onChange={(event) => setLimitPerDay(event.target.value, index)}
-        //     />
-        //   )}
         }
     ], [])
   return (
     <section className="flex-row align-items-center mb-3">
     {isLoading && <Loader />}
    <div className="w-100">
-       <div className="card border-0 ">
+      {participantsDetails.length > 0 && <div className="card border-0 ">
            <div className='card-body p-0'>
                <div className='formWraper'>
                    <div>
@@ -266,7 +237,7 @@ const LuckyDrawParticipationDetails = () => {
                    </div>
                </div>
            </div>
-       </div>
+       </div>}
    </div>
    <div className='container p-3 justify-align-content-around w-100 mt-3'>
        <div className='d-flex '>
@@ -295,6 +266,7 @@ const LuckyDrawParticipationDetails = () => {
    <div>
        <ReactTable columns={columns} data={participantsDetails} showCheckbox={false} onSelectionChange={() => { }} />
    </div>
+   {participantsDetails.length > 0 && <p className='text-end'>* Changes will be reflected if saved.</p>}
    {participantsDetails.length > 0 &&
        <div className='d-flex w-100 justify-content-center mt-3  gap-3'>
            <div className='d-flex gap-3'>

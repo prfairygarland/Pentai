@@ -18,6 +18,17 @@ const ProductManagementRegistration = ({ show = false, setShow, productData }) =
   const [uploadedImage, setUploadedImage] = useState('')
 
   const closeHandler = () => {
+    setTitle('')
+    setPrice('')
+    setUploadedImage('')
+    setShow(false)
+  }
+
+  const updateHandler = () => {
+    enqueueSnackbar(`Product updated successfully!`, { variant: 'success' })
+    setTitle('')
+    setPrice('')
+    setUploadedImage('')
     setShow(false)
   }
 
@@ -35,6 +46,9 @@ const ProductManagementRegistration = ({ show = false, setShow, productData }) =
       const res = await postApi(API_ENDPOINT.createRewardProduct, body)
       if (res?.data?.status === 201) {
         enqueueSnackbar(`Product saved successfully!`, { variant: 'success' })
+        setTitle('')
+        setPrice('')
+        setUploadedImage('')
         setShow(false)
       } else {
         enqueueSnackbar(`Enter all fields`, { variant: 'error' })
@@ -169,7 +183,8 @@ const ProductManagementRegistration = ({ show = false, setShow, productData }) =
       </CModalBody>
       <CModalFooter className="d-flex justify-content-center gap-2">
         <CButton onClick={cancelHandler}>Cancel</CButton>
-        <CButton onClick={saveHandler}>Save</CButton>
+        {productData && productData?.prodTitle && <CButton onClick={updateHandler}>Update</CButton>}
+        {!productData?.prodTitle && <CButton onClick={saveHandler}>Save</CButton>}
       </CModalFooter>
     </CModal>
   )
