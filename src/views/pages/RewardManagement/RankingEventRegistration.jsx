@@ -7,6 +7,7 @@ import DatePicker from 'react-date-picker'
 import { ALL_CONSTANTS, API_ENDPOINT } from 'src/utils/config'
 import { getApi, postApi } from 'src/utils/Api'
 import { enqueueSnackbar } from 'notistack'
+import ProductManagementRegistration from './ProductManagementRegistration'
 
 const RankingEventRegistration = ({ eventId = '' }) => {
   const [uploadedImage, setUploadedImage] = useState('')
@@ -20,11 +21,13 @@ const RankingEventRegistration = ({ eventId = '' }) => {
   const [endHour, setEndHour] = useState('')
   const [endMins, setEndMins] = useState('')
   const [participationPoints, setParticipationPoints] = useState(100)
-  const [participationLimit, setParticipationLimit] = useState(1)
   const [description, setDescription] = useState('')
   const [winnerDescription, setWinnerDescription] = useState('')
   const [rewardCount, setRewardCount] = useState(1)
   const [rewards, setRewards] = useState([])
+  const [productModal, setProductModal] = useState(false)
+  const [newRewardForIndex, setNewRewardForIndex] = useState('')
+  const [newProductId, setNewProductId] = useState('')
 
   const [productList, setProductList] = useState([])
   const navigate = useNavigate()
@@ -76,6 +79,75 @@ const RankingEventRegistration = ({ eventId = '' }) => {
     navigate('../RankingEventManagement')
   }
 
+  const addNewProduct = (id) => {
+    setProductModal(true)
+    setNewRewardForIndex(id)
+  }
+
+  const validateForm = () => {
+    if (!title) {
+      enqueueSnackbar(`please enter title!`, { variant: 'error' })
+      return
+    } else if (startDate === '') {
+      enqueueSnackbar('Please select start date', { variant: 'error' })
+      return false
+    } else if (startHour === '') {
+      enqueueSnackbar('Please select start time', { variant: 'error' })
+      return false
+    } else if (endDate === '') {
+      enqueueSnackbar('Please select end date', { variant: 'error' })
+      return false
+    } else if (endHour === '') {
+      enqueueSnackbar('Please select end time', { variant: 'error' })
+      return false
+    } else if (new Date() > new Date(startDate + 'T' + startHour + ':' + startMins)) {
+      enqueueSnackbar('Start time can not be earlier than current time', { variant: 'error' })
+      return false
+    } else if (
+      new Date(endDate + 'T' + endHour + ':' + endMins) <
+      new Date(startDate + 'T' + startHour + ':' + startMins)
+    ) {
+      enqueueSnackbar('End time can not be earlier than start time', { variant: 'error' })
+      return false
+    } else if (uploadedImage === '') {
+      enqueueSnackbar('Please select image', { variant: 'error' })
+      return false
+    } else if (!participationPoints) {
+      enqueueSnackbar('Please enter participation points', { variant: 'error' })
+      return false
+    } else if (isNaN(participationPoints)) {
+      enqueueSnackbar('Please enter number in participation points', { variant: 'error' })
+      return false
+    } else if (Number(participationPoints) < 0) {
+      enqueueSnackbar('Participation points must be 0 or greater', { variant: 'error' })
+      return false
+    } else if (Number(fromStar) > Number(toStar)) {
+      enqueueSnackbar('Please select range of stars correctly!', { variant: 'error' })
+      return false
+    } else if (!rewards[0].productId) {
+      enqueueSnackbar('Please select 1st reward', { variant: 'error' })
+      return false
+    } else if (rewardCount > 1 && !rewards[1].productId) {
+      enqueueSnackbar('Please select 2nd reward', { variant: 'error' })
+      return false
+    } else if (rewardCount > 2 && !rewards[2].productId) {
+      enqueueSnackbar('Please select  reward', { variant: 'error' })
+      return false
+    } else if (!rewards[0].productId) {
+      enqueueSnackbar('Please select reward', { variant: 'error' })
+      return false
+    } else if (!description) {
+      enqueueSnackbar('Please enter description', { variant: 'error' })
+      return false
+    } else if (!winnerDescription) {
+      enqueueSnackbar('Please enter winner description', { variant: 'error' })
+      return false
+    } else {
+      enqueueSnackbar('All Clear!', { variant: 'success' })
+      saveRankingEvent()
+    }
+  }
+
   const saveRankingEvent = async () => {
     const formData = new FormData()
     formData.append('images', uploadedImage)
@@ -106,13 +178,16 @@ const RankingEventRegistration = ({ eventId = '' }) => {
     }
   }
 
-  const getAllProducts = async () => {
+  const getAllProducts = async (cb = '') => {
     try {
       const res = await getApi(API_ENDPOINT.getAllProducts)
-
       if (res.status === 200) {
-        setProductList(res?.data)
-        setRewardsHandler(0, res?.data[0].value)
+        setProductList([{ value: '', label: 'Product' }, ...res?.data])
+        if (newProductId) {
+          cb(newRewardForIndex, newProductId)
+        } else {
+          setRewardsHandler(0, rewards[0] ? rewards[0].productId : '')
+        }
       }
     } catch (error) {
       console.log(error)
@@ -126,8 +201,10 @@ const RankingEventRegistration = ({ eventId = '' }) => {
 
   const setRewardsHandler = (index, value = productList[0].value) => {
     const allRewards = [...rewards]
-    allRewards[index] = { type: 'product', productId: Number(value) }
+    allRewards[index] = { type: 'product', productId: value ? Number(value) : '' }
     setRewards(allRewards)
+    setNewRewardForIndex('')
+    setNewProductId('')
   }
 
   async function urlToBlob(url) {
@@ -146,7 +223,6 @@ const RankingEventRegistration = ({ eventId = '' }) => {
   const getEventDetails = async () => {
     try {
       const res = await getApi(API_ENDPOINT.getRankingDetails + '?eventId=' + eventId)
-      console.log('res :: ', res)
 
       if (res.status === 201) {
         setTitle(res?.data?.title)
@@ -210,6 +286,12 @@ const RankingEventRegistration = ({ eventId = '' }) => {
   useEffect(() => {
     getAllProducts()
   }, [])
+
+  useEffect(() => {
+    if (!productModal) {
+      getAllProducts(setRewardsHandler)
+    }
+  }, [productModal])
 
   useEffect(() => {
     if (eventId) {
@@ -383,8 +465,18 @@ const RankingEventRegistration = ({ eventId = '' }) => {
                     aria-label="Default select example"
                     options={productList}
                     onChange={(e) => setRewardsHandler(0, e.target.value)}
-                    value={rewards[0]?.value}
+                    value={rewards[0]?.productId}
                   />
+                  {!rewards[0]?.productId && (
+                    <button
+                      className="btn btn-primary"
+                      onClick={() => {
+                        addNewProduct(0)
+                      }}
+                    >
+                      Registration&nbsp;+
+                    </button>
+                  )}
                 </div>
                 {rewardCount >= 2 && (
                   <div className="d-flex formradiogroup align-items-center mb-2 gap-3">
@@ -394,8 +486,18 @@ const RankingEventRegistration = ({ eventId = '' }) => {
                       aria-label="Default select example"
                       options={productList}
                       onChange={(e) => setRewardsHandler(1, e.target.value)}
-                      value={rewards[1]?.value}
+                      value={rewards[1]?.productId}
                     />
+                    {!rewards[1]?.productId && (
+                      <button
+                        className="btn btn-primary"
+                        onClick={() => {
+                          addNewProduct(1)
+                        }}
+                      >
+                        Registration&nbsp;+
+                      </button>
+                    )}
                   </div>
                 )}
                 {rewardCount === 3 && (
@@ -406,8 +508,18 @@ const RankingEventRegistration = ({ eventId = '' }) => {
                       aria-label="Default select example"
                       options={productList}
                       onChange={(e) => setRewardsHandler(2, e.target.value)}
-                      value={rewards[2]?.value}
+                      value={rewards[2]?.productId}
                     />
+                    {!rewards[2]?.productId && (
+                      <button
+                        className="btn btn-primary"
+                        onClick={() => {
+                          addNewProduct(2)
+                        }}
+                      >
+                        Registration&nbsp;+
+                      </button>
+                    )}
                   </div>
                 )}
                 {rewardCount < 3 && (
@@ -458,7 +570,7 @@ const RankingEventRegistration = ({ eventId = '' }) => {
             Cancel
           </CButton>
           {!eventId && (
-            <CButton className="btn " onClick={saveRankingEvent}>
+            <CButton className="btn " onClick={validateForm}>
               Save
             </CButton>
           )}
@@ -469,6 +581,12 @@ const RankingEventRegistration = ({ eventId = '' }) => {
           )}
         </div>
       </main>
+      <ProductManagementRegistration
+        show={productModal}
+        setShow={setProductModal}
+        productData={{}}
+        setProduct={setNewProductId}
+      />
     </>
   )
 }

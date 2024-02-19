@@ -518,7 +518,7 @@ const RouletteEventManagementRegistration = ({ eventId = '' }) => {
                       </div>
                       <div className="w-50 d-flex justify-content-start">
                         {item.prodId === 'product' && (
-                          <button className="btn btn-primary" onClick={() => alert('WIP')}>
+                          <button className="btn btn-primary" onClick={() => {}}>
                             Registration +
                           </button>
                         )}

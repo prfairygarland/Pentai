@@ -222,7 +222,7 @@ const ClubDetails = () => {
           <div className="d-flex gap-1">
             {row.original.isAnnouncement > 0 && <i className="icon-announce"></i>}
             <Link
-              to={`/BulletinBoardPostDetails/${row.original.postId}/${row.original.boardId}`}
+              to={`/BulletinBoardPostDetails/${row.original.postId}/${row.original.clubId}`}
               style={{
                 // width: '200px',
                 overflow: 'hidden',
@@ -345,6 +345,7 @@ const ClubDetails = () => {
       const response = await getApi(url)
 
       if (response.status === 200) {
+        console.log('response?.data :: ', response?.data)
         setPostData(response.data)
         setTotalDataCount(response.totalCount)
         setTotalPages(Math.ceil(response.totalCount / Number(itemsPerPage)))

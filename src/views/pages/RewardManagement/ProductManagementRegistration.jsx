@@ -12,15 +12,15 @@ import { postApi } from 'src/utils/Api'
 import { ALL_CONSTANTS, API_ENDPOINT } from 'src/utils/config'
 import { enqueueSnackbar } from 'notistack'
 
-const ProductManagementRegistration = ({ show = false, setShow, productData }) => {
+const ProductManagementRegistration = ({ show = false, setShow, productData, setProduct = '' }) => {
   const [title, setTitle] = useState('')
   const [price, setPrice] = useState('')
-  const [uploadedImage, setUploadedImage] = useState('')
+  const [prodUploadedImage, setProdUploadedImage] = useState('')
 
   const closeHandler = () => {
     setTitle('')
     setPrice('')
-    setUploadedImage('')
+    setProdUploadedImage('')
     setShow(false)
   }
 
@@ -28,13 +28,13 @@ const ProductManagementRegistration = ({ show = false, setShow, productData }) =
     enqueueSnackbar(`Product updated successfully!`, { variant: 'success' })
     setTitle('')
     setPrice('')
-    setUploadedImage('')
+    setProdUploadedImage('')
     setShow(false)
   }
 
   const saveHandler = async () => {
     const formData = new FormData()
-    formData.append('images', uploadedImage)
+    formData.append('images', prodUploadedImage)
     const changedImage = await postApi(API_ENDPOINT.uploadImage, formData)
     const imagePath = await changedImage?.data?.data[0]?.path
     const body = {
@@ -48,8 +48,11 @@ const ProductManagementRegistration = ({ show = false, setShow, productData }) =
         enqueueSnackbar(`Product saved successfully!`, { variant: 'success' })
         setTitle('')
         setPrice('')
-        setUploadedImage('')
+        setProdUploadedImage('')
         setShow(false)
+        if (setProduct) {
+          setProduct(res?.data?.data?.productId)
+        }
       } else {
         enqueueSnackbar(`Enter all fields`, { variant: 'error' })
       }
@@ -79,7 +82,7 @@ const ProductManagementRegistration = ({ show = false, setShow, productData }) =
     setTitle(productData?.prodTitle)
     setPrice(productData?.prodPrice)
     const imagePath = await urlToFile(productData?.imagePath)
-    setUploadedImage(imagePath)
+    setProdUploadedImage(imagePath)
   }
   useEffect(() => {
     if (productData && productData?.prodTitle) {
@@ -88,7 +91,7 @@ const ProductManagementRegistration = ({ show = false, setShow, productData }) =
     }
     setTitle('')
     setPrice('')
-    setUploadedImage('')
+    setProdUploadedImage('')
   }, [show])
 
   return (
@@ -156,23 +159,23 @@ const ProductManagementRegistration = ({ show = false, setShow, productData }) =
                     <label
                       className="btn btn-primary"
                       style={{ paddingLeft: 20 }}
-                      htmlFor="imageFiles"
+                      htmlFor="prodImage"
                     >
                       Upload
                       <input
                         type="file"
-                        name="imageFiles"
-                        id="imageFiles"
+                        name="prodImage"
+                        id="prodImage"
                         style={{ display: 'none' }}
                         accept=".png, .jpg, .jpeg, .gif"
-                        onChange={(e) => setUploadedImage(e.target.files[0])}
+                        onChange={(e) => setProdUploadedImage(e.target.files[0])}
                       />
                     </label>
                   </div>
-                  {uploadedImage && (
+                  {prodUploadedImage && (
                     <div className="upload-images-container uploadImgWrap">
                       <div className="thubmnail-img-container">
-                        <img src={URL.createObjectURL(uploadedImage)} alt="" />
+                        <img src={URL.createObjectURL(prodUploadedImage)} alt="" />
                       </div>
                     </div>
                   )}

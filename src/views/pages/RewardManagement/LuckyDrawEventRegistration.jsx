@@ -7,6 +7,7 @@ import DatePicker from 'react-date-picker'
 import { ALL_CONSTANTS, API_ENDPOINT } from 'src/utils/config'
 import { getApi, postApi } from 'src/utils/Api'
 import { enqueueSnackbar } from 'notistack'
+import ProductManagementRegistration from './ProductManagementRegistration'
 
 const LuckyDrawEventRegistration = ({ eventId = '' }) => {
   const [title, setTitle] = useState('')
@@ -29,16 +30,28 @@ const LuckyDrawEventRegistration = ({ eventId = '' }) => {
   const [rewardId, setRewardId] = useState('')
   const [rewardQuantity, setRewardQuantity] = useState(1)
   const [productList, setProductList] = useState([])
+  const [productModal, setProductModal] = useState(false)
+
   const navigate = useNavigate()
 
   const setStartDateHandler = (event) => {
-    let d = new Date(event),
-      month = '' + (d.getMonth() + 1),
-      day = '' + d.getDate(),
-      year = d.getFullYear()
-    if (month.length < 2) month = '0' + month
-    if (day.length < 2) day = '0' + day
-    setStartDate([year, month, day].join('-'))
+    if (new Date(event).getFullYear() <= 2020) {
+      let d = new Date(),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear()
+      if (month.length < 2) month = '0' + month
+      if (day.length < 2) day = '0' + day
+      setStartDate([year, month, day].join('-'))
+    } else {
+      let d = new Date(event),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear()
+      if (month.length < 2) month = '0' + month
+      if (day.length < 2) day = '0' + day
+      setStartDate([year, month, day].join('-'))
+    }
   }
 
   const startTimeHandler = (e) => {
@@ -47,22 +60,33 @@ const LuckyDrawEventRegistration = ({ eventId = '' }) => {
   }
 
   const setEndDateHandler = (event) => {
-    let d = new Date(event),
+    let eventValue = event
+    if (new Date(event).getFullYear() <= 2020) {
+      eventValue = null
+    }
+    let d = new Date(eventValue),
       month = '' + (d.getMonth() + 1),
       day = '' + d.getDate(),
       year = d.getFullYear()
     if (month.length < 2) month = '0' + month
     if (day.length < 2) day = '0' + day
     setEndDate([year, month, day].join('-'))
+    if (announcementMode === 'atTheEnd') {
+      setAnnouncementDate([year, month, day].join('-'))
+    }
   }
 
   const endTimeHandler = (e) => {
     setEndHour(e.target.value.split(':')[0])
     setEndMins(e.target.value.split(':')[1])
+    if (announcementMode === 'atTheEnd') {
+      setAnnouncementHour(e.target.value.split(':')[0])
+      setAnnouncementMins(e.target.value.split(':')[1])
+    }
   }
 
-  const setAnnouncementDateHandler = (event = 'atTheEnd') => {
-    if (event === 'event') {
+  const setAnnouncementDateHandler = (event) => {
+    if (event === 'atTheEnd') {
       setAnnouncementDate(endDate)
       return
     }
@@ -75,9 +99,9 @@ const LuckyDrawEventRegistration = ({ eventId = '' }) => {
     setAnnouncementDate([year, month, day].join('-'))
   }
 
-  const announcementTimeHandler = (e = endHour + ':' + endMins) => {
-    setAnnouncementHour(e.target ? e.target.value.split(':')[0] : endHour)
-    setAnnouncementMins(e.target ? e.target.value.split(':')[1] : endMins)
+  const announcementTimeHandler = (e) => {
+    setAnnouncementHour(e === 'atTheEnd' ? endHour : e.target.value.split(':')[0])
+    setAnnouncementMins(e === 'atTheEnd' ? endMins : e.target.value.split(':')[1])
   }
 
   const backToListing = () => {
@@ -87,6 +111,83 @@ const LuckyDrawEventRegistration = ({ eventId = '' }) => {
   const updateLuckyDrawEvent = () => {
     enqueueSnackbar(`Data updated successfully!`, { variant: 'success' })
     navigate('../LuckyDrawEventManagement')
+  }
+
+  const validateForm = () => {
+    if (!title) {
+      enqueueSnackbar(`please enter title!`, { variant: 'error' })
+      return
+    } else if (startDate === '') {
+      enqueueSnackbar('Please select start date', { variant: 'error' })
+      return false
+    } else if (startHour === '') {
+      enqueueSnackbar('Please select start time', { variant: 'error' })
+      return false
+    } else if (endDate === '') {
+      enqueueSnackbar('Please select end date', { variant: 'error' })
+      return false
+    } else if (endHour === '') {
+      enqueueSnackbar('Please select end time', { variant: 'error' })
+      return false
+    } else if (new Date() > new Date(startDate + 'T' + startHour + ':' + startMins)) {
+      console.log('new Date() :: ', new Date())
+      console.log('new  :: ', new Date(startDate + 'T' + startHour + ':' + startMins))
+      enqueueSnackbar('Start time can not be earlier than current time', { variant: 'error' })
+      return false
+    } else if (announcementDate === '') {
+      enqueueSnackbar('Please select announcement date', { variant: 'error' })
+      return false
+    } else if (announcementHour === '') {
+      enqueueSnackbar('Please select announcement time', { variant: 'error' })
+      return false
+    } else if (
+      endHour &&
+      new Date(startDate + 'T' + startHour + ':' + startMins) >
+        new Date(endDate + 'T' + endHour + ':' + endMins)
+    ) {
+      enqueueSnackbar('End time can not be earlier than start time', { variant: 'error' })
+      return false
+    } else if (
+      announcementMode !== 'atTheEnd' &&
+      new Date(endDate + 'T' + endHour + ':' + endMins) >=
+        new Date(announcementDate + 'T' + announcementHour + ':' + announcementMins)
+    ) {
+      enqueueSnackbar('Announcement time can not be earlier than end time', { variant: 'error' })
+      return false
+    } else if (uploadedImage === '') {
+      enqueueSnackbar('Please select image', { variant: 'error' })
+      return false
+    } else if (!participationPoints) {
+      enqueueSnackbar('Please enter participation points', { variant: 'error' })
+      return false
+    } else if (isNaN(participationPoints)) {
+      enqueueSnackbar('Please enter number in participation points', { variant: 'error' })
+      return false
+    } else if (Number(participationPoints) < 0) {
+      enqueueSnackbar('Participation points must be 0 or greater', { variant: 'error' })
+      return false
+    } else if (!rewardId) {
+      enqueueSnackbar('Please select reward!', { variant: 'error' })
+      return false
+    } else if (!rewardQuantity) {
+      enqueueSnackbar('Please enter reward quantity', { variant: 'error' })
+      return false
+    } else if (isNaN(rewardQuantity)) {
+      enqueueSnackbar('Please enter number in reward quantity', { variant: 'error' })
+      return false
+    } else if (Number(rewardQuantity) < 1) {
+      enqueueSnackbar('Reward quantity must be greater than 0', { variant: 'error' })
+      return false
+    } else if (!description) {
+      enqueueSnackbar('Please enter description', { variant: 'error' })
+      return false
+    } else if (!winnerDescription) {
+      enqueueSnackbar('Please enter winner description', { variant: 'error' })
+      return false
+    } else {
+      enqueueSnackbar('Validation forn Only Participation Limit Is Pending', { variant: 'success' })
+      saveLuckyDrawEvent()
+    }
   }
 
   const saveLuckyDrawEvent = async () => {
@@ -137,7 +238,7 @@ const LuckyDrawEventRegistration = ({ eventId = '' }) => {
       const res = await getApi(API_ENDPOINT.getAllProducts)
 
       if (res.status === 200) {
-        setProductList(res?.data)
+        setProductList([{ value: '', label: 'Product' }, ...res?.data])
       }
     } catch (error) {
       console.log(error)
@@ -219,9 +320,19 @@ const LuckyDrawEventRegistration = ({ eventId = '' }) => {
     }
   }
 
+  const addNewProduct = () => {
+    setProductModal(true)
+  }
+
   useEffect(() => {
     getAllProducts()
   }, [])
+
+  useEffect(() => {
+    if (!productModal) {
+      getAllProducts()
+    }
+  }, [productModal])
 
   useEffect(() => {
     if (eventId) {
@@ -314,11 +425,11 @@ const LuckyDrawEventRegistration = ({ eventId = '' }) => {
                     id="exampleRadios1"
                     label={`${' '} At the end of the event`}
                     defaultChecked={announcementMode === 'atTheEnd'}
-                    onClick={
-                      (() => setAnnouncementMode('atTheEnd'),
-                      () => setAnnouncementDateHandler('atTheEnd'),
-                      () => announcementTimeHandler())
-                    }
+                    onClick={() => {
+                      setAnnouncementMode('atTheEnd')
+                      setAnnouncementDateHandler('atTheEnd')
+                      announcementTimeHandler('atTheEnd')
+                    }}
                     value="yes"
                   />
                   &nbsp;&nbsp;&nbsp;
@@ -484,6 +595,16 @@ const LuckyDrawEventRegistration = ({ eventId = '' }) => {
                       value={rewardId}
                     />
                   </div>
+                  {rewardId === '' && (
+                    <button
+                      className="btn btn-primary"
+                      onClick={() => {
+                        addNewProduct()
+                      }}
+                    >
+                      Registration +
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
@@ -553,7 +674,7 @@ const LuckyDrawEventRegistration = ({ eventId = '' }) => {
             Cancel
           </CButton>
           {!eventId && (
-            <CButton className="btn " onClick={saveLuckyDrawEvent}>
+            <CButton className="btn " onClick={validateForm}>
               Save
             </CButton>
           )}
@@ -564,6 +685,12 @@ const LuckyDrawEventRegistration = ({ eventId = '' }) => {
           )}
         </div>
       </main>
+      <ProductManagementRegistration
+        show={productModal}
+        setShow={setProductModal}
+        productData={{}}
+        setProduct={setRewardId}
+      />
     </>
   )
 }
