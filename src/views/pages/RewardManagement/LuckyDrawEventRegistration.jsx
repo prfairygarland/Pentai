@@ -475,7 +475,7 @@ const LuckyDrawEventRegistration = ({ eventId = '' }) => {
                   </label>
                 </div>
                 <div className="push-notification-container gap-3 align-items-center">
-                  <div className="w-50">
+                  <div>
                     <CFormSelect
                       className="me-2"
                       aria-label="Default select example"

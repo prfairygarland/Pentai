@@ -301,10 +301,10 @@ const PointsDetails = () => {
             <div className="formWrpInpt d-flex gap-3 align-items-center">
               <p>{userData[0]?.availablePoints}</p>
               <CButton onClick={() => setVisible(!visible)}>{multiLang?.changePoints}</CButton>
-            </div >
-          </div >
-        </div >
-      </div >
+            </div>
+          </div>
+        </div>
+      </div>
 
       <div>
         <div className='pageTitle mt-5 mb-3 pb-2'>
@@ -388,7 +388,7 @@ const PointsDetails = () => {
                   </div>
                   <div className="formWrpInpt">
                     <div className="formradiogroup mb-2 gap-3">
-                      <div className="push-notification-container gap-3">
+                      <div className="push-notification-container gap-3 px-0">
                         <CFormCheck type="radio" name="add" id="exampleRadios1" label={multiLang?.add}
                           defaultChecked={type}
                           onClick={() => setType(true)}

@@ -108,13 +108,13 @@ const ProductManagementRegistration = ({ show = false, setShow, productData }) =
           <div className="formWraper">
             <div className="form-outline form-white  d-flex ">
               <div className="formWrpLabel">
-                <label className="fw-bolder ">Title</label>
+                <label className="fw-bolder ">Product Name</label>
               </div>
               <div className="formWrpInpt">
                 <div className="d-flex formradiogroup mb-2 gap-3">
                   <CFormInput
                     type="text"
-                    placeholder="Enter title"
+                    placeholder="Enter Name"
                     name="title"
                     value={title}
                     onChange={(e) => {
@@ -135,12 +135,13 @@ const ProductManagementRegistration = ({ show = false, setShow, productData }) =
                 <div className="d-flex formradiogroup mb-2 gap-3">
                   <CFormInput
                     type="text"
-                    placeholder="Enter price"
+                    placeholder="Enter Number"
                     name="price"
                     value={price}
                     onChange={(e) => {
                       setPrice(e.target.value.substring(0, 4))
                     }}
+                    style={{ width: 150 }}
                   />
                 </div>
               </div>
@@ -182,7 +183,9 @@ const ProductManagementRegistration = ({ show = false, setShow, productData }) =
         </div>
       </CModalBody>
       <CModalFooter className="d-flex justify-content-center gap-2">
-        <CButton onClick={cancelHandler}>Cancel</CButton>
+        <CButton className="btn-black" onClick={cancelHandler}>
+          Cancel
+        </CButton>
         {productData && productData?.prodTitle && <CButton onClick={updateHandler}>Update</CButton>}
         {!productData?.prodTitle && <CButton onClick={saveHandler}>Save</CButton>}
       </CModalFooter>
