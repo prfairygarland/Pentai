@@ -111,7 +111,7 @@ const ProductManagement = () => {
         {
             Header: "Price",
             accessor: 'price',
-            Cell: ({ row }) => <a className='Livetitle' style={{ cursor: 'pointer' }}> {row.original.price ? row.original.price : '-'}</a>
+            Cell: ({ row }) => <p> {row.original.price ? row.original.price : '-'}</p>
         },
         {
             Header: "Creator",
@@ -144,12 +144,12 @@ const ProductManagement = () => {
                             </div>
                         </div>
                     </div>
-                    <CButton type="button" onClick={getRewardProduct} className="btn btn-primary" >Searching</CButton>
+                    <CButton type="button" onClick={getRewardProduct} className="btn btn-primary" >Search</CButton>
 
                     <div className='d-flex  align-items-center justify-content-between w-100 gap-3 '>
                         <div className='d-flex  align-items-center gap-3 w-100'>
                         </div>
-                        <CButton className="w-50" type="button" onClick={() => {setProductModal(true); setProductData({})}} >Registration</CButton>
+                        <CButton className="w-50 btn-success" type="button" onClick={() => {setProductModal(true); setProductData({})}} >Registration</CButton>
                     </div>
                 </div>
                 <p className='mt-3 mb-3'>Total : </p>

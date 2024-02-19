@@ -581,7 +581,10 @@ thead{
 .pointsDetailTable {
   table{
     td{
-      white-space: inherit !important;
+      &:last-child{
+        white-space: inherit !important;
+      width: 300px;
+      }
     }
   }
 }

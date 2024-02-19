@@ -703,7 +703,7 @@ const UserList = () => {
             <div className="col-md-10  ">
               <div className="d-flex form-inline w-100">
                 <input className="form-control mr-sm-10 me-2" value={searchInput} onChange={handleInputChange} type="search" placeholder={multiLang?.Search} aria-label="Search" />
-                <button className="btn btn-primary my-2 my-sm-0" disabled={!typeSelect.id || searchInput == ''} type="submit" onClick={() => { handleInputvalue() }}>{multiLang?.Search}</button>
+                <button className="btn btn-primary my-2 my-sm-0" disabled={!typeSelect.id || searchInput == ''} type="submit" onClick={() => { handleInputvalue() }}>{multiLang?.search}</button>
               </div>
             </div>
           </div>
@@ -862,7 +862,7 @@ const UserList = () => {
                     <div>
                       <div className="d-flex form-inline w-100">
                         <input className="form-control mr-sm-10 me-2" onChange={handleImportInputChange} type="search" placeholder={multiLang?.Search} aria-label="Search" />
-                        <button className="btn btn-primary my-2 my-sm-0" disabled={searchImportInput == ''} type="submit" onClick={() => { handleImportInputvalue() }}>{multiLang?.search}</button>
+                        <button className="btn btn-primary my-2 my-sm-0" disabled={searchImportInput == ''} type="submit" onClick={() => { handleImportInputvalue() }}>{multiLang?.Search}</button>
                       </div>
                     </div>
                   </div>

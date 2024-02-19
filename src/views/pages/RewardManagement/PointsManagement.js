@@ -461,7 +461,7 @@ const PointsManagement = () => {
                       </div>
                       <div className="formWrpInpt">
                         <div className="formradiogroup mb-2 gap-3">
-                          <div className="push-notification-container gap-3">
+                          <div className="push-notification-container gap-3 px-0 py-2">
                             <CFormCheck type="radio" name="add" id="exampleRadios1" label={multiLang?.add}
                               defaultChecked={type}
                               onClick={() => setType(true)}

@@ -1081,7 +1081,7 @@ const BulletinBoardPostDetails = () => {
                         <div className="participatntimgBox">
                           {item?.profileImage ? (
                             <CImage
-                              rounded
+                             
                               crossorigin="anonymous"
                               src={ALL_CONSTANTS.API_URL + item?.profileImage}
                             />
