@@ -56,7 +56,7 @@ const routes = [
 
   // User Management Module
   { path: '/User', name: 'User List', element: UserList },
-  { path: '/UserInformation', name: 'User Information Settings', element: UserInformationSettings },
+  { path: '/UserInformationSettings', name: 'User Information Settings', element: UserInformationSettings },
   { path: '/User/UserDetails', name: 'User Details', element: UserDetails },
 
   //{ community management}

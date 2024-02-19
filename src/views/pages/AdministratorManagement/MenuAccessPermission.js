@@ -248,7 +248,6 @@ const MenuAccessPermission = () => {
   };
 
   const handleCheckboxChange = async (mode, val, subMenuId) => {
-    console.log('subMenuId =>', subMenuId);
 
     const current = { ...initialMainAccess }
 
@@ -452,7 +451,7 @@ const MenuAccessPermission = () => {
           },
           {
             submenuId: initialMainAccess.oprationManagement.pushNotificationSubMenuId,
-            isPermission: initialMainAccess.oprationManagement.greetingMessage
+            isPermission: initialMainAccess.oprationManagement.pushNotification
           },
         ]
       },
